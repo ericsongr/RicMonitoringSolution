@@ -1,0 +1,121 @@
+<div id="renters" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+      <!-- HEADER -->
+      <div class="header accent"
+           fxLayout="column" fxLayoutAlign="center center"
+           fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+          <!-- APP TITLE -->
+          <div class="logo mb-24 mb-md-0"
+               fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                  shopping_basket
+              </mat-icon>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Renters</span>
+          </div>
+          <!-- / APP TITLE -->
+
+          <!-- SEARCH -->
+          <div class="search-wrapper ml-sm-32">
+              <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                  <mat-icon>search</mat-icon>
+                  <input #filter placeholder="Search for an renters">
+              </div>
+          </div>
+          <!-- / SEARCH -->
+
+          <!-- add new renter -->
+          <button mat-raised-button
+                [routerLink]="'/apps/rent-room/renters/new'"
+                class="add-room-button mat-white-bg my-12 mt-sm-0">
+            <span>ADD NEW RENTER</span>
+          </button>
+          <!-- / add new renter -->
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+
+          <mat-table class="renters-table"
+                     #table [dataSource]="dataSource"
+                     matSort
+                     [@animateStagger]="{value:'50'}"
+                     fusePerfectScrollbar>
+
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                  <mat-cell *matCellDef="let renter">
+                      <p class="text-truncate">{{renter.id}}</p>
+                  </mat-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Renter</mat-header-cell>
+                  <mat-cell *matCellDef="let renter">
+                      <p class="text-truncate">{{renter.name}}</p>
+                  </mat-cell>
+              </ng-container>
+
+              <!-- Advance Paid Date Column -->
+              <ng-container matColumnDef="advancePaidDateString">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Advance Paid Date</mat-header-cell>
+                <mat-cell *matCellDef="let renter">
+                    <p class="text-truncate">{{renter.advancePaidDateString}}</p>
+                </mat-cell>
+              </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="startDateString">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+              <mat-cell *matCellDef="let renter">
+                <p class="text-truncate">{{renter.startDateString}}</p>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Due Date Column -->
+            <ng-container matColumnDef="dueDateString">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
+                <mat-cell *matCellDef="let renter">
+                  <p class="text-truncate">{{renter.dueDateString}}</p>
+                </mat-cell>
+              </ng-container>
+
+               <!-- # Of Persons Column -->
+            <ng-container matColumnDef="noOfPersons">
+                <mat-header-cell *matHeaderCellDef mat-sort-header># of persons</mat-header-cell>
+                <mat-cell *matCellDef="let renter">
+                  <p class="text-truncate">{{renter.noOfPersons}}</p>
+                </mat-cell>
+              </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+              <mat-row *matRowDef="let renter; columns: displayedColumns;"
+                       class="renter"
+                       matRipple
+                       [routerLink]="'/apps/rent-room/renters/' + renter.id + '/' + handleize(renter.name)">
+              </mat-row>
+          </mat-table>
+
+          <mat-paginator #paginator
+                         [length]="dataSource.filteredData.length"
+                         [pageIndex]="0"
+                         [pageSize]="10"
+                         [pageSizeOptions]="[5, 10, 25, 100]">
+          </mat-paginator>
+
+      </div>
+      <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

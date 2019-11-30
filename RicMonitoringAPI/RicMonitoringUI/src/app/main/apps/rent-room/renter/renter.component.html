@@ -1,0 +1,200 @@
+<div id="renter" class="page-layout carded fullwidth inner-scroll" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="row"  fxLayoutAlign="space-between center">
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apps/rent-room/renters'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="renter-image mr-8 mr-sm-16" [@animate]="{value:'*', params:{delay:'50ms', scale:'0.2'}}">
+          <img [src]="'assets/images/avatars/profile.jpg'">
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start start"
+           [@animate]="{value:'*',params:{delay:'100ms', x:'-25px'}}">
+          <div class="h2" *ngIf="pageType === 'edit'">
+            {{renter.name}}
+          </div>
+          <div class="h2" *ngIf="pageType === 'new'">
+            New renter
+          </div>
+          <div class="subtitle secondary-text">
+            <span>Renter Detail</span>
+          </div>
+        </div>
+      </div>
+      <!-- /APP TITLE -->
+      <button mat-raised-button 
+              class="save-renter-button mat-white-bg mt-16 mt-sm-0"
+              [disabled]="renterForm.controls.invalid"
+              *ngIf="pageType === 'add'" (click)="add()">
+        <span>ADD</span>
+      </button>
+
+      <button mat-raised-button 
+              class="save-renter mat-white-bg mt-16 mt-sm-0"
+              [disabled]="renterForm.controls.invalid || renterForm.controls.pristine"
+              *ngIf="pageType === 'edit'" (click)="save()">
+        <span>SAVE</span>
+      </button>
+    </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+
+        <!-- CONTENT -->
+        <div class="content">
+
+          <form name="renterForm" [formGroup]="renterForm" class="renter w-100-p" fxLayout="column" fxFlex>
+            <div class="tab-content p-24" fusePerfectScrollbar>
+              <div>
+                  <mat-form-field fxFlex="33" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Name</mat-label>
+                    <input matInput
+                          name="name"
+                          formControlName="name"
+                          required>
+                          <show-errors [control]="renterForm.controls.name"></show-errors>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="33" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Advance Months</mat-label>
+                    <input matInput
+                          name="advanceMonths"
+                          formControlName="advanceMonths"
+                          [(ngModel)]="renter.advanceMonths"
+                          (keyup)="selectRoom()"
+                          required>
+                          <show-errors [control]="renterForm.controls.advanceMonths"></show-errors>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="33" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Months Used</mat-label>
+                    <input matInput
+                          name="monthsUsed"
+                          formControlName="monthsUsed">
+                          <show-errors [control]="renterForm.controls.monthsUsed"></show-errors>
+                  </mat-form-field>
+
+              </div>
+              
+              <div>
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="33">
+                  <mat-label>Advance Paid Date</mat-label>
+                  <input matInput [matDatepicker]="advancePaidDatePicker" formControlName="advancePaidDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="advancePaidDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #advancePaidDatePicker></mat-datepicker>
+                  <show-errors [control]="renterForm.controls.advancePaidDate"></show-errors>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="33">
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startDatePicker></mat-datepicker>
+                  <show-errors [control]="renterForm.controls.startDate"></show-errors>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="33">
+                  <mat-label>Due Date</mat-label>
+                  <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #dueDatePicker></mat-datepicker>
+                  <show-errors [control]="renterForm.controls.dueDate"></show-errors>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="33">
+                  <mat-label>
+                      Room
+                  </mat-label>
+                  <mat-select formControlName="roomId" placeholder="[select one]" style="width:100%" name="roomId"
+                      (selectionChange)="selectRoom()"
+                      [(ngModel)]="renter.roomId"
+                    required>
+                    <mat-option *ngFor="let room of rooms" [value]="room.id" ng-value="room.id">
+                      {{room.name}}
+                    </mat-option>
+                  </mat-select>
+                  <show-errors [control]="renterForm.controls.roomId"></show-errors>
+                </mat-form-field>
+                
+                <mat-form-field fxFlex="33" appearance="outline" floatLabel="always">
+                  <mat-label># of persons</mat-label>
+                  <input matInput
+                        name="noOfPersons"
+                        formControlName="noOfPersons"
+                        required>
+                        <show-errors [control]="renterForm.controls.noOfPersons"></show-errors>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="33" appearance="outline" floatLabel="always">
+                  <mat-label>Total Paid Amount</mat-label>
+                  <input matInput
+                        name="totalPaidAmount"
+                        formControlName="totalPaidAmount"
+                        [(ngModel)]="renter.totalPaidAmount"
+                        (keyup)="onChangeTotalPaidAmount()"
+                        required>
+                        <show-errors [control]="renterForm.controls.totalPaidAmount"></show-errors>
+                </mat-form-field>
+              </div>
+
+              <div>
+                  <div [hidden]="!hasBalance" style="width: 33%">
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>Balance Pay Date</mat-label>
+                        <input matInput [matDatepicker]="balancePaidDatePicker" formControlName="balancePaidDate"
+                          [(ngModel)]="renter.balancePaidDate">
+                        <mat-datepicker-toggle matSuffix [for]="balancePaidDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #balancePaidDatePicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                <div class="is-rent-end" fxFlex="33" style="padding-top:18px;padding-left: 20px;">
+                  <label class="label-rent-end" style="color:black">Is Rent End?</label>
+                    <mat-radio-group formControlName="isEndRent" [(ngModel)]="renter.isEndRent">
+                        <mat-radio-button value="true">Yes</mat-radio-button>
+                        <mat-radio-button value="false" checked>No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div [hidden]="renter.isEndRent == false" style="width: 33%">
+                  <mat-form-field appearance="outline" floatLabel="always" style="width:100%">
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="dateEndRentPicker" formControlName="dateEndRent">
+                    <mat-datepicker-toggle matSuffix [for]="dateEndRentPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #dateEndRentPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="isShowBreakdown">
+                <h3>Breakdown</h3>
+                <strong>
+                  Monthly rent is {{monthlyRentPrice | number: '1.0-2'}} x {{renter.advanceMonths}} months advance = {{renter.totalAdvanceAmountDue | number: '1.0-2'}}
+                </strong>
+              </div>
+
+              <div [hidden]="hasBalance" style="color:maroon">
+                <br>
+                <strong>
+                  Total paid amount is {{renter.totalPaidAmount | number: '1.0-2'}} with balance of {{ renter.balanceAmount | number: '1.0-2'}}
+                </strong>
+              </div>
+          </div>
+          
+          </form>
+        </div>
+
+      </div>
+  </div>
+
+</div>

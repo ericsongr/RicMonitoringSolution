@@ -1,0 +1,96 @@
+<div id="room" class="page-layout carded fullwidth inner-scroll" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="row"  fxLayoutAlign="space-between center">
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apps/rent-room/rooms'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="room-image mr-8 mr-sm-16" [@animate]="{value:'*', params:{delay:'50ms', scale:'0.2'}}">
+          <img [src]="'assets/images/avatars/profile.jpg'">
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start start"
+           [@animate]="{value:'*',params:{delay:'100ms', x:'-25px'}}">
+          <div class="h2" *ngIf="pageType === 'edit'">
+            {{room.name}}
+          </div>
+          <div class="h2" *ngIf="pageType === 'new'">
+            New Room
+          </div>
+          <div class="subtitle secondary-text">
+            <span>Room Detail</span>
+          </div>
+        </div>
+      </div>
+      <!-- /APP TITLE -->
+
+      <button mat-raised-button 
+              class="save-room-button mat-white-bg mt-16 mt-sm-0"
+              [disabled]="roomForm.invalid"
+              *ngIf="pageType === 'add'" (click)="add()">
+        <span>ADD</span>
+      </button>
+
+      <button mat-raised-button 
+              class="save-room mat-white-bg mt-16 mt-sm-0"
+              [disabled]="roomForm.invalid || roomForm.pristine"
+              *ngIf="pageType === 'edit'" (click)="save()">
+        <span>SAVE</span>
+      </button>
+    </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+
+        <!-- CONTENT -->
+        <div class="content">
+
+          <form name="roomForm" [formGroup]="roomForm" class="room w-100-p" fxLayout="column" fxFlex>
+            <div class="tab-content p-24" fusePerfectScrollbar>
+              <div>
+                  <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Name</mat-label>
+                    <input matInput
+                          name="name"
+                          formControlName="name"
+                          required>
+                          <show-errors [control]="roomForm.controls.frequency"></show-errors>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="20" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Frequency</mat-label>
+                    <input matInput
+                          name="frequency"
+                          formControlName="frequency"
+                          required>
+                          <show-errors [control]="roomForm.controls.frequency"></show-errors>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="20" appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Price</mat-label>
+                    <input matInput
+                          name="price"
+                          formControlName="price"
+                          required>
+                          <show-errors [control]="roomForm.controls.price"></show-errors>
+                  </mat-form-field>
+                </div>
+          </div>
+          </form>
+        </div>
+
+      </div>
+  </div>
+
+</div>
