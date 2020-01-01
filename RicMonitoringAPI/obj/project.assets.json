@@ -13076,11 +13076,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Ricman\\dev\\aspcore-api\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
+      "projectUniqueName": "C:\\Ricman\\dev\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
       "projectName": "RicMonitoringAPI",
-      "projectPath": "C:\\Ricman\\dev\\aspcore-api\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
+      "projectPath": "C:\\Ricman\\dev\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
       "packagesPath": "C:\\Users\\Ericson\\.nuget\\packages\\",
-      "outputPath": "C:\\Ricman\\dev\\aspcore-api\\RicMonitoringSolution\\RicMonitoringAPI\\obj\\",
+      "outputPath": "C:\\Ricman\\dev\\RicMonitoringSolution\\RicMonitoringAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
