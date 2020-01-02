@@ -24,6 +24,10 @@ const appRoutes: Routes = [
         loadChildren: './main/apps/app-ricmonitoring.module#AppRicMonitoringModule'
     },
     {
+        path          : 'booking',
+        loadChildren  : './online-booking/online-booking.module#OnlineBookingModule'
+      },
+    {
         path      : '**',
         redirectTo: 'sample'
     }
