@@ -11,6 +11,7 @@ import 'hammerjs';
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
+import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 
 import { fuseConfig } from 'app/fuse-config';
 
@@ -25,11 +26,12 @@ const appRoutes: Routes = [
     },
     {
         path          : 'booking',
-        loadChildren  : './online-booking/online-booking.module#OnlineBookingModule'
+        loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
       },
     {
         path      : '**',
         redirectTo: 'sample'
+        // redirectTo: 'booking'
     }
 ];
 
@@ -54,6 +56,7 @@ const appRoutes: Routes = [
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),
+        MatSelectCountryModule,
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
@@ -63,7 +66,7 @@ const appRoutes: Routes = [
         LayoutModule,
         SampleModule
     ],
-    bootstrap   : [
+      bootstrap   : [
         AppComponent
     ]
 })
