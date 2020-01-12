@@ -13,6 +13,7 @@ export class ShowErrorsComponent {
 
     public static readonly errorMessages = {
         'required': () => 'This field is required.',
+        'email': () => 'Please enter a valid email address.',
     }
 
     @Input()
