@@ -41,6 +41,9 @@ export class OnlineBookingComponent implements OnInit {
         leaveMessage: [''],
         persons: this._formBuilder.array([])
       });
+
+      //add single entry for person
+      this.addPerson();
   }
 
   get persons() : FormArray {
@@ -51,7 +54,7 @@ export class OnlineBookingComponent implements OnInit {
     return this._formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      type: ['', Validators.required],
+      ages: ['', Validators.required],
     });
   }
 

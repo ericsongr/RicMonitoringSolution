@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RicMonitoringAPI.Common;
 using RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig;
 using RicMonitoringAPI.RicXplorer.Entities;
 using RicMonitoringAPI.RicXplorer.Entities.EntityTypeConfig;
@@ -7,11 +8,18 @@ namespace RicMonitoringAPI.RoomRent.Entities
 {
     public class RoomRentContext : DbContext
     {
+        public RoomRentContext()
+        {
+            DbInitializer.Initialize(new RoomRentContext());    
+        }
+
         public RoomRentContext(DbContextOptions<RoomRentContext> options) : 
             base(options)
         {
+           
         }
-
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             RenterMap.AddMap(modelBuilder);
@@ -21,6 +29,8 @@ namespace RicMonitoringAPI.RoomRent.Entities
 
             LookupTypesMap.AddMap(modelBuilder);
             LookupTypeItemsMap.AddMap(modelBuilder);
+
+            
         }
 
         public DbSet<Room> Rooms { get; set; }

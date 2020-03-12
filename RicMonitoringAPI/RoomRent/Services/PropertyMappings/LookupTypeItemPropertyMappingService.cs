@@ -1,0 +1,28 @@
+﻿using RicMonitoringAPI.Api.Services.PropertyMappings;
+using RicMonitoringAPI.RoomRent.Entities;
+using RicMonitoringAPI.RoomRent.Models;
+using RicMonitoringAPI.RoomRent.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
+{
+    public class LookupTypeItemPropertyMappingService : PropertyMappingService, ILookupTypeItemPropertyMappingService
+    {
+        private readonly Dictionary<string, PropertyMappingValue> _lookupTypeItemPropertyMapping =
+            new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
+            {
+                {"Id", new PropertyMappingValue(new List<string>() {"Id"}) },
+                {"Description", new PropertyMappingValue(new List<string>() {"Description"}) },
+                {"IsActive", new PropertyMappingValue(new List<string>() {"IsActive"}) },
+                {"LookupTypeId", new PropertyMappingValue(new List<string>() {"LookupTypeId"}) },
+            };
+
+        public LookupTypeItemPropertyMappingService()
+        {
+            base.Add(new PropertyMapping<LookupTypeItemDto, LookupTypeItems>(_lookupTypeItemPropertyMapping));
+        }
+
+    }
+
+}

@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -12,8 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using RicMonitoringAPI.Api.Services.Interfaces.PropertyMappings;
 using RicMonitoringAPI.Api.Services.PropertyMappings;
+using RicMonitoringAPI.Common;
 using RicMonitoringAPI.Common.Services;
 using RicMonitoringAPI.Common.Validators;
+using RicMonitoringAPI.RicXplorer.Services;
+using RicMonitoringAPI.RicXplorer.Services.Interfaces;
 using RicMonitoringAPI.RoomRent.Entities;
 using RicMonitoringAPI.RoomRent.Entities.Validators;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
@@ -43,10 +47,11 @@ namespace RicMonitoringAPI
             //mapped database connection string
             services.AddDbContext<RoomRentContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoryDbConnString")));
-
+            
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
             services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();
+            services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -61,6 +66,8 @@ namespace RicMonitoringAPI
             services.AddTransient<IRoomPropertyMappingService, RoomPropertyMappingService>();
             services.AddTransient<IRenterPropertyMappingService, RenterPropertyMappingService>();
             services.AddTransient<IRentTransactionPropertyMappingService, RentTransactionPropertyMappingService>();
+            services.AddTransient<ILookupTypePropertyMappingService, LookupTypePropertyMappingService>();
+            services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -99,7 +106,10 @@ namespace RicMonitoringAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app, 
-            IHostingEnvironment env)
+            IHostingEnvironment env,
+            RoomRentContext context
+            //,UserManager<IdentityUser> userManager
+            )
         {
 
             if (env.IsDevelopment())
@@ -127,6 +137,9 @@ namespace RicMonitoringAPI
                     .ForMember(dest => dest.DueDate,
                                 opt => opt.MapFrom(src => src.GetDueDate()));
 
+                cfg.CreateMap<LookupType, LookupTypeDto>();
+                cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();
+
             });
 
             //Enable CORS policy "AllowCors"
@@ -134,6 +147,9 @@ namespace RicMonitoringAPI
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            //seeding initial data here
+            DbInitializer.Initialize(context);
         }
     }
 }
