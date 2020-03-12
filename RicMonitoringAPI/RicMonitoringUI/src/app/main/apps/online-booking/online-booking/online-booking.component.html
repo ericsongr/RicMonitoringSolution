@@ -12,6 +12,9 @@
   <div class="content p-24">
     <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
         <br/>  
+        <div>
+          <span class="mat-title">Person(s) Details </span>
+        </div>
         <div formArrayName="persons" *ngFor="let person of bookingForm.get('persons')['controls']; let i = index;">
             <ng-container [formGroupName]="i">
               <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
@@ -35,55 +38,46 @@
               </mat-form-field>
 
               <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-                <mat-label>Type</mat-label>
-                      <mat-select formControlName="type" required>
+                <mat-label>Ages</mat-label>
+                      <mat-select formControlName="ages" required>
                         <mat-option value="Adult">Adult</mat-option>
                         <mat-option value="Children">Children</mat-option>
                         <mat-option value="Infant">Infant</mat-option>
                       </mat-select>
-                      <show-errors [control]="person.controls.type"></show-errors>
+                      <show-errors [control]="person.controls.ages"></show-errors>
               </mat-form-field>
             </ng-container>
         </div>
-       <br>
+        <div class="text-right mr-20">
+          <button type="button" class="mat-raised-button accent" (click)="addPerson()">
+            Add New Person
+          </button>
+        </div>
+        <br>
        <div>
-         <div fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-select-country appearance="outline" 
-          (onCountrySelected)="onCountrySelected($event)">
-          </mat-select-country> 
-          <input type="hidden" [(ngModel)]="countryInput" formControlName="country" required/>
-          <show-errors [control]="bookingForm.controls.country"></show-errors>
-         </div>
-         <!-- <mat-select-country appearance="outline" 
-         (onCountrySelected)="onCountrySelected($event)">
-         </mat-select-country>  -->
-        <!-- <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-label>Country</mat-label>
-          <mat-select-country appearance="outline" 
-          formControlName="country"
-                    (onCountrySelected)="onCountrySelected($event)">
-          </mat-select-country>
-                <show-errors [control]="bookingForm.controls.country"></show-errors>
-        </mat-form-field> -->
-        <!-- <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-label>Country</mat-label>
-          <mat-select-country appearance="outline" 
-          formControlName="country"
-                    (onCountrySelected)="onCountrySelected($event)">
-          </mat-select-country>
-                <show-errors [control]="bookingForm.controls.country"></show-errors>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-label>Languages Spoken</mat-label>
+         <mat-form-field fxFlex="25" appearance="outline" floatLabel="always" class="w-100-p">
+          <mat-label>Email</mat-label>
           <input matInput
-                name="languagesSpoken"
-                formControlName="languagesSpoken"
+                name="email"
+                formControlName="email"
                 autocomplete="off"
                 required/>
-                <show-errors [control]="bookingForm.controls.languagesSpoken"></show-errors>
-        </mat-form-field> -->
-        <mat-form-field  fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
+                <mat-icon matSuffix>@</mat-icon>
+                <show-errors [control]="bookingForm.controls.email"></show-errors>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="25" appearance="outline" floatLabel="always" class="w-100-p">
+          <mat-label>Contact</mat-label>
+          <input matInput
+                name="contact"
+                formControlName="contact"
+                autocomplete="off"
+                required/>
+                <mat-icon matSuffix>phone</mat-icon>
+                <show-errors [control]="bookingForm.controls.contact"></show-errors>
+        </mat-form-field>
+        
+        <mat-form-field  fxFlex="30" appearance="outline" floatLabel="always" class="w-100-p">
           <mat-label>Languages Spoken (eg. English, Tagalog)</mat-label>
           <mat-chip-list #chipListLangues>
             <mat-chip *ngFor="let language of languages" [selectable]="selectable"
@@ -100,31 +94,19 @@
                    required>
           </mat-chip-list>
         </mat-form-field>
+
+        <div fxFlex="20" appearance="outline" floatLabel="always" class="w-100-p">
+          <mat-select-country appearance="outline"
+          (onCountrySelected)="onCountrySelected($event)">
+          </mat-select-country> 
+          <input type="hidden" [(ngModel)]="countryInput" formControlName="country" required/>
+          <show-errors [control]="bookingForm.controls.country"></show-errors>
+         </div>
       </div>
 
-      <div>
-        <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-label>Email</mat-label>
-          <input matInput
-                name="email"
-                formControlName="email"
-                autocomplete="off"
-                required/>
-                <mat-icon matSuffix>@</mat-icon>
-                <show-errors [control]="bookingForm.controls.email"></show-errors>
-        </mat-form-field>
-
-        <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
-          <mat-label>Contact</mat-label>
-          <input matInput
-                name="contact"
-                formControlName="contact"
-                autocomplete="off"
-                required/>
-                <mat-icon matSuffix>phone</mat-icon>
-                <show-errors [control]="bookingForm.controls.contact"></show-errors>
-        </mat-form-field>
-      </div>
+      <!-- <div>
+        
+      </div> -->
 
       <div>
         <mat-form-field fxFlex="98" appearance="outline" floatLabel="always" class="w-100-p">
@@ -135,14 +117,10 @@
                 formControlName="leaveMessage"/>
         </mat-form-field>
       </div>
-       <p>
-        <button type="submit">Submit</button>
-      </p>
+       <div class="text-right mr-20">
+        <button type="submit" class="mat-raised-button warn">Book Now</button>
+       </div>
     </form>
-
-    <p>
-      <button type="button" (click)="addPerson()">Add</button>
-    </p>
      
     <!-- {{this.bookingForm.value | json}} -->
   </div>

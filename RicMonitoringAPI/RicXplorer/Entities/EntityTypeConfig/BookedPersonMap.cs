@@ -20,7 +20,7 @@ namespace RicMonitoringAPI.RicXplorer.Entities.EntityTypeConfig
             modelBuilder.Entity<BookedPerson>()
                 .HasOne(t => t.LookupTypeItems)
                 .WithMany(p => p.BookedPersons)
-                .HasForeignKey(f => f.Type)
+                .HasForeignKey(f => f.Ages)
                 .HasConstraintName("ForeignKey_LookupTypeItems_BookedPersons");
 
             modelBuilder.Entity<LookupType>().ToTable("BookedPersons");

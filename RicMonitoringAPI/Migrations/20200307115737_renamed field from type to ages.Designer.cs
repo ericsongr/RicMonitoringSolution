@@ -3,16 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RicMonitoringAPI.RoomRent.Entities;
 
 namespace RicMonitoringAPI.Migrations
 {
     [DbContext(typeof(RoomRentContext))]
-    partial class RoomRentContextModelSnapshot : ModelSnapshot
+    [Migration("20200307115737_renamed field from type to ages")]
+    partial class renamedfieldfromtypetoages
     {
-        
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +78,7 @@ namespace RicMonitoringAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
+                    b.Property<int>("Name")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
