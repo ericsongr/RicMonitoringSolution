@@ -7,16 +7,15 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
 import { ShowErrorsComponent } from "../common/show-errors.component";
 import { OnlineBookingComponent } from "./online-booking/online-booking.component";
 import { OnlineBookingService } from "./online-booking/online-booking.service";
+import { LookupTypeItemsService } from "../common/services/lookup-type-items.service";
 
 const routes : Routes = [{
     path        : '',
     component   : OnlineBookingComponent,
-    // resolve     : {
-    //         data: OnlineBookingService
-    // }
-}
-
-]
+    resolve     : {
+            data: OnlineBookingService
+    }
+}]
 
 @NgModule({
     imports: [
@@ -32,7 +31,8 @@ const routes : Routes = [{
         OnlineBookingComponent
     ],
     providers: [
-        OnlineBookingService
+        OnlineBookingService,
+        LookupTypeItemsService
     ]
 })
 export class OnlineBookingModule {}

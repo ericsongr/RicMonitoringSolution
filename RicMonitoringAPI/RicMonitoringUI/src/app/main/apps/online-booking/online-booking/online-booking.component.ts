@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FuseConfigService } from '@fuse/services/config.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 import { Country } from '@angular-material-extensions/select-country';
 import { MatChipInputEvent } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { LookupTypeItemsService } from '../../common/services/lookup-type-items.service';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { OnlineBookingService } from './online-booking.service';
 
 export interface Language {
   name: string;
@@ -26,35 +30,53 @@ export class OnlineBookingComponent implements OnInit {
   config: any;
   addOnBlur = true;
 
+  onAgesChanged: Subscription;
+  lookupTypeAges: []
+  agesDefaultValue: string;
+
   constructor(
+    private _onlineBookingService: OnlineBookingService,
     private _formBuilder: FormBuilder,
     private _fuseConfigService: FuseConfigService) 
     {
       //set window settings
       this.setConfig();
 
-      this.bookingForm = this._formBuilder.group({
-        country: ['', Validators.required],
-        languagesSpoken: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        contact: ['', Validators.required],
-        leaveMessage: [''],
-        persons: this._formBuilder.array([])
-      });
+      this.onAgesChanged = 
+        this._onlineBookingService.onLookupTypeItemsChanged
+            .subscribe(result =>{
+                this.lookupTypeAges = result.ages;
+                this.agesDefaultValue = result.defaultValue;
+            });
 
-      //add single entry for person
-      this.addPerson();
+           //initialize form
+            this.bookingForm = this._formBuilder.group({
+              country: ['', Validators.required],
+              languagesSpoken: ['', Validators.required],
+              email: ['', [Validators.required, Validators.email]],
+              contact: ['', Validators.required],
+              leaveMessage: [''],
+              persons: this._formBuilder.array([])
+            });
+
+            //just delay to default value for ages
+             setTimeout(() => {
+                //add single entry for person by default
+                  this.addPerson();
+            }, 100);
   }
 
   get persons() : FormArray {
+    debugger;
     return this.bookingForm.get("persons") as FormArray
   }
 
   newPerson() : FormGroup {
+    
     return this._formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      ages: ['', Validators.required],
+      ages: [this.agesDefaultValue, Validators.required],
     });
   }
 
@@ -67,8 +89,6 @@ export class OnlineBookingComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log(this.bookingForm.value);
-
     var data = this.bookingForm.value;
     data.languagesSpoken =  this.getLanguagesSpoken(); 
     console.log(data);
@@ -128,11 +148,18 @@ export class OnlineBookingComponent implements OnInit {
   }
 
   ngOnInit() {
+      this.subscribeConfigChanged();
+  } 
+
+
+  subscribeConfigChanged() {
+
     // Subscribe to config change
     this._fuseConfigService.config
     .subscribe((config) => {
         this.config = config;
     });
+
   }
 
 }

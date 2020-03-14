@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.Common.Enumeration;
 using RicMonitoringAPI.RicXplorer.Interfaces;
 using RicMonitoringAPI.RoomRent.Entities;
@@ -18,7 +19,7 @@ namespace RicMonitoringAPI.RicXplorer.Entities.Seeders
             lookupTypeItems.ForEach(lookupTypeItem =>
             {
                 var item = context.LookupTypeItems.SingleOrDefault(o =>
-                    o.LookupTypes.Name == LookupTypeEnum.Ages.ToString() &&
+                    o.LookupTypes.Name == LookupTypeConstant.Ages &&
                     o.Description.Trim().ToLower() == lookupTypeItem.Description.Trim().ToLower());
                 if (item == null)
                 {
@@ -42,9 +43,9 @@ namespace RicMonitoringAPI.RicXplorer.Entities.Seeders
                 var lookupTypeId = lookupType.Id;
                 var lookupTypeItems = new List<LookupTypeItems>
                 {
-                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = "Adult", IsActive = true},
-                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = "Children", IsActive = true},
-                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = "Infant", IsActive = true},
+                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = LookupTypeItemConstant.Adult, IsActive = true},
+                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = LookupTypeItemConstant.Children, IsActive = true},
+                    new LookupTypeItems {LookupTypeId = lookupTypeId, Description = LookupTypeItemConstant.Infant, IsActive = true},
                 };
 
                 return lookupTypeItems.ToList();
