@@ -39,10 +39,10 @@
 
               <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
                 <mat-label>Ages</mat-label>
-                      <mat-select formControlName="ages" required>
-                        <mat-option value="Adult">Adult</mat-option>
-                        <mat-option value="Children">Children</mat-option>
-                        <mat-option value="Infant">Infant</mat-option>
+                      <mat-select formControlName="ages" name="ages" required>
+                        <mat-option *ngFor="let age of lookupTypeAges" [value]="age.id" ng-value="age.id">
+                          {{age.description}}
+                        </mat-option>
                       </mat-select>
                       <show-errors [control]="person.controls.ages"></show-errors>
               </mat-form-field>

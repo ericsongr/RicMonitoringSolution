@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.Common.Enumeration;
 using RicMonitoringAPI.RicXplorer.Interfaces;
 using RicMonitoringAPI.RoomRent.Entities;
@@ -33,7 +34,7 @@ namespace RicMonitoringAPI.RicXplorer.Entities.Seeders
         {
             var lookupTypes = new List<LookupType>
             {
-                new LookupType {Name = LookupTypeEnum.Ages.ToString()}
+                new LookupType {Name = LookupTypeConstant.Ages}
             };
 
             return lookupTypes.ToList();

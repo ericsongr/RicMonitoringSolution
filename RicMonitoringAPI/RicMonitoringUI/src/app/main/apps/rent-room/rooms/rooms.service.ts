@@ -38,7 +38,6 @@ export class RoomsService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       var url = `${API_URL}${fields}`;
-
       this._httpClient.get(url)
           .subscribe((response: any) => {
               this.rooms = response;
