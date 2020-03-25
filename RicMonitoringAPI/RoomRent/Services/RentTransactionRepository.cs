@@ -24,8 +24,11 @@ namespace RicMonitoringAPI.Services.RoomRent
             _propertyMappingService = propertyMappingService;
         }
 
-        public IQueryable<RentTransaction2> GetTransactionQueryResult(int renterId = 0)
+        public IQueryable<RentTransaction2> GetTransactionQueryResult(DateTime selectedDate, int renterId = 0)
         {
+
+            selectedDate = DateTime.Now.AddMonths(1);
+
             var renters = _context.Renters
                            .Select(o => new
                            {
@@ -35,8 +38,6 @@ namespace RicMonitoringAPI.Services.RoomRent
                                RoomName = o.Room.Name,
                                MonthlyRent = o.Room.Price,
                                DueDate = o.DueDay,
-                               Month = DateTime.Now.Month,
-                               Year = DateTime.Now.Year,
                            });
 
             if (renterId > 0)
@@ -46,7 +47,7 @@ namespace RicMonitoringAPI.Services.RoomRent
 
             var transactions = (from r in renters
                                 join t in _context.RentTransactions
-                                on new { r.RenterId, r.Month, r.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
+                                on new { r.RenterId, selectedDate.Month, selectedDate.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
                                 into rentTrans
                                 from trans in rentTrans.DefaultIfEmpty()
                                 select new RentTransaction2
@@ -64,8 +65,8 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
                                     BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
                                     Note = trans.Note == null ? "" : trans.Note,
-                                    Month = r.Month,
-                                    Year = r.Year,
+                                    Month = selectedDate.Month,
+                                    Year = selectedDate.Year,
                                     TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType
                                 });
 
@@ -76,10 +77,10 @@ namespace RicMonitoringAPI.Services.RoomRent
         {
             
 
-            var currentDate = DateTime.Now;
+            var selectedDate = DateTime.Now.AddMonths(1);
 
 
-            var transactions = GetTransactionQueryResult();
+            var transactions = GetTransactionQueryResult(selectedDate);
             var collectionBeforPaging =
                 transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());

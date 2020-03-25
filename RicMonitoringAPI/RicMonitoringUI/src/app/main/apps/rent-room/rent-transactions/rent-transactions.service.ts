@@ -36,7 +36,6 @@ export class RentTransactionsService implements Resolve<any> {
       console.log(url);
       this._httpClient.get(url)
           .subscribe((response: any) => {
-             console.log(response);
               this.rentTransactions = response;
             
               this.onRentTransactionsChanged.next(this.rentTransactions);
