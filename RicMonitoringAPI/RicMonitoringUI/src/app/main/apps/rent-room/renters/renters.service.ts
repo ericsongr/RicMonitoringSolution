@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 
 const API_URL = environment.webApi + ApiControllers.Renters;
-const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDateString,noOfPersons&orderBy=name";
+const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=name";
 const DROPDOWN_FIELDS = "?fields=id,name";
 
 @Injectable()

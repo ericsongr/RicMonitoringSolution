@@ -18,7 +18,7 @@
               <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                   shopping_basket
               </mat-icon>
-              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Renters</span>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Tenants</span>
           </div>
           <!-- / APP TITLE -->
 
@@ -26,16 +26,16 @@
           <div class="search-wrapper ml-sm-32">
               <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                   <mat-icon>search</mat-icon>
-                  <input #filter placeholder="Search for an renters">
+                  <input #filter placeholder="Search for an tenants">
               </div>
           </div>
           <!-- / SEARCH -->
 
           <!-- add new renter -->
           <button mat-raised-button
-                [routerLink]="'/apps/rent-room/renters/new'"
+                [routerLink]="'/apps/rent-room/tenants/new'"
                 class="add-room-button mat-white-bg my-12 mt-sm-0">
-            <span>ADD NEW RENTER</span>
+            <span>ADD NEW TENANT</span>
           </button>
           <!-- / add new renter -->
       </div>
@@ -83,10 +83,10 @@
             </ng-container>
 
             <!-- Due Date Column -->
-            <ng-container matColumnDef="dueDateString">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
+            <ng-container matColumnDef="dueDayString">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Due Day</mat-header-cell>
                 <mat-cell *matCellDef="let renter">
-                  <p class="text-truncate">{{renter.dueDateString}}</p>
+                  <p class="text-truncate">Every {{renter.dueDayString}} of the month</p>
                 </mat-cell>
               </ng-container>
 
@@ -103,7 +103,7 @@
               <mat-row *matRowDef="let renter; columns: displayedColumns;"
                        class="renter"
                        matRipple
-                       [routerLink]="'/apps/rent-room/renters/' + renter.id + '/' + handleize(renter.name)">
+                       [routerLink]="'/apps/rent-room/tenants/' + renter.id + '/' + handleize(renter.name)">
               </mat-row>
           </mat-table>
 

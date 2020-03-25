@@ -77,7 +77,8 @@ page-rent-transactions {
         }
 
         .mat-column-id {
-            flex: 0 1 50px;
+            // flex: 0 1 50px;
+            display: none;
         }
 
         .mat-column-renterId {
@@ -90,12 +91,18 @@ page-rent-transactions {
             display: none;
           }
 
-          .mat-column-renter {
-            flex: 0 1 200px;
+          .mat-column-transactionType {
+            // flex: 0 1 30px;
+            display: none;
           }
 
-          .mat-column-room {
-            flex: 0 1 200px;
+          .mat-column-renterName {
+            flex: 0 1 150px;
+            padding-left: 20px;
+          }
+
+          .mat-column-roomName {
+            flex: 0 1 150px;
           }
 
         .mat-column-image {

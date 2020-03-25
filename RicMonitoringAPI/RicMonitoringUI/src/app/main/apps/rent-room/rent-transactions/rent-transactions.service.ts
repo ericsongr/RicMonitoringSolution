@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions;
-const TABLE_FIELDS = "?fields=id,renter,renterId,room,roomId,monthlyRent,dueDate,paidDate,amount,balanceDateToBePaid,isDepositUsed,note&orderBy=renter,room";
+const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,isDepositUsed,transactionType,note&orderBy=dueDay";
 
 @Injectable()
 export class RentTransactionsService implements Resolve<any> {
@@ -31,13 +31,18 @@ export class RentTransactionsService implements Resolve<any> {
 
   getRentTransactions(): Promise<any> {
        return new Promise((resolve, reject) => {
+
       var url = `${API_URL}${TABLE_FIELDS}`;
-        console.log(url);
+      console.log(url);
       this._httpClient.get(url)
           .subscribe((response: any) => {
+             console.log(response);
               this.rentTransactions = response;
+            
               this.onRentTransactionsChanged.next(this.rentTransactions);
+            
               resolve(response);
+
           }, reject);
     })
 

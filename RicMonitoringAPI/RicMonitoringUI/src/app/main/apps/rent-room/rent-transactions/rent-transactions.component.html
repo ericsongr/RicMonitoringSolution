@@ -18,7 +18,7 @@
               <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                   shopping_basket
               </mat-icon>
-              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Rent Transactions</span>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Tenant Transactions</span>
           </div>
           <!-- / APP TITLE -->
 
@@ -26,18 +26,10 @@
           <div class="search-wrapper ml-sm-32">
               <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                   <mat-icon>search</mat-icon>
-                  <input #filter placeholder="Search for an transactions">
+                  <input #filter placeholder="Search">
               </div>
           </div>
           <!-- / SEARCH -->
-
-          <!-- add new room -->
-          <button mat-raised-button
-                [routerLink]="'/apps/rent-room/rent-transactions/new'"
-                class="add-room-button mat-white-bg my-12 mt-sm-0">
-            <span>NEW ROOM</span>
-          </button>
-          <!-- / add new room -->
       </div>
       <!-- / HEADER -->
 
@@ -52,8 +44,8 @@
 
               <!-- ID Column -->
               <ng-container matColumnDef="id">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                  <mat-cell *matCellDef="let rentTransaction">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                  <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
                       <p class="text-truncate">{{rentTransaction.id}}</p>
                   </mat-cell>
               </ng-container>
@@ -71,69 +63,85 @@
                     <p class="text-truncate">{{rentTransaction.renterId}}</p>
                 </mat-cell>
             </ng-container>
+            <ng-container matColumnDef="transactionType">
+              <mat-header-cell *matHeaderCellDef>transactionType</mat-header-cell>
+              <mat-cell *matCellDef="let rentTransaction">
+                  <p class="text-truncate">{{rentTransaction.transactionType}}</p>
+              </mat-cell>
+          </ng-container>
 
               <!-- renter Column -->
-              <ng-container matColumnDef="renter">
+              <ng-container matColumnDef="renterName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Renter</mat-header-cell>
-                  <mat-cell *matCellDef="let rentTransaction">
-                      <p class="text-truncate">{{rentTransaction.renter}}</p>
+                  <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                      <p class="text-truncate">{{rentTransaction.renterName}}</p>
                   </mat-cell>
               </ng-container>
 
               <!-- Room Column -->
-              <ng-container matColumnDef="room">
+              <ng-container matColumnDef="roomName">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Room</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction">
-                    <p class="text-truncate">{{rentTransaction.room}}</p>
+                <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                    <p class="text-truncate">{{rentTransaction.roomName}}</p>
                 </mat-cell>
               </ng-container>
 
             <!-- Monthly Rent Column -->
             <ng-container matColumnDef="monthlyRent">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Rent</mat-header-cell>
-              <mat-cell *matCellDef="let rentTransaction">
+              <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
                 <p class="text-truncate right">{{rentTransaction.monthlyRent | number: '1.0-2' }}</p>
               </mat-cell>
             </ng-container>
 
             <!-- dueDate Column -->
-            <ng-container matColumnDef="dueDate">
+            <ng-container matColumnDef="dueDateString">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction">
-                    <p class="text-truncate">{{rentTransaction.dueDate | date}}</p>
+                <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                    <p class="text-truncate">{{rentTransaction.dueDateString}}</p>
                 </mat-cell>
               </ng-container>
 
+            <!-- amount Column -->
+            <ng-container matColumnDef="paidAmount">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</mat-header-cell>
+              <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                  <p class="text-truncate">{{rentTransaction.paidAmount | number: '1.0-2' }}</p>
+              </mat-cell>
+            </ng-container>
+
             <!-- paidDate Column -->
-            <ng-container matColumnDef="paidDate">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Paid Date</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction">
-                    <p class="text-truncate">{{rentTransaction.paidDate}}</p>
-                </mat-cell>
-              </ng-container>
-            
-              <!-- amount Column -->
-            <ng-container matColumnDef="amount">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction">
-                    <p class="text-truncate">{{rentTransaction.amount}}</p>
+            <ng-container matColumnDef="datePaidString">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date Paid</mat-header-cell>
+                <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                    <p class="text-truncate">{{rentTransaction.datePaidString}}</p>
                 </mat-cell>
               </ng-container>
              
-              <!-- balanceDateToBePaid Column -->
+               <!-- balanceDateToBePaid Column -->
+              <ng-container matColumnDef="balance">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Balance</mat-header-cell>
+                <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
+                    <p class="text-truncate">{{rentTransaction.balance | number: '1.0-2' }}</p>
+                </mat-cell>
+              </ng-container>
+
+            <!-- balanceDateToBePaid Column -->
             <ng-container matColumnDef="balanceDateToBePaid">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Date</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Bal. Date</mat-header-cell>
+                <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
                     <p class="text-truncate">{{rentTransaction.balanceDateToBePaid | date}}</p>
                 </mat-cell>
               </ng-container>
             
               <!-- IsActive Column -->
             <ng-container matColumnDef="isDepositUsed">
-                <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Deposit Used</mat-header-cell>
-                <mat-cell *matCellDef="let rentTransaction" fxHide fxShow.gt-xs>
-                  <mat-icon *ngIf="rentTransaction.isDepositUsed" class="active-icon mat-green-600-bg s-16">check</mat-icon>
-                  <mat-icon *ngIf="!rentTransaction.isDepositUsed" class="active-icon mat-red-500-bg s-16">close</mat-icon>
+                <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>D.Used</mat-header-cell>
+                <mat-cell *matCellDef="let rentTransaction" fxHide fxShow.gt-xs [style.color]="getColor(rentTransaction.transactionType)">
+                  <div class="pl-20">
+                    <mat-icon *ngIf="rentTransaction.isDepositUsed" class="active-icon mat-green-600-bg s-16">check</mat-icon>
+                    <mat-icon *ngIf="!rentTransaction.isDepositUsed" class="active-icon mat-red-500-bg s-16">close</mat-icon>
+                  </div>
                 </mat-cell>
               </ng-container>
             
@@ -142,7 +150,7 @@
               <mat-row *matRowDef="let rentTransaction; columns: displayedColumns;"
                        class="rentTransaction"
                        matRipple
-                       [routerLink]="'/apps/rent-room/renter-transactions/' + rentTransaction.id + '/' + rentTransaction.renterId + '/' + rentTransaction.roomId + '/' + rentTransaction.dueDate + '/' + handleize(rentTransaction.renter)">
+                       [routerLink]="'/apps/rent-room/tenant-transactions/' + rentTransaction.renterId + '/' + handleize(rentTransaction.renterName)">
               </mat-row>
           </mat-table>
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RicMonitoringAPI.RoomRent.Entities;
@@ -34,22 +35,22 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             _typeHelperService = typeHelperService;
         }
 
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(int id, [FromQuery] string fields)
+        [HttpGet("{renterId}", Name = "Get")]
+        public async Task<IActionResult> Get(int renterId, [FromQuery] string fields)
         {
 
-            if (!_typeHelperService.TypeHasProperties<RentTransactionDto>(fields))
+            if (!_typeHelperService.TypeHasProperties<RentTransaction2Dto>(fields))
             {
                 return BadRequest();
             }
 
-            var rentTransactionFromRepo = await _rentTransactionRepository.GetSingleAsync(o => o.Id == id);
+            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(renterId).SingleOrDefault();
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();
             }
 
-            var rentTransaction = Mapper.Map<RentTransactionDto>(rentTransactionFromRepo);
+            var rentTransaction = Mapper.Map<RentTransaction2Dto>(rentTransactionFromRepo);
 
             return Ok(rentTransaction.ShapeData(fields));
         }
@@ -108,14 +109,14 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
                 return NotFound();
             }
 
-            var RentTransactionEntity = Mapper.Map<RentTransaction>(rentTransaction);
+            var rentTransactionEntity = Mapper.Map<RentTransaction>(rentTransaction);
 
-            _rentTransactionRepository.Add(RentTransactionEntity);
+            _rentTransactionRepository.Add(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
-            var RentTransactionToReturn = Mapper.Map<RentTransactionDto>(RentTransactionEntity);
+            var rentTransactionToReturn = Mapper.Map<RentTransactionDto>(rentTransactionEntity);
 
-            return CreatedAtRoute("GetAll", new { id = RentTransactionToReturn.Id }, RentTransactionToReturn);
+            return CreatedAtRoute("GetAll", new { id = rentTransactionToReturn.Id }, rentTransactionToReturn);
         }
 
         [HttpPut("{id}", Name = "Update")]
@@ -133,13 +134,12 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             }
 
             rentTransactionEntity.PaidDate = rentTransaction.PaidDate;
-            rentTransactionEntity.Amount = rentTransaction.Amount;
+            rentTransactionEntity.PaidAmount = rentTransaction.PaidAmount;
             rentTransactionEntity.Balance = rentTransaction.Balance;
             rentTransactionEntity.BalanceDateToBePaid = rentTransaction.BalanceDateToBePaid;
             rentTransactionEntity.IsDepositUsed = rentTransaction.IsDepositUsed;
             rentTransactionEntity.Note = rentTransaction.Note;
-            rentTransactionEntity.DueDate = rentTransaction.DueDate;
-
+            
             _rentTransactionRepository.Update(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
@@ -193,13 +193,13 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<RentTransaction>> DeleteRentTransaction(int id)
         {
-            var RentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(id);
-            if (RentTransactionEntity == null)
+            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(id);
+            if (rentTransactionEntity == null)
             {
                 return NotFound();
             }
 
-            _rentTransactionRepository.Delete(RentTransactionEntity);
+            _rentTransactionRepository.Delete(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
             return Ok(new { message = "Rent Transaction successfully deleted."});

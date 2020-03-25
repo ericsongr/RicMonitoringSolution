@@ -3,5 +3,7 @@
 namespace RicMonitoringAPI.RoomRent.Models
 {
     public class RoomDto : Room
-    { }
+    {
+        
+    }
 }

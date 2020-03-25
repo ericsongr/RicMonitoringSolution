@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Renter } from './renter.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { RenterService } from './renter.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatRadioChange } from '@angular/material';
 import { FuseUtils } from '@fuse/utils';
 import { Location } from '@angular/common';
 import { RoomsService } from '../rooms/rooms.service';
+import { AppFunctionsService } from '../../common/services/app-functions.service';
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-renter',
@@ -19,46 +21,67 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
   pageType: string;
   renterForm: FormGroup;
   onRenterChanged: Subscription;
+  
   rooms: any;
+  daysWithSuffix: any;
   
   isShowBreakdown: boolean = false;
   monthlyRentPrice: number;
   hasBalance: boolean = true;
+  dueDay: string;
   
   constructor(
+    private _appFunctionsService: AppFunctionsService,
     private _renterService: RenterService,
     private _roomsService: RoomsService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
-    private _location : Location
+    private _location : Location,
+    private _cdr: ChangeDetectorRef
     ) { }
     
     ngOnInit() {
       
       this.onRenterChanged =
       this._renterService.onRenterChanged
-      .subscribe(renter => {
-        if(renter) {
-          this.renter = new Renter(renter);
-          this.pageType = 'edit';
+          .subscribe(renter => {
 
-          //delay 1 second
-          setTimeout(() => {
-            this.onChangeTotalPaidAmount();
+            //fetch rooms
+            this.fetchRooms();
+
+            if(renter) {
+              this.renter = new Renter(renter);
+              this.pageType = 'edit';
+              
+              //delay after 1 second
+              setTimeout(() => {
+                this.selectRoom();
+                this.onChangeTotalPaidAmount();
+              });
+              
+              var dateStart = moment(this.renter.startDate).format('YYYY-MM-DD');
+              //fetch days with suffix
+              this.fetchDaysWithSuffix(dateStart);
+              
+              this.dueDay = renter.dueDay.toString();
+              
+            } 
+            else 
+            {
+              this.pageType = 'add';
+              this.renter = new Renter();
+
+              var dateStart = moment().format('YYYY-MM-DD');
+              //fetch days with suffix
+              this.fetchDaysWithSuffix(dateStart);
+              this.dueDay = moment().format('DD');
+
+            }
+            
+            this.renterForm = this.createRenterForm();
+
           });
 
-        } 
-        else 
-        {
-          this.pageType = 'add';
-          this.renter = new Renter();
-        }
-        
-        this.renterForm = this.createRenterForm();
-        
-        //fetch rooms
-        this.fetchRooms();
-      });
     }
 
     ngAfterViewInit(): void {
@@ -73,7 +96,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
       monthsUsed:       [this.renter.monthsUsed],
       advancePaidDate:  [this.renter.advancePaidDate, Validators.required],
       startDate:        [this.renter.startDate, Validators.required],
-      dueDate:          [this.renter.dueDate, Validators.required],
+      dueDay:           [this.renter.dueDay, Validators.required],
       noOfPersons:      [this.renter.noOfPersons, Validators.required],
       roomId:           [this.renter.roomId, Validators.required],
       isEndRent:        [this.renter.isEndRent],
@@ -90,12 +113,29 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
         })
   }
 
+  fetchDaysWithSuffix(selectedDate: string) {
+    //1st, 2nd, 6th
+    this._appFunctionsService.getDaysWithSuffix(selectedDate)
+        .then(response => {
+          this.daysWithSuffix = response;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  }
+
   save() {
     const data = this.renterForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
     data.balanceAmount = this.renter.balanceAmount;
-    console.log()
-    console.log('data: ', data);
+    data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
+    data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;
+    data.handle = FuseUtils.handleize(data.name);
+    
+    if (!this.hasBalance){
+      data.balancePaidDate = null;
+      data.balanceAmount = 0;
+    }
+
     this._renterService.saveRenter(data)
         .then(() => {
 
@@ -109,20 +149,22 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           //change the location with new one
-          this._location.go(`/apps/rent-room/renters/${this.renter.id}/${this.renter.handle}`);
+          this._location.go(`/apps/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
         })
   }
 
   add() {
     const data = this.renterForm.getRawValue();
     data.balanceAmount = this.renter.balanceAmount;
-
+    data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
+    data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;
     data.handle = FuseUtils.handleize(data.name);
 
     this._renterService.addRenter(data)
-        .then(() => {
-
+        .then((renterId) => {
           //Trigger the subscription with new data
+
+          data.id = renterId;
           this._renterService.onRenterChanged.next(data);
 
           //show the success message
@@ -132,13 +174,17 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           //change the location with new one
-          this._location.go(`/apps/rent-room/renters/${this.renter.id}/${this.renter.handle}`);
-        })
+          this._location.go(`/apps/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
+          this._cdr.detectChanges();
+        }).catch(error =>{
+          console.log('error: ', error);
+        });
   }
 
   selectRoom() {
 
-    var advanceMonths = Number(this.renter.advanceMonths);
+    var advanceMonths = Number(this.renter.advanceMonths == undefined ? 0 : this.renter.advanceMonths);
+ 
     if(advanceMonths > 0) {
       var room = this.rooms.find(room => room.id == this.renter.roomId)
       if(room != undefined){
@@ -150,19 +196,48 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isShowBreakdown = false;
       }
     }
-    
+   
+    this.onChangeTotalPaidAmount();
+  }
+
+  get balancePaidDate() {
+    return this.renterForm.get('balancePaidDate');
+  }
+
+  get dateEndRent() {
+    return this.renterForm.get('dateEndRent');
   }
 
   onChangeTotalPaidAmount() {
-    this.selectRoom();
-    this.hasBalance = Number(this.renter.totalAdvanceAmountDue) > Number(this.renter.totalPaidAmount);
-    console.log('hasBalance:', this.hasBalance);
-    this.renter.balanceAmount = this.renter.totalAdvanceAmountDue - this.renter.totalPaidAmount;
+      this.renter.balanceAmount = this.renter.totalAdvanceAmountDue - this.renter.totalPaidAmount;
+      this.hasBalance = Number(this.renter.totalAdvanceAmountDue) > Number(this.renter.totalPaidAmount);
     
-    if(!this.hasBalance){
-      this.renter.balancePaidDate = null;
-    }
+      if(!this.hasBalance){
+        this.renter.balancePaidDate = null;
+        this.balancePaidDate.setValidators(null);
+      }
+      else {
+        this.balancePaidDate.setValidators([Validators.required])
+      }
+      this.balancePaidDate.updateValueAndValidity();
+      this._cdr.detectChanges();
+
   }
+
+  onChangeIsRentEnd(event: MatRadioChange) {
+    debugger;
+    this.renter.isEndRent = event.value == "true";
+     if (this.renter.isEndRent) {
+        this.dateEndRent.setValidators([Validators.required])
+     }
+     else {
+      this.renter.dateEndRent = null;
+      this.dateEndRent.setValidators(null);
+     }
+     this.dateEndRent.updateValueAndValidity();
+     this._cdr.detectChanges();
+  }
+
   ngOnDestroy(): void {
     this.onRenterChanged.unsubscribe();
   }

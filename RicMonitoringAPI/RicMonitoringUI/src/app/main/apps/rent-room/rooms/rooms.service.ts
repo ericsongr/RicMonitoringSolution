@@ -7,7 +7,7 @@ import { ApiControllers } from 'environments/api-controllers';
 
 const API_URL = environment.webApi + ApiControllers.Rooms;
 const TABLE_FIELDS = "?fields=id,name,frequency,price&orderBy=name";
-const DROPDOWN_FIELDS = "?fields=id,name,price&orderBy=name";
+const DROPDOWN_FIELDS = "?fields=id,name,isOccupied,price&orderBy=name";
 
 @Injectable()
 export class RoomsService implements Resolve<any> {

@@ -1,5 +1,8 @@
 ﻿using RicMonitoringAPI.Services.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Security.AccessControl;
+using RicMonitoringAPI.Common.Enumeration;
 
 namespace RicMonitoringAPI.RoomRent.Entities
 {
@@ -8,16 +11,20 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public int Id { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime PaidDate { get; set; }
-        public decimal Amount { get; set; }
-        public decimal? Balance { get; set; }
+        public string Period { get; set; }
+        public decimal PaidAmount { get; set; }
         public DateTime? BalanceDateToBePaid { get; set; }
+        public decimal? Balance { get; set; }
         public bool IsDepositUsed { get; set; }
         public string Note { get; set; }
+        public TransactionTypeEnum TransactionType { get; set; }
 
         public int RoomId { get; set; }
         public Room Room { get; set; }
         public int RenterId { get; set; }
         public Renter Renter { get; set; }
+
+        public ICollection<Renter> Renters { get; set; }
 
     }
 }
