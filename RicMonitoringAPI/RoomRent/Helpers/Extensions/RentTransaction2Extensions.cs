@@ -10,8 +10,17 @@ namespace RicMonitoringAPI.RoomRent.Helpers.Extensions
             {
                 throw new ArgumentNullException("source");
             }
+            var day = 0;
+            var year = rentTransaction2.Year;
+            var month = rentTransaction2.Month;
 
-            var day = rentTransaction2.DueDay;
+            var lastDayInMonth = DateTime.DaysInMonth(year, month);
+            //check if the payDay is less than or equal the current month day to avoid error
+            if (rentTransaction2.DueDay > lastDayInMonth)
+                day = lastDayInMonth;
+            else
+                day = rentTransaction2.DueDay;
+
             var dueDate = new DateTime(rentTransaction2.Year, rentTransaction2.Month, day);
 
             return dueDate;
@@ -24,7 +33,17 @@ namespace RicMonitoringAPI.RoomRent.Helpers.Extensions
                 throw new ArgumentNullException("source");
             }
 
-            var day = rentTransaction2.DueDay;
+            var day = 0;
+            var year = rentTransaction2.Year;
+            var month = rentTransaction2.Month;
+
+            var lastDayInMonth = DateTime.DaysInMonth(year, month);
+            //check if the payDay is less than or equal the current month day to avoid error
+            if (rentTransaction2.DueDay > lastDayInMonth)
+                day = lastDayInMonth;
+            else
+                day = rentTransaction2.DueDay;
+
             var dateFrom = new DateTime(rentTransaction2.Year, rentTransaction2.Month, day).AddDays(1);
             var dateTo = dateFrom.AddMonths(1).AddDays(-1);
 

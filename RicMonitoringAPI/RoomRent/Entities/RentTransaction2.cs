@@ -13,7 +13,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public decimal MonthlyRent { get; set; }
         public int DueDay { get; set; }
         public DateTime? PaidDate { get; set; }
-        public decimal PaidAmount { get; set; }
+        public decimal? PaidAmount { get; set; }
         public decimal? Balance { get; set; }
         public DateTime? BalanceDateToBePaid { get; set; }
         public bool IsDepositUsed { get; set; }

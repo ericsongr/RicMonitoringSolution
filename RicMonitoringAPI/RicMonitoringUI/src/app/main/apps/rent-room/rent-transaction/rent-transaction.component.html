@@ -85,7 +85,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="20" appearance="outline" floatLabel="always">
-                  <mat-label>Date Paid</mat-label>
+                  <mat-label>{{rentTransaction.isDepositUsed ? 'Date Use The Deposit' : 'Date Paid'}}</mat-label>
                   <input matInput [matDatepicker]="paidDatePicker" formControlName="paidDate" [(ngModel)]="defaultPaidDate" required>
                   <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
                   <mat-datepicker #paidDatePicker></mat-datepicker>
@@ -107,8 +107,7 @@
                       <div class="h4 secondary-text">Use Deposit?</div>
                       <div class="h2 font-weight-300 py-8">
                         <mat-radio-group formControlName="isDepositUsed" 
-                          (change)="onChangeDepositUsed($event)"
-                          [(ngModel)]="rentTransaction.isDepositUsed">
+                          (change)="onChangeDepositUsedEvent($event)">
                             <mat-radio-button value="true" [checked]="rentTransaction.isDepositUsed">Yes</mat-radio-button>
                             <mat-radio-button value="false" [checked]="!rentTransaction.isDepositUsed">No</mat-radio-button>
                         </mat-radio-group>

@@ -28,6 +28,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   hasBalance: boolean;
   
   defaultPaidDate: Date;
+  datePaidLabel: string = 'Date Paid';
 
   constructor(
     private _rentTransactionService: RentTransactionService,
@@ -44,20 +45,20 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
         this._rentTransactionService.onRentTransactionChanged
             .subscribe(transaction => {
               this.rentTransaction = new RentTransaction(transaction);
-              console.log(transaction);
+            
               if (this.rentTransaction.paidDate != "")
               {
                 this.defaultPaidDate = new Date();
               }
               
               this.rentTransactionForm = this.createRentTransactionForm();
-
-              this.onChangePaidAmount();
-
+              
+              if (this.rentTransaction.isDepositUsed) {
+                this.onChangeDepositUsed(true);
+              }else{
+                this.onChangePaidAmount();
+              }
             });
-        
-         
-  
     }
 
     ngAfterViewInit(): void {
@@ -93,7 +94,6 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.rentTransaction.paidDate = formData.paidDate;
       this.rentTransaction.paidAmount = formData.paidAmount;
       this.rentTransaction.balanceDateToBePaid = formData.balanceDateToBePaid;
-      this.rentTransaction.isDepositUsed = formData.isDepositUsed;
       this.rentTransaction.note = formData.note;
       this.rentTransaction.transactionType = TransactionTypeEnum.MonthlyRent;
 
@@ -103,17 +103,18 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       }
 
       this._rentTransactionService.saveTransaction(this.rentTransaction)
-          .then((transaction: RentTransaction) => {
-            //Trigger the subscription with new data
-            this._rentTransactionService.onRentTransactionChanged.next(transaction);
+          .then((transactionId: number) => {
+            
+            this.rentTransaction.id = transactionId;
+
+            this._rentTransactionService.onRentTransactionChanged.next(this.rentTransaction);
+            
             var message = "";
             if (this.rentTransaction.id > 0){
               message = "Transaction detail has been updated."
             } else {
               message = "Transaction has been added."
             }
-
-            this.rentTransaction.id = transaction.id;
 
             //show the success message
             this._snackBar.open(message, 'OK', {
@@ -122,16 +123,29 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
             });
 
           })
+          
+          this._location.go(`/apps/rent-room/tenant-transactions/${this.rentTransaction.renterId}/${this.rentTransaction.handle}`);
+          
+          this._cdr.detectChanges();
     }
 }
+
+  get paidAmount() {
+    return this.rentTransactionForm.get('paidAmount');
+  }
+
   get balanceDateToBePaid() {
     return this.rentTransactionForm.get('balanceDateToBePaid');
   }
 
   onChangePaidAmount() {
     
-    this.hasBalance = Number(this.rentTransaction.monthlyRent) > Number(this.rentTransaction.paidAmount);
-
+    if (this.rentTransaction.isDepositUsed){
+      this.hasBalance = false;
+    } else {
+      this.hasBalance = Number(this.rentTransaction.monthlyRent) > Number(this.rentTransaction.paidAmount);
+    }
+    
     if (this.rentTransaction.transactionType == TransactionTypeEnum.AdvanceAndDeposit){
       this.hasBalance = this.rentTransaction.balance > 0;
     }
@@ -152,11 +166,20 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     this.balanceDateToBePaid.updateValueAndValidity();
     this._cdr.detectChanges();
 
-    console.log("this.rentTransaction", this.rentTransaction);
   }
 
-  onChangeDepositUsed(event: MatRadioChange) {
-    if (event.value == "true") {
+  onChangeDepositUsedEvent(event: MatRadioChange) {
+    
+    this.rentTransaction.isDepositUsed = event.value == "true";
+
+    this.onChangeDepositUsed(this.rentTransaction.isDepositUsed)
+
+    this.onChangePaidAmount()
+  }
+ 
+  onChangeDepositUsed(isUsedDeposit: boolean) {
+    
+    if (isUsedDeposit) {
       
       this.rentTransaction.paidAmount = 0;
       this.hasBalance = false;
@@ -165,10 +188,12 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.balanceDateToBePaid.updateValueAndValidity();
 
       this.rentTransaction.balanceDateToBePaid = null;
-
+      this.paidAmount.disable();
     } else {
       this.rentTransaction.paidAmount = this.rentTransaction.monthlyRent;
+      this.paidAmount.enable();
     }
+    
   }
 
   ngOnDestroy(): void {

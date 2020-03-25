@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,8 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
                 return BadRequest();
             }
 
-            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(renterId).SingleOrDefault();
+            var currentDate = DateTime.Now.Date;
+            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(currentDate, renterId).SingleOrDefault();
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();
@@ -114,9 +116,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             _rentTransactionRepository.Add(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
-            var rentTransactionToReturn = Mapper.Map<RentTransactionDto>(rentTransactionEntity);
-
-            return CreatedAtRoute("GetAll", new { id = rentTransactionToReturn.Id }, rentTransactionToReturn);
+            return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
         }
 
         [HttpPut("{id}", Name = "Update")]
@@ -143,9 +143,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             _rentTransactionRepository.Update(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
-            var RentTransactionToReturn = Mapper.Map<RentTransactionDto>(rentTransactionEntity);
-
-            return CreatedAtRoute("GetAll", new { id = RentTransactionToReturn.Id }, RentTransactionToReturn);
+            return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
 
         }
 

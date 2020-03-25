@@ -54,10 +54,14 @@ export class RentTransactionService implements Resolve<any>
       
       return new Promise((resolve, reject) => {
         if (transaction.id > 0) {
+            var url = API_URL + transaction.id;
+            console.log(url);
+            console.log(JSON.stringify(transaction));
 
             this._httpClient.put(API_URL + transaction.id, transaction)
                 .subscribe((response: any) => {
-                  resolve(response);
+                  //return transactionId
+                  resolve(response.id);
                 }, reject);
 
           }
@@ -65,7 +69,8 @@ export class RentTransactionService implements Resolve<any>
 
             this._httpClient.post(API_URL, transaction)
                     .subscribe((response: any) => {
-                      resolve(response);
+                      //return transactionId
+                      resolve(response.id);
                     }, reject);
       
           }
