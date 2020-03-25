@@ -16,6 +16,8 @@ import { RenterService } from './renter/renter.service';
 import { RentTransactionsComponent } from './rent-transactions/rent-transactions.component';
 import { RentTransactionsService } from './rent-transactions/rent-transactions.service';
 import { RentTransactionService } from './rent-transaction/rent-transaction.service';
+import { AppFunctionsService } from '../common/services/app-functions.service';
+import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
 
 const routes : Routes= [
   {
@@ -40,21 +42,21 @@ const routes : Routes= [
     }
   },
   {
-    path      :  'renters',
+    path      :  'tenants',
     component :  RentersComponent,
     resolve   : {
           data: RentersService
     }
   },
   {
-    path      : 'renters/:id',
+    path      : 'tenants/:id',
     component : RenterComponent,
     resolve: {
       data: RenterService
     }
   },
   {
-    path      : 'renters/:id/:handle',
+    path      : 'tenants/:id/:handle',
     component : RenterComponent,
     resolve: {
       data: RenterService
@@ -62,22 +64,15 @@ const routes : Routes= [
   },
   //rent transactions
   {
-    path      :  'rent-transactions',
+    path      :  'tenant-transactions',
     component :  RentTransactionsComponent,
     resolve   : {
           data: RentTransactionsService
     }
   },
-  // {
-  //   path      : 'renter-transactions/:id',
-  //   component : RentTransactionsComponent,
-  //   resolve: {
-  //     data: RenterService
-  //   }
-  // },
   {
-    path      : 'renter-transactions/:id/:renterId/:roomId/:dueDate/:handle',
-    component : RentTransactionsComponent,
+    path      : 'tenant-transactions/:renterId/:handle',
+    component : RentTransactionComponent,
     resolve: {
       data: RentTransactionService
     }
@@ -97,6 +92,7 @@ const routes : Routes= [
     RentersComponent,
     RenterComponent,
     RentTransactionsComponent,
+    RentTransactionComponent,
     ShowErrorsComponent
   ],
   providers: [
@@ -105,7 +101,8 @@ const routes : Routes= [
     RentersService,
     RenterService,
     RentTransactionsService,
-    RentTransactionService
+    RentTransactionService,
+    AppFunctionsService
   ]
 })
 export class RentRoomModule { 

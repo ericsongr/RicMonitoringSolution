@@ -55,45 +55,70 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
   
   save() {
-    const data = this.roomForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
+    if (this.roomForm.invalid) {
+      
+      //show the success message
+      this._snackBar.open('Invalid data. Please verify.', 'OK', {
+        verticalPosition  : 'top',
+        duration          : 2000,
+        panelClass        : ['mat-warn']
+      });
 
-    this._roomService.saveRoom(data)
-        .then(() => {
+    } else {
+      const data = this.roomForm.getRawValue();
+      data.handle = FuseUtils.handleize(data.name);
 
-          //Trigger the subscription with new data
-          this._roomService.onRoomChanged.next(data);
+      this._roomService.saveRoom(data)
+          .then(() => {
 
-          //show the success message
-          this._snackBar.open('Room detail saved.', 'OK', {
-            verticalPosition  : 'top',
-            duration          : 2000
+            //Trigger the subscription with new data
+            this._roomService.onRoomChanged.next(data);
+
+            //show the success message
+            this._snackBar.open('Room detail saved.', 'OK', {
+              verticalPosition  : 'top',
+              duration          : 2000
+            });
+
+            //change the location with new one
+            this._location.go(`/apps/rent-room/rooms/${this.room.id}/${this.room.handle}`);
           });
-
-          //change the location with new one
-          this._location.go(`/apps/rent-room/rooms/${this.room.id}/${this.room.handle}`);
-        })
+      }
   }
 
   add() {
-    const data = this.roomForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
 
-    this._roomService.addRoom(data)
-        .then(() => {
+    if (this.roomForm.invalid) {
+      
+      //show the success message
+      this._snackBar.open('Invalid data. Please verify.', 'OK', {
+        verticalPosition  : 'top',
+        duration          : 2000,
+        panelClass        : ['mat-warn']
+      });
 
-          //Trigger the subscription with new data
-          this._roomService.onRoomChanged.next(data);
+    } else {
 
-          //show the success message
-          this._snackBar.open('New room added.', 'OK', {
-            verticalPosition  : 'top',
-            duration          : 2000
+      const data = this.roomForm.getRawValue();
+      data.handle = FuseUtils.handleize(data.name);
+  
+      this._roomService.addRoom(data)
+          .then(() => {
+  
+            //Trigger the subscription with new data
+            this._roomService.onRoomChanged.next(data);
+  
+            //show the success message
+            this._snackBar.open('New room added.', 'OK', {
+              verticalPosition  : 'top',
+              duration          : 2000
+            });
+  
+            //change the location with new one
+            this._location.go(`/apps/rent-room/rooms/${this.room.id}/${this.room.handle}`);
           });
-
-          //change the location with new one
-          this._location.go(`/apps/rent-room/rooms/${this.room.id}/${this.room.handle}`);
-        })
+    }
+    
   }
 
   

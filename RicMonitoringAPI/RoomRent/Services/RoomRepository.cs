@@ -23,8 +23,9 @@ namespace RicMonitoringAPI.Services.RoomRent
         public PagedList<Room> GetRooms(RoomResourceParameters roomResourceParameters)
         {
             var collectionBeforPaging =
-                _context.Rooms.ApplySort(roomResourceParameters.OrderBy,
-                    _propertyMappingService.GetPropertyMapping<RoomDto, Room>());
+                _context.Rooms.ApplySort(
+                    roomResourceParameters.OrderBy,
+                        _propertyMappingService.GetPropertyMapping<RoomDto, Room>());
 
 
             if (!string.IsNullOrEmpty(roomResourceParameters.SearchQuery))
@@ -34,8 +35,17 @@ namespace RicMonitoringAPI.Services.RoomRent
 
                 collectionBeforPaging = collectionBeforPaging
                     .Where(a => a.Name.ToLowerInvariant().Contains(searchQueryForWhereClause));
-
             }
+
+
+            var roomIds = _context.Renters.Where(o => !o.IsEndRent).Select(o => o.RoomId);
+
+            collectionBeforPaging.ToList().ForEach(room =>
+            {
+                room.IsOccupied = roomIds.Contains(room.Id);
+                room.Name = $"{room.Name} {(room.IsOccupied ? "(Occupied)" : "")}";
+            });
+
 
             return PagedList<Room>.Create(collectionBeforPaging,
                 roomResourceParameters.PageNumber,

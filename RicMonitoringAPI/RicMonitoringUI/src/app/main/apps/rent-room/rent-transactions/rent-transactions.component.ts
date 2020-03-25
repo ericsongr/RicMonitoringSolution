@@ -17,7 +17,7 @@ import { DataSource } from '@angular/cdk/collections';
 export class RentTransactionsComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id','renterId','roomId','renter','room','monthlyRent','dueDate','paidDate','amount','balanceDateToBePaid','isDepositUsed'];
+  displayedColumns = ['id','renterId','roomId','renterName','roomName','monthlyRent','dueDateString','paidAmount','datePaidString','balance','balanceDateToBePaid','isDepositUsed','transactionType'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
@@ -51,6 +51,10 @@ export class RentTransactionsComponent implements OnInit {
 
   handleize(name) {
     return FuseUtils.handleize(name);
+  }
+
+  getColor(transactionType: number){
+    return transactionType == 2 ? 'purple' : 'black'
   }
 
   ngOnDestroy():void
@@ -178,14 +182,14 @@ export class FilesDataSource extends DataSource<any>
         case 'id':
             [propertyA, propertyB] = [a.id, b.id];
             break;
-        case 'renter':
-            [propertyA, propertyB] = [a.renter, b.renter];
+        case 'renterName':
+            [propertyA, propertyB] = [a.renterName, b.renterName];
             break;
-        case 'room':
-            [propertyA, propertyB] = [a.room, b.room];
+        case 'roomName':
+            [propertyA, propertyB] = [a.roomName, b.roomName];
             break;
-        case 'dueDate':
-            [propertyA, propertyB] = [a.dueDate, b.dueDate];
+        case 'dueDateString':
+            [propertyA, propertyB] = [a.dueDateString, b.dueDateString];
             break;
       }
 

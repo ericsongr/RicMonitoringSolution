@@ -16,6 +16,7 @@ namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
                 {"Name", new PropertyMappingValue(new List<string>() {"Name"}) },
                 {"Frequency", new PropertyMappingValue(new List<string>() {"Frequency"}) },
                 {"Price", new PropertyMappingValue(new List<string>() {"Price"}) },
+                {"IsOccupied", new PropertyMappingValue(new List<string>() {"IsOccupied"}) },
             };
 
         public RoomPropertyMappingService()

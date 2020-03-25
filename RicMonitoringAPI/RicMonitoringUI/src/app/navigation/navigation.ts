@@ -37,16 +37,16 @@ export const navigation: FuseNavigation[] = [
                     },
                     {
                         id        : 'RENTERS',
-                        title     : 'Renters',
+                        title     : 'Tenants',
                         type      : 'item',
-                        url       :'/apps/rent-room/renters',
+                        url       :'/apps/rent-room/tenants',
                         exactMatch:true
                     },
                     {
                         id        : 'RENTTRANSACTION',
-                        title     : 'Rent Transactions',
+                        title     : 'Tenant Transactions',
                         type      : 'item',
-                        url       :'/apps/rent-room/rent-transactions',
+                        url       :'/apps/rent-room/tenant-transactions',
                         exactMatch:true
                     }
                 ],

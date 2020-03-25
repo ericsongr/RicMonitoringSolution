@@ -7,6 +7,7 @@ using System;
 using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
+using RicMonitoringAPI.Common.Enumeration;
 
 namespace RicMonitoringAPI.Services.RoomRent
 {
@@ -23,49 +24,62 @@ namespace RicMonitoringAPI.Services.RoomRent
             _propertyMappingService = propertyMappingService;
         }
 
+        public IQueryable<RentTransaction2> GetTransactionQueryResult(int renterId = 0)
+        {
+            var renters = _context.Renters
+                           .Select(o => new
+                           {
+                               RenterId = o.Id,
+                               RenterName = o.Name,
+                               RoomId = o.RoomId,
+                               RoomName = o.Room.Name,
+                               MonthlyRent = o.Room.Price,
+                               DueDate = o.DueDay,
+                               Month = DateTime.Now.Month,
+                               Year = DateTime.Now.Year,
+                           });
+
+            if (renterId > 0)
+            {
+                renters = renters.Where(o => o.RenterId == renterId);
+            }
+
+            var transactions = (from r in renters
+                                join t in _context.RentTransactions
+                                on new { r.RenterId, r.Month, r.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
+                                into rentTrans
+                                from trans in rentTrans.DefaultIfEmpty()
+                                select new RentTransaction2
+                                {
+                                    Id = trans.Id == null ? 0 : trans.Id,
+                                    RenterId = r.RenterId,
+                                    RenterName = r.RenterName,
+                                    RoomId = r.RoomId,
+                                    RoomName = r.RoomName,
+                                    MonthlyRent = r.MonthlyRent,
+                                    DueDay = r.DueDate,
+                                    PaidDate = trans.PaidDate,
+                                    PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
+                                    Balance = trans.Balance == null ? 0 : trans.Balance,
+                                    IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
+                                    BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
+                                    Note = trans.Note == null ? "" : trans.Note,
+                                    Month = r.Month,
+                                    Year = r.Year,
+                                    TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType
+                                });
+
+            return transactions;
+        }
+
         public PagedList<RentTransaction2> GetRentTransactions(RentTransactionResourceParameters rentTransactionResourceParameters)
         {
             
 
             var currentDate = DateTime.Now;
 
-            var renters = _context.Renters
-                            .Select(o => new
-                            {
-                                RenterId = o.Id,
-                                Renter = o.Name,
-                                RoomId = o.RoomId,
-                                Room = o.Room.Name,
-                                MonthlyRent = o.Room.Price,
-                                o.DueDate,
-                                Month = DateTime.Now.Month,
-                                Year = DateTime.Now.Year,
-                            });
 
-            var transactions = (from R in renters
-                                join T in _context.RentTransactions
-                                on new { R.RenterId, R.Month, R.Year } equals new { T.RenterId , T.DueDate.Month, T.DueDate.Year }
-                                into rentTrans
-                                from trans in rentTrans.DefaultIfEmpty()
-                                select new RentTransaction2 {
-                                    Id = trans.Id == null ? 0 : trans.Id,
-                                    RenterId = R.RenterId,
-                                    Renter = R.Renter,
-                                    RoomId = R.RoomId,
-                                    Room = R.Room,
-                                    MonthlyRent = R.MonthlyRent,
-                                    DueDate = R.DueDate,
-                                    PaidDate = trans.PaidDate  == null ? null : trans.PaidDate.ToShortDateString(),
-                                    Amount = trans.Amount == null ? 0 : trans.Amount,
-                                    Balance = trans.Balance == null ? 0 : trans.Balance,
-                                    IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
-                                    BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
-                                    Note = trans.Note == null ? "" : trans.Note,
-                                    Month = R.Month,
-                                    Year = R.Year
-                                });
-
-
+            var transactions = GetTransactionQueryResult();
             var collectionBeforPaging =
                 transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());
@@ -77,7 +91,7 @@ namespace RicMonitoringAPI.Services.RoomRent
                     rentTransactionResourceParameters.SearchQuery.Trim().ToLowerInvariant();
 
                 collectionBeforPaging = collectionBeforPaging
-                    .Where(a => a.Renter.ToLowerInvariant().Contains(searchQueryForWhereClause));
+                    .Where(a => a.RenterName.ToLowerInvariant().Contains(searchQueryForWhereClause));
 
             }
 

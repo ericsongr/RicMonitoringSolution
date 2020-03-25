@@ -17,7 +17,7 @@ import { DataSource } from '@angular/cdk/collections';
 export class RentersComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id','name','advancePaidDateString','startDateString', 'dueDateString', 'noOfPersons'];
+  displayedColumns = ['id','name','advancePaidDateString','startDateString', 'dueDayString', 'noOfPersons'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;

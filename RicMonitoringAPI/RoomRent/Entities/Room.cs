@@ -12,6 +12,9 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public string Frequency { get; set; }
         public decimal Price { get; set; }
 
+        [NotMapped]
+        public bool IsOccupied { get; set; }
+
         public ICollection<Renter> Renters { get; set; }
         public ICollection<RentTransaction> RentTransactions { get; set; }
     }

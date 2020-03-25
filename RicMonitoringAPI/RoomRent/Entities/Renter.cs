@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RicMonitoringAPI.Common.Helpers;
 
 namespace RicMonitoringAPI.RoomRent.Entities
 {
@@ -15,24 +16,42 @@ namespace RicMonitoringAPI.RoomRent.Entities
 
         [DataType(DataType.Date)]
         public DateTime AdvancePaidDate { get; set; }
-        public string AdvancePaidDateString { get { return AdvancePaidDate.ToShortDateString(); } }
 
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
-        public string StartDateString { get { return StartDate.ToShortDateString();  } }
-
-        [DataType(DataType.Date)]
-        public DateTime DueDate { get; set; }
+        public int DueDay { get; set; }
         public bool IsEndRent { get; set; }
         public DateTime? DateEndRent { get; set; }
-        public string DueDateString { get { return DueDate.ToShortDateString(); } }
         public int NoOfPersons { get; set; }
         public int RoomId { get; set; }
         public decimal TotalPaidAmount { get; set; }
-        public decimal BalanceAmount { get; set; }
+        public decimal? BalanceAmount { get; set; }
         public DateTime? BalancePaidDate { get; set; }
-        public virtual Room Room { get; set; }
 
+        /// <summary>
+        /// with RentTransactionId in order to delete data including the RentTransaction is should first update as null before delete
+        /// eg: update Renters set RentTransactionId = null where id = 16
+        /// eg: delete renters
+        /// eg: delete RentTransactions
+        /// </summary>
+        public int? RentTransactionId { get; set; } 
+
+
+        public string AdvancePaidDateString
+        {
+            get { return AdvancePaidDate.ToShortDateString(); }
+        }
+        public string StartDateString
+        {
+            get { return StartDate.ToShortDateString(); }
+        }
+        public string DueDayString
+        {
+            get { return $"{DueDay}{CommonFunctions.GetSuffix(DueDay.ToString())}"; }
+        }
+
+        public virtual RentTransaction RentTransaction { get; set; }
+        public virtual Room Room { get; set; }
         public ICollection<RentTransaction> RentTransactions { get; set; }
 
     }

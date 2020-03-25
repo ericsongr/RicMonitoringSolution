@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RicMonitoringAPI.RoomRent.Entities;
 
 namespace RicMonitoringAPI.Migrations
 {
     [DbContext(typeof(RoomRentContext))]
-    partial class RoomRentContextModelSnapshot : ModelSnapshot
+    [Migration("20200323074216_Transaction Type")]
+    partial class TransactionType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +153,7 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<DateTime>("AdvancePaidDate");
 
-                    b.Property<decimal?>("BalanceAmount");
+                    b.Property<decimal>("BalanceAmount");
 
                     b.Property<DateTime?>("BalancePaidDate");
 
@@ -169,8 +171,6 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<int>("NoOfPersons");
 
-                    b.Property<int?>("RentTransactionId");
-
                     b.Property<int>("RoomId");
 
                     b.Property<DateTime>("StartDate");
@@ -178,8 +178,6 @@ namespace RicMonitoringAPI.Migrations
                     b.Property<decimal>("TotalPaidAmount");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RentTransactionId");
 
                     b.HasIndex("RoomId");
 
@@ -241,11 +239,6 @@ namespace RicMonitoringAPI.Migrations
 
             modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.Renter", b =>
                 {
-                    b.HasOne("RicMonitoringAPI.RoomRent.Entities.RentTransaction", "RentTransaction")
-                        .WithMany("Renters")
-                        .HasForeignKey("RentTransactionId")
-                        .HasConstraintName("ForeignKey_Renter_RentTransaction");
-
                     b.HasOne("RicMonitoringAPI.RoomRent.Entities.Room", "Room")
                         .WithMany("Renters")
                         .HasForeignKey("RoomId")

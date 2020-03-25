@@ -11,7 +11,7 @@
       <!-- APP TITLE -->
       <div fxLayout="row" fxLayoutAlign="start center">
 
-        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apps/rent-room/renters'">
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apps/rent-room/tenants'">
           <mat-icon>arrow_back</mat-icon>
         </button>
 
@@ -25,24 +25,24 @@
             {{renter.name}}
           </div>
           <div class="h2" *ngIf="pageType === 'new'">
-            New renter
+            New tenant
           </div>
           <div class="subtitle secondary-text">
-            <span>Renter Detail</span>
+            <span>Tenant Detail</span>
           </div>
         </div>
       </div>
       <!-- /APP TITLE -->
       <button mat-raised-button 
               class="save-renter-button mat-white-bg mt-16 mt-sm-0"
-              [disabled]="renterForm.controls.invalid"
+              [disabled]="renterForm.invalid"
               *ngIf="pageType === 'add'" (click)="add()">
         <span>ADD</span>
       </button>
 
       <button mat-raised-button 
               class="save-renter mat-white-bg mt-16 mt-sm-0"
-              [disabled]="renterForm.controls.invalid || renterForm.controls.pristine"
+              [disabled]="renterForm.invalid || renterForm.pristine"
               *ngIf="pageType === 'edit'" (click)="save()">
         <span>SAVE</span>
       </button>
@@ -82,7 +82,8 @@
                     <mat-label>Months Used</mat-label>
                     <input matInput
                           name="monthsUsed"
-                          formControlName="monthsUsed">
+                          formControlName="monthsUsed"
+                          (keyup)="onChangeTotalPaidAmount()">
                           <show-errors [control]="renterForm.controls.monthsUsed"></show-errors>
                   </mat-form-field>
 
@@ -106,11 +107,17 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" floatLabel="always" fxFlex="33">
-                  <mat-label>Due Date</mat-label>
-                  <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" required>
-                  <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-                  <mat-datepicker #dueDatePicker></mat-datepicker>
-                  <show-errors [control]="renterForm.controls.dueDate"></show-errors>
+                  <mat-label>
+                      Due Day
+                  </mat-label>
+                  <mat-select formControlName="dueDay" placeholder="[select one]" style="width:100%" name="dueDay"
+                      [(ngModel)]="dueDay" required>
+                    <mat-option *ngFor="let dayWithSuffix of daysWithSuffix"
+                    [value]="dayWithSuffix.value" ng-value="dayWithSuffix.value">
+                      every {{dayWithSuffix.text}} of the month
+                    </mat-option>
+                  </mat-select>
+                  <show-errors [control]="renterForm.controls.dueDay"></show-errors>
                 </mat-form-field>
               </div>
               <div>
@@ -122,7 +129,10 @@
                       (selectionChange)="selectRoom()"
                       [(ngModel)]="renter.roomId"
                     required>
-                    <mat-option *ngFor="let room of rooms" [value]="room.id" ng-value="room.id">
+                    <mat-option *ngFor="let room of rooms" 
+                      [value]="room.id" 
+                      ng-value="room.id"
+                      [disabled]="room.isOccupied">
                       {{room.name}}
                     </mat-option>
                   </mat-select>
@@ -149,30 +159,38 @@
                         <show-errors [control]="renterForm.controls.totalPaidAmount"></show-errors>
                 </mat-form-field>
               </div>
-
+             
               <div>
-                  <div [hidden]="!hasBalance" style="width: 33%">
-                      <mat-form-field appearance="outline" floatLabel="always">
-                        <mat-label>Balance Pay Date</mat-label>
-                        <input matInput [matDatepicker]="balancePaidDatePicker" formControlName="balancePaidDate"
-                          [(ngModel)]="renter.balancePaidDate">
-                        <mat-datepicker-toggle matSuffix [for]="balancePaidDatePicker"></mat-datepicker-toggle>
-                        <mat-datepicker #balancePaidDatePicker></mat-datepicker>
-                      </mat-form-field>
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="33"
+                  *ngIf="hasBalance && renter.totalPaidAmount > 0">
+                  <mat-label>Balance Pay Date</mat-label>
+                  <input matInput [matDatepicker]="balancePaidDatePicker" formControlName="balancePaidDate"
+                    [(ngModel)]="renter.balancePaidDate">
+                  <mat-datepicker-toggle matSuffix [for]="balancePaidDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #balancePaidDatePicker></mat-datepicker>
+                  <show-errors [control]="renterForm.controls.balancePaidDate"></show-errors>
+                </mat-form-field>
+                
+                <div class="is-rent-end" fxFlex="33">
+                    <div class="pl-40" fxLayout="column" fxLayoutAlign="start left">
+                        <div class="h5 secondary-text">Is Rent End?</div>
+                        <div class="h2 font-weight-300 py-8">
+                          <mat-radio-group formControlName="isEndRent" 
+                            (change)="onChangeIsRentEnd($event)">
+                            <mat-radio-button [checked]="renter.isEndRent" value="true">Yes</mat-radio-button>
+                            <mat-radio-button [checked]="!renter.isEndRent" value="false">No</mat-radio-button>
+                        </mat-radio-group>
+                        </div>
                     </div>
-                <div class="is-rent-end" fxFlex="33" style="padding-top:18px;padding-left: 20px;">
-                  <label class="label-rent-end" style="color:black">Is Rent End?</label>
-                    <mat-radio-group formControlName="isEndRent" [(ngModel)]="renter.isEndRent">
-                        <mat-radio-button value="true">Yes</mat-radio-button>
-                        <mat-radio-button value="false" checked>No</mat-radio-button>
-                    </mat-radio-group>
                 </div>
-                <div [hidden]="renter.isEndRent == false" style="width: 33%">
+                
+                <div *ngIf="renter.isEndRent" style="width: 33%">
                   <mat-form-field appearance="outline" floatLabel="always" style="width:100%">
                     <mat-label>End Date</mat-label>
                     <input matInput [matDatepicker]="dateEndRentPicker" formControlName="dateEndRent">
                     <mat-datepicker-toggle matSuffix [for]="dateEndRentPicker"></mat-datepicker-toggle>
                     <mat-datepicker #dateEndRentPicker></mat-datepicker>
+                    <show-errors [control]="renterForm.controls.dateEndRent"></show-errors>
                   </mat-form-field>
                 </div>
               </div>
@@ -182,8 +200,7 @@
                   Monthly rent is {{monthlyRentPrice | number: '1.0-2'}} x {{renter.advanceMonths}} months advance = {{renter.totalAdvanceAmountDue | number: '1.0-2'}}
                 </strong>
               </div>
-
-              <div [hidden]="hasBalance" style="color:maroon">
+              <div *ngIf="hasBalance && renter.balanceAmount > 0" style="color:maroon">
                 <br>
                 <strong>
                   Total paid amount is {{renter.totalPaidAmount | number: '1.0-2'}} with balance of {{ renter.balanceAmount | number: '1.0-2'}}

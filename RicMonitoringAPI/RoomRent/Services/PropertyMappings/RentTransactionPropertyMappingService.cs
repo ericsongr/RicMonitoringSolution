@@ -14,16 +14,21 @@ namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
             {
                 {"Id", new PropertyMappingValue(new List<string>() {"Id"}) },
                 {"RenterId", new PropertyMappingValue(new List<string>() {"RenterId"}) },
-                {"Renter", new PropertyMappingValue(new List<string>() {"Renter"}) },
+                {"RenterName", new PropertyMappingValue(new List<string>() {"RenterName"}) },
                 {"RoomId", new PropertyMappingValue(new List<string>() {"RoomId"}) },
-                {"Room", new PropertyMappingValue(new List<string>() {"Room"}) },
+                {"RoomName", new PropertyMappingValue(new List<string>() {"RoomName"}) },
                 {"PaidDate", new PropertyMappingValue(new List<string>() {"PaidDate"}) },
-                {"Amount", new PropertyMappingValue(new List<string>() {"Amount"}) },
+                {"DatePaidString", new PropertyMappingValue(new List<string>() {"DatePaidString"}) },
+                {"PaidAmount", new PropertyMappingValue(new List<string>() {"PaidAmount"}) },
                 {"Balance", new PropertyMappingValue(new List<string>() {"Balance"}) },
                 {"BalanceDateToBePaid", new PropertyMappingValue(new List<string>() {"BalanceDateToBePaid"}) },
                 {"IsDepositUsed", new PropertyMappingValue(new List<string>() {"IsDepositUsed"}) },
                 {"Note", new PropertyMappingValue(new List<string>() {"Note"}) },
                 {"DueDate", new PropertyMappingValue(new List<string>() {"DueDate"}) },
+                {"DueDateString", new PropertyMappingValue(new List<string>() {"DueDateString"}) },
+                {"DueDay", new PropertyMappingValue(new List<string>() {"DueDay"}) },
+                {"Period", new PropertyMappingValue(new List<string>() {"Period"}) },
+                {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
             };
 
         public RentTransactionPropertyMappingService()

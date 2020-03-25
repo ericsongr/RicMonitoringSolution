@@ -135,7 +135,9 @@ namespace RicMonitoringAPI
 
                 cfg.CreateMap<RentTransaction2, RentTransaction2Dto>()
                     .ForMember(dest => dest.DueDate,
-                                opt => opt.MapFrom(src => src.GetDueDate()));
+                                opt => opt.MapFrom(src => src.GetDueDate()))
+                    .ForMember(dest => dest.Period,
+                                            opt => opt.MapFrom(src => src.GetPeriod()));
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
                 cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();

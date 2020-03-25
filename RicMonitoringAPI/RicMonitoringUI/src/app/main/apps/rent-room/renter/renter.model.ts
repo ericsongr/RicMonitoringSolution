@@ -7,7 +7,7 @@ export class Renter {
     monthsUsed      : number;
     startDate       : string;
     advancePaidDate : string;
-    dueDate         : string;
+    dueDay         : number;
     noOfPersons     : number;
     roomId          : number;
     isEndRent       : boolean;
@@ -26,7 +26,7 @@ export class Renter {
         this.monthsUsed = renter.monthsUsed;
         this.advancePaidDate = renter.advancePaidDate;
         this.startDate = renter.startDate;
-        this.dueDate = renter.dueDate;
+        this.dueDay = renter.dueDay;
         this.startDate = renter.startDate;
         this.noOfPersons = renter.noOfPersons;
         this.roomId = renter.roomId;

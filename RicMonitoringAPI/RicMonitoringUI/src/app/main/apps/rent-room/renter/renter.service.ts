@@ -56,7 +56,7 @@ export class RenterService implements Resolve<any>
     return new Promise((resolve, reject) => {
       this._httpClient.put(API_URL + renter.id, renter)
           .subscribe((response: any) => {
-            resolve(response);
+            resolve(response.id);
           }, reject);
     });
   }
@@ -65,7 +65,7 @@ export class RenterService implements Resolve<any>
     return new Promise((resolve, reject) => {
       this._httpClient.post(API_URL, renter)
           .subscribe((response: any) => {
-            resolve(response);
+            resolve(response.id);
           }, reject);
     });
   }

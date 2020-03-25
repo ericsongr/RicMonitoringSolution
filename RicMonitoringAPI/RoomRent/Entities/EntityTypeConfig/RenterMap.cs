@@ -30,7 +30,7 @@ namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
                 .IsRequired();
 
             modelBuilder.Entity<Renter>()
-                .Property(t => t.DueDate)
+                .Property(t => t.DueDay)
                 .IsRequired();
 
             modelBuilder.Entity<Renter>()
@@ -42,6 +42,12 @@ namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
                 .WithMany(p => p.Renters)
                 .HasForeignKey(f => f.RoomId)
                 .HasConstraintName("ForeignKey_Renter_Room");
+
+            modelBuilder.Entity<Renter>()
+                .HasOne(t => t.RentTransaction)
+                .WithMany(p => p.Renters)
+                .HasForeignKey(f => f.RentTransactionId)
+                .HasConstraintName("ForeignKey_Renter_RentTransaction");
 
             modelBuilder.Entity<Renter>().ToTable("Renters");
 

@@ -74,6 +74,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var roomFromRepo = _roomRepository.GetRooms(roomResourceParameters);
 
+
             var previousPageLink = roomFromRepo.HasPrevious
                 ? CreateRoomResourceUri(roomResourceParameters,
                     ResourceUriType.PreviousPage)
@@ -98,7 +99,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var rooms = Mapper.Map<IEnumerable<RoomDto>>(roomFromRepo);
 
-            return Ok(rooms.ShapeData(roomResourceParameters.Fields));
+            var result = rooms.ShapeData(roomResourceParameters.Fields);
+
+            return Ok(result);
 
         }
 

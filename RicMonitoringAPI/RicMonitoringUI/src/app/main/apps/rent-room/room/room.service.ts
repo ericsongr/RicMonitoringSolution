@@ -44,6 +44,7 @@ export class RoomService implements Resolve<any>
         this._httpClient.get(API_URL + this.routeParams.id)
             .subscribe((response: any) => {
                 this.room = response;
+                
                 this.onRoomChanged.next(this.room);
                 resolve(response);
             }, reject);
