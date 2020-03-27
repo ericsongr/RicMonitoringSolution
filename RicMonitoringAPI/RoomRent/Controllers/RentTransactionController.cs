@@ -19,19 +19,25 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
     {
         private readonly RoomRentContext _context;
         private readonly IRentTransactionRepository _rentTransactionRepository;
+        private readonly IRentTransactionDetailRepository _rentDetailTransactionRepository;
         private readonly IRentTransactionPropertyMappingService _rentTransactionPropertyMappingService;
+        private readonly IRentArrearRepository _rentArrearRepository;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
 
         public RentTransactionsController(RoomRentContext context,
             IRentTransactionRepository rentTransactionRepository,
+            IRentTransactionDetailRepository rentDetailTransactionRepository,
             IRentTransactionPropertyMappingService rentTransactionPropertyMappingService,
+            IRentArrearRepository rentArrearRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
             _context = context;
             _rentTransactionRepository = rentTransactionRepository;
+            _rentDetailTransactionRepository = rentDetailTransactionRepository;
             _rentTransactionPropertyMappingService = rentTransactionPropertyMappingService;
+            _rentArrearRepository = rentArrearRepository;
             _urlHelper = urlHelper;
             _typeHelperService = typeHelperService;
         }
@@ -50,7 +56,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();
-            }
+            }   
 
             var rentTransaction = Mapper.Map<RentTransaction2Dto>(rentTransactionFromRepo);
 
@@ -115,6 +121,45 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
 
             _rentTransactionRepository.Add(rentTransactionEntity);
             _rentTransactionRepository.Commit();
+
+            //save the arrear to transaction detail
+            if (rentTransaction.PreviousUnpaidAmount > 0)
+            {
+                _rentDetailTransactionRepository.Add(new RentTransactionDetail
+                {
+                    TransactionId = rentTransactionEntity.Id,
+                    RentArrearId = rentTransaction.RentArrearId,
+                    Amount = rentTransaction.PreviousUnpaidAmount,
+                });
+            }
+
+            //save transaction detail
+            _rentDetailTransactionRepository.Add(new RentTransactionDetail
+            {
+                TransactionId = rentTransactionEntity.Id,
+                Amount = rentTransaction.MonthlyRent,
+            });
+            _rentDetailTransactionRepository.Commit();
+
+            ////update previous arrear
+            //var updatePreviousArrear = _rentArrearRepository.FindBy(o => o.Id == rentTransaction.RentArrearId).FirstOrDefault();
+            //if (updatePreviousArrear != null)
+            //{
+            //    updatePreviousArrear.IsProcessed = true;
+            //    _rentArrearRepository.Update(updatePreviousArrear);
+            //}
+
+            //if (rentTransaction.Balance > 0)
+            //{
+            //    _rentArrearRepository.Add(new RentArrear
+            //    {
+            //        RenterId = rentTransaction.RenterId,
+            //        RentTransactionId = rentTransactionEntity.Id,
+            //        UnpaidAmount = rentTransaction.Balance ?? 0,
+            //        IsProcessed = false
+            //    });
+            //}
+            //_rentArrearRepository.Commit();
 
             return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
         }

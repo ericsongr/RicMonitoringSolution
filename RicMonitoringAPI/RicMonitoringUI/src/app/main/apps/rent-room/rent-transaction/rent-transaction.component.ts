@@ -110,7 +110,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
             this._rentTransactionService.onRentTransactionChanged.next(this.rentTransaction);
             
             var message = "";
-            if (this.rentTransaction.id > 0){
+            if (this.rentTransaction.id > 0) {
               message = "Transaction detail has been updated."
             } else {
               message = "Transaction has been added."
@@ -143,7 +143,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.rentTransaction.isDepositUsed){
       this.hasBalance = false;
     } else {
-      this.hasBalance = Number(this.rentTransaction.monthlyRent) > Number(this.rentTransaction.paidAmount);
+      this.hasBalance = Number(this.rentTransaction.totalAmountDue) > Number(this.rentTransaction.paidAmount);
     }
     
     if (this.rentTransaction.transactionType == TransactionTypeEnum.AdvanceAndDeposit){
@@ -158,7 +158,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
       if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent){
         this.rentTransaction.balance = 
-          (Number(this.rentTransaction.paidAmount) >  Number(this.rentTransaction.monthlyRent)) ? 0 : (Number(this.rentTransaction.monthlyRent) - Number(this.rentTransaction.paidAmount))
+          (Number(this.rentTransaction.paidAmount) >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - Number(this.rentTransaction.paidAmount))
       }
       
         this.balanceDateToBePaid.setValidators([Validators.required])
@@ -190,7 +190,8 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.rentTransaction.balanceDateToBePaid = null;
       this.paidAmount.disable();
     } else {
-      this.rentTransaction.paidAmount = this.rentTransaction.monthlyRent;
+      this.rentTransaction.paidAmount = 
+        (this.rentTransaction.monthlyRent == this.rentTransaction.totalAmountDue ? this.rentTransaction.monthlyRent : 0);
       this.paidAmount.enable();
     }
     

@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
-const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,isDepositUsed,note,transactionType";
+const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 
@@ -43,6 +43,7 @@ export class RentTransactionService implements Resolve<any>
       this._httpClient.get(url)
             .subscribe((response: any) => {
                 this.rentTransaction = response;
+                console.log(response);
                 this.onRentTransactionChanged.next(response);
                 resolve(response);
             }, reject);

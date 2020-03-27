@@ -28,22 +28,13 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public decimal? BalanceAmount { get; set; }
         public DateTime? BalancePaidDate { get; set; }
 
-        /// <summary>
-        /// with RentTransactionId in order to delete data including the RentTransaction is should first update as null before delete
-        /// eg: update Renters set RentTransactionId = null where id = 16
-        /// eg: delete renters
-        /// eg: delete RentTransactions
-        /// </summary>
-        public int? RentTransactionId { get; set; } 
-
-
         public string AdvancePaidDateString
         {
-            get { return AdvancePaidDate.ToShortDateString(); }
+            get { return AdvancePaidDate.ToString("dd-MMM-yyyy"); }
         }
         public string StartDateString
         {
-            get { return StartDate.ToShortDateString(); }
+            get { return StartDate.ToString("dd-MMM-yyyy"); }
         }
         public string DueDayString
         {
@@ -53,6 +44,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public virtual RentTransaction RentTransaction { get; set; }
         public virtual Room Room { get; set; }
         public ICollection<RentTransaction> RentTransactions { get; set; }
+        public ICollection<RentArrear> RentArrears { get; set; }
 
     }
 }

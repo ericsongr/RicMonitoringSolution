@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions;
-const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,isDepositUsed,transactionType,note&orderBy=dueDay";
+const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note&orderBy=dueDay";
 
 @Injectable()
 export class RentTransactionsService implements Resolve<any> {

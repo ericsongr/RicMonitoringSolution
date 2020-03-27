@@ -17,7 +17,7 @@ import { DataSource } from '@angular/cdk/collections';
 export class RentTransactionsComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id','renterId','roomId','renterName','roomName','monthlyRent','dueDateString','paidAmount','datePaidString','balance','balanceDateToBePaid','isDepositUsed','transactionType'];
+  displayedColumns = ['id','renterId','roomId','renterName','roomName','dueDateString','paidAmount','datePaidString','balance','balanceDateToBePaid', 'totalAmountDue','isDepositUsed','transactionType'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;

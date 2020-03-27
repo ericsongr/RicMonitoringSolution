@@ -22,6 +22,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            RoomMap.AddMap(modelBuilder);
             RenterMap.AddMap(modelBuilder);
 
             BookedDetailMap.AddMap(modelBuilder);
@@ -30,12 +31,17 @@ namespace RicMonitoringAPI.RoomRent.Entities
             LookupTypesMap.AddMap(modelBuilder);
             LookupTypeItemsMap.AddMap(modelBuilder);
 
+            RentArrearMap.AddMap(modelBuilder);
+
+            RentTransactionMap.AddMap(modelBuilder);
+            RentTransactionDetailMap.AddMap(modelBuilder);
             
         }
 
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Renter> Renters { get; set; }
         public DbSet<RentTransaction> RentTransactions { get; set; }
+        public DbSet<RentTransactionDetail> RentTransactionDetails { get; set; }
 
         public DbSet<BookedPerson> BookedPersons { get; set; }
         public DbSet<BookedDetail> BookedDetails { get; set; }
@@ -43,5 +49,10 @@ namespace RicMonitoringAPI.RoomRent.Entities
         //maintenance
         public DbSet<LookupType> LookupTypes { get; set; }
         public DbSet<LookupTypeItems> LookupTypeItems { get; set; }
+
+        public DbSet<MonthlyRentBatch> MonthlyRentBatch { get; set; }
+
+        public DbSet<RentArrear> RentArrears { get; set; }
+
     }
 }

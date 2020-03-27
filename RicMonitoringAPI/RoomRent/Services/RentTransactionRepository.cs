@@ -7,6 +7,7 @@ using System;
 using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RicMonitoringAPI.Common.Enumeration;
 
 namespace RicMonitoringAPI.Services.RoomRent
@@ -50,6 +51,9 @@ namespace RicMonitoringAPI.Services.RoomRent
                                 on new { r.RenterId, selectedDate.Month, selectedDate.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
                                 into rentTrans
                                 from trans in rentTrans.DefaultIfEmpty()
+                                join arrear in _context.RentArrears on r.RenterId equals arrear.RenterId
+                                into arrearTempTable
+                                from arrearTable in arrearTempTable.DefaultIfEmpty()
                                 select new RentTransaction2
                                 {
                                     Id = trans.Id == null ? 0 : trans.Id,
@@ -62,6 +66,9 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     PaidDate = trans.PaidDate,
                                     PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
                                     Balance = trans.Balance == null ? 0 : trans.Balance,
+                                    RentArrearId = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.Id : 0),
+                                    PreviousUnpaidAmount = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0 ),
+                                    TotalAmountDue = (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
                                     IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
                                     BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
                                     Note = trans.Note == null ? "" : trans.Note,
