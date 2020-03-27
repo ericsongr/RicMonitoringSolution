@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 
 const API_URL = environment.webApi + ApiControllers.Renters;
-const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=name";
+const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=dueDay";
 const DROPDOWN_FIELDS = "?fields=id,name";
 
 @Injectable()
@@ -16,9 +16,7 @@ export class RentersService implements Resolve<any> {
   onRentersChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(private _httpClient: HttpClient)  
-  { 
-    
-  }
+  {}
   
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     return new Promise((resolve, reject) => {

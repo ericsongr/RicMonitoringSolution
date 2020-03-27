@@ -44,6 +44,7 @@ C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\bin\Debug\netcoreapp2.
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\bin\Debug\netcoreapp2.2\RicMonitoringAPI.runtimeconfig.dev.json
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\bin\Debug\netcoreapp2.2\RicMonitoringAPI.dll
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\bin\Debug\netcoreapp2.2\RicMonitoringAPI.pdb
+C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.csprojAssemblyReference.cache
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.csproj.CoreCompileInputs.cache
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.RazorAssemblyInfo.cache
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.RazorAssemblyInfo.cs

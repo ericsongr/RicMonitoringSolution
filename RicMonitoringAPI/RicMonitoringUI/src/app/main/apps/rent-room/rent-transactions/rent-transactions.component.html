@@ -86,11 +86,11 @@
                 </mat-cell>
               </ng-container>
 
-            <!-- Monthly Rent Column -->
-            <ng-container matColumnDef="monthlyRent">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Rent</mat-header-cell>
+            <!-- Total Amount Due Column -->
+            <ng-container matColumnDef="totalAmountDue">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount Due</mat-header-cell>
               <mat-cell *matCellDef="let rentTransaction" [style.color]="getColor(rentTransaction.transactionType)">
-                <p class="text-truncate right">{{rentTransaction.monthlyRent | number: '1.0-2' }}</p>
+                <p class="text-truncate right">{{rentTransaction.totalAmountDue | number: '1.0-2' }}</p>
               </mat-cell>
             </ng-container>
 

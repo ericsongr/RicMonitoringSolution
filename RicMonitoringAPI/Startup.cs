@@ -51,7 +51,9 @@ namespace RicMonitoringAPI
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
             services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();
+            services.AddScoped<IRentTransactionDetailRepository, RentTransactionDetailRepository>();
             services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
+            services.AddScoped<IRentArrearRepository, RentArrearRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 

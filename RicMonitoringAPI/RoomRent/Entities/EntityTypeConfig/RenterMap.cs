@@ -38,16 +38,18 @@ namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
                 .IsRequired();
 
             modelBuilder.Entity<Renter>()
+                .Property(t => t.BalanceAmount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Renter>()
+                .Property(t => t.TotalPaidAmount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Renter>()
                 .HasOne(t => t.Room)
                 .WithMany(p => p.Renters)
                 .HasForeignKey(f => f.RoomId)
                 .HasConstraintName("ForeignKey_Renter_Room");
-
-            modelBuilder.Entity<Renter>()
-                .HasOne(t => t.RentTransaction)
-                .WithMany(p => p.Renters)
-                .HasForeignKey(f => f.RentTransactionId)
-                .HasConstraintName("ForeignKey_Renter_RentTransaction");
 
             modelBuilder.Entity<Renter>().ToTable("Renters");
 

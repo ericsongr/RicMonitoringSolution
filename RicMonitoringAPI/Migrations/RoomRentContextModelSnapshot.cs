@@ -104,13 +104,57 @@ namespace RicMonitoringAPI.Migrations
                     b.ToTable("LookupTypeItems");
                 });
 
+            modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.MonthlyRentBatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Month");
+
+                    b.Property<DateTime>("ProcessStartDateTime");
+
+                    b.Property<DateTime?>("ProcesssEndDateTime");
+
+                    b.Property<int>("Year");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MonthlyRentBatch");
+                });
+
+            modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentArrear", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsProcessed");
+
+                    b.Property<int>("RentTransactionId");
+
+                    b.Property<int>("RenterId");
+
+                    b.Property<decimal>("UnpaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentTransactionId");
+
+                    b.HasIndex("RenterId");
+
+                    b.ToTable("RentArrears");
+                });
+
             modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentTransaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal?>("Balance");
+                    b.Property<decimal?>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("BalanceDateToBePaid");
 
@@ -118,17 +162,25 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<bool>("IsDepositUsed");
 
+                    b.Property<bool>("IsSystemProcessed");
+
                     b.Property<string>("Note");
 
-                    b.Property<decimal>("PaidAmount");
+                    b.Property<decimal?>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("PaidDate");
+                    b.Property<DateTime?>("PaidDate");
 
                     b.Property<string>("Period");
 
                     b.Property<int>("RenterId");
 
                     b.Property<int>("RoomId");
+
+                    b.Property<DateTime?>("SystemDateTimeProcessed");
+
+                    b.Property<decimal>("TotalAmountDue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TransactionType");
 
@@ -141,6 +193,28 @@ namespace RicMonitoringAPI.Migrations
                     b.ToTable("RentTransactions");
                 });
 
+            modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentTransactionDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("RentArrearId");
+
+                    b.Property<int>("TransactionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentArrearId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("RentTransactionDetails");
+                });
+
             modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.Renter", b =>
                 {
                     b.Property<int>("Id")
@@ -151,7 +225,8 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<DateTime>("AdvancePaidDate");
 
-                    b.Property<decimal?>("BalanceAmount");
+                    b.Property<decimal?>("BalanceAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("BalancePaidDate");
 
@@ -175,7 +250,8 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<DateTime>("StartDate");
 
-                    b.Property<decimal>("TotalPaidAmount");
+                    b.Property<decimal>("TotalPaidAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -196,7 +272,8 @@ namespace RicMonitoringAPI.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -226,16 +303,47 @@ namespace RicMonitoringAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentArrear", b =>
+                {
+                    b.HasOne("RicMonitoringAPI.RoomRent.Entities.RentTransaction", "RentTransaction")
+                        .WithMany("RentArrears")
+                        .HasForeignKey("RentTransactionId")
+                        .HasConstraintName("ForeignKey_RentArrears_RentTransaction_RentTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RicMonitoringAPI.RoomRent.Entities.Renter", "Renter")
+                        .WithMany("RentArrears")
+                        .HasForeignKey("RenterId")
+                        .HasConstraintName("ForeignKey_RentArrears_Renter_RenterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentTransaction", b =>
                 {
                     b.HasOne("RicMonitoringAPI.RoomRent.Entities.Renter", "Renter")
                         .WithMany("RentTransactions")
                         .HasForeignKey("RenterId")
+                        .HasConstraintName("ForeignKey_RentTransaction_Renter_RenterId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RicMonitoringAPI.RoomRent.Entities.Room", "Room")
                         .WithMany("RentTransactions")
                         .HasForeignKey("RoomId")
+                        .HasConstraintName("ForeignKey_RentTransaction_Room_RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RicMonitoringAPI.RoomRent.Entities.RentTransactionDetail", b =>
+                {
+                    b.HasOne("RicMonitoringAPI.RoomRent.Entities.RentArrear", "RentArrear")
+                        .WithMany("RentTransactionDetails")
+                        .HasForeignKey("RentArrearId")
+                        .HasConstraintName("ForeignKey_RentTransactionDetails_RentArrear_RentArrearId");
+
+                    b.HasOne("RicMonitoringAPI.RoomRent.Entities.RentTransaction", "RentTransaction")
+                        .WithMany("RentTransactionDetails")
+                        .HasForeignKey("TransactionId")
+                        .HasConstraintName("ForeignKey_RentTransactionDetails_RentTransaction_TransactionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -243,8 +351,7 @@ namespace RicMonitoringAPI.Migrations
                 {
                     b.HasOne("RicMonitoringAPI.RoomRent.Entities.RentTransaction", "RentTransaction")
                         .WithMany("Renters")
-                        .HasForeignKey("RentTransactionId")
-                        .HasConstraintName("ForeignKey_Renter_RentTransaction");
+                        .HasForeignKey("RentTransactionId");
 
                     b.HasOne("RicMonitoringAPI.RoomRent.Entities.Room", "Room")
                         .WithMany("Renters")

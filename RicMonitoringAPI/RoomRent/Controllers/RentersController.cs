@@ -143,7 +143,7 @@ namespace RicMonitoringAPI.RenterRent.Controllers
 
             //update renter table with the generated rent transaction id
             renterEntity.MonthsUsed = (renterEntity.MonthsUsed + 1); // tagged 1 meaning advance will use to ongoing month period
-            renterEntity.RentTransactionId = rentTransaction.Id;
+            
             _renterRepository.Update(renterEntity);
             _renterRepository.Commit();
 
@@ -186,7 +186,7 @@ namespace RicMonitoringAPI.RenterRent.Controllers
             _renterRepository.Commit();
 
             //fetch data from rent transaction table
-            var rentTransaction = _rentTransactionRepository.FindBy(o => o.Id == renterEntity.RentTransactionId).FirstOrDefault();
+            var rentTransaction = _rentTransactionRepository.FindBy(o => o.RenterId == renterEntity.Id && o.TransactionType == TransactionTypeEnum.AdvanceAndDeposit).FirstOrDefault();
             if (rentTransaction != null)
             {
                 //update data to rent transaction table

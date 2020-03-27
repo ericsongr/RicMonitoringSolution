@@ -55,17 +55,27 @@
                   <div class="h2 font-weight-300 py-8">{{rentTransaction.roomName}}</div>
                 </div>
 
-                <div class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Monthly</div>
                   <div class="h2 font-weight-300 py-8">{{rentTransaction.monthlyRent | number: '1.0-2'}}</div>
                 </div>
 
-                <div class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text">Previous Unpaid</div>
+                  <div class="h2 font-weight-300 py-8">{{rentTransaction.previousUnpaidAmount | number: '1.0-2'}}</div>
+                </div>
+
+                <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text">Total Amt Due</div>
+                  <div class="h2 font-weight-300 py-8">{{rentTransaction.totalAmountDue | number: '1.0-2'}}</div>
+                </div>
+
+                <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Due Date</div>
                   <div class="h2 font-weight-300 py-8">{{rentTransaction.dueDateString}}</div>
                 </div>
 
-                <div class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Period</div>
                   <div class="h2 font-weight-300 py-8">{{rentTransaction.period}}</div>
                 </div>
