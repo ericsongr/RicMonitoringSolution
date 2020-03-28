@@ -113,7 +113,7 @@
                   </mat-form-field>
                   
                   <div class="is-rent-end" fxFlex="30" style="padding-left: 20px;">
-                    <div class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                    <div *ngIf="!rentTransaction.isNoAdvanceDepositLeft" class="px-20" fxLayout="column" fxLayoutAlign="start left">
                       <div class="h4 secondary-text">Use Deposit?</div>
                       <div class="h2 font-weight-300 py-8">
                         <mat-radio-group formControlName="isDepositUsed" 
@@ -121,6 +121,12 @@
                             <mat-radio-button value="true" [checked]="rentTransaction.isDepositUsed">Yes</mat-radio-button>
                             <mat-radio-button value="false" [checked]="!rentTransaction.isDepositUsed">No</mat-radio-button>
                         </mat-radio-group>
+                      </div>
+                    </div>
+                    <div *ngIf="rentTransaction.isNoAdvanceDepositLeft" class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                      <div class="h4 secondary-text" style="color: red;">ALERT!</div>
+                      <div class="font-weight-300 py-8 message-box warning">
+                          No Advance/Deposit Left...
                       </div>
                     </div>
                   </div>

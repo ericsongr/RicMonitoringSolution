@@ -49,13 +49,13 @@ namespace RicMonitoringAPI.RenterRent.Controllers
                 return BadRequest();
             }
 
-            var RenterFromRepo = await _renterRepository.GetSingleAsync(o => o.Id == id);
-            if (RenterFromRepo == null)
+            var renterFromRepo = await _renterRepository.GetSingleAsync(o => o.Id == id);
+            if (renterFromRepo == null)
             {
                 return NotFound();
             }
 
-            var Renter = Mapper.Map<RenterDto>(RenterFromRepo);
+            var Renter = Mapper.Map<RenterDto>(renterFromRepo);
 
             return Ok(Renter.ShapeData(fields));
         }

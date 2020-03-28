@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
-const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType";
+const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 

@@ -30,7 +30,7 @@ namespace RicMonitoringAPI.Services.RoomRent
 
             selectedDate = DateTime.Now.AddMonths(1);
 
-            var renters = _context.Renters
+            var renters = _context.Renters.Where(o => !o.IsEndRent)
                            .Select(o => new
                            {
                                RenterId = o.Id,
@@ -38,7 +38,9 @@ namespace RicMonitoringAPI.Services.RoomRent
                                RoomId = o.RoomId,
                                RoomName = o.Room.Name,
                                MonthlyRent = o.Room.Price,
-                               DueDate = o.DueDay,
+                               DueDay = o.DueDay,
+                               AdvanceMonths = o.AdvanceMonths,
+                               MonthsUsed = o.MonthsUsed
                            });
 
             if (renterId > 0)
@@ -51,9 +53,10 @@ namespace RicMonitoringAPI.Services.RoomRent
                                 on new { r.RenterId, selectedDate.Month, selectedDate.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
                                 into rentTrans
                                 from trans in rentTrans.DefaultIfEmpty()
-                                join arrear in _context.RentArrears on r.RenterId equals arrear.RenterId
+                                join arrear in _context.RentArrears.Where(o=> !o.IsProcessed) on r.RenterId equals arrear.RenterId
                                 into arrearTempTable
                                 from arrearTable in arrearTempTable.DefaultIfEmpty()
+                                
                                 select new RentTransaction2
                                 {
                                     Id = trans.Id == null ? 0 : trans.Id,
@@ -62,7 +65,7 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     RoomId = r.RoomId,
                                     RoomName = r.RoomName,
                                     MonthlyRent = r.MonthlyRent,
-                                    DueDay = r.DueDate,
+                                    DueDay = r.DueDay,
                                     PaidDate = trans.PaidDate,
                                     PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
                                     Balance = trans.Balance == null ? 0 : trans.Balance,
@@ -74,7 +77,8 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     Note = trans.Note == null ? "" : trans.Note,
                                     Month = selectedDate.Month,
                                     Year = selectedDate.Year,
-                                    TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType
+                                    TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
+                                    IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths
                                 });
 
             return transactions;

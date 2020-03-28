@@ -21,6 +21,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
         private readonly IRentTransactionRepository _rentTransactionRepository;
         private readonly IRentTransactionDetailRepository _rentDetailTransactionRepository;
         private readonly IRentTransactionPropertyMappingService _rentTransactionPropertyMappingService;
+        private readonly IRenterRepository _renterRepository;
         private readonly IRentArrearRepository _rentArrearRepository;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
@@ -29,6 +30,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             IRentTransactionRepository rentTransactionRepository,
             IRentTransactionDetailRepository rentDetailTransactionRepository,
             IRentTransactionPropertyMappingService rentTransactionPropertyMappingService,
+            IRenterRepository renterRepository, 
             IRentArrearRepository rentArrearRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
@@ -37,6 +39,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             _rentTransactionRepository = rentTransactionRepository;
             _rentDetailTransactionRepository = rentDetailTransactionRepository;
             _rentTransactionPropertyMappingService = rentTransactionPropertyMappingService;
+            _renterRepository = renterRepository;
             _rentArrearRepository = rentArrearRepository;
             _urlHelper = urlHelper;
             _typeHelperService = typeHelperService;
@@ -141,6 +144,12 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             });
             _rentDetailTransactionRepository.Commit();
 
+            if (rentTransaction.IsDepositUsed)
+            {
+                //detect 1 month to field MonthUsed
+                AddOrDeductMonthUsed(rentTransactionEntity.RenterId, true);
+            }
+
             ////update previous arrear
             //var updatePreviousArrear = _rentArrearRepository.FindBy(o => o.Id == rentTransaction.RentArrearId).FirstOrDefault();
             //if (updatePreviousArrear != null)
@@ -178,6 +187,16 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
                 return NotFound();
             }
 
+            //if change existing transacton from used deposit to just pay the rent 
+            if (rentTransactionEntity.IsDepositUsed != rentTransaction.IsDepositUsed)
+            {
+                if (rentTransaction.IsDepositUsed)
+                    AddOrDeductMonthUsed(rentTransaction.RenterId, true);
+                else
+                    AddOrDeductMonthUsed(rentTransaction.RenterId, false);
+
+            }
+
             rentTransactionEntity.PaidDate = rentTransaction.PaidDate;
             rentTransactionEntity.PaidAmount = rentTransaction.PaidAmount;
             rentTransactionEntity.Balance = rentTransaction.Balance;
@@ -190,6 +209,21 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
 
             return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
 
+        }
+
+        private void AddOrDeductMonthUsed(int renterId, bool isAdd)
+        {
+            var renter = _renterRepository.GetSingleAsync(o => o.Id == renterId);
+            if (renter != null)
+            {
+                renter.Result.MonthsUsed = 
+                    (isAdd ? 
+                        renter.Result.MonthsUsed + 1 : 
+                        renter.Result.MonthsUsed - 1);
+
+                _renterRepository.Update(renter.Result);
+                _renterRepository.Commit();
+            }
         }
 
         private string CreateResourceUri(
