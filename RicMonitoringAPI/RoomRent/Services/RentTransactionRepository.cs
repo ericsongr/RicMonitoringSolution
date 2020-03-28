@@ -78,7 +78,8 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     Month = selectedDate.Month,
                                     Year = selectedDate.Year,
                                     TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
-                                    IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths
+                                    IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths,
+                                    IsProcessed = trans == null ? false : trans.IsProcessed
                                 });
 
             return transactions;

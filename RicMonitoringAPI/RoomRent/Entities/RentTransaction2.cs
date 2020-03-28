@@ -25,6 +25,6 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public int Year { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
         public bool IsNoAdvanceDepositLeft { get; set; }
-
+        public bool IsProcessed { get; set; }
     }
 }

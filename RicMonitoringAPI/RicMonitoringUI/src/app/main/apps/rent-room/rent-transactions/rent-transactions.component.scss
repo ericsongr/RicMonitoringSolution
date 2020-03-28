@@ -105,6 +105,18 @@ page-rent-transactions {
             flex: 0 1 150px;
           }
 
+          .mat-column-totalAmountDue, 
+          .mat-column-balance, 
+          .mat-column-paidAmount {
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 20px;
+            
+            p {
+                padding-right: 20px;
+            }
+          }
+
         .mat-column-image {
             flex: 0 1 84px;
 
@@ -122,5 +134,12 @@ page-rent-transactions {
         .active-icon {
             border-radius: 50%;
         }
+
+        .mat-header-cell {
+            text-align: center !important;
+          }
+        
     }
+
+    
 }
