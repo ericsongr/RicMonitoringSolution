@@ -74,7 +74,8 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     Note = trans.Note == null ? "" : trans.Note,
                                     Month = selectedDate.Month,
                                     Year = selectedDate.Year,
-                                    TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType
+                                    TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
+                                    IsProcessed = trans == null ? false : trans.IsProcessed
                                 });
 
             return transactions;

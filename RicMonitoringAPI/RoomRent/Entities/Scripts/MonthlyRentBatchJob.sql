@@ -96,7 +96,8 @@ BEGIN
 			Period,
 			TransactionType,
 			IsSystemProcessed,
-			SystemDateTimeProcessed)
+			SystemDateTimeProcessed,
+			IsProcessed)
 		VALUES(
 			@RoomId,
 			@RenterId,
@@ -107,7 +108,8 @@ BEGIN
 			@Period,
 			@TransactionTypeAsMonthlyRent,
 			@TransactionTypeAsMonthlyRent,
-			@SystemDateTimeProcessed)
+			@SystemDateTimeProcessed,
+			1)
 		
 		SET @TransactionId = @@IDENTITY
 
@@ -140,8 +142,13 @@ BEGIN
 		UPDATE RentArrears
 			SET IsProcessed = 1
 				WHERE RentTransactionId = @PreviousRentTransactionId	
+
+		UPDATE RentTransactions
+			SET IsProcessed = 1
+				WHERE RentTransactionId = @TransactionId
 		
 	END
+
 	ELSE IF @Balance > 0
 	BEGIN
 		--INSERT TOTAL ARREAR/UNPAID AMOUNT BILL
@@ -163,21 +170,19 @@ BEGIN
 		
 		--UPDATE THE @SystemDateTimeProcessed
 		UPDATE RentTransactions
-			SET SystemDateTimeProcessed = @SystemDateTimeProcessed
-				WHERE Id = @TransactionId
-	
+			SET SystemDateTimeProcessed = @SystemDateTimeProcessed,
+				IsProcessed = 1
+			WHERE Id = @TransactionId
 	END
+
 	ELSE IF @IsDeposit = 1
 	BEGIN
-		
 		--UPDATE THE @SystemDateTimeProcessed
 		UPDATE RentTransactions
-			SET SystemDateTimeProcessed = @SystemDateTimeProcessed
-				WHERE Id = @TransactionId
+			SET SystemDateTimeProcessed = @SystemDateTimeProcessed,
+				IsProcessed = 1
+			WHERE Id = @TransactionId
 	END
-	
-	--@MonthlyRent, @Note, @RenterId, @RoomId, @DueDate, @Period, @TransactionTypeAsMonthlyRent, @SystemDateTimeProcessed
-	--PRINT @MonthlyRent --Monthly Rent
 
 	FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @DueDay, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId
 END

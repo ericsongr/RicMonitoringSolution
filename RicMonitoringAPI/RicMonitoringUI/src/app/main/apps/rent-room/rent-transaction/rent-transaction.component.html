@@ -32,10 +32,17 @@
       <!-- /APP TITLE -->
       <button mat-raised-button 
               class="save-rent-transaction mat-white-bg mt-16 mt-sm-0"
-              *ngIf="rentTransaction.transactionType == 1"
+              *ngIf="rentTransaction.transactionType == 1 && !rentTransaction.isProcessed"
               [disabled]="rentTransactionForm.invalid"
               (click)="save()">
         <span>SAVE</span>
+      </button>
+      <!-- adjust payment -->
+      <button mat-raised-button 
+              class="save-rent-transaction mat-white-bg mt-16 mt-sm-0"
+              *ngIf="rentTransaction.isProcessed"
+              (click)="amendment()">
+        <span>Amendment</span>
       </button>
     </div>
       <!-- / HEADER -->
