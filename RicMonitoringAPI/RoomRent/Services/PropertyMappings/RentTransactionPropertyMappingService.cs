@@ -32,6 +32,7 @@ namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
                 {"DueDay", new PropertyMappingValue(new List<string>() {"DueDay"}) },
                 {"Period", new PropertyMappingValue(new List<string>() {"Period"}) },
                 {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
+                {"IsNoAdvanceDepositLeft", new PropertyMappingValue(new List<string>() {"IsNoAdvanceDepositLeft"}) },
                 {"IsProcessed", new PropertyMappingValue(new List<string>() {"IsProcessed"}) },
             };
 

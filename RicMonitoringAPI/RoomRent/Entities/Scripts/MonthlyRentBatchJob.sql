@@ -25,9 +25,11 @@ DECLARE @RenterId		INT,
 		@RoomId			INT,
 		@DueDay			INT,
 		@DueDate		DATETIME,
+		@PaidDate		DATETIME,
 		@MonthlyRent	DECIMAL,
 		@PaidAmount		DECIMAL,
 		@Balance		DECIMAL,
+		@TotalAmountDue DECIMAL,
 		@IsDeposit		BIT,
 		@Note			VARCHAR(100)
 
@@ -58,8 +60,9 @@ OPEN ProcessMonthlyRentTransactionsCursor
 FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @DueDay, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId
 WHILE @@FETCH_STATUS = 0
 BEGIN
+	SET @IsDeposit = 0
 	--GET THE TOTAL PREVIOUS UNPAID AMOUNT BILL
-	SET @PreviousRentArrearId = 0;
+	SET @PreviousRentArrearId = 0
 	SET @PreviousRentTransactionId = 0
 	SET @PreviousTotalBalance = 0
 
@@ -83,7 +86,26 @@ BEGIN
 		SET @DateEnd = DATEADD(DAY, -1, DATEADD(MONTH, 1, @DateStart))
 		SET @Period = FORMAT(@DateStart, 'dd-MMM') + ' to ' + FORMAT(@DateEnd, 'dd-MMM-yyyy')
 		
-		SET @TotalBalance = @MonthlyRent + IIF(@PreviousTotalBalance IS NULL, 0, @PreviousTotalBalance) --MonthlyRent + Balance
+		SET @TotalAmountDue = @MonthlyRent + IIF(@PreviousTotalBalance IS NULL, 0, @PreviousTotalBalance) --MonthlyRent + Balance
+		
+		--IF THERE'S REMAINING DEPOSIT DEDUCT INSTEAD OF ADDING TO ARREAR
+		IF EXISTS(SELECT 1 FROM Renters WHERE Id = @RenterId AND MonthsUsed < AdvanceMonths)
+		BEGIN
+			SET @IsDeposit = 1
+			--UPDATE MonthsUsed FIELD
+			UPDATE Renters SET MonthsUsed = MonthsUsed + 1 WHERE Id = @RenterId
+
+			--FETCH ONLY THE EXISTING BALANCE
+			SET @TotalBalance = IIF(@PreviousTotalBalance IS NULL, 0, @PreviousTotalBalance) 
+			SET @PaidDate = @DueDate
+		END 
+		ELSE
+		BEGIN
+			--TOTAL BALANCE HERE
+			SET @TotalBalance = @TotalBalance;
+			SET @PaidDate = NULL
+		END
+		
 
 		--PROCESSED TRANSACTION BY SYSTEM IF CURRENT MONTH DUE STILL UNPAID
 		INSERT INTO RentTransactions(
@@ -93,9 +115,11 @@ BEGIN
 			Note,
 			IsDepositUsed,
 			DueDate,
+			PaidDate,
 			Period,
 			TransactionType,
 			IsSystemProcessed,
+			TotalAmountDue,
 			SystemDateTimeProcessed,
 			IsProcessed)
 		VALUES(
@@ -103,11 +127,13 @@ BEGIN
 			@RenterId,
 			@TotalBalance,
 			@Note,
-			0,
+			@IsDeposit,
 			@DueDate,
+			@PaidDate,
 			@Period,
 			@TransactionTypeAsMonthlyRent,
-			@TransactionTypeAsMonthlyRent,
+			1,
+			@TotalAmountDue,
 			@SystemDateTimeProcessed,
 			1)
 		
@@ -126,18 +152,21 @@ BEGIN
 				VALUES(@TransactionId, @MonthlyRent, NULL)
 		--END RentTransactionDetails
 
-		--INSERT TOTAL ARREAR/UNPAID AMOUNT BILL
-		INSERT INTO RentArrears(
-			RenterId,
-			RentTransactionId,
-			UnpaidAmount,
-			IsProcessed)
-		VALUES
-			(@RenterId,
-				@TransactionId,
-				@TotalBalance,
-				0)
-		
+		IF @TotalBalance > 0
+		BEGIN
+			--INSERT TOTAL ARREAR/UNPAID AMOUNT BILL
+			INSERT INTO RentArrears(
+				RenterId,
+				RentTransactionId,
+				UnpaidAmount,
+				IsProcessed)
+			VALUES
+				(@RenterId,
+					@TransactionId,
+					@TotalBalance,
+					0)
+		END
+
 		--SET THE PREVIOUS TOTAL BALANCE IN ARREARS TABLE AS PROCESSED SO IT WON'T COUNT THE NEXT TIME IT BILL
 		UPDATE RentArrears
 			SET IsProcessed = 1
@@ -177,6 +206,27 @@ BEGIN
 
 	ELSE IF @IsDeposit = 1
 	BEGIN
+		
+		IF @PreviousTotalBalance > 0
+		BEGIN
+			--INSERT TOTAL ARREAR/UNPAID AMOUNT BILL
+			INSERT INTO RentArrears(
+				RenterId,
+				RentTransactionId,
+				UnpaidAmount,
+				IsProcessed)
+			VALUES
+				(@RenterId,
+				@TransactionId,
+				@PreviousTotalBalance,
+				0)
+		END
+
+		--SET THE PREVIOUS TOTAL BALANCE IN ARREARS TABLE AS PROCESSED SO IT WON'T COUNT THE NEXT TIME IT BILL
+		UPDATE RentArrears
+			SET IsProcessed = 1
+				WHERE RentTransactionId = @PreviousRentTransactionId	
+
 		--UPDATE THE @SystemDateTimeProcessed
 		UPDATE RentTransactions
 			SET SystemDateTimeProcessed = @SystemDateTimeProcessed,
