@@ -102,7 +102,7 @@ BEGIN
 		ELSE
 		BEGIN
 			--TOTAL BALANCE HERE
-			SET @TotalBalance = @TotalBalance;
+			SET @TotalBalance = @TotalAmountDue;
 			SET @PaidDate = NULL
 		END
 		
@@ -174,7 +174,7 @@ BEGIN
 
 		UPDATE RentTransactions
 			SET IsProcessed = 1
-				WHERE RentTransactionId = @TransactionId
+				WHERE Id = @TransactionId
 		
 	END
 
