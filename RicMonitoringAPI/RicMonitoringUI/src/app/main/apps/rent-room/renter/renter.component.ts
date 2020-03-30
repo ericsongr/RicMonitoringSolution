@@ -130,17 +130,19 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
     data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
     data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;
     data.handle = FuseUtils.handleize(data.name);
+    data.startDateInput = moment(data.startDate).format('YYYY-MM-DD');
+    data.advancePaidDateInput = moment(data.advancePaidDate).format('YYYY-MM-DD');
     
     if (!this.hasBalance){
       data.balancePaidDate = null;
       data.balanceAmount = 0;
     }
-
+    
     this._renterService.saveRenter(data)
         .then(() => {
 
           //Trigger the subscription with new data
-          this._renterService.onRenterChanged.next(data);
+          // this._renterService.onRenterChanged.next(data);
 
           //show the success message
           this._snackBar.open('Renter detail saved.', 'OK', {
@@ -159,13 +161,15 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
     data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
     data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;
     data.handle = FuseUtils.handleize(data.name);
-
+    data.startDateInput = moment(data.startDate).format('YYYY-MM-DD');
+    data.advancePaidDateInput = moment(data.advancePaidDate).format('YYYY-MM-DD');
+    
     this._renterService.addRenter(data)
         .then((renterId) => {
           //Trigger the subscription with new data
 
           data.id = renterId;
-          this._renterService.onRenterChanged.next(data);
+          // this._renterService.onRenterChanged.next(data);
 
           //show the success message
           this._snackBar.open('New renter added.', 'OK', {

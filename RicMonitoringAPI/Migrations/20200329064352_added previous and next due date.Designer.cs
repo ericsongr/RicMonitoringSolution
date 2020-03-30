@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RicMonitoringAPI.RoomRent.Entities;
 
 namespace RicMonitoringAPI.Migrations
 {
     [DbContext(typeof(RoomRentContext))]
-    partial class RoomRentContextModelSnapshot : ModelSnapshot
+    [Migration("20200329064352_added previous and next due date")]
+    partial class addedpreviousandnextduedate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

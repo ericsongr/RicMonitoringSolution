@@ -26,7 +26,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public bool IsSystemProcessed { get; set; }
         public DateTime? SystemDateTimeProcessed { get; set; }
         public bool IsProcessed { get; set; }
-
+       
         public virtual Room Room { get; set; }
         public virtual Renter Renter { get; set; }
 
