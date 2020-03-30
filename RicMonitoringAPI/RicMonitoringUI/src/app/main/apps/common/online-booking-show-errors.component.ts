@@ -2,14 +2,14 @@ import { Component, Input } from "@angular/core";
 import { AbstractControlDirective, AbstractControl } from "@angular/forms";
 
 @Component({
-    selector: 'show-errors',
+    selector: 'online-booking-show-errors',
     template: `
         <div *ngIf="shouldShowErrors()">
             <mat-error *ngFor="let error of listOfErrors()">{{error}}</mat-error>
         </div>
     `
 })
-export class ShowErrorsComponent {
+export class OnlineBookingShowErrorsComponent {
 
     public static readonly errorMessages = {
         'required': () => 'This field is required.',
@@ -33,7 +33,7 @@ export class ShowErrorsComponent {
     }
 
     getMessage(type: string, params: any): any {
-        var errorMessage = ShowErrorsComponent.errorMessages[type](params);
+        var errorMessage = OnlineBookingShowErrorsComponent.errorMessages[type](params);
         return errorMessage;
     }
 }

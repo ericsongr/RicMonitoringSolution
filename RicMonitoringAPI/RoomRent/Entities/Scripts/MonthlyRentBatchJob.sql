@@ -1,13 +1,8 @@
-﻿
---SELECT DATEADD(MONTH, 1, Cast('7/7/2011' as datetime))
-
---SELECT FORMAT(GETDATE(), 'dd-MMM-yyyy')
-
-DECLARE @Month			INT,
+﻿ALTER PROCEDURE RentTransactionBatchFile
+AS
+DECLARE @CurrentDate	DATETIME,
+		@Month			INT,
 		@Year			INT
-
-SET @Month = 4
-SET @Year = 2020
 
 DECLARE @TransactionTypeAsMonthlyRent	INT,
 		@DateStart						DATETIME,
@@ -19,11 +14,11 @@ DECLARE @TransactionTypeAsMonthlyRent	INT,
 		@PreviousRentArrearId			INT,
 		@PreviousRentTransactionId		INT,
 		@PreviousTotalBalance			DECIMAL, 
-		@TransactionId					INT
+		@TransactionId					INT,
+		@TenantGracePeriod				INT
 
 DECLARE @RenterId		INT,
 		@RoomId			INT,
-		@DueDay			INT,
 		@DueDate		DATETIME,
 		@PaidDate		DATETIME,
 		@MonthlyRent	DECIMAL,
@@ -33,31 +28,38 @@ DECLARE @RenterId		INT,
 		@IsDeposit		BIT,
 		@Note			VARCHAR(100)
 
---use to get the last day of the each month to avoid error once save to due date field
-SET @LastDayOfTheMonth = DAY(EOMONTH(CONVERT(VARCHAR(10), @Year) + '-' + CONVERT(VARCHAR(10),@Month)+ '-1'))
+SET @CurrentDate = GETDATE()
 
-SET @SystemDateTimeProcessed = GETDATE()
+SET @SystemDateTimeProcessed = @CurrentDate
 SET @Note = 'PROCESSED BY THE SYSTEM'
 SET @TransactionTypeAsMonthlyRent = 1 -- 1 for Monthly Rent
+
+SELECT @TenantGracePeriod = Value FROM Settings WHERE [Key] = 'TenantGracePeriod'
+
+--COMMENT FOR TESTING PURPOSES
+--SET @CurrentDate = DATEADD(MONTH, 1, DATEADD(DAY, @TenantGracePeriod, '2020-04-30'))
+
+SET @CurrentDate = DATEADD(DAY, @TenantGracePeriod, '2020-04-30')
 
 DECLARE ProcessMonthlyRentTransactionsCursor CURSOR FOR
 	SELECT 
 		r.Id AS RenterId,
-		r.DueDay,
 		rm.id RoomId, 
 		rm.Price MonthlyRent,
 		t.PaidAmount,
 		t.Balance,
 		t.IsDepositUsed,
-		t.Id
-	FROM Rooms rm LEFT JOIN Renters r ON rm.id = r.RoomId 
-		LEFT JOIN RentTransactions t ON r.Id = t.RenterId AND MONTH(t.DueDate) = @Month AND YEAR(t.DueDate) = @Year
+		t.Id,
+		r.NextDueDate
+	FROM Rooms rm INNER JOIN Renters r ON rm.id = r.RoomId 
+		LEFT JOIN RentTransactions t ON r.Id = t.RenterId AND r.NextDueDate = t.DueDate
 	where IsEndRent = 0
-	AND   SystemDateTimeProcessed IS NULL
+	AND   t.IsProcessed is null
+	AND DATEADD(DAY, @TenantGracePeriod, r.NextDueDate) <= @CurrentDate
 
 
 OPEN ProcessMonthlyRentTransactionsCursor
-FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @DueDay, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId
+FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId, @DueDate
 WHILE @@FETCH_STATUS = 0
 BEGIN
 	SET @IsDeposit = 0
@@ -76,12 +78,9 @@ BEGIN
 	
 	IF @PaidAmount IS NULL
 	BEGIN
-		--CHECK IF DUE DAY OF THE RENTER NOT EXCEED THE LAST DAY OF THE MONTH IF SO USE LAST DAY INSTEAD
-		IF @DueDay > @LastDayOfTheMonth
-			SET @DueDay = @LastDayOfTheMonth
-
+		
 		--DUE DATE TIME
-		SET @DueDate = CAST((CONVERT(VARCHAR(2), @Month) + '/' + CONVERT(VARCHAR(2), @DueDay) + '/' + CONVERT(VARCHAR(4), @Year)) AS DATETIME)
+		--SET @DueDate = CAST((CONVERT(VARCHAR(2), @Month) + '/' + CONVERT(VARCHAR(2), @DueDay) + '/' + CONVERT(VARCHAR(4), @Year)) AS DATETIME)
 		SET @DateStart = DATEADD(DAY, 1, @DueDate)
 		SET @DateEnd = DATEADD(DAY, -1, DATEADD(MONTH, 1, @DateStart))
 		SET @Period = FORMAT(@DateStart, 'dd-MMM') + ' to ' + FORMAT(@DateEnd, 'dd-MMM-yyyy')
@@ -234,7 +233,13 @@ BEGIN
 			WHERE Id = @TransactionId
 	END
 
-	FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @DueDay, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId
+	--UPDATE PREVIOUS AND NEXT DUE DATE
+	UPDATE Renters 
+		SET PreviousDueDate = NextDueDate,
+			NextDueDate = DATEADD(MONTH,1, NextDueDate)
+				WHERE Id = @RenterId
+
+	FETCH NEXT FROM ProcessMonthlyRentTransactionsCursor INTO @RenterId, @RoomId, @MonthlyRent, @PaidAmount, @Balance, @IsDeposit, @TransactionId, @DueDate
 END
 CLOSE ProcessMonthlyRentTransactionsCursor
 DEALLOCATE ProcessMonthlyRentTransactionsCursor

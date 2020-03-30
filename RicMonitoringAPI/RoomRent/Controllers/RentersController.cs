@@ -114,6 +114,14 @@ namespace RicMonitoringAPI.RenterRent.Controllers
                 return NotFound();
             }
 
+            DateTime.TryParse(renter.StartDateInput, out DateTime startDateInput);
+            DateTime.TryParse(renter.AdvancePaidDateInput, out DateTime advancePaidDateInput);
+
+            renter.StartDate = startDateInput;
+            renter.AdvancePaidDate = advancePaidDateInput;
+            renter.PreviousDueDate = startDateInput;
+            renter.NextDueDate = startDateInput.AddMonths(1);
+
             var renterEntity = Mapper.Map<Renter>(renter);
 
             _renterRepository.Add(renterEntity);
@@ -126,7 +134,7 @@ namespace RicMonitoringAPI.RenterRent.Controllers
 
             var rentTransaction = new RentTransaction
             {
-                PaidDate = renter.AdvancePaidDate,
+                PaidDate = advancePaidDateInput,
                 PaidAmount = renter.TotalPaidAmount,
                 Balance = renter.BalanceAmount,
                 BalanceDateToBePaid = renter.BalancePaidDate,
@@ -166,11 +174,14 @@ namespace RicMonitoringAPI.RenterRent.Controllers
                 return NotFound();
             }
 
+            DateTime.TryParse(renter.StartDateInput,out DateTime startDateInput);
+            DateTime.TryParse(renter.AdvancePaidDateInput,out DateTime advancePaidDateInput);
+
             renterEntity.Name = renter.Name;
             renterEntity.AdvanceMonths = renter.AdvanceMonths;
             renterEntity.MonthsUsed = renter.MonthsUsed;
-            renterEntity.AdvancePaidDate = renter.AdvancePaidDate;
-            renterEntity.StartDate = renter.StartDate;
+            renterEntity.AdvancePaidDate = advancePaidDateInput;
+            renterEntity.StartDate = startDateInput;
             renterEntity.DueDay = renter.DueDay;
             renterEntity.NoOfPersons = renter.NoOfPersons;
             renterEntity.RoomId = renter.RoomId;

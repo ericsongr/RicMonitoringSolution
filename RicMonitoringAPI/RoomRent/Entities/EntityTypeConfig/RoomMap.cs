@@ -12,7 +12,7 @@ namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
                 .Property(t => t.Price)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentArrear>().ToTable("Rooms");
+            modelBuilder.Entity<Room>().ToTable("Rooms");
 
         }
     }

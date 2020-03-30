@@ -6,7 +6,9 @@ export class Renter {
     advanceMonths   : number;
     monthsUsed      : number;
     startDate       : string;
+    startDateString : string;
     advancePaidDate : string;
+    advancePaidDateString : string;
     dueDay         : number;
     noOfPersons     : number;
     roomId          : number;

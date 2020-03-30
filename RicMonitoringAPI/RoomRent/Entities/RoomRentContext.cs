@@ -22,6 +22,8 @@ namespace RicMonitoringAPI.RoomRent.Entities
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SettingMap.AddMap(modelBuilder);
+
             RoomMap.AddMap(modelBuilder);
             RenterMap.AddMap(modelBuilder);
 
@@ -35,7 +37,10 @@ namespace RicMonitoringAPI.RoomRent.Entities
 
             RentTransactionMap.AddMap(modelBuilder);
             RentTransactionDetailMap.AddMap(modelBuilder);
-            
+
+            this.Database.ExecuteSqlCommand("RentTransactionBatchFile");
+
+
         }
 
         public DbSet<Room> Rooms { get; set; }
@@ -53,6 +58,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public DbSet<MonthlyRentBatch> MonthlyRentBatch { get; set; }
 
         public DbSet<RentArrear> RentArrears { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
     }
 }
