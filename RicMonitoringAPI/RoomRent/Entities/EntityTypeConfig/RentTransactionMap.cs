@@ -25,6 +25,10 @@ namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<RentTransaction>()
+                .Property(p => p.AdjustmentBalancePaymentDueAmount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<RentTransaction>()
                 .HasOne(t => t.Room)
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RoomId)

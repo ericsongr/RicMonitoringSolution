@@ -173,6 +173,47 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
             return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
         }
 
+        [HttpPost(Name = "BalanceAdjustment")]
+        [Route("[action]")]
+        public async Task<IActionResult> BalanceAdjustment([FromBody] RentTransactionBalanceAdjustmentDto balanceAdjustment)
+        {
+            if (balanceAdjustment == null)
+            {
+                return NotFound();
+            }
+
+            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(balanceAdjustment.TransactionId);
+            if (rentTransactionEntity == null)
+            {
+                return NotFound();
+            }
+
+            rentTransactionEntity.AdjustmentBalancePaymentDueAmount = balanceAdjustment.AdjustmentBalancePaymentDueAmount;
+            rentTransactionEntity.Note = balanceAdjustment.Note + 
+                                         $"\n>>Adjustment {balanceAdjustment.AdjustmentBalancePaymentDueAmount} pesos date of {DateTime.Now.ToString("dd-MMM-yyyy")}";
+
+            _rentTransactionRepository.Update(rentTransactionEntity);
+            _rentTransactionRepository.Commit();
+
+            var rentArrear = await _rentArrearRepository.GetSingleAsync(o => o.RentTransactionId == balanceAdjustment.TransactionId);
+            if (rentArrear != null)
+            {
+                rentArrear.UnpaidAmount = ((rentTransactionEntity.Balance ?? 0) - balanceAdjustment.AdjustmentBalancePaymentDueAmount);
+
+                _rentArrearRepository.Update(rentArrear);
+                _rentArrearRepository.Commit();
+            }
+
+
+            var fields =
+                "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate," +
+                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,"+
+                "note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
+
+            return Redirect($"/api/rent-transactions/{rentTransactionEntity.RenterId}?fields={fields}");
+            
+        }
+
         [HttpPut("{id}", Name = "Update")]
         public async Task<IActionResult> Update(int id, [FromBody] RentTransactionForUpdateDto rentTransaction)
         {

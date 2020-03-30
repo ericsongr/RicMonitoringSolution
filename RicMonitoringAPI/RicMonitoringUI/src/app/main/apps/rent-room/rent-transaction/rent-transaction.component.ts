@@ -72,11 +72,41 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
             paidAmount           : [this.rentTransaction.paidAmount, Validators.required],
             balanceDateToBePaid  : [this.rentTransaction.balanceDateToBePaid],
             isDepositUsed        : [this.rentTransaction.isDepositUsed],
-            note                 : [this.rentTransaction.note]
+            note                 : [this.rentTransaction.note],
+            adjustmentBalancePaymentDueAmount: [this.rentTransaction.adjustmentBalancePaymentDueAmount],
         });
 
   }
   
+  saveBalanceAdjustment() {
+    if (this.rentTransactionForm.invalid){
+      this._snackBar.open('Invalid form. Please verify.', 'OK', {
+        verticalPosition  : 'top',
+        duration          : 2000
+      });
+
+      this._cdr.detectChanges();
+  
+    } else {
+
+      const formData = this.rentTransactionForm.getRawValue();
+      
+      this._rentTransactionService.saveBalanceAdjustment(
+            this.rentTransaction.id,
+            formData.adjustmentBalancePaymentDueAmount,
+            formData.note)
+          .then((rentTransaction: RentTransaction) => {
+            this.rentTransaction = new RentTransaction(rentTransaction);  
+            });
+
+            this._snackBar.open("Payment has been saved.", 'OK', {
+              verticalPosition: 'top',
+              duration        : 200
+            });
+
+    }
+  }
+
   save() {
 
     if (this.rentTransactionForm.invalid){
@@ -138,32 +168,55 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     return this.rentTransactionForm.get('balanceDateToBePaid');
   }
 
+  get adjustmentBalancePaymentDueAmount() {
+    return this.rentTransactionForm.get('adjustmentBalancePaymentDueAmount');
+  }
+
+  onChangeAdjustmentBalancePaymentDueAmount() {
+    //  this.rentTransaction.balance = this.rentTransaction.totalAmountDue - (this.rentTransaction.paidAmount + this.rentTransaction.adjustmentBalancePaymentDueAmount)
+  }
+
   onChangePaidAmount() {
     
-    if (this.rentTransaction.isDepositUsed){
-      this.hasBalance = false;
-    } else {
-      this.hasBalance = Number(this.rentTransaction.totalAmountDue) > Number(this.rentTransaction.paidAmount);
-    }
-    
-    if (this.rentTransaction.transactionType == TransactionTypeEnum.AdvanceAndDeposit){
+    if (this.rentTransaction.isProcessed) {
+      //isProcessed meaning the batch file has been run.
       this.hasBalance = this.rentTransaction.balance > 0;
-    }
+      if (this.hasBalance) {
+        this.adjustmentBalancePaymentDueAmount.setValidators([Validators.required]);
+      } else {
+        this.adjustmentBalancePaymentDueAmount.setValidators(null);
+      }
+      this.adjustmentBalancePaymentDueAmount.updateValueAndValidity();
 
-    if (!this.hasBalance) {
-      this.balanceDateToBePaid.setValidators(null);
-      this.rentTransaction.balanceDateToBePaid = null;
-    }
-    else {
-
-      if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent){
-        this.rentTransaction.balance = 
-          (Number(this.rentTransaction.paidAmount) >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - Number(this.rentTransaction.paidAmount))
+    } else {
+      //not yet run the batch file
+      if (this.rentTransaction.isDepositUsed) {
+        this.hasBalance = false;
+      } else {
+        this.hasBalance = Number(this.rentTransaction.totalAmountDue) > Number(this.rentTransaction.paidAmount);
       }
       
-        this.balanceDateToBePaid.setValidators([Validators.required])
+      if (this.rentTransaction.transactionType == TransactionTypeEnum.AdvanceAndDeposit){
+        this.hasBalance = this.rentTransaction.balance > 0;
+      }
+  
+      if (!this.hasBalance) {
+        this.balanceDateToBePaid.setValidators(null);
+        this.rentTransaction.balanceDateToBePaid = null;
+      }
+      else {
+  
+        if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent){
+          this.rentTransaction.balance = 
+            (Number(this.rentTransaction.paidAmount) >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - Number(this.rentTransaction.paidAmount))
+        }
+        
+          this.balanceDateToBePaid.setValidators([Validators.required])
+      }
+      this.balanceDateToBePaid.updateValueAndValidity();
+
     }
-    this.balanceDateToBePaid.updateValueAndValidity();
+    
     this._cdr.detectChanges();
 
   }
