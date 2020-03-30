@@ -67,11 +67,18 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     MonthlyRent = r.MonthlyRent,
                                     DueDay = r.DueDay,
                                     PaidDate = trans.PaidDate,
-                                    PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
-                                    Balance = trans.Balance == null ? 0 : trans.Balance,
+                                    PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount + trans.AdjustmentBalancePaymentDueAmount,
+                                    Balance = trans.Balance == null ? 0 : (trans.Balance - trans.AdjustmentBalancePaymentDueAmount),
+                                    IsBalanceEditable = trans.Balance != null && trans.Balance > 0,
                                     RentArrearId = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.Id : 0),
-                                    PreviousUnpaidAmount = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0 ),
-                                    TotalAmountDue = (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
+                                    PreviousUnpaidAmount =
+                                        trans != null && trans.IsProcessed ?
+                                            ((trans.Balance ?? 0) - trans.AdjustmentBalancePaymentDueAmount) : 
+                                            (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0 ),
+                                    TotalAmountDue = 
+                                        trans != null && trans.IsProcessed ? 
+                                            trans.TotalAmountDue : 
+                                                (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
                                     IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
                                     BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
                                     Note = trans.Note == null ? "" : trans.Note,
@@ -79,7 +86,8 @@ namespace RicMonitoringAPI.Services.RoomRent
                                     Year = selectedDate.Year,
                                     TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
                                     IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths,
-                                    IsProcessed = trans == null ? false : trans.IsProcessed
+                                    IsProcessed = trans == null ? false : trans.IsProcessed,
+                                    AdjustmentBalancePaymentDueAmount = trans == null ? 0 : trans.AdjustmentBalancePaymentDueAmount
                                 });
 
             return transactions;
@@ -96,7 +104,6 @@ namespace RicMonitoringAPI.Services.RoomRent
             var collectionBeforPaging =
                 transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());
-
 
             if (!string.IsNullOrEmpty(rentTransactionResourceParameters.SearchQuery))
             {

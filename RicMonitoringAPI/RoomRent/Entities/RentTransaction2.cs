@@ -15,6 +15,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public DateTime? PaidDate { get; set; }
         public decimal? PaidAmount { get; set; }
         public decimal? Balance { get; set; }
+        public bool IsBalanceEditable { get; set; }
         public decimal PreviousUnpaidAmount { get; set; } //arrears
         public int RentArrearId { get; set; } //arrears
         public DateTime? BalanceDateToBePaid { get; set; }
@@ -26,5 +27,6 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public TransactionTypeEnum TransactionType { get; set; }
         public bool IsNoAdvanceDepositLeft { get; set; }
         public bool IsProcessed { get; set; }
+        public decimal AdjustmentBalancePaymentDueAmount { get; set; }
     }
 }

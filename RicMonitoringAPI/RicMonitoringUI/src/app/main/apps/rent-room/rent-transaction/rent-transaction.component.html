@@ -40,9 +40,10 @@
       <!-- adjust payment -->
       <button mat-raised-button 
               class="save-rent-transaction mat-white-bg mt-16 mt-sm-0"
-              *ngIf="rentTransaction.isProcessed"
-              (click)="amendment()">
-        <span>Amendment</span>
+              *ngIf="rentTransaction.isProcessed && rentTransaction.isBalanceEditable"
+              [disabled]="rentTransactionForm.invalid"
+              (click)="saveBalanceAdjustment()">
+        <span>Save Balance Adjustment</span>
       </button>
     </div>
       <!-- / HEADER -->
@@ -89,7 +90,7 @@
               </div>
               
 
-              <div fxLayout="row">
+              <div fxLayout="row" [hidden]="rentTransaction.isProcessed">
                 <mat-form-field fxFlex="20" appearance="outline" floatLabel="always">
                   <mat-label>Paid Amount</mat-label>
                   <input matInput
@@ -138,6 +139,33 @@
                     </div>
                   </div>
               </div>
+
+              <div fxLayout="row" [hidden]="!rentTransaction.isProcessed">
+                
+                <mat-form-field *ngIf="rentTransaction.isProcessed && rentTransaction.isBalanceEditable" fxFlex="30" appearance="outline" floatLabel="always">
+                  <mat-label>Paid Amount [Balance Adjustment]</mat-label>
+                  <input matInput
+                        name="adjustmentBalancePaymentDueAmount"
+                        formControlName="adjustmentBalancePaymentDueAmount"
+                        [(ngModel)]="rentTransaction.adjustmentBalancePaymentDueAmount"
+                        (keyup)="onChangeAdjustmentBalancePaymentDueAmount()">
+                        <show-errors [control]="rentTransactionForm.controls.adjustmentBalancePaymentDueAmount"></show-errors>
+                </mat-form-field>
+
+                <div *ngIf="rentTransaction.isDepositUsed" class="pr-40 pb-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text">Deposit Used?</div>
+                  <div class="font-weight-300 py-8 message-box success">
+                      <strong>YES</strong>
+                  </div>
+                </div>
+                <div *ngIf="rentTransaction.isNoAdvanceDepositLeft" class="pr-40 pb-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text" style="color: red;">ALERT!</div>
+                  <div class="font-weight-300 py-8 message-box warning">
+                      <span>No Advance/Deposit Left...</span>
+                  </div>
+                </div>
+              </div>
+
               <div fxLayout="row">
                 <mat-form-field fxFlex="65" appearance="outline" floatLabel="always">
                   <mat-label>Note(s)</mat-label>
@@ -149,15 +177,22 @@
                         <show-errors [control]="rentTransactionForm.controls.note"></show-errors>
                 </mat-form-field>
               </div>
-              
-              <div *ngIf="hasBalance" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
-                <div class="h4 secondary-text">Balance</div>
-                <div class="h2 font-weight-300 py-8" style="color: maroon;">{{rentTransaction.balance | number: '1.0-2'}}</div>
-              </div>
+              <div fxLayout="row">
+                <div *ngIf="rentTransaction.id > 0 && rentTransaction.paidAmount > 0" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text">Amount Paid</div>
+                  <div class="h2 font-weight-300 py-8" style="color: maroon;">{{(rentTransaction.paidAmount) | number: '1.0-2'}}</div>
+                </div>
 
-              <div *ngIf="rentTransaction.transactionType == 2" class="message-box warning">
-                Please modify the tenant information via <a href="#" [routerLink]="'/apps/rent-room/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
-              </div>
+                <div *ngIf="hasBalance" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h4 secondary-text">Balance</div>
+                  <div class="h2 font-weight-300 py-8" style="color: maroon;">{{rentTransaction.balance | number: '1.0-2'}}</div>
+                </div>
+
+                <div *ngIf="rentTransaction.transactionType == 2" class="message-box warning">
+                  Please modify the tenant information via <a href="#" [routerLink]="'/apps/rent-room/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
+                </div>
+            </div>
+              
           </div>
           
           </form>

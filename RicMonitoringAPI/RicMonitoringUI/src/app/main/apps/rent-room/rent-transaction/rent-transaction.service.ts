@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
-const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed";
+const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 
@@ -43,7 +43,6 @@ export class RentTransactionService implements Resolve<any>
       this._httpClient.get(url)
             .subscribe((response: any) => {
                 this.rentTransaction = response;
-                console.log(response);
                 this.onRentTransactionChanged.next(response);
                 resolve(response);
             }, reject);
@@ -52,7 +51,6 @@ export class RentTransactionService implements Resolve<any>
   }
 
   saveTransaction(transaction: RentTransaction) {
-      
       return new Promise((resolve, reject) => {
         if (transaction.id > 0) {
             var url = API_URL + transaction.id;
@@ -80,5 +78,20 @@ export class RentTransactionService implements Resolve<any>
    
   }
 
+  saveBalanceAdjustment(transactionId: number, adjustmentBalancePaymentDueAmount: string, note: string) {
+    return new Promise((resolve, reject) => {
+
+      var adjustmentObject = {
+        transactionId: transactionId,
+        adjustmentBalancePaymentDueAmount: adjustmentBalancePaymentDueAmount,
+        note: note
+      };
+
+      this._httpClient.post(`${API_URL}BalanceAdjustment`, adjustmentObject)
+          .subscribe((response: any) => {
+            resolve(response);
+          }, reject);
+    })
+  }
 
 }
