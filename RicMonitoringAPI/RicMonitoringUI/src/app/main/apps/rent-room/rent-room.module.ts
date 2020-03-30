@@ -8,7 +8,7 @@ import { RoomService } from './room/room.service';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components';
 import { MaterialModule } from 'app/main/module/material.module';
-import { ShowErrorsComponent } from '../common/show-errors.component';
+import { TenantShowErrorsComponent } from '../common/tenant-show-errors.component';
 import { RentersComponent } from './renters/renters.component';
 import { RentersService } from './renters/renters.service';
 import { RenterComponent } from './renter/renter.component';
@@ -93,7 +93,7 @@ const routes : Routes= [
     RenterComponent,
     RentTransactionsComponent,
     RentTransactionComponent,
-    ShowErrorsComponent
+    TenantShowErrorsComponent
   ],
   providers: [
     RoomsService,

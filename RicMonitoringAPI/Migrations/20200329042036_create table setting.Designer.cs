@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RicMonitoringAPI.RoomRent.Entities;
 
 namespace RicMonitoringAPI.Migrations
 {
     [DbContext(typeof(RoomRentContext))]
-    partial class RoomRentContextModelSnapshot : ModelSnapshot
+    [Migration("20200329042036_create table setting")]
+    partial class createtablesetting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,11 +246,7 @@ namespace RicMonitoringAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("NextDueDate");
-
                     b.Property<int>("NoOfPersons");
-
-                    b.Property<DateTime>("PreviousDueDate");
 
                     b.Property<int?>("RentTransactionId");
 

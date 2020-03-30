@@ -4,7 +4,7 @@
 
   <!-- HEADER -->
   <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
-      <h2>Full width</h2>
+      <h2>Online Booking</h2>
   </div>
   <!-- / HEADER -->
 
@@ -24,7 +24,7 @@
                       formControlName="firstName"
                       autocomplete="off"
                       required/>
-                      <show-errors [control]="person.controls.firstName"></show-errors>
+                      <online-booking-show-errors [control]="person.controls.firstName"></online-booking-show-errors>
               </mat-form-field>
 
               <mat-form-field fxFlex="33" appearance="outline" floatLabel="always" class="w-100-p">
@@ -34,7 +34,7 @@
                       formControlName="lastName"
                       autocomplete="off"
                       required/>
-                      <show-errors [control]="person.controls.lastName"></show-errors>
+                      <online-booking-show-errors [control]="person.controls.lastName"></online-booking-show-errors>
               </mat-form-field>
 
               <mat-form-field fxFlex="49" appearance="outline" floatLabel="always" class="w-100-p">
@@ -44,7 +44,7 @@
                           {{age.description}}
                         </mat-option>
                       </mat-select>
-                      <show-errors [control]="person.controls.ages"></show-errors>
+                      <online-booking-show-errors [control]="person.controls.ages"></online-booking-show-errors>
               </mat-form-field>
             </ng-container>
         </div>
@@ -63,7 +63,7 @@
                 autocomplete="off"
                 required/>
                 <mat-icon matSuffix>@</mat-icon>
-                <show-errors [control]="bookingForm.controls.email"></show-errors>
+                <online-booking-show-errors [control]="bookingForm.controls.email"></online-booking-show-errors>
         </mat-form-field>
 
         <mat-form-field fxFlex="25" appearance="outline" floatLabel="always" class="w-100-p">
@@ -74,7 +74,7 @@
                 autocomplete="off"
                 required/>
                 <mat-icon matSuffix>phone</mat-icon>
-                <show-errors [control]="bookingForm.controls.contact"></show-errors>
+                <online-booking-show-errors [control]="bookingForm.controls.contact"></online-booking-show-errors>
         </mat-form-field>
         
         <mat-form-field  fxFlex="30" appearance="outline" floatLabel="always" class="w-100-p">
@@ -100,7 +100,7 @@
           (onCountrySelected)="onCountrySelected($event)">
           </mat-select-country> 
           <input type="hidden" [(ngModel)]="countryInput" formControlName="country" required/>
-          <show-errors [control]="bookingForm.controls.country"></show-errors>
+          <online-booking-show-errors [control]="bookingForm.controls.country"></online-booking-show-errors>
          </div>
       </div>
 

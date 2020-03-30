@@ -52,4 +52,3 @@ C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.RazorTargetAssemblyInfo.cache
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.dll
 C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.pdb
-C:\ricman\projects\RicMonitoringSolution\RicMonitoringAPI\obj\Debug\netcoreapp2.2\RicMonitoringAPI.csprojAssemblyReference.cache

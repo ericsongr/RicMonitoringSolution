@@ -27,6 +27,8 @@ namespace RicMonitoringAPI.RoomRent.Entities
         public decimal TotalPaidAmount { get; set; }
         public decimal? BalanceAmount { get; set; }
         public DateTime? BalancePaidDate { get; set; }
+        public DateTime PreviousDueDate { get; set; }
+        public DateTime NextDueDate { get; set; }
 
         public string AdvancePaidDateString
         {

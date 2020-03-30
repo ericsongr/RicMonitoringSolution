@@ -4,10 +4,10 @@ import { RouterModule, Routes } from "@angular/router";
 import { FuseWidgetModule, FuseDemoModule } from "@fuse/components";
 import { MaterialModule } from "app/main/module/material.module";
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
-import { ShowErrorsComponent } from "../common/show-errors.component";
 import { OnlineBookingComponent } from "./online-booking/online-booking.component";
 import { OnlineBookingService } from "./online-booking/online-booking.service";
 import { LookupTypeItemsService } from "../common/services/lookup-type-items.service";
+import { OnlineBookingShowErrorsComponent } from "../common/online-booking-show-errors.component";
 
 const routes : Routes = [{
     path        : '',
@@ -27,8 +27,8 @@ const routes : Routes = [{
         MatSelectCountryModule
     ],
     declarations: [
-        ShowErrorsComponent,
-        OnlineBookingComponent
+        OnlineBookingComponent,
+        OnlineBookingShowErrorsComponent
     ],
     providers: [
         OnlineBookingService,

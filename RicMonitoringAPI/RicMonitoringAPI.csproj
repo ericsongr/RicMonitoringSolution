@@ -19,6 +19,7 @@
     <Folder Include="Common\Helpers\Extensions\" />
     <Folder Include="RicXplorer\Entities\Parameters\" />
     <Folder Include="RicXplorer\Entities\Validators\" />
+    <Folder Include="RoomRent\Entities\Seeders\" />
   </ItemGroup>
 
 </Project>
