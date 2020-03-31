@@ -60,6 +60,13 @@ export class RoomsComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
 
+  //get total balance
+  getTotal() {
+    var total = this.dataSource.filteredData.map(o => o.price).reduce((total, value) => total + value, 0);
+    console.log(total);
+    return total;
+  }
+    
 }
 
 export class FilesDataSource extends DataSource<any> 
@@ -103,6 +110,7 @@ export class FilesDataSource extends DataSource<any>
   {
     this._filterChange.next(filter);
   }
+
 
 
       // -----------------------------------------------------------------------------------------------------
