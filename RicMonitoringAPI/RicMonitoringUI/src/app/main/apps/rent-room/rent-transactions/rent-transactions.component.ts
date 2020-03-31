@@ -57,6 +57,21 @@ export class RentTransactionsComponent implements OnInit {
     return transactionType == 2 ? 'purple' : 'black'
   }
 
+  getTotalBalance() {
+    var totalBalance = this.dataSource.filteredData.map(o => o.balance).reduce((totalBalance, value) => totalBalance + value, 0);
+    return totalBalance;
+  }
+
+  getTotalPaidAmount() {
+    var totalPaidAmount = this.dataSource.filteredData.map(o => o.paidAmount).reduce((total, value) => total + value, 0);
+    return totalPaidAmount;
+  }
+
+  getGrandTotalAmountDue() {
+    var grandTotalAmountDue = this.dataSource.filteredData.map(o => o.totalAmountDue).reduce((total, value) => total + value, 0);
+    return grandTotalAmountDue;
+  }
+
   ngOnDestroy():void
   {
     //unsubscribe from all subscriptions

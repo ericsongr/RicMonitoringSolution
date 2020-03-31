@@ -76,6 +76,11 @@ page-rent-transactions {
             align-items: center;
         }
 
+        .mat-footer-cell {
+            font-weight: bold;
+            padding-right: 18px;
+        }
+
         .mat-column-id {
             // flex: 0 1 50px;
             display: none;
@@ -107,7 +112,8 @@ page-rent-transactions {
 
           .mat-column-totalAmountDue, 
           .mat-column-balance, 
-          .mat-column-paidAmount {
+          .mat-column-paidAmount
+           {
             display: flex;
             justify-content: flex-end;
             margin-right: 20px;

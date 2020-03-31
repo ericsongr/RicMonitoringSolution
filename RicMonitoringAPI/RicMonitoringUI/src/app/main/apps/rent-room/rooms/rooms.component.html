@@ -56,6 +56,7 @@
                   <mat-cell *matCellDef="let room">
                       <p class="text-truncate">{{room.id}}</p>
                   </mat-cell>
+                  <mat-footer-cell *matFooterCellDef></mat-footer-cell>
               </ng-container>
 
               <!-- Name Column -->
@@ -64,6 +65,7 @@
                   <mat-cell *matCellDef="let room">
                       <p class="text-truncate">{{room.name}}</p>
                   </mat-cell>
+                  <mat-footer-cell *matFooterCellDef></mat-footer-cell>
               </ng-container>
 
               <!-- Mobile# Column -->
@@ -72,23 +74,29 @@
                 <mat-cell *matCellDef="let room">
                     <p class="text-truncate">{{room.frequency}}</p>
                 </mat-cell>
+                <mat-footer-cell *matFooterCellDef>
+                   <strong>Total</strong>
+                </mat-footer-cell>
               </ng-container>
 
             <!-- Email Column -->
             <ng-container matColumnDef="price">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
-              <mat-cell *matCellDef="let room">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+                <mat-cell *matCellDef="let room">
                 <p class="text-truncate">{{room.price | number: '1.0-2' }}</p>
-              </mat-cell>
+                </mat-cell>
+                <mat-footer-cell *matFooterCellDef>
+                    <strong>{{getTotal() | number: '1.0-2'}}</strong>
+                </mat-footer-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
-
-              <mat-row *matRowDef="let room; columns: displayedColumns;"
-                       class="room"
-                       matRipple
-                       [routerLink]="'/apps/rent-room/rooms/' + room.id + '/' + handleize(room.name)">
-              </mat-row>
+            <mat-row *matRowDef="let room; columns: displayedColumns;"
+                    class="room"
+                    matRipple
+                    [routerLink]="'/apps/rent-room/rooms/' + room.id + '/' + handleize(room.name)">
+            </mat-row>
+            <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
           </mat-table>
 
           <mat-paginator #paginator
