@@ -59,7 +59,7 @@ namespace RicMonitoringAPI.Services.RoomRent
                                 
                                 select new RentTransaction2
                                 {
-                                    Id = trans.Id == null ? 0 : trans.Id,
+                                    Id = trans == null ? 0 : trans.Id,
                                     RenterId = r.RenterId,
                                     RenterName = r.RenterName,
                                     RoomId = r.RoomId,
@@ -79,9 +79,9 @@ namespace RicMonitoringAPI.Services.RoomRent
                                         trans != null && trans.IsProcessed ? 
                                             trans.TotalAmountDue : 
                                                 (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
-                                    IsDepositUsed = trans.IsDepositUsed == null ? false : trans.IsDepositUsed,
+                                    IsDepositUsed = trans == null ? false : trans.IsDepositUsed,
                                     BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
-                                    Note = trans.Note == null ? "" : trans.Note,
+                                    Note = trans == null ? "" : trans.Note,
                                     Month = selectedDate.Month,
                                     Year = selectedDate.Year,
                                     TransactionType = trans.TransactionType == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,

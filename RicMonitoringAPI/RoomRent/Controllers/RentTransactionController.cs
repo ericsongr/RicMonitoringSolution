@@ -11,7 +11,7 @@ using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
 
-namespace RicMonitoringAPI.RentTransactionRent.Controllers
+namespace RicMonitoringAPI.RoomRent.Controllers
 {
     [Route("api/rent-transactions")]
     [ApiController]
@@ -46,7 +46,7 @@ namespace RicMonitoringAPI.RentTransactionRent.Controllers
         }
 
         [HttpGet("{renterId}", Name = "Get")]
-        public async Task<IActionResult> Get(int renterId, [FromQuery] string fields)
+        public IActionResult Get(int renterId, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<RentTransaction2Dto>(fields))

@@ -8,8 +8,6 @@ using RicMonitoringAPI.RoomRent.Entities.Parameters;
 using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using RicMonitoringAPI.RoomRent.Entities.Validators;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {

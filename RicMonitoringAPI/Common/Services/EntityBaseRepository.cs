@@ -25,7 +25,7 @@ namespace RicMonitoringAPI.Services
 
         public virtual IAsyncEnumerable<T> GetAllAsync()
         {
-            return _context.Set<T>().ToAsyncEnumerable();
+            return _context.Set<T>().AsAsyncEnumerable();
         }
 
         public virtual int Count()
@@ -39,7 +39,7 @@ namespace RicMonitoringAPI.Services
             {
                 query = query.Include(includeProperty);
             }
-            return query.ToAsyncEnumerable();
+            return query.AsAsyncEnumerable();
         }
 
         public async Task<T> GetSingleAsync(int id)

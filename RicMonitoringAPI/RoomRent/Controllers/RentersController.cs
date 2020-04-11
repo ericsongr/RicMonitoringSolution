@@ -12,7 +12,7 @@ using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
 using RicMonitoringAPI.Common.Enumeration;
 
-namespace RicMonitoringAPI.RenterRent.Controllers
+namespace RicMonitoringAPI.RoomRent.Controllers
 {
     [Route("api/renters")]
     [ApiController]
