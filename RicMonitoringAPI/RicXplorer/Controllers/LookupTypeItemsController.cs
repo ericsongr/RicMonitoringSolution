@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RicMonitoringAPI.Api.Helpers;
 using RicMonitoringAPI.Common.Constants;
-using RicMonitoringAPI.Common.Enumeration;
 using RicMonitoringAPI.RicXplorer.Services.Interfaces;
 using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Services.Interfaces;

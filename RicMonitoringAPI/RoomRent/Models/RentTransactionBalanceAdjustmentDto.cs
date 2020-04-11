@@ -1,4 +1,4 @@
-﻿namespace RicMonitoringAPI
+﻿namespace RicMonitoringAPI.RoomRent.Models
 {
     public class RentTransactionBalanceAdjustmentDto
     {

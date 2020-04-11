@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using RicMonitoringAPI.Api.Services.Interfaces.PropertyMappings;
 using RicMonitoringAPI.Api.Services.PropertyMappings;
@@ -72,7 +74,7 @@ namespace RicMonitoringAPI
             services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddHealthChecks();
 
@@ -88,27 +90,28 @@ namespace RicMonitoringAPI
                         .AllowAnyHeader();
                 });
             });
+           
 
             services.AddMvc(setupAction =>
+                {
+                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
+                    setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                    setupAction.Filters.Add(typeof(ValidatorActionFilter));
+                })
+                .AddFluentValidation(fvc =>
+                    fvc.RegisterValidatorsFromAssemblyContaining<RoomForCreateDtoValidator>()) // this line automatically register all validators that inherit from AbstractValidator
+            .AddNewtonsoftJson(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true;
-                setupAction.InputFormatters.Add(new XmlSerializerInputFormatter());
-                setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-                setupAction.Filters.Add(typeof(ValidatorActionFilter));
-            })
-            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RoomForCreateDtoValidator>()) // this line automatically register all validators that inherit from AbstractValidator
-            .AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ContractResolver =
-                    new CamelCasePropertyNamesContractResolver();
+                setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }); //use for data shaping
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IHostingEnvironment env,
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
             RoomRentContext context
             //,UserManager<IdentityUser> userManager
             )
@@ -120,6 +123,8 @@ namespace RicMonitoringAPI
             }
             else
             {
+                //check https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-3.1
+                //app.UseExceptionHandler("/Error"); 
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -150,10 +155,15 @@ namespace RicMonitoringAPI
             app.UseCors("AllowCors");
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+
+            // Matches request to an endpoint.
+            app.UseRouting();
+            // Execute the matched endpoint.
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
             //seeding initial data here
-            DbInitializer.Initialize(context);
+            //DbInitializer.Initialize(context);
         }
     }
 }

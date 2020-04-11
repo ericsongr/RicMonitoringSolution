@@ -8,11 +8,6 @@ namespace RicMonitoringAPI.RoomRent.Entities
 {
     public class RoomRentContext : DbContext
     {
-        public RoomRentContext()
-        {
-            DbInitializer.Initialize(new RoomRentContext());    
-        }
-
         public RoomRentContext(DbContextOptions<RoomRentContext> options) : 
             base(options)
         {
@@ -38,7 +33,7 @@ namespace RicMonitoringAPI.RoomRent.Entities
             RentTransactionMap.AddMap(modelBuilder);
             RentTransactionDetailMap.AddMap(modelBuilder);
 
-            this.Database.ExecuteSqlCommand("RentTransactionBatchFile");
+            //this.Database.ExecuteSqlCommand("RentTransactionBatchFile");
 
 
         }
