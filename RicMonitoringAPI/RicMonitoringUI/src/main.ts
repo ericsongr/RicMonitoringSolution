@@ -10,7 +10,18 @@ if ( environment.production )
     enableProdMode();
 }
 
-const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
+export function getBaseUrl() {
+    console.log('baseUrl: ', document.getElementsByTagName('base')[0].href);
+    return document.getElementsByTagName('base')[0].href;
+  }
+
+const providers = [
+    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+    { provide: 'AUTH_URL', useValue: 'https://localhost:44371' },
+    { provide: 'API_URL', useValue: 'https://localhost:5001' }
+  ];
+
+const bootstrap = () => platformBrowserDynamic(providers).bootstrapModule(AppModule);
 
 if ( environment.hmr )
 {
@@ -28,3 +39,11 @@ else
 {
     bootstrap().catch(err => console.log(err));
 }
+
+
+  
+
+  
+//   platformBrowserDynamic(providers).bootstrapModule(AppModule)
+//     .catch(err => console.error(err));
+  

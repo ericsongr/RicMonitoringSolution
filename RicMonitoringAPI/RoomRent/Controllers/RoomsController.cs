@@ -8,9 +8,11 @@ using RicMonitoringAPI.RoomRent.Entities.Parameters;
 using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
+    [Authorize]
     [Route("api/rooms")]
     [ApiController]
     public class RoomsController : ControllerBase

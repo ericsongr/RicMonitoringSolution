@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
+import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.Rooms;
 const TABLE_FIELDS = "?fields=id,name,frequency,price&orderBy=name";
@@ -15,7 +16,9 @@ export class RoomsService implements Resolve<any> {
   rooms: any[];
   onRoomsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  constructor(private _httpClient: HttpClient)  
+  constructor(
+    private _httpClient: HttpClient,
+    private _authService: AuthService)  
   { 
     
   }
@@ -38,7 +41,7 @@ export class RoomsService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       var url = `${API_URL}${fields}`;
-      this._httpClient.get(url)
+      this._httpClient.get(url, { headers: this._authService.getHeaders() })
           .subscribe((response: any) => {
               this.rooms = response;
               this.onRoomsChanged.next(this.rooms);

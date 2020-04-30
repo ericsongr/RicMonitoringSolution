@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.Rooms + "/";
 
@@ -17,7 +18,8 @@ export class RoomService implements Resolve<any>
   onRoomChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _httpClient :HttpClient
+    private _httpClient :HttpClient,
+    private _authService: AuthService
   ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {

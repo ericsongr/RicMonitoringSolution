@@ -1,9 +1,7 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -15,7 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using RicMonitoringAPI.Api.Services.Interfaces.PropertyMappings;
 using RicMonitoringAPI.Api.Services.PropertyMappings;
-using RicMonitoringAPI.Common;
 using RicMonitoringAPI.Common.Services;
 using RicMonitoringAPI.Common.Validators;
 using RicMonitoringAPI.RicXplorer.Services;
@@ -44,12 +41,10 @@ namespace RicMonitoringAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-
             //mapped database connection string
             services.AddDbContext<RoomRentContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoryDbConnString")));
-            
+
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
             services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();
@@ -74,9 +69,22 @@ namespace RicMonitoringAPI
             services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
-
             services.AddHealthChecks();
+
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddNewtonsoftJson();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = Configuration["authority"]; //auth server
+
+                    options.RequireHttpsMetadata = true;
+
+                    // name of the API resource //resourceApi
+                    options.ApiName = "RicMonitoringAPI";
+                });
 
             //cors
             services.AddCors(options =>
@@ -85,12 +93,12 @@ namespace RicMonitoringAPI
                 {
                     builder
                         .AllowAnyOrigin()
-                        //.WithOrigins("http://localhost:4200")
+                        .WithOrigins(Configuration["clientUrl"]) //client url
                         .WithMethods("GET", "PUT", "POST", "DELETE")
                         .AllowAnyHeader();
                 });
             });
-           
+
 
             services.AddMvc(setupAction =>
                 {
@@ -101,10 +109,10 @@ namespace RicMonitoringAPI
                 })
                 .AddFluentValidation(fvc =>
                     fvc.RegisterValidatorsFromAssemblyContaining<RoomForCreateDtoValidator>()) // this line automatically register all validators that inherit from AbstractValidator
-            .AddNewtonsoftJson(setupAction =>
-            {
-                setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            }); //use for data shaping
+                .AddNewtonsoftJson(setupAction =>
+                {
+                    setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }); //use for data shaping
 
         }
 
@@ -129,7 +137,8 @@ namespace RicMonitoringAPI
                 app.UseHsts();
             }
 
-            AutoMapper.Mapper.Initialize(cfg => {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
 
                 cfg.CreateMap<RoomForCreateDto, Room>();
                 cfg.CreateMap<Room, RoomDto>();
@@ -155,10 +164,13 @@ namespace RicMonitoringAPI
             app.UseCors("AllowCors");
 
             app.UseHttpsRedirection();
-
-
             // Matches request to an endpoint.
             app.UseRouting();
+            
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             // Execute the matched endpoint.
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
