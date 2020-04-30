@@ -18,6 +18,8 @@ import { fuseConfig } from 'app/fuse-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
+import { UnauthorizedComponent } from './main/apps/unauthorized/unauthorized.component';
+import { CoreModule } from './main/apps/common/core/core.module';
 
 const appRoutes: Routes = [
     {
@@ -28,6 +30,8 @@ const appRoutes: Routes = [
         path          : 'booking',
         loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
       },
+      { path: 'unauthorized', component: UnauthorizedComponent },
+      { path: 'forbidden', component: UnauthorizedComponent },
     {
         path      : '**',
         redirectTo: 'sample'
@@ -37,7 +41,8 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        UnauthorizedComponent
     ],
     imports     : [
         BrowserModule,
@@ -64,7 +69,8 @@ const appRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        SampleModule
+        SampleModule,
+        CoreModule
     ],
       bootstrap   : [
         AppComponent

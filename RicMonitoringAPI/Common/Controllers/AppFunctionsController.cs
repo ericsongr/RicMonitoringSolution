@@ -14,7 +14,7 @@ namespace RicMonitoringAPI.Common.Controllers
     public class AppFunctionsController : ControllerBase
     {
         [HttpGet(Name = "days-with-suffix")]
-        public async Task<IActionResult> DaysWithSuffix(string selectedDate)
+        public IActionResult DaysWithSuffix(string selectedDate)
         {
 
             var isValid = DateTime.TryParse(selectedDate, out DateTime dateStarted);
