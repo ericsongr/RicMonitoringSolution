@@ -266,6 +266,12 @@ namespace RicAuthServer.Quickstart.UI
                 //await HttpContext.SignOutAsync();
                 await _signInManager.SignOutAsync();
 
+                if (!string.IsNullOrEmpty(vm.PostLogoutRedirectUri))
+                {
+                    //go back to the angular home page
+                    return Redirect(vm.PostLogoutRedirectUri);
+                }
+
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
             }

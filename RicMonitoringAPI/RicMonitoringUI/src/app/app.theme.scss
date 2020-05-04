@@ -85,6 +85,9 @@ $typography: mat-typography-config(
 @import "src/app/main/apps/rent-room/renters/renters.theme";
 @import "src/app/main/apps/rent-room/rent-transactions/rent-transactions.theme";
 
+@import "src/app/main/apps/unauthorized/unauthorized.theme";
+
+
 // Define a mixin for easier access
 @mixin components-theme($theme) {
 
@@ -92,9 +95,12 @@ $typography: mat-typography-config(
     @include chat-panel-theme($theme);
     @include toolbar-theme($theme);
 
+    //pages
     @include page-rooms-theme($theme);
     @include page-renters-theme($theme);
     @include page-rent-transactions-theme($theme);
+    @include unauthorized-theme($theme);
+
 }
 
 // -----------------------------------------------------------------------------------------------------

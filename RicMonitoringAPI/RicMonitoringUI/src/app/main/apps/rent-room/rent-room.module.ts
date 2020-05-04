@@ -18,6 +18,8 @@ import { RentTransactionsService } from './rent-transactions/rent-transactions.s
 import { RentTransactionService } from './rent-transaction/rent-transaction.service';
 import { AppFunctionsService } from '../common/services/app-functions.service';
 import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
+// import { HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
 const routes : Routes= [
   {
@@ -102,7 +104,12 @@ const routes : Routes= [
     RenterService,
     RentTransactionsService,
     RentTransactionService,
-    AppFunctionsService
+    AppFunctionsService,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true
+    // }
   ]
 })
 export class RentRoomModule { 

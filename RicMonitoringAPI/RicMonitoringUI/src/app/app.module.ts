@@ -20,6 +20,8 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
 import { UnauthorizedComponent } from './main/apps/unauthorized/unauthorized.component';
 import { CoreModule } from './main/apps/common/core/core.module';
+import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
+import { APP_BASE_HREF } from '@angular/common';
 
 const appRoutes: Routes = [
     {
@@ -71,6 +73,13 @@ const appRoutes: Routes = [
         LayoutModule,
         SampleModule,
         CoreModule
+    ],
+    providers: [
+        httpInterceptorProvider, 
+        {
+            provide: APP_BASE_HREF,
+            useValue: '/'
+        }
     ],
       bootstrap   : [
         AppComponent

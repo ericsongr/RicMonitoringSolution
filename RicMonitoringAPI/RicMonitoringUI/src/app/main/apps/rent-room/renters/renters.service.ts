@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
+import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.Renters;
 const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=dueDay";
@@ -15,7 +16,7 @@ export class RentersService implements Resolve<any> {
   renters: any[];
   onRentersChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  constructor(private _httpClient: HttpClient)  
+  constructor(private _authService: AuthService)  
   {}
   
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -36,7 +37,7 @@ export class RentersService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       var url = `${API_URL}${fields}`
-      this._httpClient.get(url)
+      this._authService.get(url)
           .subscribe((response: any) => {
               this.renters = response;
               this.onRentersChanged.next(this.renters);

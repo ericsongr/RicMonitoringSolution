@@ -21,11 +21,12 @@ namespace RicAuthServer
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource("roles", new [] {"role"})
             };
         }
 
         //private static string spaClientUrl = "https://localhost:44311";
-        private static string spaClientUrl = "https://localhost:4200";
+        private static string spaClientUrl = "http://localhost:4200";
 
         public static IEnumerable<Client> GetClients()
         {
@@ -122,7 +123,7 @@ namespace RicAuthServer
                         IdentityServerConstants.StandardScopes.Profile,
                         "RicMonitoringAPI"
                     },
-                    RequireConsent = false
+                    RequireConsent = false,
                 },
                 
             };

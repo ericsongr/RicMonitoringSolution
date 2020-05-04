@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class AuthService implements OnDestroy {
 
     isAuthorized = false;
-
+    
     constructor(
         private oidcSecurityService: OidcSecurityService,
         private http: HttpClient,
@@ -19,8 +19,10 @@ export class AuthService implements OnDestroy {
     ) {
     }
 
+    public username: string;
+    
     private isAuthorizedSubscription: Subscription = new Subscription;
-
+    
     ngOnDestroy(): void {
         if (this.isAuthorizedSubscription) {
             this.isAuthorizedSubscription.unsubscribe();
@@ -45,7 +47,7 @@ export class AuthService implements OnDestroy {
             log_console_debug_active: true,
             max_id_token_iat_offset_allowed_in_seconds: 10,
         };
-       
+        
         const authWellKnownEndpoints: AuthWellKnownEndpoints = {
             issuer: this.authUrl,
             jwks_uri: this.authUrl + '/.well-known/openid-configuration/jwks',
@@ -75,6 +77,7 @@ export class AuthService implements OnDestroy {
             (authorizationResult: AuthorizationResult) => {
                 this.onAuthorizationResultComplete(authorizationResult);
             });
+
     }
 
     private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
@@ -101,12 +104,15 @@ export class AuthService implements OnDestroy {
         return this.oidcSecurityService.getIsAuthorized();
     }
 
+    getUserData() : Observable<any> {
+        return this.oidcSecurityService.getUserData()
+    }
+
     login() {
         this.oidcSecurityService.authorize();
     }
 
     logout() {
-        console.log('start logoff');
         this.oidcSecurityService.logoff();
     }
 
@@ -135,8 +141,7 @@ export class AuthService implements OnDestroy {
         }));
     }
 
-    post(url: string, data: any): Observable<any> {
-        const body = JSON.stringify(data);
+    post(url: string, body: any): Observable<any> {
         return this.http.post(url, body, { headers: this.getHeaders() })
         .pipe(catchError((error) => {
             this.oidcSecurityService.handleError(error);
@@ -145,7 +150,6 @@ export class AuthService implements OnDestroy {
     }
 
     public getHeaders() {
-        debugger;
         let headers = new HttpHeaders();
         headers = headers.set('Content-Type', 'application/json');
         return this.appendAuthHeader(headers);
@@ -160,7 +164,6 @@ export class AuthService implements OnDestroy {
         const token = this.oidcSecurityService.getToken();
         
         if (token === '') { return headers; }
-        console.log('token', token);
         const tokenValue = 'Bearer ' + token;
         return headers.set('Authorization', tokenValue);
     }

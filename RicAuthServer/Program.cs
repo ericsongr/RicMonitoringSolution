@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,37 +26,20 @@ namespace RicAuthServer
                 .WriteTo.Console()
                 .CreateLogger();
 
-            //var seed = args.Contains("/seed");
-            //if (seed)
-            //{
-            //    args = args.Except(new[] {"/seed"}).ToArray();
-            //}
-
-            //seed = false;
-
             try
             {
                 Log.Information("Starting web host");
 
-                //var host = CreateWebHostBuilder(args);
                 var host = CreateHostBuilder(args).Build();
 
                 using (var scope = host.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;
-
                     try
                     {
-                       
-
                         SeedData.EnsureSeedData(services);
 
-                        //seeding the user - identity user
-                        //var userManager = scope.ServiceProvider
-                        //    .GetService<UserManager<ApplicationUser>>();
-                        //var user = new ApplicationUser();
-                        //user.UserName = "ericson";
-                        //var result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
+                        SeedData.UserData(scope);
                     }
                     catch (Exception ex)
                     {
@@ -79,6 +63,7 @@ namespace RicAuthServer
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                     {
@@ -92,39 +77,14 @@ namespace RicAuthServer
                     webBuilder.UseIISIntegration();
                     webBuilder.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
                     webBuilder.UseStartup<Startup>();
+
                     webBuilder.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
                         .MinimumLevel.Debug()
                         .Enrich.FromLogContext()
                         .WriteTo.Console(theme: AnsiConsoleTheme.Code));
+
                 });
 
-        //WebHost
-        //    .CreateDefaultBuilder(args)
-        //    .ConfigureAppConfiguration((context, config) =>
-        //    {
-        //        config
-        //            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        //            .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true);
-        //        context.Configuration = config.Build();
-        //    })
-        //    .UseStartup<Startup>()
-        //    .UseKestrel(options =>
-        //    {
-        //        options.AddServerHeader = false;
-        //        //options.Listen(IPAddress.Any, 443, listenOptions =>
-        //        //{
-        //        //    listenOptions.UseHttps("server.pfx", "password");
-        //        //});
-        //    })
-        //    .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
-        //        .ReadFrom.Configuration(hostingContext.Configuration)
-        //        .MinimumLevel.Debug()
-        //        .Enrich.FromLogContext()
-        //        .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-        //    //.WriteTo.RollingFile("Log")
-        //    )
-        //    .UseIISIntegration()
-        //    .Build();
     }
 }

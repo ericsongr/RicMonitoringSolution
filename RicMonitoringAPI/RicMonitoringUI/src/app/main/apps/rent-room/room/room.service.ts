@@ -18,8 +18,7 @@ export class RoomService implements Resolve<any>
   onRoomChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _httpClient :HttpClient,
-    private _authService: AuthService
+    private _authService :AuthService
   ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -43,7 +42,7 @@ export class RoomService implements Resolve<any>
       }
       else 
       {
-        this._httpClient.get(API_URL + this.routeParams.id)
+        this._authService.get(API_URL + this.routeParams.id)
             .subscribe((response: any) => {
                 this.room = response;
                 
@@ -57,7 +56,7 @@ export class RoomService implements Resolve<any>
 
   saveRoom(room){
     return new Promise((resolve, reject) => {
-      this._httpClient.put(API_URL + room.id, room)
+      this._authService.put(API_URL + room.id, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
@@ -66,7 +65,7 @@ export class RoomService implements Resolve<any>
 
   addRoom(room){
     return new Promise((resolve, reject) => {
-      this._httpClient.post(API_URL, room)
+      this._authService.post(API_URL, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

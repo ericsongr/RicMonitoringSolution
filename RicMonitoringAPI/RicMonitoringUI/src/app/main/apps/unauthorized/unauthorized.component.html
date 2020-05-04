@@ -1,7 +1,32 @@
-﻿<h2>
-    Login is required to access this area
-</h2>
-<div>
-    <button type="button" class="btn btn-primary" (click)="login()">Login</button>
-    <button type="button" class="btn btn-default" (click)="goback()">Back</button>
+﻿<div id="lock" fxLayout="column">
+
+    <div id="lock-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+
+        <div id="lock-form" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+
+            <div class="lock-form-header" fxLayout="column" fxLayoutAlign="center center"
+                 fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="start center">
+
+                <div class="avatar-container">
+                    <img class="avatar big" src="assets/images/avatars/katherine.jpg">
+                    <mat-icon class="s-32">lock</mat-icon>
+                </div>
+
+                <div>
+                    <div class="title">UNAUTHORIZED ACCESS</div>
+                    <div class="subtitle">
+                        Please re-login.
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button mat-raised-button color="accent" class="btn btn-primary" (click)="login()">Login</button>
+                        <button mat-raised-button class="btn btn-default" (click)="goback()" style="margin-left: 10px;">Home</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

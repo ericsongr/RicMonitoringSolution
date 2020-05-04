@@ -91,7 +91,6 @@ export class OnlineBookingComponent implements OnInit {
   onSubmit() {
     var data = this.bookingForm.value;
     data.languagesSpoken =  this.getLanguagesSpoken(); 
-    console.log(data);
   }
 
   getLanguagesSpoken(){
@@ -99,7 +98,6 @@ export class OnlineBookingComponent implements OnInit {
   }
   
   onCountrySelected($event: Country) {
-    console.log($event);
     this.countryInput = $event.name;
   }
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RicAuthServer.Data;
 using RicAuthServer.Services;
 using System.Reflection;
+using IdentityServer4.Services;
 using Microsoft.Extensions.Hosting;
 using RicAuthServer.Data.Migrations.IdentityServer;
 
@@ -30,15 +31,10 @@ namespace RicAuthServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicAuthServerConnection")));
 
-
-            //services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-            //{
-            //    config.Password.RequiredLength = 4;
-            //    config.Password.RequireDigit = false;
-            //    config.Password.RequireNonAlphanumeric = false;
-            //    config.Password.RequireUppercase = false;
-            //});
-
+            //added IProfileService here
+            services.AddTransient<IProfileService, ProfileService>();
+            
+            //TODO: temporarily removed the password complexity
             services.AddIdentity<ApplicationUser, IdentityRole>(config =>
                 {
                     config.Password.RequiredLength = 4;
@@ -76,7 +72,9 @@ namespace RicAuthServer
                     options.ConfigureDbContext = builder =>
                         builder.UseSqlServer(Configuration.GetConnectionString("RicAuthServerConnection"),
                             db => db.MigrationsAssembly(migrationsAssembly));
-                });
+                })
+                .AddProfileService<ProfileService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,6 +102,7 @@ namespace RicAuthServer
             app.UseIdentityServer();
 
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

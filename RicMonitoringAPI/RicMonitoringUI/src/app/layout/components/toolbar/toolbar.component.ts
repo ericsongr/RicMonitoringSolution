@@ -8,6 +8,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { AuthService } from 'app/main/apps/common/core/auth/auth.service';
 
 @Component({
     selector     : 'toolbar',
@@ -26,6 +27,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
     selectedLanguage: any;
     userStatusOptions: any[];
 
+    name: string;
+
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -39,7 +42,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+        private _translateService: TranslateService,
+        private _authServer: AuthService
     )
     {
         // Set the defaults
@@ -88,6 +92,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        this._authServer.getUserData().subscribe(userData => {
+            this.name = userData.name;
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -126,6 +134,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
+    logout() {
+        this._authServer.logout();
+    }
     /**
      * Toggle sidebar open
      *
