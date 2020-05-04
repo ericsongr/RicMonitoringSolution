@@ -11,7 +11,6 @@ if ( environment.production )
 }
 
 export function getBaseUrl() {
-    console.log('baseUrl: ', document.getElementsByTagName('base')[0].href);
     return document.getElementsByTagName('base')[0].href;
   }
 

@@ -6,6 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
+import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
 const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
@@ -19,7 +20,7 @@ export class RentTransactionService implements Resolve<any>
   onRentTransactionChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _httpClient :HttpClient
+    private _authService : AuthService
   ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -40,7 +41,7 @@ export class RentTransactionService implements Resolve<any>
     
     return new Promise((resolve, reject) => {
 
-      this._httpClient.get(url)
+      this._authService.get(url)
             .subscribe((response: any) => {
                 this.rentTransaction = response;
                 this.onRentTransactionChanged.next(response);
@@ -52,23 +53,21 @@ export class RentTransactionService implements Resolve<any>
 
   saveTransaction(transaction: RentTransaction) {
       return new Promise((resolve, reject) => {
+        
         if (transaction.id > 0) {
             var url = API_URL + transaction.id;
-            console.log(url);
-            console.log(JSON.stringify(transaction));
-
-            this._httpClient.put(API_URL + transaction.id, transaction)
+            this._authService.put(url, transaction)
                 .subscribe((response: any) => {
-                  //return transactionId
+                  
                   resolve(response.id);
                 }, reject);
 
           }
           else {
 
-            this._httpClient.post(API_URL, transaction)
+            this._authService.post(API_URL, transaction)
                     .subscribe((response: any) => {
-                      //return transactionId
+                      
                       resolve(response.id);
                     }, reject);
       
@@ -87,7 +86,7 @@ export class RentTransactionService implements Resolve<any>
         note: note
       };
 
-      this._httpClient.post(`${API_URL}BalanceAdjustment`, adjustmentObject)
+      this._authService.put(`${API_URL}${transactionId}/BalanceAdjustment`, adjustmentObject)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

@@ -85,5 +85,69 @@ namespace RicAuthServer.Data
                 Console.WriteLine("ApiResources already populated");
             }
         }
+
+        public static void UserData(IServiceScope scope)
+        {
+            //seeding the user - identity user
+            var userManager = scope.ServiceProvider
+                .GetService<UserManager<ApplicationUser>>();
+
+            var user = new ApplicationUser();
+            user.UserName = "ericson";
+            var result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
+
+            user = new ApplicationUser();
+            user.UserName = "sherine";
+            result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
+
+            user = new ApplicationUser();
+            user.UserName = "egboy";
+            user.FirstName = "Eldric Gesua";
+            user.LastName = "Ramos";
+            result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
+
+
+            var roleManager = scope.ServiceProvider
+                .GetService<RoleManager<IdentityRole>>();
+
+            string superuser = "Superuser";
+            string administrator = "Administrator";
+            if (!roleManager.RoleExistsAsync(superuser).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new IdentityRole(superuser)).GetAwaiter().GetResult();
+            }
+
+            if (!roleManager.RoleExistsAsync(administrator).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new IdentityRole(administrator)).GetAwaiter().GetResult();
+            }
+
+            //seeding the user role
+            var ericsonRole = userManager.FindByNameAsync("ericson").GetAwaiter().GetResult();
+            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            {
+                userManager.AddToRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult();
+            }
+
+            var sherineRole = userManager.FindByNameAsync("sherine").GetAwaiter().GetResult();
+            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            {
+                userManager.AddToRoleAsync(sherineRole, administrator).GetAwaiter().GetResult();
+            }
+
+            var egboyRole = userManager.FindByNameAsync("egboy").GetAwaiter().GetResult();
+            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            {
+                userManager.AddToRoleAsync(egboyRole, administrator).GetAwaiter().GetResult();
+            }
+
+            //seeding claim
+            var resultClaim = userManager.AddClaimAsync(user, new Claim("ric.test", "big.cookie"))
+                .GetAwaiter().GetResult();
+
+            var resultClaim2 = userManager.AddClaimAsync(user, new Claim("ric.api.test", "big.api.cookie"))
+                .GetAwaiter().GetResult();
+        }
+
     }
 }

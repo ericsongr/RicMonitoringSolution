@@ -41,7 +41,8 @@ export class RoomsService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       var url = `${API_URL}${fields}`;
-      this._httpClient.get(url, { headers: this._authService.getHeaders() })
+
+      this._authService.get(url)
           .subscribe((response: any) => {
               this.rooms = response;
               this.onRoomsChanged.next(this.rooms);

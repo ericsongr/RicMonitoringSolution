@@ -3,15 +3,15 @@
     <h2>{{'SAMPLE.HELLO' | translate}}</h2>
     
     <div *ngIf="isAuthorized">
-        <h1>Youu are now logged-in</h1>
+        <h1>You are now logged-in</h1>
         <div>
-             <button mat-raised-button (click)="logout()">Log-out</button>
+             <button mat-raised-button color="warn" (click)="logout()">Log-out</button>
         </div>
     </div>
-    
+    <br>
     <div *ngIf="!isAuthorized">
-        <strong>Ericson User should log-in</strong>
-        <button mat-raised-button (click)="login()">Login</button>
+        <strong>User should log-in</strong>
+        <button mat-raised-button color="accent" (click)="login()">Login</button>
     </div>
     
 

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "Superuser")]
     [Route("api/rooms")]
     [ApiController]
     public class RoomsController : ControllerBase
@@ -105,6 +105,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         }
 
+        [Authorize(Roles = "Superuser")]
         [HttpPost()]
         public IActionResult CreateRoom([FromBody] RoomForCreateDto room)
         {
@@ -123,6 +124,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
         }
 
+        [Authorize(Roles = "Superuser")]
         [HttpPut("{id}", Name = "UpdateRoom")]
         public async Task<IActionResult> UpdateRoom(int id, [FromBody] RoomForUpdateDto room)
         {
@@ -190,6 +192,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
         }
 
+        [Authorize(Roles = "Superuser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Room>> DeleteRoom(int id)
         {

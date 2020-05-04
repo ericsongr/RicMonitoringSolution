@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
+import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions;
 const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note&orderBy=dueDay";
@@ -14,7 +15,7 @@ export class RentTransactionsService implements Resolve<any> {
   rentTransactions: any[];
   onRentTransactionsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  constructor(private _httpClient: HttpClient)  
+  constructor(private _authService: AuthService)  
   { 
     
   }
@@ -33,8 +34,8 @@ export class RentTransactionsService implements Resolve<any> {
        return new Promise((resolve, reject) => {
 
       var url = `${API_URL}${TABLE_FIELDS}`;
-      console.log(url);
-      this._httpClient.get(url)
+      
+      this._authService.get(url)
           .subscribe((response: any) => {
               this.rentTransactions = response;
             

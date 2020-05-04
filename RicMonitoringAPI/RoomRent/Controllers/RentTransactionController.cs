@@ -10,9 +10,11 @@ using RicMonitoringAPI.RoomRent.Entities.Parameters;
 using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
+    [Authorize(Policy = "Superuser")]
     [Route("api/rent-transactions")]
     [ApiController]
     public class RentTransactionsController : ControllerBase
@@ -173,9 +175,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
         }
 
-        [HttpPost(Name = "BalanceAdjustment")]
-        [Route("[action]")]
-        public async Task<IActionResult> BalanceAdjustment([FromBody] RentTransactionBalanceAdjustmentDto balanceAdjustment)
+        [HttpPut(Name = "BalanceAdjustment")]
+        [Route("{transactionId:int}/BalanceAdjustment")]
+        public async Task<IActionResult> BalanceAdjustment(int transactionId, [FromBody] RentTransactionBalanceAdjustmentDto balanceAdjustment)
         {
             if (balanceAdjustment == null)
             {
@@ -189,7 +191,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             rentTransactionEntity.AdjustmentBalancePaymentDueAmount = balanceAdjustment.AdjustmentBalancePaymentDueAmount;
-            rentTransactionEntity.Note = balanceAdjustment.Note + 
+            rentTransactionEntity.Note = balanceAdjustment.Note +
                                          $"\n>>Adjustment {balanceAdjustment.AdjustmentBalancePaymentDueAmount} pesos date of {DateTime.Now.ToString("dd-MMM-yyyy")}";
 
             _rentTransactionRepository.Update(rentTransactionEntity);
@@ -207,11 +209,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var fields =
                 "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate," +
-                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,"+
+                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed," +
                 "note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
 
             return Redirect($"/api/rent-transactions/{rentTransactionEntity.RenterId}?fields={fields}");
-            
+
         }
 
         [HttpPut("{id}", Name = "Update")]

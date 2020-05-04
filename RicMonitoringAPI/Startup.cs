@@ -86,13 +86,19 @@ namespace RicMonitoringAPI
                     options.ApiName = "RicMonitoringAPI";
                 });
 
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("Superuser", policy => policy.RequireRole("Superuser", "Administrator"));
+                config.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+            });
+
             //cors
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowCors", builder =>
                 {
                     builder
-                        .AllowAnyOrigin()
+                        //.AllowAnyOrigin()
                         .WithOrigins(Configuration["clientUrl"]) //client url
                         .WithMethods("GET", "PUT", "POST", "DELETE")
                         .AllowAnyHeader();
@@ -113,6 +119,8 @@ namespace RicMonitoringAPI
                 {
                     setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 }); //use for data shaping
+
+
 
         }
 
@@ -166,7 +174,7 @@ namespace RicMonitoringAPI
             app.UseHttpsRedirection();
             // Matches request to an endpoint.
             app.UseRouting();
-            
+
             app.UseAuthentication();
 
             app.UseAuthorization();

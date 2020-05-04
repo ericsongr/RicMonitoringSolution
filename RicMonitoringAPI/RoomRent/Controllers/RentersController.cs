@@ -10,10 +10,12 @@ using RicMonitoringAPI.RoomRent.Entities.Parameters;
 using RicMonitoringAPI.RoomRent.Models;
 using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using RicMonitoringAPI.Common.Enumeration;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
+    [Authorize(Policy = "Superuser")]
     [Route("api/renters")]
     [ApiController]
     public class RentersController : ControllerBase
