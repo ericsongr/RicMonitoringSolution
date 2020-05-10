@@ -32,21 +32,21 @@ export const navigation: FuseNavigation[] = [
                         id: 'ROOMS',
                         title: 'Rooms',
                         type: 'item',
-                        url: '/apps/rent-room/rooms',
+                        url: '/rent-room/rooms',
                         exactMatch: true
                     },
                     {
                         id        : 'RENTERS',
                         title     : 'Tenants',
                         type      : 'item',
-                        url       :'/apps/rent-room/tenants',
+                        url       :'/rent-room/tenants',
                         exactMatch:true
                     },
                     {
                         id        : 'RENTTRANSACTION',
                         title     : 'Tenant Transactions',
                         type      : 'item',
-                        url       :'/apps/rent-room/tenant-transactions',
+                        url       :'/rent-room/tenant-transactions',
                         exactMatch:true
                     }
                 ],

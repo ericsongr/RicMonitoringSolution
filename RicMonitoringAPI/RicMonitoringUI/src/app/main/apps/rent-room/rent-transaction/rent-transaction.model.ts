@@ -17,14 +17,16 @@ export class RentTransaction {
     balance             : number;
     isBalanceEditable   : boolean;
     totalAmountDue      : number;
+    previousUnpaidAmount: number;
     isDepositUsed       : boolean;
     note                : string;
     adjustmentBalancePaymentDueAmount   : number;
     transactionType     : number;
     isNoAdvanceDepositLeft : boolean;
     isProcessed         : boolean;
-    handle              : string;
     billingStatement    : BillingStatement;
+    handle              : string;
+    
 
     constructor(transaction?) {
         transaction = transaction || {};
@@ -42,6 +44,7 @@ export class RentTransaction {
         this.balance = transaction.balance;
         this.isBalanceEditable = transaction.isBalanceEditable;
         this.totalAmountDue = transaction.totalAmountDue;
+        this.previousUnpaidAmount = transaction.previousUnpaidAmount;
         this.paidAmount = transaction.paidAmount || 
             (transaction.isDepositUsed ? 0 : 
                 (this.monthlyRent == this.totalAmountDue ? transaction.monthlyRent : 0));
@@ -51,8 +54,9 @@ export class RentTransaction {
         this.transactionType = transaction.transactionType;
         this.isNoAdvanceDepositLeft = transaction.isNoAdvanceDepositLeft;
         this.isProcessed = transaction.isProcessed;
-        this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
         this.billingStatement = transaction.billingStatement;
+        this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
+        
     }
 
 }
