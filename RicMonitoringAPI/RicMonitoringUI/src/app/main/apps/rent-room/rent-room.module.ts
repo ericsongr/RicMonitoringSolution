@@ -18,6 +18,8 @@ import { RentTransactionsService } from './rent-transactions/rent-transactions.s
 import { RentTransactionService } from './rent-transaction/rent-transaction.service';
 import { AppFunctionsService } from '../common/services/app-functions.service';
 import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
+import { CopyClipboardModule } from '../common/directives/copy-clipboard.module';
+import { BillingStatementComponent } from './rent-transactions/billing-statement/billing-statement.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -86,7 +88,8 @@ const routes : Routes= [
     FuseSharedModule,
     RouterModule.forChild(routes),
     FuseWidgetModule,
-    MaterialModule
+    MaterialModule,
+    CopyClipboardModule
   ],
   declarations: [
     RoomsComponent,
@@ -95,6 +98,7 @@ const routes : Routes= [
     RenterComponent,
     RentTransactionsComponent,
     RentTransactionComponent,
+    BillingStatementComponent,
     TenantShowErrorsComponent
   ],
   providers: [

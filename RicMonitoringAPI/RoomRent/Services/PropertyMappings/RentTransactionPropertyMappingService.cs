@@ -17,6 +17,7 @@ namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
                 {"RenterName", new PropertyMappingValue(new List<string>() {"RenterName"}) },
                 {"RoomId", new PropertyMappingValue(new List<string>() {"RoomId"}) },
                 {"RoomName", new PropertyMappingValue(new List<string>() {"RoomName"}) },
+                {"MonthlyRent", new PropertyMappingValue(new List<string>() {"MonthlyRent"}) },
                 {"PaidDate", new PropertyMappingValue(new List<string>() {"PaidDate"}) },
                 {"DatePaidString", new PropertyMappingValue(new List<string>() {"DatePaidString"}) },
                 {"PaidAmount", new PropertyMappingValue(new List<string>() {"PaidAmount"}) },
@@ -36,6 +37,7 @@ namespace RicMonitoringAPI.RoomRent.Services.PropertyMappings
                 {"IsProcessed", new PropertyMappingValue(new List<string>() {"IsProcessed"}) },
                 {"AdjustmentBalancePaymentDueAmount", new PropertyMappingValue(new List<string>() {"AdjustmentBalancePaymentDueAmount"}) },
                 {"IsBalanceEditable", new PropertyMappingValue(new List<string>() {"IsBalanceEditable"}) },
+                {"BillingStatement", new PropertyMappingValue(new List<string>() {"BillingStatement"}) },
             };
 
         public RentTransactionPropertyMappingService()

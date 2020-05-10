@@ -1,4 +1,5 @@
 import { FuseUtils } from "@fuse/utils";
+import { BillingStatement } from "../rent-transactions/billing-statement/billing-statement.model";
 
 export class RentTransaction {
     id                  : number;
@@ -16,7 +17,6 @@ export class RentTransaction {
     balance             : number;
     isBalanceEditable   : boolean;
     totalAmountDue      : number;
-    previousUnpaidAmount: number;
     isDepositUsed       : boolean;
     note                : string;
     adjustmentBalancePaymentDueAmount   : number;
@@ -24,6 +24,7 @@ export class RentTransaction {
     isNoAdvanceDepositLeft : boolean;
     isProcessed         : boolean;
     handle              : string;
+    billingStatement    : BillingStatement;
 
     constructor(transaction?) {
         transaction = transaction || {};
@@ -41,7 +42,6 @@ export class RentTransaction {
         this.balance = transaction.balance;
         this.isBalanceEditable = transaction.isBalanceEditable;
         this.totalAmountDue = transaction.totalAmountDue;
-        this.previousUnpaidAmount = transaction.previousUnpaidAmount;
         this.paidAmount = transaction.paidAmount || 
             (transaction.isDepositUsed ? 0 : 
                 (this.monthlyRent == this.totalAmountDue ? transaction.monthlyRent : 0));
@@ -52,6 +52,7 @@ export class RentTransaction {
         this.isNoAdvanceDepositLeft = transaction.isNoAdvanceDepositLeft;
         this.isProcessed = transaction.isProcessed;
         this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
+        this.billingStatement = transaction.billingStatement;
     }
 
 }

@@ -9,7 +9,7 @@ import { RentTransaction } from './rent-transaction.model';
 import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
-const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
+const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable,billingStatement";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 
@@ -43,6 +43,7 @@ export class RentTransactionService implements Resolve<any>
 
       this._authService.get(url)
             .subscribe((response: any) => {
+
                 this.rentTransaction = response;
                 this.onRentTransactionChanged.next(response);
                 resolve(response);

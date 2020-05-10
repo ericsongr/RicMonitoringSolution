@@ -27,6 +27,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     selectedLanguage: any;
     userStatusOptions: any[];
 
+    isAuthorized: boolean;
     name: string;
 
     // Private
@@ -43,7 +44,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _authServer: AuthService
+        private _authService: AuthService
     )
     {
         // Set the defaults
@@ -93,9 +94,14 @@ export class ToolbarComponent implements OnInit, OnDestroy
         // Set the private defaults
         this._unsubscribeAll = new Subject();
 
-        this._authServer.getUserData().subscribe(userData => {
+        this._authService.getUserData().subscribe(userData => {
             this.name = userData.name;
         });
+
+        this._authService.getIsAuthorized()
+         .subscribe((isAuthorized: boolean) => {
+            this.isAuthorized = isAuthorized;
+         });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -134,8 +140,12 @@ export class ToolbarComponent implements OnInit, OnDestroy
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
+    login() {
+        this._authService.login();
+    }
+    
     logout() {
-        this._authServer.logout();
+        this._authService.logout();
     }
     /**
      * Toggle sidebar open
