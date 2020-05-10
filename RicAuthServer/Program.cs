@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore;
@@ -65,16 +66,21 @@ namespace RicAuthServer
         public static IHostBuilder CreateHostBuilder(string[] args) =>
 
             Host.CreateDefaultBuilder(args)
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, config) =>
-                    {
-                        config
-                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                            .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true);
+                {
+                    config
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                          //.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true);
                         context.Configuration = config.Build();
-                    })
+                    })  
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    var config = new ConfigurationBuilder()
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .Build();
                     webBuilder.UseIISIntegration();
+                    webBuilder.UseUrls($"https://localhost:{config.GetValue<int>("Host:Port")}");
                     webBuilder.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
                     webBuilder.UseStartup<Startup>();
 

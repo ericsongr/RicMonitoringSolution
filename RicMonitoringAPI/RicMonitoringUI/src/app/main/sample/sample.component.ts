@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
@@ -12,38 +12,18 @@ import { Subscription } from 'rxjs';
     templateUrl: './sample.component.html',
     styleUrls  : ['./sample.component.scss']
 })
-export class SampleComponent implements OnDestroy
+export class SampleComponent 
 {
-    private isAuthorizedSubscription: Subscription = new Subscription();
-    public isAuthorized = false;
     /**
      * Constructor
      *
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
     constructor(
-        private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        public _authService: AuthService
-    )
+        private _fuseTranslationLoaderService: FuseTranslationLoaderService)
     {
 
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
 
-         this.isAuthorizedSubscription = this._authService.getIsAuthorized()
-         .subscribe((isAuthorized: boolean) => {
-            this.isAuthorized = isAuthorized;
-         });
-    }
-
-    login() {
-        this._authService.login();
-    }
-
-    logout() {
-        this._authService.logout();
-    }
-
-    ngOnDestroy() : void {
-        this.isAuthorizedSubscription.unsubscribe();
     }
 }

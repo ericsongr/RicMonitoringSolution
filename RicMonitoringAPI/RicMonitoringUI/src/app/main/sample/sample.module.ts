@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { SampleComponent } from './sample.component';
+import { CopyClipboardModule } from '../apps/common/directives/copy-clipboard.module';
 
 const routes = [
     {
@@ -22,7 +23,8 @@ const routes = [
 
         TranslateModule,
 
-        FuseSharedModule
+        FuseSharedModule,
+        CopyClipboardModule
     ],
     exports     : [
         SampleComponent

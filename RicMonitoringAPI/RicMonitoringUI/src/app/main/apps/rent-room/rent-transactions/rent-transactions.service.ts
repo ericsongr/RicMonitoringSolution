@@ -7,7 +7,7 @@ import { ApiControllers } from 'environments/api-controllers';
 import { AuthService } from '../../common/core/auth/auth.service';
 
 const API_URL = environment.webApi + ApiControllers.RentTransactions;
-const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note&orderBy=dueDay";
+const TABLE_FIELDS = "?fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note,billingStatement&orderBy=dueDay";
 
 @Injectable()
 export class RentTransactionsService implements Resolve<any> {
@@ -38,7 +38,7 @@ export class RentTransactionsService implements Resolve<any> {
       this._authService.get(url)
           .subscribe((response: any) => {
               this.rentTransactions = response;
-            
+              
               this.onRentTransactionsChanged.next(this.rentTransactions);
             
               resolve(response);

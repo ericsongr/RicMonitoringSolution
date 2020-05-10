@@ -4,6 +4,7 @@
     <UserSecretsId>aspnet-AuthorizationServer-6FF6A6A8-0F1D-480E-A4A7-F8C67C40EBB4</UserSecretsId>
     <AssemblyName>RicAuthServer</AssemblyName>
     <RootNamespace>RicAuthServer</RootNamespace>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="3.1.2" />
