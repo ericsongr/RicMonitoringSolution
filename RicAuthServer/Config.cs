@@ -25,8 +25,8 @@ namespace RicAuthServer
             };
         }
 
-        //private static string spaClientUrl = "https://localhost:44311";
-        private static string spaClientUrl = "http://localhost:4200";
+        //private static string spaClientUrl = "http://localhost:4200";
+        private static string spaClientUrl = "http://tenants.ericsonramos.com";
 
         public static IEnumerable<Client> GetClients()
         {
