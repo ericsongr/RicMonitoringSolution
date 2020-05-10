@@ -1,4 +1,5 @@
 import { FuseUtils } from "@fuse/utils";
+import { BillingStatement } from "../rent-transactions/billing-statement/billing-statement.model";
 
 export class RentTransaction {
     id                  : number;
@@ -55,6 +56,7 @@ export class RentTransaction {
         this.isProcessed = transaction.isProcessed;
         this.billingStatement = transaction.billingStatement;
         this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
+        
     }
 
 }

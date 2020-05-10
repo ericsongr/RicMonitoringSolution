@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Input } from '@angular/core';
 import { RentTransaction } from './rent-transaction.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { RoomsService } from '../rooms/rooms.service';
 import * as moment from 'moment';
 import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
+import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
 
 @Component({
   selector: 'page-rent-transaction',
@@ -30,9 +31,12 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   defaultPaidDate: Date;
   datePaidLabel: string = 'Date Paid';
 
+  billingStatement: BillingStatement;
+  
+  
+
   constructor(
     private _rentTransactionService: RentTransactionService,
-    private _roomsService: RoomsService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
     private _location : Location,
@@ -77,7 +81,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
   }
-  
+
   saveBalanceAdjustment() {
     if (this.rentTransactionForm.invalid){
       this._snackBar.open('Invalid form. Please verify.', 'OK', {

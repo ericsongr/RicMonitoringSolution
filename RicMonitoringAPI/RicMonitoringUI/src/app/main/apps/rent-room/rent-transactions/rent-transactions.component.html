@@ -158,6 +158,24 @@
                 <mat-footer-cell *matFooterCellDef></mat-footer-cell>
               </ng-container>
             
+              <!-- Buttons Column -->
+              <ng-container matColumnDef="buttons">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let rentTransaction">
+                    <div fxFlex="row" fxLayoutAlign="end center">
+                        <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                (click)="$event.stopPropagation();">
+                            <mat-icon class="secondary-text">more_vert</mat-icon>
+                        </button>
+
+                        <mat-menu #moreMenu="matMenu">
+                          <button-billing-statement [billingStatement]="rentTransaction.billingStatement"></button-billing-statement>
+                        </mat-menu>
+                    </div>
+
+                </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
               <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
               <mat-row *matRowDef="let rentTransaction; columns: displayedColumns;"

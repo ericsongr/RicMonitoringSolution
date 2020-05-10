@@ -1,5 +1,6 @@
 ﻿using System;
 using RicMonitoringAPI.RoomRent.Entities;
+using RicMonitoringAPI.RoomRent.Entities.Containers;
 
 namespace RicMonitoringAPI.RoomRent.Models
 {
@@ -16,5 +17,19 @@ namespace RicMonitoringAPI.RoomRent.Models
 
         }
         public string Period { get; set; }
+
+        public BillingStatement BillingStatement =>
+            new BillingStatement
+            {
+                RenterName = RenterName,
+                RoomName = RoomName,
+                Period = Period,
+                DueDate = DueDateString,
+                MonthlyRent = MonthlyRent.ToString("#,###"),
+                HasPreviousBalance = PreviousUnpaidAmount > 0,
+                PreviousUnpaidAmount = PreviousUnpaidAmount.ToString("#,###"),
+                TotalAmountDue = TotalAmountDue.ToString("#,###")
+            };
+
     }
 }

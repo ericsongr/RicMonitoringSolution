@@ -3,12 +3,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost/RicAuthServer",
-      "sslPort": 0
+      "applicationUrl": "https://RicAuthServer",
+      "sslPort": 5002
     },
     "iisExpress": {
-      "applicationUrl": "https://localhost:44371/",
-      "sslPort": 44370
+      "applicationUrl": "https://localhost:5002/",
+      "sslPort": 5002
     }
   },
   "profiles": {
@@ -17,18 +17,19 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "ancmHostingModel": "OutOfProcess"
     },
     "RicAuthServer": {
-      "commandName": "IISExpress",
+      "commandName": "IIS",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "sqlDebugging": true,
-      "ancmHostingModel": "InProcess",
+      "ancmHostingModel": "OutOfProcess",
       "nativeDebugging": true,
-      "applicationUrl": "https://localhost:44370/"
+      "applicationUrl": "https://localhost:5002/"
     }
   }
 }

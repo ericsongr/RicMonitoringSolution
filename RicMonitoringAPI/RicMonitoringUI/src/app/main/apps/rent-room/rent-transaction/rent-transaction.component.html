@@ -30,8 +30,9 @@
         </div>
       </div>
       <!-- /APP TITLE -->
+      
       <button mat-raised-button 
-              class="save-rent-transaction mat-white-bg mt-16 mt-sm-0"
+              class="mt-16 mt-sm-0"
               *ngIf="rentTransaction.transactionType == 1 && !rentTransaction.isProcessed"
               [disabled]="rentTransactionForm.invalid"
               (click)="save()">
@@ -39,7 +40,7 @@
       </button>
       <!-- adjust payment -->
       <button mat-raised-button 
-              class="save-rent-transaction mat-white-bg mt-16 mt-sm-0"
+              class="mt-16 mt-sm-0"
               *ngIf="rentTransaction.isProcessed && rentTransaction.isBalanceEditable"
               [disabled]="rentTransactionForm.invalid"
               (click)="saveBalanceAdjustment()">
@@ -56,7 +57,18 @@
 
           <form name="rentTransactionForm" [formGroup]="rentTransactionForm" class="rentTransaction w-100-p" fxLayout="column" fxFlex>
             <div class="tab-content p-24" fusePerfectScrollbar>
+              <!--right menu start-->
+              <div style="float: right">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
 
+                <mat-menu #menu="matMenu">
+                  <button-billing-statement [billingStatement]="rentTransaction.billingStatement"></button-billing-statement>
+                </mat-menu>
+              </div>
+              <!--right menu end-->
+              
               <div class="pl-1 pb-24" fxLayout="row" fxLayoutAlign="left center">
                 <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Room Name</div>
@@ -87,6 +99,7 @@
                   <div class="h4 secondary-text">Period</div>
                   <div class="h2 font-weight-300 py-8">{{rentTransaction.period}}</div>
                 </div>
+                
               </div>
               
 

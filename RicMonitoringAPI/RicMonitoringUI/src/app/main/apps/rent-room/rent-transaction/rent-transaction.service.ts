@@ -43,6 +43,7 @@ export class RentTransactionService implements Resolve<any>
 
       this._authService.get(url)
             .subscribe((response: any) => {
+
                 this.rentTransaction = response;
                 this.onRentTransactionChanged.next(response);
                 resolve(response);
