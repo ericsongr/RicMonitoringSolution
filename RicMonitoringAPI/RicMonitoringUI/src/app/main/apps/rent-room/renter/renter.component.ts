@@ -151,7 +151,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           //change the location with new one
-          this._location.go(`/apps/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
+          this._location.go(`/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
         })
   }
 
@@ -178,7 +178,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           //change the location with new one
-          this._location.go(`/apps/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
+          this._location.go(`/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
           this._cdr.detectChanges();
         }).catch(error =>{
           console.log('error: ', error);

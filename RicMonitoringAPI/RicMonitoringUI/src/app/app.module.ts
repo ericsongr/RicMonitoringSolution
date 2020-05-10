@@ -25,7 +25,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 const appRoutes: Routes = [
     {
-        path      : 'apps',
+        path      : '',
         loadChildren: './main/apps/app-ricmonitoring.module#AppRicMonitoringModule'
     },
     {

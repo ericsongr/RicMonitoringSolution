@@ -23,7 +23,9 @@ export class RentTransaction {
     transactionType     : number;
     isNoAdvanceDepositLeft : boolean;
     isProcessed         : boolean;
+    billingStatement    : BillingStatement;
     handle              : string;
+    
 
     constructor(transaction?) {
         transaction = transaction || {};
@@ -51,6 +53,7 @@ export class RentTransaction {
         this.transactionType = transaction.transactionType;
         this.isNoAdvanceDepositLeft = transaction.isNoAdvanceDepositLeft;
         this.isProcessed = transaction.isProcessed;
+        this.billingStatement = transaction.billingStatement;
         this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
     }
 

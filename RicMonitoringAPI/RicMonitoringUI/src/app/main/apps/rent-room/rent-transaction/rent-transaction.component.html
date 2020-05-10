@@ -11,7 +11,7 @@
       <!-- APP TITLE -->
       <div fxLayout="row" fxLayoutAlign="start center">
 
-        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apps/rent-room/tenant-transactions'">
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/rent-room/tenant-transactions'">
           <mat-icon>arrow_back</mat-icon>
         </button>
 
@@ -189,7 +189,7 @@
                 </div>
 
                 <div *ngIf="rentTransaction.transactionType == 2" class="message-box warning">
-                  Please modify the tenant information via <a href="#" [routerLink]="'/apps/rent-room/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
+                  Please modify the tenant information via <a href="#" [routerLink]="'/rent-room/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
                 </div>
             </div>
               
