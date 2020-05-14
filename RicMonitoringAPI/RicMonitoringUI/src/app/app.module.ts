@@ -75,11 +75,11 @@ const appRoutes: Routes = [
         CoreModule
     ],
     providers: [
-        httpInterceptorProvider, 
-        {
-            provide: APP_BASE_HREF,
-            useValue: '/'
-        }
+        // httpInterceptorProvider, 
+        // {
+        //     provide: APP_BASE_HREF,
+        //     useValue: '/'
+        // }
     ],
       bootstrap   : [
         AppComponent

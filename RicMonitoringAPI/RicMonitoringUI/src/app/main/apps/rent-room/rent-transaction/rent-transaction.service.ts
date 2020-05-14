@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -8,20 +8,23 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
 import { AuthService } from '../../common/core/auth/auth.service';
 
-const API_URL = environment.webApi + ApiControllers.RentTransactions + "/";
 const fields = "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate,paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed,note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable,billingStatement";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 
 {
+  apiUrl: string;
 
   routeParams: any;
   rentTransaction: any;
   onRentTransactionChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService : AuthService
-  ) { }
+    private _authService : AuthService,
+    @Inject('API_URL') private _apiUrl: string) 
+  {
+    this.apiUrl = `${this._apiUrl}${ApiControllers.RentTransactions}/`
+  }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     this.routeParams = route.params;
@@ -37,7 +40,7 @@ export class RentTransactionService implements Resolve<any>
 
   getRentTransaction(): Promise<any> {
     
-    var url = `${API_URL}${this.routeParams.renterId}?fields=${fields}`;
+    var url = `${this.apiUrl}${this.routeParams.renterId}?fields=${fields}`;
     
     return new Promise((resolve, reject) => {
 
@@ -56,7 +59,7 @@ export class RentTransactionService implements Resolve<any>
       return new Promise((resolve, reject) => {
         
         if (transaction.id > 0) {
-            var url = API_URL + transaction.id;
+            var url = this.apiUrl + transaction.id;
             this._authService.put(url, transaction)
                 .subscribe((response: any) => {
                   
@@ -66,7 +69,7 @@ export class RentTransactionService implements Resolve<any>
           }
           else {
 
-            this._authService.post(API_URL, transaction)
+            this._authService.post(this.apiUrl, transaction)
                     .subscribe((response: any) => {
                       
                       resolve(response.id);
@@ -87,7 +90,7 @@ export class RentTransactionService implements Resolve<any>
         note: note
       };
 
-      this._authService.put(`${API_URL}${transactionId}/BalanceAdjustment`, adjustmentObject)
+      this._authService.put(`${this.apiUrl}${transactionId}/BalanceAdjustment`, adjustmentObject)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

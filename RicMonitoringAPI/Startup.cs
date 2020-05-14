@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System;
+using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,7 +44,7 @@ namespace RicMonitoringAPI
         {
             //mapped database connection string
             services.AddDbContext<RoomRentContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("RicMonitoryDbConnString")));
+                options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
 
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
@@ -86,6 +87,7 @@ namespace RicMonitoringAPI
                     options.ApiName = "RicMonitoringAPI";
                 });
 
+
             services.AddAuthorization(config =>
             {
                 config.AddPolicy("Superuser", policy => policy.RequireRole("Superuser", "Administrator"));
@@ -104,7 +106,6 @@ namespace RicMonitoringAPI
                         .AllowAnyHeader();
                 });
             });
-
 
             services.AddMvc(setupAction =>
                 {
@@ -181,6 +182,7 @@ namespace RicMonitoringAPI
 
             // Execute the matched endpoint.
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+           
 
             //seeding initial data here
             //DbInitializer.Initialize(context);

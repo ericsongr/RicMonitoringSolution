@@ -1,25 +1,24 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AuthService } from '../../common/core/auth/auth.service';
 
-const API_URL = environment.webApi + ApiControllers.Renters + "/";
-
 @Injectable()
 export class RenterService implements Resolve<any> 
 {
-
+  apiUrl: string;
   routeParams: any;
   renter: any;
   onRenterChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService : AuthService
-  ) { }
+    private _authService : AuthService,
+    @Inject('API_URL') private _apiUrl: string) 
+  { 
+    this.apiUrl = `${_apiUrl}${ApiControllers.Renters}/`;
+  }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     this.routeParams = route.params;
@@ -42,7 +41,7 @@ export class RenterService implements Resolve<any>
       }
       else 
       {
-        this._authService.get(API_URL + this.routeParams.id)
+        this._authService.get(this.apiUrl + this.routeParams.id)
             .subscribe((response: any) => {
                 this.renter = response;
                 this.onRenterChanged.next(this.renter);
@@ -55,7 +54,7 @@ export class RenterService implements Resolve<any>
 
   saveRenter(renter){
     return new Promise((resolve, reject) => {
-      this._authService.put(API_URL + renter.id, renter)
+      this._authService.put(this.apiUrl + renter.id, renter)
           .subscribe((response: any) => {
             resolve(response.id);
           }, reject);
@@ -64,7 +63,7 @@ export class RenterService implements Resolve<any>
 
   addRenter(renter){
     return new Promise((resolve, reject) => {
-      this._authService.post(API_URL, renter)
+      this._authService.post(this.apiUrl, renter)
           .subscribe((response: any) => {
             resolve(response.id);
           }, reject);
