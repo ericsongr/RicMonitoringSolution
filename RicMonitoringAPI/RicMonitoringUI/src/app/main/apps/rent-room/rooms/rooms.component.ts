@@ -63,7 +63,6 @@ export class RoomsComponent implements OnInit {
   //get total balance
   getTotal() {
     var total = this.dataSource.filteredData.map(o => o.price).reduce((total, value) => total + value, 0);
-    console.log(total);
     return total;
   }
     

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -7,19 +7,22 @@ import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AuthService } from '../../common/core/auth/auth.service';
 
-const API_URL = environment.webApi + ApiControllers.Rooms + "/";
 
 @Injectable()
 export class RoomService implements Resolve<any> 
 {
 
+  apiUrl: string;
   routeParams: any;
   room: any;
   onRoomChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService :AuthService
-  ) { }
+    private _authService :AuthService,
+    @Inject('API_URL') private _apiUrl: string
+  ) {
+    this.apiUrl = `${_apiUrl}${ApiControllers.Rooms}/`;
+   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
     this.routeParams = route.params;
@@ -42,7 +45,7 @@ export class RoomService implements Resolve<any>
       }
       else 
       {
-        this._authService.get(API_URL + this.routeParams.id)
+        this._authService.get(this.apiUrl + this.routeParams.id)
             .subscribe((response: any) => {
                 this.room = response;
                 
@@ -56,7 +59,7 @@ export class RoomService implements Resolve<any>
 
   saveRoom(room){
     return new Promise((resolve, reject) => {
-      this._authService.put(API_URL + room.id, room)
+      this._authService.put(this.apiUrl + room.id, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
@@ -65,7 +68,7 @@ export class RoomService implements Resolve<any>
 
   addRoom(room){
     return new Promise((resolve, reject) => {
-      this._authService.post(API_URL, room)
+      this._authService.post(this.apiUrl, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

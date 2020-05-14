@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { AuthService } from '../../common/core/auth/auth.service';
 
-const API_URL = environment.webApi + ApiControllers.Rooms;
+// const API_URL = environment.webApi + ApiControllers.Rooms;
 const TABLE_FIELDS = "?fields=id,name,frequency,price&orderBy=name";
 const DROPDOWN_FIELDS = "?fields=id,name,isOccupied,price&orderBy=name";
 
@@ -18,7 +18,8 @@ export class RoomsService implements Resolve<any> {
 
   constructor(
     private _httpClient: HttpClient,
-    private _authService: AuthService)  
+    private _authService: AuthService,
+    @Inject('API_URL') private apiUrl: string)  
   { 
     
   }
@@ -40,8 +41,7 @@ export class RoomsService implements Resolve<any> {
     }
 
     return new Promise((resolve, reject) => {
-      var url = `${API_URL}${fields}`;
-
+      var url = `${this.apiUrl}${ApiControllers.Rooms}${fields}`;
       this._authService.get(url)
           .subscribe((response: any) => {
               this.rooms = response;
