@@ -1,11 +1,12 @@
 ﻿USE [RicMonitoring]
 GO
-/****** Object:  StoredProcedure [dbo].[RentTransactionBatchFile]    Script Date: 15/05/2020 9:01:52 PM ******/
+/****** Object:  StoredProcedure [dbo].[RentTransactionBatchFile]    Script Date: 16/05/2020 1:54:53 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 ALTER PROCEDURE [dbo].[RentTransactionBatchFile]
+	@CurrentDate	DATETIME
 AS
 
 --NOTES
@@ -15,7 +16,7 @@ AS
 IF NOT EXISTS(select 1 from MonthlyRentBatch WHERE CONVERT(VARCHAR(101), ProcessStartDateTime, 11) = CONVERT(VARCHAR(101), GETDATE(), 11))
 BEGIN
 
-	DECLARE @CurrentDate	DATETIME
+	--DECLARE @CurrentDate	DATETIME
 
 	DECLARE @TransactionTypeAsMonthlyRent	INT,
 			@DateStart						DATETIME,
@@ -269,7 +270,7 @@ BEGIN
 
 				--UPDATE ProcesssEndDateTime SO THAT BATCH DATE FOR TODAY RUN ONCE
 				UPDATE MonthlyRentBatch SET ProcesssEndDateTime = GETDATE() WHERE Id = @MonthlyRentBatchId
-
+				--SELECT 1 / 0 AS Error;
 			COMMIT TRANSACTION
 		END TRY
 		BEGIN CATCH

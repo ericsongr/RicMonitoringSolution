@@ -1,8 +1,9 @@
 ﻿using System;
+using RicMonitoringAPI.Services.Interfaces;
 
 namespace RicMonitoringAPI.RoomRent.Entities
 {
-    public class MonthlyRentBatch
+    public class MonthlyRentBatch : IEntityBase
     {
         public int Id { get; set; }
         public int Month { get; set; }
