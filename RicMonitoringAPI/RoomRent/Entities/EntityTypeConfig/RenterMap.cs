@@ -3,56 +3,56 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class RenterMap
+    public class RenterMap : IEntityTypeConfiguration<Renter>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<Renter> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<Renter>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.AdvanceMonths)
                 .IsRequired();
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.AdvancePaidDate)
                 .IsRequired();
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.StartDate)
                 .IsRequired();
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.DueDay)
                 .IsRequired();
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.NoOfPersons)
                 .IsRequired();
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.BalanceAmount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .Property(t => t.TotalPaidAmount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Renter>()
+            builder
                 .HasOne(t => t.Room)
                 .WithMany(p => p.Renters)
                 .HasForeignKey(f => f.RoomId)
                 .HasConstraintName("ForeignKey_Renter_Room");
 
-            modelBuilder.Entity<Renter>().ToTable("Renters");
-
+            builder.ToTable("Renters");
         }
     }
 }

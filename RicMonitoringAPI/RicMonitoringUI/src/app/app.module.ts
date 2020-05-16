@@ -22,10 +22,11 @@ import { UnauthorizedComponent } from './main/apps/unauthorized/unauthorized.com
 import { CoreModule } from './main/apps/common/core/core.module';
 import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
 import { APP_BASE_HREF } from '@angular/common';
+import { HomeModule } from './main/home/home.module';
 
 const appRoutes: Routes = [
     {
-        path      : '',
+        path      : 'apartment',
         loadChildren: './main/apps/app-ricmonitoring.module#AppRicMonitoringModule'
     },
     {
@@ -34,9 +35,11 @@ const appRoutes: Routes = [
       },
       { path: 'unauthorized', component: UnauthorizedComponent },
       { path: 'forbidden', component: UnauthorizedComponent },
+
+   
     {
         path      : '**',
-        redirectTo: 'sample'
+        redirectTo: 'home'
         // redirectTo: 'booking'
     }
 ];
@@ -71,7 +74,8 @@ const appRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        SampleModule,
+        // SampleModule,
+        HomeModule,
         CoreModule
     ],
     providers: [

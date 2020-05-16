@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class RentTransactionDetailMap
+    public class RentTransactionDetailMap : IEntityTypeConfiguration<RentTransactionDetail>
     {
-        public static void AddMap(ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<RentTransactionDetail> builder)
         {
-            modelBuilder.Entity<RentTransactionDetail>().HasKey(o => o.Id);
+            builder.HasKey(o => o.Id);
 
-            modelBuilder.Entity<RentTransactionDetail>()
+            builder
                 .Property(t => t.Amount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentTransactionDetail>()
+            builder
                 .HasOne(t => t.RentTransaction)
                 .WithMany(t => t.RentTransactionDetails)
                 .HasForeignKey(t => t.TransactionId)
                 .HasConstraintName("ForeignKey_RentTransactionDetails_RentTransaction_TransactionId");
 
-            modelBuilder.Entity<RentTransactionDetail>()
+            builder
                 .HasOne(t => t.RentArrear)
                 .WithMany(t => t.RentTransactionDetails)
                 .HasForeignKey(t => t.RentArrearId)
                 .HasConstraintName("ForeignKey_RentTransactionDetails_RentArrear_RentArrearId");
 
-            modelBuilder.Entity<RentTransactionDetail>().ToTable("RentTransactionDetails");
+            builder.ToTable("RentTransactionDetails");
         }
     }
 }

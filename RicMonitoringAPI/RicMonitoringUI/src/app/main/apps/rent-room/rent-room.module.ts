@@ -24,7 +24,7 @@ import { BillingStatementComponent } from './rent-transactions/billing-statement
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
 const routes : Routes= [
-  {
+   {
     path      :  'rooms',
     component :  RoomsComponent,
     resolve   : {

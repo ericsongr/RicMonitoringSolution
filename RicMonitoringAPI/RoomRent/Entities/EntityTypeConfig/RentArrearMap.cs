@@ -1,31 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class RentArrearMap
+    public class RentArrearMap : IEntityTypeConfiguration<RentArrear>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<RentArrear> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<RentArrear>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<RentArrear>()
+            builder
                 .Property(t => t.UnpaidAmount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentArrear>()
+            builder
                 .HasOne(t => t.RentTransaction)
                 .WithMany(p => p.RentArrears)
                 .HasForeignKey(f => f.RentTransactionId)
                 .HasConstraintName("ForeignKey_RentArrears_RentTransaction_RentTransactionId");
 
-            modelBuilder.Entity<RentArrear>()
+            builder
                 .HasOne(t => t.Renter)
                 .WithMany(p => p.RentArrears)
                 .HasForeignKey(f => f.RenterId)
                 .HasConstraintName("ForeignKey_RentArrears_Renter_RenterId");
 
-            modelBuilder.Entity<RentArrear>().ToTable("RentArrears");
-
+            builder.ToTable("RentArrears");
         }
     }
 }

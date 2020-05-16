@@ -22,8 +22,8 @@ export const navigation: FuseNavigation[] = [
             //     }
             // },
             {
-                id          : 'rentroom', 
-                title       : 'Rent Room',
+                id          : 'apartment', 
+                title       : 'Apartment',
                 translate   : 'NAV.RENTROOM',
                 type        : 'collapsable',
                 icon        : 'person',
@@ -32,21 +32,21 @@ export const navigation: FuseNavigation[] = [
                         id: 'ROOMS',
                         title: 'Rooms',
                         type: 'item',
-                        url: '/rent-room/rooms',
+                        url: '/apartment/rooms',
                         exactMatch: true
                     },
                     {
                         id        : 'RENTERS',
                         title     : 'Tenants',
                         type      : 'item',
-                        url       :'/rent-room/tenants',
+                        url       :'/apartment/tenants',
                         exactMatch:true
                     },
                     {
                         id        : 'RENTTRANSACTION',
                         title     : 'Tenant Transactions',
                         type      : 'item',
-                        url       :'/rent-room/tenant-transactions',
+                        url       :'/apartment/tenant-transactions',
                         exactMatch:true
                     }
                 ],

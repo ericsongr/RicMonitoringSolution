@@ -33,7 +33,7 @@
 
           <!-- add new renter -->
           <button mat-raised-button
-                [routerLink]="'/rent-room/tenants/new'"
+                [routerLink]="'/apartment/tenants/new'"
                 class="add-room-button mat-white-bg my-12 mt-sm-0">
             <span>ADD NEW TENANT</span>
           </button>
@@ -103,7 +103,7 @@
               <mat-row *matRowDef="let renter; columns: displayedColumns;"
                        class="renter"
                        matRipple
-                       [routerLink]="'/rent-room/tenants/' + renter.id + '/' + handleize(renter.name)">
+                       [routerLink]="'/apartment/tenants/' + renter.id + '/' + handleize(renter.name)">
               </mat-row>
           </mat-table>
 

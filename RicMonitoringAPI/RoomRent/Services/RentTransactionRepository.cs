@@ -27,9 +27,6 @@ namespace RicMonitoringAPI.Services.RoomRent
 
         public IQueryable<RentTransaction2> GetTransactionQueryResult(DateTime selectedDate, int renterId = 0)
         {
-
-            selectedDate = DateTime.Now.AddMonths(1);
-
             var renters = _context.Renters.Where(o => !o.IsEndRent)
                            .Select(o => new
                            {
@@ -97,7 +94,7 @@ namespace RicMonitoringAPI.Services.RoomRent
         {
             
 
-            var selectedDate = DateTime.Now.AddMonths(1);
+            var selectedDate = DateTime.Now; //.AddMonths(1);
 
 
             var transactions = GetTransactionQueryResult(selectedDate);

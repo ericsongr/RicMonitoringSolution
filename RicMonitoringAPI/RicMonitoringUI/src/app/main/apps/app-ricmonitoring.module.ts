@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path          : 'rent-room',
+    path          : '',
     loadChildren  : './rent-room/rent-room.module#RentRoomModule'
   }
 ];

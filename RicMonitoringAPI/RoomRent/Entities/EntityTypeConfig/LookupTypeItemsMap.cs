@@ -1,24 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class LookupTypeItemsMap
+    public class LookupTypeItemsMap : IEntityTypeConfiguration<LookupTypeItems>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<LookupTypeItems> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<LookupTypeItems>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<LookupTypeItems>()
+            builder
                 .Property(t => t.Description)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<LookupTypeItems>()
+            builder
                 .HasOne(t => t.LookupTypes)
                 .WithMany(p => p.LookupTypeItems)
                 .HasForeignKey(f => f.LookupTypeId)
                 .HasConstraintName("ForeignKey_LookupTypeItems_LookupTypes");
 
-            modelBuilder.Entity<LookupTypeItems>().ToTable("LookupTypeItems");
+            builder.ToTable("LookupTypeItems");
         }
     }
 }

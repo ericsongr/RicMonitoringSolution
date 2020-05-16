@@ -81,7 +81,7 @@ export class RoomComponent implements OnInit, OnDestroy {
             });
 
             //change the location with new one
-            this._location.go(`/rent-room/rooms/${this.room.id}/${this.room.handle}`);
+            this._location.go(`/apartment/rooms/${this.room.id}/${this.room.handle}`);
           });
       }
   }
@@ -115,7 +115,7 @@ export class RoomComponent implements OnInit, OnDestroy {
             });
   
             //change the location with new one
-            this._location.go(`/rent-room/rooms/${this.room.id}/${this.room.handle}`);
+            this._location.go(`/apartment/rooms/${this.room.id}/${this.room.handle}`);
           });
     }
     
