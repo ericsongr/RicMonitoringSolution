@@ -137,22 +137,24 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
       data.balancePaidDate = null;
       data.balanceAmount = 0;
     }
-    
+
     this._renterService.saveRenter(data)
         .then(() => {
 
-          //Trigger the subscription with new data
-          // this._renterService.onRenterChanged.next(data);
+            //Trigger the subscription with new data
+            // this._renterService.onRenterChanged.next(data);
 
-          //show the success message
-          this._snackBar.open('Renter detail saved.', 'OK', {
-            verticalPosition  : 'top',
-            duration          : 2000
-          });
+            //show the success message
+            this._snackBar.open('Renter detail saved.',
+                'OK',
+                {
+                    verticalPosition: 'top',
+                    duration: 2000
+                });
 
-          //change the location with new one
-          this._location.go(`/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
-        })
+            //change the location with new one
+            this._location.go(`/apartment/tenants/${this.renter.id}/${this.renter.handle}`);
+        });
   }
 
   add() {
@@ -178,7 +180,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
 
           //change the location with new one
-          this._location.go(`/rent-room/tenants/${this.renter.id}/${this.renter.handle}`);
+          this._location.go(`/apartment/tenants/${this.renter.id}/${this.renter.handle}`);
           this._cdr.detectChanges();
         }).catch(error =>{
           console.log('error: ', error);

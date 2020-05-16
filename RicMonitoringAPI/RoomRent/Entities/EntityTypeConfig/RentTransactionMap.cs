@@ -3,45 +3,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class RentTransactionMap
+    public class RentTransactionMap : IEntityTypeConfiguration<RentTransaction>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
 
-            modelBuilder.Entity<RentTransaction>().HasKey(t => t.Id);
+        public void Configure(EntityTypeBuilder<RentTransaction> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .Property(p => p.PaidAmount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .Property(p => p.Balance)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .Property(p => p.TotalAmountDue)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .Property(p => p.AdjustmentBalancePaymentDueAmount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .HasOne(t => t.Room)
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RoomId)
                 .HasConstraintName("ForeignKey_RentTransaction_Room_RoomId");
 
-            modelBuilder.Entity<RentTransaction>()
+            builder
                 .HasOne(t => t.Renter)
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RenterId)
                 .HasConstraintName("ForeignKey_RentTransaction_Renter_RenterId");
-                
-            modelBuilder.Entity<RentTransaction>().ToTable("RentTransactions");
 
+            builder.ToTable("RentTransactions");
         }
     }
 }

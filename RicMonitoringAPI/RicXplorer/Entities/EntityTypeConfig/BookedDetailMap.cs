@@ -1,34 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RicXplorer.Entities.EntityTypeConfig
 {
-    public class BookedDetailMap
+    public class BookedDetailMap : IEntityTypeConfiguration<BookedDetail>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<BookedDetail> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<BookedDetail>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<BookedDetail>()
+            builder
                 .Property(t => t.Country)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<BookedDetail>()
+            builder
                 .Property(t => t.LanguagesSpoken)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<BookedDetail>()
-               .Property(t => t.Email)
-               .HasMaxLength(50);
+            builder
+                .Property(t => t.Email)
+                .HasMaxLength(50);
 
-            modelBuilder.Entity<BookedDetail>()
-               .Property(t => t.Contact)
-               .HasMaxLength(15);
+            builder
+                .Property(t => t.Contact)
+                .HasMaxLength(15);
 
-            modelBuilder.Entity<BookedDetail>()
-               .Property(t => t.LeaveMessage)
-               .HasMaxLength(1000);
+            builder
+                .Property(t => t.LeaveMessage)
+                .HasMaxLength(1000);
 
-            modelBuilder.Entity<BookedDetail>().ToTable("BookedDetails");
+            builder.ToTable("BookedDetails");
         }
     }
 }

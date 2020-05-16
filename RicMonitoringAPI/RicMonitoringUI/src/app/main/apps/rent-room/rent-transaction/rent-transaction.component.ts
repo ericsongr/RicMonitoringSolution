@@ -158,7 +158,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
           })
           
-          this._location.go(`/rent-room/tenant-transactions/${this.rentTransaction.renterId}/${this.rentTransaction.handle}`);
+          this._location.go(`/apartment/tenant-transactions/${this.rentTransaction.renterId}/${this.rentTransaction.handle}`);
           
           this._cdr.detectChanges();
     }

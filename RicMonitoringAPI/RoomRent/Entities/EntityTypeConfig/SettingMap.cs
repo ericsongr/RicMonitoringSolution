@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class SettingMap
+    public class SettingMap : IEntityTypeConfiguration<Setting>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<Setting> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<Setting>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<Setting>().ToTable("Settings");
-
+            builder.ToTable("Settings");
         }
     }
 }

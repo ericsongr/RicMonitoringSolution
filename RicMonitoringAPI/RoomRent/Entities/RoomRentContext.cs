@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using RicMonitoringAPI.Common;
 using RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig;
 using RicMonitoringAPI.RicXplorer.Entities;
@@ -17,24 +18,10 @@ namespace RicMonitoringAPI.RoomRent.Entities
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SettingMap.AddMap(modelBuilder);
-
-            RoomMap.AddMap(modelBuilder);
-            RenterMap.AddMap(modelBuilder);
-
-            BookedDetailMap.AddMap(modelBuilder);
-            BookedPersonMap.AddMap(modelBuilder);
-
-            LookupTypesMap.AddMap(modelBuilder);
-            LookupTypeItemsMap.AddMap(modelBuilder);
-
-            RentArrearMap.AddMap(modelBuilder);
-
-            RentTransactionMap.AddMap(modelBuilder);
-            RentTransactionDetailMap.AddMap(modelBuilder);
-
             //this.Database.ExecuteSqlCommand("RentTransactionBatchFile");
 
+            //register all fluent api validations or inherited by IEntityTypeConfiguration
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         }
 

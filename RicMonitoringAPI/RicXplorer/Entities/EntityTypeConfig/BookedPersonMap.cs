@@ -1,29 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RicMonitoringAPI.RoomRent.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RicXplorer.Entities.EntityTypeConfig
 {
-    public class BookedPersonMap
+    public class BookedPersonMap : IEntityTypeConfiguration<BookedPerson>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<BookedPerson> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<BookedPerson>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<BookedPerson>()
+            builder
                 .Property(t => t.FirstName)
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<BookedPerson>()
+            builder
                 .Property(t => t.LastName)
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<BookedPerson>()
+            builder
                 .HasOne(t => t.LookupTypeItems)
                 .WithMany(p => p.BookedPersons)
                 .HasForeignKey(f => f.Ages)
                 .HasConstraintName("ForeignKey_LookupTypeItems_BookedPersons");
 
-            modelBuilder.Entity<LookupType>().ToTable("BookedPersons");
+            builder.ToTable("BookedPersons");
         }
     }
 }

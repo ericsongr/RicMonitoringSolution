@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RicMonitoringAPI.RoomRent.Entities.EntityTypeConfig
 {
-    public class RoomMap
+    public class RoomMap : IEntityTypeConfiguration<Room>
     {
-        public static void AddMap(ModelBuilder modelBuilder) {
+        public void Configure(EntityTypeBuilder<Room> builder)
+        {
+            builder.HasKey(t => t.Id);
 
-            modelBuilder.Entity<Room>().HasKey(t => t.Id);
-
-            modelBuilder.Entity<Room>()
+            builder
                 .Property(t => t.Price)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Room>().ToTable("Rooms");
-
+            builder.ToTable("Rooms");
         }
     }
 }

@@ -33,7 +33,7 @@
 
           <!-- add new room -->
           <button mat-raised-button
-                [routerLink]="'/rent-room/rooms/new'"
+                [routerLink]="'/apartment/rooms/new'"
                 class="add-room-button mat-white-bg my-12 mt-sm-0">
             <span>ADD NEW ROOM</span>
           </button>
@@ -94,7 +94,7 @@
             <mat-row *matRowDef="let room; columns: displayedColumns;"
                     class="room"
                     matRipple
-                    [routerLink]="'/rent-room/rooms/' + room.id + '/' + handleize(room.name)">
+                    [routerLink]="'/apartment/rooms/' + room.id + '/' + handleize(room.name)">
             </mat-row>
             <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
           </mat-table>
