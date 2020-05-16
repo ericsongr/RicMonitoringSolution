@@ -22,6 +22,7 @@ using RicMonitoringAPI.RoomRent.Entities;
 using RicMonitoringAPI.RoomRent.Entities.Validators;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Models;
+using RicMonitoringAPI.RoomRent.Services;
 using RicMonitoringAPI.RoomRent.Services.Interfaces;
 using RicMonitoringAPI.RoomRent.Services.PropertyMappings;
 using RicMonitoringAPI.Services.Interfaces;
@@ -52,6 +53,7 @@ namespace RicMonitoringAPI
             services.AddScoped<IRentTransactionDetailRepository, RentTransactionDetailRepository>();
             services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
             services.AddScoped<IRentArrearRepository, RentArrearRepository>();
+            services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -91,6 +93,7 @@ namespace RicMonitoringAPI
             services.AddAuthorization(config =>
             {
                 config.AddPolicy("Superuser", policy => policy.RequireRole("Superuser", "Administrator"));
+                config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
                 config.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
             });
 
