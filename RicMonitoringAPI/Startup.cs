@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,22 +11,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-using RicMonitoringAPI.Api.Services.Interfaces.PropertyMappings;
-using RicMonitoringAPI.Api.Services.PropertyMappings;
-using RicMonitoringAPI.Common.Services;
+using RicEntityFramework;
+using RicEntityFramework.Interfaces;
+using RicEntityFramework.Interfaces.PropertyMappings;
+using RicEntityFramework.PropertyMappings;
+using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicEntityFramework.RoomRent.PropertyMappings;
+using RicEntityFramework.RoomRent.Repositories;
+using RicEntityFramework.Services;
+using RicModel.RoomRent;
+using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Validators;
 using RicMonitoringAPI.RicXplorer.Services;
 using RicMonitoringAPI.RicXplorer.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.RoomRent.Entities.Validators;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
-using RicMonitoringAPI.RoomRent.Models;
-using RicMonitoringAPI.RoomRent.Services;
-using RicMonitoringAPI.RoomRent.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Services.PropertyMappings;
-using RicMonitoringAPI.Services.Interfaces;
-using RicMonitoringAPI.Services.RenterRent;
-using RicMonitoringAPI.Services.RoomRent;
+using RicMonitoringAPI.RoomRent.Validators;
 
 namespace RicMonitoringAPI
 {
@@ -44,7 +43,7 @@ namespace RicMonitoringAPI
         public void ConfigureServices(IServiceCollection services)
         {
             //mapped database connection string
-            services.AddDbContext<RoomRentContext>(options =>
+            services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
 
             services.AddScoped<IRoomRepository, RoomRepository>();
@@ -132,7 +131,7 @@ namespace RicMonitoringAPI
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            RoomRentContext context
+            RicDbContext context
             //,UserManager<IdentityUser> userManager
             )
         {
@@ -186,9 +185,6 @@ namespace RicMonitoringAPI
             // Execute the matched endpoint.
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
            
-
-            //seeding initial data here
-            //DbInitializer.Initialize(context);
         }
     }
 }

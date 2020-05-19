@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="obj\Debug\netstandard2.0\RicEntityFramework.AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\netstandard2.0\RicEntityFramework.deps.json" />
+    <Content Include="obj\Debug\netstandard2.0\RicEntityFramework.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\project.assets.json" />
+    <Content Include="obj\RicEntityFramework.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\netstandard2.0\RicEntityFramework.dll" />
+    <None Include="bin\Debug\netstandard2.0\RicEntityFramework.pdb" />
+    <None Include="bin\Debug\netstandard2.0\RicModel.dll" />
+    <None Include="bin\Debug\netstandard2.0\RicModel.pdb" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.assets.cache" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.csproj.CopyComplete" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.dll" />
+    <None Include="obj\Debug\netstandard2.0\RicEntityFramework.pdb" />
+    <None Include="obj\project.nuget.cache" />
+    <None Include="obj\RicEntityFramework.csproj.nuget.g.props" />
+    <None Include="obj\RicEntityFramework.csproj.nuget.g.targets" />
+	  
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RicModel\RicModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RicModel">
+      <HintPath>..\RicModel\bin\Debug\netstandard2.0\RicModel.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

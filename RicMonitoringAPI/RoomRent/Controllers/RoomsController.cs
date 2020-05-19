@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Entities.Parameters;
-using RicMonitoringAPI.RoomRent.Models;
-using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using RicEntityFramework;
+using RicEntityFramework.Helpers;
+using RicEntityFramework.Interfaces;
+using RicEntityFramework.Parameters;
+using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicModel.RoomRent;
+using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -17,19 +19,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [ApiController]
     public class RoomsController : ControllerBase
     {
-        private readonly RoomRentContext _context;
         private readonly IRoomRepository _roomRepository;
         private readonly IRoomPropertyMappingService _roomPropertyMappingService;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
 
-        public RoomsController(RoomRentContext context,
+        public RoomsController(RicDbContext context,
             IRoomRepository roomRepository,
             IRoomPropertyMappingService roomPropertyMappingService,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
-            _context = context;
             _roomRepository = roomRepository;
             _roomPropertyMappingService = roomPropertyMappingService;
             _urlHelper = urlHelper;
@@ -133,7 +133,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var roomEntity = await _roomRepository.GetSingleAsync(id);
+            var roomEntity = await _roomRepository.GetSingleAsync(o => o.Id == id);
             if (roomEntity == null)
             {
                 return NotFound();
@@ -196,7 +196,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Room>> DeleteRoom(int id)
         {
-            var roomEntity = await _roomRepository.GetSingleAsync(id);
+            var roomEntity = await _roomRepository.GetSingleAsync(o => o.Id == id);
             if (roomEntity == null)
             {
                 return NotFound();

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Entities.Parameters;
-using RicMonitoringAPI.RoomRent.Models;
-using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using RicEntityFramework;
+using RicEntityFramework.Helpers;
+using RicEntityFramework.Interfaces;
+using RicEntityFramework.Parameters;
+using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicModel.RoomRent;
+using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -19,7 +21,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [ApiController]
     public class RentTransactionsController : ControllerBase
     {
-        private readonly RoomRentContext _context;
         private readonly IRentTransactionRepository _rentTransactionRepository;
         private readonly IRentTransactionDetailRepository _rentDetailTransactionRepository;
         private readonly IRentTransactionPropertyMappingService _rentTransactionPropertyMappingService;
@@ -28,7 +29,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
 
-        public RentTransactionsController(RoomRentContext context,
+        public RentTransactionsController(
             IRentTransactionRepository rentTransactionRepository,
             IRentTransactionDetailRepository rentDetailTransactionRepository,
             IRentTransactionPropertyMappingService rentTransactionPropertyMappingService,
@@ -37,7 +38,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
-            _context = context;
             _rentTransactionRepository = rentTransactionRepository;
             _rentDetailTransactionRepository = rentDetailTransactionRepository;
             _rentTransactionPropertyMappingService = rentTransactionPropertyMappingService;
@@ -184,7 +184,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(balanceAdjustment.TransactionId);
+            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(o => o.Id == balanceAdjustment.TransactionId);
             if (rentTransactionEntity == null)
             {
                 return NotFound();
@@ -224,7 +224,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(id);
+            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(o => o.Id == id);
             if (rentTransactionEntity == null)
             {
                 return NotFound();
@@ -313,7 +313,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<RentTransaction>> DeleteRentTransaction(int id)
         {
-            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(id);
+            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(o => o.Id == id);
             if (rentTransactionEntity == null)
             {
                 return NotFound();

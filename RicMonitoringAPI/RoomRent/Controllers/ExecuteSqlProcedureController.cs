@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using RicEntityFramework;
+using RicEntityFramework.RoomRent.Interfaces;
 using RicMonitoringAPI.Common.Constants;
-using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.RoomRent.Services;
-using RicMonitoringAPI.RoomRent.Services.Interfaces;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -20,11 +17,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [ApiController]
     public class ExecuteSqlProcedureController : ControllerBase
     {
-        private readonly RoomRentContext _context;
+        private readonly RicDbContext _context;
         private readonly IMonthlyRentBatchRepository _monthlyRentBatchRepository;
 
         public ExecuteSqlProcedureController(
-            RoomRentContext context,
+            RicDbContext context,
             IMonthlyRentBatchRepository monthlyRentBatchRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));

@@ -9,12 +9,13 @@
 	<s:Int64 x:Key="/Default/CodeStyle/Naming/CSharpAutoNaming/AutoNamingCompletedVersion/@EntryValue">2</s:Int64>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.1.3\ref\netcoreapp3.1\Microsoft.AspNetCore.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Ericson Ramos\.nuget\packages\system.linq.dynamic.core\1.0.23\lib\netcoreapp2.1\System.Linq.Dynamic.Core.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark3/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark3/Coords/@EntryValue">(Doc Ln 32 Col 11)</s:String>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark3/FileId/@EntryValue">7020124F-9FFC-4AC3-8F3D-AAB8E0240759/f:IHostEnvironment.cs/l:..?..?..?Users?Ericson Ramos?AppData?Local?JetBrains?Shared?vAny?DecompilerCache?metadata?643F39BA-A69D-4929-8421-EAD0C6F95F28?95?5141e3e9?IHostEnvironment.cs</s:String>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=Bookmark3/Owner/@EntryValue">NumberedBookmarkManager</s:String>
-	<s:String x:Key="/Default/RunConfigs/Active/@EntryValue">2AD05751F9B4E348B95067149ED4263A</s:String>
+	
 	<s:Boolean x:Key="/Default/RunConfigs/Config/=2AD05751F9B4E348B95067149ED4263A/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/RunConfigs/Config/=2AD05751F9B4E348B95067149ED4263A/Name/@EntryValue">RicAuthServer</s:String>
 	<s:String x:Key="/Default/RunConfigs/Config/=2AD05751F9B4E348B95067149ED4263A/ProjectGuid/@EntryValue">FA9D863D850DFB40AA6D9C275F1B4DED</s:String>
