@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RicMonitoringAPI.Api.Helpers;
+using RicEntityFramework.Helpers;
+using RicEntityFramework.Interfaces;
+using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.RicXplorer.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Models;
-using RicMonitoringAPI.Services.Interfaces;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
 {
@@ -37,7 +37,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             }
 
             var lookupTypeItemRepo =
-                await _lookupTypeItemRepository.GetSingleAsync(
+                await _lookupTypeItemRepository.GetSingleIncludesAsync(
                     o => o.Name.ToLower().Trim() == lookupTypeName.ToLower().Trim(), 
                     o => o.LookupTypeItems);
             if (lookupTypeItemRepo == null)

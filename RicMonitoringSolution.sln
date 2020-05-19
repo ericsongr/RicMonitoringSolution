@@ -4,10 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicMonitoringAPI", "RicMonitoringAPI\RicMonitoringAPI.csproj", "{CE3299E2-A324-4641-B4B1-6FA1E6DFED75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA} = {2ED39617-E702-48D5-A475-2FAC0AEE7BAA}
+		{B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2} = {B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicAuthServer", "RicAuthServer\RicAuthServer.csproj", "{3D869DFA-0D85-40FB-AA6D-9C275F1B4DED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RicMonitoringUI", "RicMonitoringUI\RicMonitoringUI.csproj", "{4F7163B4-CBBF-49F5-8E8F-607C8F485564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicMonitoringUI", "RicMonitoringUI\RicMonitoringUI.csproj", "{4F7163B4-CBBF-49F5-8E8F-607C8F485564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicDatabaseUpgrader", "RicDatabaseUpgrader\RicDatabaseUpgrader.csproj", "{1060C7C3-5D55-419E-AA64-78BD03C8C661}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicModel", "RicModel\RicModel.csproj", "{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicEntityFramework", "RicEntityFramework\RicEntityFramework.csproj", "{B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA} = {2ED39617-E702-48D5-A475-2FAC0AEE7BAA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,17 +29,24 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE3299E2-A324-4641-B4B1-6FA1E6DFED75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE3299E2-A324-4641-B4B1-6FA1E6DFED75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE3299E2-A324-4641-B4B1-6FA1E6DFED75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE3299E2-A324-4641-B4B1-6FA1E6DFED75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D869DFA-0D85-40FB-AA6D-9C275F1B4DED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D869DFA-0D85-40FB-AA6D-9C275F1B4DED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D869DFA-0D85-40FB-AA6D-9C275F1B4DED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D869DFA-0D85-40FB-AA6D-9C275F1B4DED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F7163B4-CBBF-49F5-8E8F-607C8F485564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F7163B4-CBBF-49F5-8E8F-607C8F485564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F7163B4-CBBF-49F5-8E8F-607C8F485564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7163B4-CBBF-49F5-8E8F-607C8F485564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1060C7C3-5D55-419E-AA64-78BD03C8C661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1060C7C3-5D55-419E-AA64-78BD03C8C661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1060C7C3-5D55-419E-AA64-78BD03C8C661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1060C7C3-5D55-419E-AA64-78BD03C8C661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B07AA6F2-23CC-43FE-81AF-9AADD42FF2C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,54 @@
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using RicEntityFramework.BaseRepository;
+using RicEntityFramework.Helpers;
+using RicEntityFramework.Parameters;
+using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicModel.RoomRent;
+using RicModel.RoomRent.Dtos;
+
+namespace RicEntityFramework.RoomRent.Repositories
+{
+    public class RenterRepository : EntityBaseRepository<Renter>, IRenterRepository
+    {
+        private readonly RicDbContext _context;
+        private readonly IRenterPropertyMappingService _propertyMappingService;
+
+        public RenterRepository(
+            RicDbContext context
+            , IRenterPropertyMappingService propertyMappingService
+            ) : base(context)
+        {
+            _context = context;
+            _propertyMappingService = propertyMappingService;
+        }
+
+        public DbSet<Renter> Renters()
+        {
+            return _context.Renters;
+        }
+
+        public PagedList<Renter> GetRenters(RenterResourceParameters RenterResourceParameters)
+        {
+            var collectionBeforPaging =
+                _context.Renters.ApplySort(RenterResourceParameters.OrderBy,
+                    _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
+
+
+            if (!string.IsNullOrEmpty(RenterResourceParameters.SearchQuery))
+            {
+                var searchQueryForWhereClause =
+                    RenterResourceParameters.SearchQuery.Trim().ToLowerInvariant();
+
+                collectionBeforPaging = collectionBeforPaging
+                    .Where(a => a.Name.ToLowerInvariant().Contains(searchQueryForWhereClause));
+
+            }
+
+            return PagedList<Renter>.Create(collectionBeforPaging,
+                RenterResourceParameters.PageNumber,
+                RenterResourceParameters.PageSize);
+        }
+    }
+}

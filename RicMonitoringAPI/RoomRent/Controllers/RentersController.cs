@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Services.Interfaces;
-using RicMonitoringAPI.RoomRent.Entities.Parameters;
-using RicMonitoringAPI.RoomRent.Models;
-using RicMonitoringAPI.Api.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using RicMonitoringAPI.Common.Enumeration;
+using RicEntityFramework.Helpers;
+using RicEntityFramework.Interfaces;
+using RicEntityFramework.Parameters;
+using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicModel.Enumeration;
+using RicModel.RoomRent;
+using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -20,21 +21,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [ApiController]
     public class RentersController : ControllerBase
     {
-        private readonly RoomRentContext _context;
         private readonly IRenterRepository _renterRepository;
         private readonly IRentTransactionRepository _rentTransactionRepository;
         private readonly IRenterPropertyMappingService _renterPropertyMappingService;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
 
-        public RentersController(RoomRentContext context,
+        public RentersController(
             IRenterRepository renterRepository,
             IRentTransactionRepository rentTransactionRepository,
             IRenterPropertyMappingService renterPropertyMappingService,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
-            _context = context;
             _renterRepository = renterRepository;
             _rentTransactionRepository = rentTransactionRepository;
             _renterPropertyMappingService = renterPropertyMappingService;
@@ -170,7 +169,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var renterEntity = await _renterRepository.GetSingleAsync(id);
+            var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
             if (renterEntity == null)
             {
                 return NotFound();
@@ -270,7 +269,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Renter>> DeleteRenter(int id)
         {
-            var renterEntity = await _renterRepository.GetSingleAsync(id);
+            var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
             if (renterEntity == null)
             {
                 return NotFound();

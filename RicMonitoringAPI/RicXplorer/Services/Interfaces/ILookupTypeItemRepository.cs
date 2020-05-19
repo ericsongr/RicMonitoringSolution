@@ -1,5 +1,5 @@
-﻿using RicMonitoringAPI.RoomRent.Entities;
-using RicMonitoringAPI.Services.Interfaces;
+﻿using RicEntityFramework.BaseRepository.Interfaces;
+using RicModel.RoomRent;
 
 namespace RicMonitoringAPI.RicXplorer.Services.Interfaces
 {
