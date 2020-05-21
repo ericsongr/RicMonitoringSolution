@@ -10,11 +10,15 @@
     <None Remove="Scripts\Create\0001-Schema.sql" />
     <None Remove="Scripts\Update\0001-DbErrorLogs.sql" />
     <None Remove="Scripts\Update\0002-RentTransactionBatchFile.sql" />
+    <None Remove="Scripts\Update\0003-RentTransactionBatchFile.sql" />
+    <None Remove="Scripts\Update\0004-update-data-and-alter-renter.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create\0001-Schema.sql" />
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
+    <EmbeddedResource Include="Scripts\Update\0004-update-data-and-alter-renter.sql" />
+    <EmbeddedResource Include="Scripts\Update\0003-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\0002-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\0001-DbErrorLogs.sql" />
   </ItemGroup>

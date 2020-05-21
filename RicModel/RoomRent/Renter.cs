@@ -27,7 +27,6 @@ namespace RicModel.RoomRent
         public DateTime PreviousDueDate { get; set; }
         public DateTime NextDueDate { get; set; }
 
-        public virtual RentTransaction RentTransaction { get; set; }
         public virtual Room Room { get; set; }
         public ICollection<RentTransaction> RentTransactions { get; set; }
         public ICollection<RentArrear> RentArrears { get; set; }
