@@ -1,0 +1,14 @@
+﻿IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Renters' AND COLUMN_NAME = 'RentTransactionId')
+BEGIN
+	ALTER TABLE Renters ADD [RentTransactionId] [int] NULL
+END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME = 'ForeignKey_Renter_RentTransaction')
+BEGIN
+	ALTER TABLE [dbo].[Renters]  WITH CHECK ADD  CONSTRAINT [ForeignKey_Renter_RentTransaction] FOREIGN KEY([RentTransactionId])
+	REFERENCES [dbo].[RentTransactions] ([Id])
+
+	ALTER TABLE [dbo].[Renters] CHECK CONSTRAINT [ForeignKey_Renter_RentTransaction]
+END
+GO
