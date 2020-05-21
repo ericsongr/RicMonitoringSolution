@@ -32,7 +32,6 @@ namespace RicModel.RoomRent
 
 
         public ICollection<RentTransactionDetail> RentTransactionDetails { get; set; }
-        public ICollection<Renter> Renters { get; set; }
         public ICollection<RentArrear> RentArrears { get; set; }
 
     }
