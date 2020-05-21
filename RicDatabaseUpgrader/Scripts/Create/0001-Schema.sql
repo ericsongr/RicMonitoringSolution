@@ -145,6 +145,7 @@ CREATE TABLE [dbo].[Renters](
 	[BalancePaidDate] [datetime2](7) NULL,
 	[TotalPaidAmount] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
 	[DueDay] [int] NOT NULL DEFAULT ((0)),
+	[RentTransactionId] [int] NULL,
 	[NextDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[PreviousDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
  CONSTRAINT [PK_Renters] PRIMARY KEY CLUSTERED 
@@ -264,6 +265,11 @@ REFERENCES [dbo].[RentTransactions] ([Id])
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[RentArrears] CHECK CONSTRAINT [ForeignKey_RentArrears_RentTransaction_RentTransactionId]
+GO
+ALTER TABLE [dbo].[Renters]  WITH CHECK ADD  CONSTRAINT [ForeignKey_Renter_RentTransaction] FOREIGN KEY([RentTransactionId])
+REFERENCES [dbo].[RentTransactions] ([Id])
+GO
+ALTER TABLE [dbo].[Renters] CHECK CONSTRAINT [ForeignKey_Renter_RentTransaction]
 GO
 ALTER TABLE [dbo].[Renters]  WITH CHECK ADD  CONSTRAINT [ForeignKey_Renter_Room] FOREIGN KEY([RoomId])
 REFERENCES [dbo].[Rooms] ([Id])
