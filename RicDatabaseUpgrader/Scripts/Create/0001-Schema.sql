@@ -115,9 +115,11 @@ GO
 CREATE TABLE [dbo].[RentArrears](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[RenterId] [int] NOT NULL,
-	[RentTransactionId] [int] NOT NULL,
+	[RentTransactionId] [int] NULL,
 	[UnpaidAmount] [decimal](18, 2) NOT NULL,
 	[IsProcessed] [bit] NOT NULL,
+	[Note] NVARCHAR(2000),
+	[IsManualEntry] BIT NOT NULL DEFAULT(0),
  CONSTRAINT [PK_RentArrears] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -297,6 +299,8 @@ ALTER TABLE [dbo].[RentTransactions]  WITH CHECK ADD  CONSTRAINT [ForeignKey_Ren
 REFERENCES [dbo].[Renters] ([Id])
 GO
 ALTER TABLE [dbo].[RentTransactions] CHECK CONSTRAINT [ForeignKey_RentTransaction_Renter_RenterId]
+GO
+CREATE INDEX IX_RentArrears_IsManualEntry ON RentArrears(IsManualEntry)
 GO
 /****** Object:  StoredProcedure [dbo].[RentTransactionBatchFile]    Script Date: 17/05/2020 11:19:48 AM ******/
 SET ANSI_NULLS ON

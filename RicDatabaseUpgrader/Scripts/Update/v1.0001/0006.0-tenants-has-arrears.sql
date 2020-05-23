@@ -1,0 +1,42 @@
+﻿IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'RentArrears' AND COLUMN_NAME = 'RentTransactionId' AND IS_NULLABLE = 'NO')
+BEGIN
+	ALTER TABLE RentArrears ALTER COLUMN RentTransactionId INT NULL
+END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'RentArrears' AND COLUMN_NAME = 'Note')
+BEGIN
+	ALTER TABLE RentArrears ADD Note NVARCHAR(2000)
+END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'RentArrears' AND COLUMN_NAME = 'IsManualEntry')
+BEGIN
+	ALTER TABLE RentArrears ADD IsManualEntry BIT NOT NULL DEFAULT(0)
+END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM SYS.indexes WHERE Name = 'IX_RentArrears_IsManualEntry')
+BEGIN
+	CREATE INDEX IX_RentArrears_IsManualEntry ON RentArrears(IsManualEntry)
+END
+GO
+
+IF NOT EXISTS(select 1 from RentArrears WHERE Note = 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30')
+BEGIN
+	INSERT INTO RentArrears(
+		RenterId,
+		RentTransactionId,
+		UnpaidAmount,
+		IsProcessed,
+		Note,
+		IsManualEntry)
+	VALUES(59, NULL, 9000, 0, 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30', 1)
+END
+GO
+
+IF EXISTS(SELECT 1 FROM Renters WHERE Id = 59 AND NextDueDate = '2020-05-30 00:00:00.0000000')
+BEGIN
+	UPDATE Renters SET NextDueDate = '2020-05-31 00:00:00.0000000' WHERE Id = 59
+END
+GO
