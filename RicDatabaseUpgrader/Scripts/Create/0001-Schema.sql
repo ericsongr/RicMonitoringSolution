@@ -302,6 +302,10 @@ ALTER TABLE [dbo].[RentTransactions] CHECK CONSTRAINT [ForeignKey_RentTransactio
 GO
 CREATE INDEX IX_RentArrears_IsManualEntry ON RentArrears(IsManualEntry)
 GO
+CREATE INDEX IDX_Renters_Name ON Renters(Name)
+GO
+CREATE INDEX IDX_Renters_IsEndRent ON Renters(IsEndRent)
+GO
 /****** Object:  StoredProcedure [dbo].[RentTransactionBatchFile]    Script Date: 17/05/2020 11:19:48 AM ******/
 SET ANSI_NULLS ON
 GO

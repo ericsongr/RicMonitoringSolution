@@ -36,6 +36,9 @@ namespace RicEntityFramework.RoomRent.Repositories
                     _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
 
 
+            collectionBeforPaging = collectionBeforPaging
+                .Where(a => !a.IsEndRent);
+
             if (!string.IsNullOrEmpty(RenterResourceParameters.SearchQuery))
             {
                 var searchQueryForWhereClause =
