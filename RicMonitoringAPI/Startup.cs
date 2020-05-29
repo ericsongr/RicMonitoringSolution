@@ -22,6 +22,7 @@ using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.Services;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
 using RicMonitoringAPI.RicXplorer.Services;
 using RicMonitoringAPI.RicXplorer.Services.Interfaces;
@@ -53,6 +54,7 @@ namespace RicMonitoringAPI
             services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
             services.AddScoped<IRentArrearRepository, RentArrearRepository>();
             services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
+            services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -69,6 +71,7 @@ namespace RicMonitoringAPI
             services.AddTransient<IRentTransactionPropertyMappingService, RentTransactionPropertyMappingService>();
             services.AddTransient<ILookupTypePropertyMappingService, LookupTypePropertyMappingService>();
             services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
+            services.AddTransient<IRentTransactionHistoryPropertyMappingService, RentTransactionHistoryPropertyMappingService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
             services.AddHealthChecks();
@@ -165,6 +168,16 @@ namespace RicMonitoringAPI
                                 opt => opt.MapFrom(src => src.GetDueDate()))
                     .ForMember(dest => dest.Period,
                                             opt => opt.MapFrom(src => src.GetPeriod()));
+
+                //histories
+                cfg.CreateMap<RentTransaction, RentTransactionHistoryDto>()
+                    .ForMember(dest => dest.PreviousBalance,
+                                                opt => opt.MapFrom(src => src.GetPreviousBalance()))
+                    .ForMember(dest => dest.MonthlyRent,
+                        opt => opt.MapFrom(src => src.GetMonthlyRent()))
+                    .ForMember(dest => dest.CurrentBalance,
+                        opt => opt.MapFrom(src => src.Balance))
+                    ;
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
                 cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();

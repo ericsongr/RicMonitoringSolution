@@ -17,6 +17,7 @@ export class RentTransaction {
     balance             : number;
     isBalanceEditable   : boolean;
     totalAmountDue      : number;
+    rentArrearId        : number;
     previousUnpaidAmount: number;
     isDepositUsed       : boolean;
     note                : string;
@@ -44,6 +45,7 @@ export class RentTransaction {
         this.balance = transaction.balance;
         this.isBalanceEditable = transaction.isBalanceEditable;
         this.totalAmountDue = transaction.totalAmountDue;
+        this.rentArrearId = transaction.rentArrearId;
         this.previousUnpaidAmount = transaction.previousUnpaidAmount;
         this.paidAmount = transaction.paidAmount || 
             (transaction.isDepositUsed ? 0 : 

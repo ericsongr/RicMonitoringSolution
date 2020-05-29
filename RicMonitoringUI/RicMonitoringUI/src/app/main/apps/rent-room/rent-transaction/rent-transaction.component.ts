@@ -48,6 +48,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.onRentTransactionChanged =
         this._rentTransactionService.onRentTransactionChanged
             .subscribe(transaction => {
+              console.log(transaction);
               this.rentTransaction = new RentTransaction(transaction);
             
               if (this.rentTransaction.paidDate != "")

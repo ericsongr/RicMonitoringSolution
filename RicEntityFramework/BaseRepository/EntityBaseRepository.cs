@@ -62,6 +62,17 @@ namespace RicEntityFramework.BaseRepository
             return Context.Set<T>().Where(predicate);
         }
 
+        public virtual IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = Context.Set<T>();
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query.Where(predicate).ToList();
+
+        }
         public virtual void Add(T entity)
         {
             EntityEntry dbEntityEntry = Context.Entry<T>(entity);

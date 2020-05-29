@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using RicModel.Enumeration;
 
 namespace RicModel.RoomRent
@@ -30,9 +31,15 @@ namespace RicModel.RoomRent
         public virtual Room Room { get; set; }
         public virtual Renter Renter { get; set; }
 
-
         public ICollection<RentTransactionDetail> RentTransactionDetails { get; set; }
         public ICollection<RentArrear> RentArrears { get; set; }
+
+
+        public string DueDateString => DueDate.ToString("dd-MMM-yyyy");
+
+        public string PaidDateString => PaidDate?.ToString("dd-MMM-yyyy");
+
+        public string DateUsedDepositString => SystemDateTimeProcessed?.ToString("dd-MMM-yyyy");
 
     }
 }
