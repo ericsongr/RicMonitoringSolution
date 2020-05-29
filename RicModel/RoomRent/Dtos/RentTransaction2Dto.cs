@@ -5,15 +5,11 @@ namespace RicModel.RoomRent.Dtos
     public class RentTransaction2Dto : RentTransaction2
     {
         public DateTime DueDate { get; set; }
-        public string DueDateString
-        {
-            get { return DueDate.ToString("dd-MMM-yyyy"); }
-        }
 
-        public string DatePaidString {
-            get { return PaidDate?.ToString("dd-MMM-yyyy"); }
+        public string DueDateString => DueDate.ToString("dd-MMM-yyyy");
 
-        }
+        public string DatePaidString => PaidDate?.ToString("dd-MMM-yyyy");
+
         public string Period { get; set; }
 
         public BillingStatementDto BillingStatement =>

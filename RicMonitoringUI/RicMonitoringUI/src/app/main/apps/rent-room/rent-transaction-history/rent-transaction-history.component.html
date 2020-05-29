@@ -1,0 +1,78 @@
+<div class="p-24" style="padding-top: 5px !important;">
+    <div  *ngFor="let item of history">
+        <div class="pl-1 pb-10" fxLayout="row" fxLayoutAlign="left center" style="padding-top: 15px">
+            
+            <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Period</div>
+                <div class="h2 font-weight-300 py-8">{{item.period}}</div>
+            </div>
+
+            <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Total Amount Due</div>
+                <div class="h2 font-weight-300 py-8">{{item.totalAmountDue | number: '1.0-2'}}</div>
+            </div>
+
+            <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">(Monthly Rent + Prev.Balance)</div>
+                <div class="h2 font-weight-300 py-8">{{item.monthlyRent | number: '1.0-2'}} + {{item.previousBalance | number:'1.0-2'}}</div>
+            </div>
+
+            <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Due Date</div>
+                <div class="h2 font-weight-300 py-8">{{item.dueDateString}}</div>
+            </div>
+
+            <div *ngIf="item.transactionType != 'MonthlyRent'" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Transaction Type</div>
+                <div class="h2 font-weight-300 py-8">{{item.transactionType}}</div>
+            </div>
+        </div>
+
+        <div class="pl-1 pb-10" fxLayout="row" fxLayoutAlign="left center" style="padding-bottom: 10px;">
+            <!--payment-->
+            <div *ngIf="!item.isDepositUsed" [ngClass]="{'pr-140' : item.paidAmount > 0, 'pr-100': item.paidAmount == null}" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Paid Amount</div>
+                <div class="h2 font-weight-300 py-8" *ngIf="item.paidAmount > 0">
+                    {{item.paidAmount | number:'1.0-2'}}
+                </div>
+                <div class="h2 font-weight-290 py-8" *ngIf="item.paidAmount == null">
+                    <div class="message-box error" style="padding:1px">NO PAYMENT</div>
+                </div>
+            </div>
+            
+            <div *ngIf="!item.isDepositUsed && item.currentBalance > 0" class="pr-100" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Current Balance</div>
+                <div class="h2 font-weight-300 py-8">
+                    <div class="message-box warning" style="padding:1px">
+                        {{item.currentBalance | number:'1.0-2'}}
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="item.isDepositUsed" style="padding-right: 37px;" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Paid Amount</div>
+                <div class="h2 font-weight-300 py-8 message-box warning" style="padding: 3px;">
+                    Tenant Used Deposit
+                </div>
+            </div>
+            
+            <!--date-->
+            <div *ngIf="!item.isDepositUsed && item.paidAmount > 0" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Payment Date</div>
+                <div class="h2 font-weight-300 py-8">{{item.paidDateString}}</div>
+            </div>
+
+            <div *ngIf="item.isDepositUsed" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Date Used Deposit</div>
+                <div class="h2 font-weight-300 py-8">{{item.dateUsedDepositString}}</div>
+            </div>
+
+            <div class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="h4 secondary-text">Note(s)</div>
+                <div class="font-weight-100 py-8">{{item.note}}</div>
+            </div>
+        </div>
+        
+        <mat-divider></mat-divider>
+    </div>
+</div>

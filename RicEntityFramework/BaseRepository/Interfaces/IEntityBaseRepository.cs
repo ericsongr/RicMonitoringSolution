@@ -13,6 +13,7 @@ namespace RicEntityFramework.BaseRepository.Interfaces
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetSingleIncludesAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
+        IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);

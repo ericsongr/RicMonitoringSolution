@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using RicMonitoringAPI.Common.Constants;
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
 
-    //[Authorize(Policy = "ProcessTenantsTransaction")]
+    [Authorize(Policy = "ProcessTenantsTransaction")]
     [Route("api/exec-store-proc")]
     [ApiController]
     public class ExecuteSqlProcedureController : ControllerBase
@@ -58,5 +59,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return Ok(new {status});
         }
 
+      
     }
 }

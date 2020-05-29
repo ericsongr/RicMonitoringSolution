@@ -16,14 +16,18 @@
     <None Remove="Scripts\Update\v1.0001\0006.0-tenants-has-arrears.sql" />
     <None Remove="Scripts\Update\v1.0001\0006.1-RentTransactionBatchFile.sql" />
     <None Remove="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
+    <None Remove="Scripts\Update\v1.0001\0008-rent-transaction-history-of-tenants.sql" />
+    <None Remove="Scripts\Update\v1.0001\0009-RentTransactionBatchFile.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create\0001-Schema.sql" />
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0009-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0006.1-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0006.0-tenants-has-arrears.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0008-rent-transaction-history-of-tenants.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0003-RentTransactionBatchFile.sql" />

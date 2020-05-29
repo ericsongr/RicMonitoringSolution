@@ -9,6 +9,9 @@ import { Location } from '@angular/common';
 import { RoomsService } from '../rooms/rooms.service';
 import { AppFunctionsService } from '../../common/services/app-functions.service';
 import * as moment from 'moment'
+import { RentTransactionHistoryService } from '../rent-transaction-history/rent-transaction-history.service';
+import { RentTransactionHistory } from '../rent-transaction-history/rent-transaction-history.model';
+import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
 
 @Component({
   selector: 'app-renter',
@@ -21,7 +24,8 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
   pageType: string;
   renterForm: FormGroup;
   onRenterChanged: Subscription;
-  
+  onRentTransactionHistorySubscription: Subscription;
+
   rooms: any;
   daysWithSuffix: any;
   
@@ -29,11 +33,15 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
   monthlyRentPrice: number;
   hasBalance: boolean = true;
   dueDay: string;
+
+  rentTransactionHistory: RentTransactionHistory[];
   
   constructor(
     private _appFunctionsService: AppFunctionsService,
     private _renterService: RenterService,
+    private _rentTransactionHistoryService: RentTransactionHistoryService,
     private _roomsService: RoomsService,
+    private _fuseProgressBarService: FuseProgressBarService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
     private _location : Location,
@@ -212,6 +220,23 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get dateEndRent() {
     return this.renterForm.get('dateEndRent');
+  }
+
+
+  onClickTabHistory() {
+    
+      this._fuseProgressBarService.show();
+      
+      this._rentTransactionHistoryService.getHistory(this.renter.id)
+      
+          .then((response: RentTransactionHistory[]) => {
+            
+            this.rentTransactionHistory = response;
+            
+            this._fuseProgressBarService.hide();
+
+          })
+    
   }
 
   onChangeTotalPaidAmount() {

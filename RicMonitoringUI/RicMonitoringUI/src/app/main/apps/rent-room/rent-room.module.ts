@@ -20,6 +20,8 @@ import { AppFunctionsService } from '../common/services/app-functions.service';
 import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
 import { CopyClipboardModule } from '../common/directives/copy-clipboard.module';
 import { BillingStatementComponent } from './rent-transactions/billing-statement/billing-statement.component';
+import { RentTransactionHistoryService } from './rent-transaction-history/rent-transaction-history.service';
+import { RentTransactionHistoryComponent } from './rent-transaction-history/rent-transaction-history.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -98,6 +100,7 @@ const routes : Routes= [
     RenterComponent,
     RentTransactionsComponent,
     RentTransactionComponent,
+    RentTransactionHistoryComponent,
     BillingStatementComponent,
     TenantShowErrorsComponent
   ],
@@ -108,13 +111,15 @@ const routes : Routes= [
     RenterService,
     RentTransactionsService,
     RentTransactionService,
+    RentTransactionHistoryService,
     AppFunctionsService,
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor,
     //   multi: true
     // }
-  ]
+  ],
+  entryComponents: [RentTransactionHistoryComponent]
 })
 export class RentRoomModule { 
 
