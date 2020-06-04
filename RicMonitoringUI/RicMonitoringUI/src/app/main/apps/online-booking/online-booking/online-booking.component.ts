@@ -67,7 +67,6 @@ export class OnlineBookingComponent implements OnInit {
   }
 
   get persons() : FormArray {
-    debugger;
     return this.bookingForm.get("persons") as FormArray
   }
 
