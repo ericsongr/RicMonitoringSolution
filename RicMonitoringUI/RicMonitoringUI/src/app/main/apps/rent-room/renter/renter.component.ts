@@ -199,7 +199,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     var advanceMonths = Number(this.renter.advanceMonths == undefined ? 0 : this.renter.advanceMonths);
  
-    if(advanceMonths > 0) {
+    if(advanceMonths > 0 && this.rooms != undefined) {
       var room = this.rooms.find(room => room.id == this.renter.roomId)
       if(room != undefined){
         this.monthlyRentPrice = Number(room.price);
@@ -256,7 +256,7 @@ export class RenterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onChangeIsRentEnd(event: MatRadioChange) {
-    debugger;
+    
     this.renter.isEndRent = event.value == "true";
      if (this.renter.isEndRent) {
         this.dateEndRent.setValidators([Validators.required])

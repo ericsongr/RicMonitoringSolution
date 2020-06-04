@@ -40,11 +40,11 @@ export class AuthService implements OnDestroy {
             forbidden_route: '/forbidden',
             unauthorized_route: '/unauthorized',
             silent_renew: true,
-            silent_renew_url: this.originUrl + '/silent-renew.html',
+            silent_renew_url: this.originUrl + 'silent-renew.html',
             history_cleanup_off: true,
             auto_userinfo: true,
-            log_console_warning_active: true,
-            log_console_debug_active: true,
+            log_console_warning_active: false,
+            log_console_debug_active: false,
             max_id_token_iat_offset_allowed_in_seconds: 10,
         };
         
@@ -83,9 +83,9 @@ export class AuthService implements OnDestroy {
 
     private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
         
-        console.log('Auth result received AuthorizationState:'
-            + authorizationResult.authorizationState
-            + ' validationResult:' + authorizationResult.validationResult);
+        // console.log('Auth result received AuthorizationState:'
+        //     + authorizationResult.authorizationState
+        //     + ' validationResult:' + authorizationResult.validationResult);
 
         if (authorizationResult.authorizationState === AuthorizationState.unauthorized) {
             if (window.parent) {
