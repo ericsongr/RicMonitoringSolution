@@ -23,6 +23,7 @@ import { CoreModule } from './main/apps/common/core/core.module';
 import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
 import { APP_BASE_HREF } from '@angular/common';
 import { HomeModule } from './main/home/home.module';
+import { ConfigService } from './main/apps/common/services/config.service';
 
 const appRoutes: Routes = [
     {
@@ -79,11 +80,7 @@ const appRoutes: Routes = [
         CoreModule
     ],
     providers: [
-        // httpInterceptorProvider, 
-        // {
-        //     provide: APP_BASE_HREF,
-        //     useValue: '/'
-        // }
+        ConfigService
     ],
       bootstrap   : [
         AppComponent
