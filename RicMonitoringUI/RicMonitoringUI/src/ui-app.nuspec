@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RicMonitoring Angular UI</id>
+    <version>1.0.0</version>
+    <authors>eric</authors>
+    <owners>eric</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package description</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <!-- for some reason, removing tags and dependencies made the nuget pack executable behave badly :/ -->
+    <tags>Tag1 Tag2</tags>
+    <dependencies>
+      <dependency id="SampleDependency" version="1.0" /><!--can replace-->
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- copy all the files in dist folder to a nuget package, except for the config.js -->
+    <file src="dist\**\*.*" target="." exclude="dist\assets\js\config.js"/>
+    <!-- copy our config.template.js file as the config.js -->
+    <file src="src\assets\js\config.template.js" target="assets\js\config.js" />
+  </files>
+</package>

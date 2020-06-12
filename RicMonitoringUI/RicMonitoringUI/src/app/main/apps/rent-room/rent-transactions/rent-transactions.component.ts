@@ -6,6 +6,8 @@ import { takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs/operato
 import { RentTransactionsService } from './rent-transactions.service';
 import { FuseUtils } from '@fuse/utils';
 import { DataSource } from '@angular/cdk/collections';
+import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'page-rent-transactions',
@@ -18,19 +20,26 @@ export class RentTransactionsComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
   displayedColumns = ['id','renterId','roomId','renterName','roomName','dueDateString','paidAmount','datePaidString','balance','balanceDateToBePaid', 'totalAmountDue','isDepositUsed','transactionType','buttons'];
-
+  monthFilter: string;
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
   
   private _unsubscribeAll = new Subject();
   constructor(
-    private _rentTransactionsService: RentTransactionsService
+    private _rentTransactionsService: RentTransactionsService,
+    private _fuseProgressBarService: FuseProgressBarService,
+    private route: ActivatedRoute
   ) { }
 
 
   ngOnInit(): void {
     
+    this.route.params.subscribe((params) => {
+      this.monthFilter = params['monthFilter'];
+    });
+
     this.dataSource = new FilesDataSource(this._rentTransactionsService, this.paginator, this.sort);
     
     fromEvent(this.filter.nativeElement, 'keyup')
@@ -48,6 +57,21 @@ export class RentTransactionsComponent implements OnInit {
 
               })
   }
+
+  fetchTransactions(filter) {
+    
+    this.monthFilter = filter;
+
+    this._fuseProgressBarService.show
+
+    this._rentTransactionsService
+        .getRentTransactions(filter)
+        .then(() => {
+          this._fuseProgressBarService.hide();
+        });
+  }
+
+
 
   handleize(name) {
     return FuseUtils.handleize(name);

@@ -10,6 +10,7 @@ import { RoomsService } from '../rooms/rooms.service';
 import * as moment from 'moment';
 import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
 import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'page-rent-transaction',
@@ -30,13 +31,13 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   
   defaultPaidDate: Date;
   datePaidLabel: string = 'Date Paid';
+  monthFilter: string;
 
   billingStatement: BillingStatement;
-  
-  
 
   constructor(
     private _rentTransactionService: RentTransactionService,
+    private _route: ActivatedRoute,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
     private _location : Location,
@@ -45,6 +46,10 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     
     ngOnInit() {
       
+      this._route.params.subscribe((params) => {
+        this.monthFilter = params['monthFilter'];
+      })
+
       this.onRentTransactionChanged =
         this._rentTransactionService.onRentTransactionChanged
             .subscribe(transaction => {

@@ -40,7 +40,7 @@ export class RentTransactionService implements Resolve<any>
 
   getRentTransaction(): Promise<any> {
     
-    var url = `${this.apiUrl}${this.routeParams.renterId}?fields=${fields}`;
+    var url = `${this.apiUrl}${this.routeParams.renterId}/${this.routeParams.monthFilter}?fields=${fields}`;
     
     return new Promise((resolve, reject) => {
 

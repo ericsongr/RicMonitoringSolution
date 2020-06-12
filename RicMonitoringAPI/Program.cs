@@ -38,7 +38,10 @@ namespace RicMonitoringAPI
                         .Build();
 
                     webBuilder.UseIISIntegration();
-                    webBuilder.UseUrls("https://tenants-api.ericsonramos.com", $"https://localhost:{config.GetValue<int>("Host:Port")}");
+                    webBuilder.UseUrls(
+                        "https://tenants-api.ericsonramos.com", 
+                        $"https://localhost:{config.GetValue<int>("Host:Port")}",
+                        $"https://tenants-api:{config.GetValue<int>("Host:Port")}");
                     webBuilder.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
                     webBuilder.UseStartup<Startup>();
                 });
