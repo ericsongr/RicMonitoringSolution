@@ -16,6 +16,7 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
+    //[AllowAnonymous]
     [Authorize(Policy = "Superuser")]
     [Route("api/rent-transactions")]
     [ApiController]
@@ -47,8 +48,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _typeHelperService = typeHelperService;
         }
 
-        [HttpGet("{renterId}", Name = "Get")]
-        public IActionResult Get(int renterId, [FromQuery] string fields)
+        [HttpGet("{renterId}/{monthFilter}", Name = "Get")]
+        public IActionResult Get(int renterId, string monthFilter, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<RentTransaction2Dto>(fields))
@@ -56,8 +57,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var currentDate = DateTime.Now.Date;
-            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(currentDate, renterId).SingleOrDefault();
+            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(monthFilter, renterId).SingleOrDefault();
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();

@@ -3,6 +3,7 @@ using System.Linq;
 using RicEntityFramework.BaseRepository;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Parameters;
+using RicEntityFramework.RoomRent.Constants;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.Enumeration;
@@ -25,8 +26,18 @@ namespace RicEntityFramework.RoomRent.Repositories
             _propertyMappingService = propertyMappingService ?? throw new ArgumentNullException(nameof(propertyMappingService));
         }
 
-        public IQueryable<RentTransaction2> GetTransactionQueryResult(DateTime selectedDate, int renterId = 0)
+        public IQueryable<RentTransaction2> GetTransactionQueryResult(string monthFilter, int renterId = 0)
         {
+            var selectedDate = DateTime.Now;
+            if (monthFilter == RentTransactionMonthFilterConstant.Current)
+            {
+                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+            else if (monthFilter == RentTransactionMonthFilterConstant.Previous)
+            {
+                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            }
+
             var renters = _context.Renters.Where(o => !o.IsEndRent)
                            .Select(o => new
                            {
@@ -92,12 +103,7 @@ namespace RicEntityFramework.RoomRent.Repositories
 
         public PagedList<RentTransaction2> GetRentTransactions(RentTransactionResourceParameters rentTransactionResourceParameters)
         {
-
-
-            var selectedDate = DateTime.Now; //.AddMonths(1);
-
-
-            var transactions = GetTransactionQueryResult(selectedDate);
+            var transactions = GetTransactionQueryResult(rentTransactionResourceParameters.MonthFilter);
             var collectionBeforPaging =
                 transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());

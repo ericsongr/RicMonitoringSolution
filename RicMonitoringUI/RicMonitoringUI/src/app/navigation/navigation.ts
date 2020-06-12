@@ -46,7 +46,7 @@ export const navigation: FuseNavigation[] = [
                         id        : 'RENTTRANSACTION',
                         title     : 'Tenant Transactions',
                         type      : 'item',
-                        url       :'/apartment/tenant-transactions',
+                        url       :'/apartment/tenant-transactions/curr', //curr is default value of :monthFilter url parameter
                         exactMatch:true
                     }
                 ],

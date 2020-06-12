@@ -19,10 +19,10 @@ export function getBaseUrl() {
 
 const providers = [
    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
-     { provide: 'AUTH_URL', useValue: 'https://localhost:5002' },
-     { provide: 'API_URL', useValue: 'https://localhost:5001/api/' },
-    // { provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com' },
-    // { provide: 'API_URL', useValue: 'https://tenantsapi.ericsonramos.com/api/' }
+      { provide: 'AUTH_URL', useValue: 'https://localhost:5002' },
+      { provide: 'API_URL', useValue: 'https://localhost:5001/api/' },
+    //{ provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com' },
+    //{ provide: 'API_URL', useValue: 'https://tenantsapi.ericsonramos.com/api/' }
   ];
 
 const bootstrap = () => platformBrowserDynamic(providers).bootstrapModule(AppModule);

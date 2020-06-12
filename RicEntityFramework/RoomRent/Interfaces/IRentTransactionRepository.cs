@@ -9,7 +9,7 @@ namespace RicEntityFramework.RoomRent.Interfaces
 {
     public interface IRentTransactionRepository : IEntityBaseRepository<RentTransaction>
     {
-        IQueryable<RentTransaction2> GetTransactionQueryResult(DateTime selectedDate, int renterId = 0);
+        IQueryable<RentTransaction2> GetTransactionQueryResult(string monthFilter, int renterId = 0);
 
         PagedList<RentTransaction2> GetRentTransactions(
             RentTransactionResourceParameters rentTransactionResourceParameters);
