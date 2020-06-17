@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using RicModel.RoomRent.Audits;
 
 namespace RicModel.RoomRent
 {
     public class Room
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Frequency { get; set; }
@@ -14,7 +14,14 @@ namespace RicModel.RoomRent
         [NotMapped]
         public bool IsOccupied { get; set; }
 
-        public ICollection<Renter> Renters { get; set; }
-        public ICollection<RentTransaction> RentTransactions { get; set; }
+        public virtual ICollection<Renter> Renters { get; set; }
+        public virtual ICollection<RentTransaction> RentTransactions { get; set; }
+
+        //audit tables
+        public virtual ICollection<AuditRenter> AuditRenters { get; set; }
+        public virtual ICollection<AuditRoom> AuditRooms { get; set; }
+        public virtual ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }
+
+
     }
 }

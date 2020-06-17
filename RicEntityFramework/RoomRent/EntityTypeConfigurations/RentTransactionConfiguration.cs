@@ -4,7 +4,7 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {
-    public class RentTransactionMap : IEntityTypeConfiguration<RentTransaction>
+    public class RentTransactionConfiguration : IEntityTypeConfiguration<RentTransaction>
     {
 
         public void Configure(EntityTypeBuilder<RentTransaction> builder)
@@ -31,13 +31,13 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasOne(t => t.Room)
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RoomId)
-                .HasConstraintName("ForeignKey_RentTransaction_Room_RoomId");
+                .HasConstraintName("FK_RentTransactions_Room_RoomId");
 
             builder
                 .HasOne(t => t.Renter)
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RenterId)
-                .HasConstraintName("ForeignKey_RentTransaction_Renter_RenterId");
+                .HasConstraintName("FK_RentTransactions_Renters_RenterId");
 
             builder.ToTable("RentTransactions");
         }

@@ -119,6 +119,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _roomRepository.Add(roomEntity);
             _roomRepository.Commit();
 
+            //null to avoid error
+            roomEntity.AuditRooms = null;
+
             var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
 
             return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
@@ -144,6 +147,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             roomEntity.Price = room.Price;
             _roomRepository.Update(roomEntity);
             _roomRepository.Commit();
+
+            //null to avoid error
+            roomEntity.AuditRooms = null;
 
             var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
 

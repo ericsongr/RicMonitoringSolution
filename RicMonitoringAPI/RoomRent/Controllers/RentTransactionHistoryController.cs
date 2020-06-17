@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RicEntityFramework;
@@ -16,6 +16,7 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
+    [Authorize(Policy = "Superuser")]
     [Route("api/rent-transaction-history")]
     [ApiController]
     public class RentTransactionHistoryController : ControllerBase

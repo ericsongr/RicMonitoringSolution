@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using RicModel.RoomRent.Audits;
 
-namespace RicModel.RoomRent
+namespace RicModel.RoomRent.Audits
 {
-    public class Renter
+    public class AuditRenter : IAudit
     {
+        public int AuditRenterId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int AdvanceMonths { get; set; }
@@ -28,14 +27,12 @@ namespace RicModel.RoomRent
         public DateTime PreviousDueDate { get; set; }
         public DateTime NextDueDate { get; set; }
 
+        public DateTime AuditDateTime { get; set; }
+        public string Username { get; set; }
+        public string AuditAction { get; set; }
+
         public virtual Room Room { get; set; }
-
-        public virtual ICollection<RentTransaction> RentTransactions { get; set; }
-        public virtual ICollection<RentArrear> RentArrears { get; set; }
-
-        //audits
-        public virtual ICollection<AuditRenter> AuditRenters { get; set; }
-        public virtual ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }
+        public virtual Renter Renter { get; set; }
 
     }
 }

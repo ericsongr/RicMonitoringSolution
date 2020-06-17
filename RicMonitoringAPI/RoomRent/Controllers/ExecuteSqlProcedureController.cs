@@ -51,6 +51,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                    new SqlParameter("@CurrentDate", DateTime.Now)
                };
                
+               
                await _context.Database.ExecuteSqlCommandAsync($"RentTransactionBatchFile @CurrentDate", pc.ToArray());
             }
 

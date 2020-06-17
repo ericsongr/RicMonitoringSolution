@@ -1,14 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {
-    public class RenterMap : IEntityTypeConfiguration<Renter>
+    public class AuditRenterConfiguration : IEntityTypeConfiguration<AuditRenter>
     {
-        public void Configure(EntityTypeBuilder<Renter> builder)
+        public void Configure(EntityTypeBuilder<AuditRenter> builder)
         {
-            builder.HasKey(t => t.Id);
+            builder.HasKey(o => o.AuditRenterId)
+                .HasName("PK_AuditRenters");
+
+            builder.Property(t => t.Id);
 
             builder
                 .Property(t => t.Name)
@@ -43,13 +47,19 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .Property(t => t.TotalPaidAmount)
                 .HasColumnType("decimal(18,2)");
 
-            builder
-                .HasOne(t => t.Room)
-                .WithMany(p => p.Renters)
-                .HasForeignKey(f => f.RoomId)
-                .HasConstraintName("ForeignKey_Renter_Room");
+            builder.HasOne(o => o.Renter)
+                .WithMany(o => o.AuditRenters)
+                .HasForeignKey(o => o.Id)
+                .HasConstraintName("ForeignKey_AuditRenters_Renters")
+                .OnDelete(DeleteBehavior.Cascade);
 
-            builder.ToTable("Renters");
+            builder.HasOne(o => o.Room)
+                .WithMany(o => o.AuditRenters)
+                .HasForeignKey(o => o.RoomId)
+                .HasConstraintName("ForeignKey_AuditRenters_Room")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.ToTable("AuditRenters");
         }
     }
 }

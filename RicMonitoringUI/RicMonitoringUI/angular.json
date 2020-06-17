@@ -29,7 +29,8 @@
                                 "glob": "**/*",
                                 "input": "./node_modules/svg-country-flags/svg",
                                 "output": "assets/svg-country-flags/svg"
-                              }
+                            },
+                            "src/web.config"
                         ],
                         "styles": [
                             "src/styles.scss"

@@ -4,7 +4,7 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {
-    public class LookupTypesMap : IEntityTypeConfiguration<LookupType>
+    public class LookupTypesConfiguration : IEntityTypeConfiguration<LookupType>
     {
         public void Configure(EntityTypeBuilder<LookupType> builder)
         {
