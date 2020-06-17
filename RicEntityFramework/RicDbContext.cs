@@ -1,22 +1,20 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using Audit.Core;
+using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using RicModel.RicXplorer;
 using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 
 namespace RicEntityFramework
 {
-    public class RicDbContext : DbContext
+    public class RicDbContext : AuditDbContext
     {
         public RicDbContext(DbContextOptions<RicDbContext> options) :
             base(options)
         { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //register all fluent api entity type configuration or inherited by IEntityTypeConfiguration
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        }
 
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Renter> Renters { get; set; }
@@ -35,5 +33,37 @@ namespace RicEntityFramework
         public DbSet<RentArrear> RentArrears { get; set; }
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<AuditRenter> AuditRenters { get; set; }
+        public DbSet<AuditRoom> AuditRooms { get; set; }
+        public DbSet<AuditRentTransaction> AuditRentTransactions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //register all fluent api entity type configuration or inherited by IEntityTypeConfiguration
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            
+        }
+
+        public override void OnScopeCreated(AuditScope auditScope)
+        {
+            Database.BeginTransaction();
+            //base.OnScopeCreated(auditScope);
+        }
+
+        public override void OnScopeSaving(AuditScope auditScope)
+        {
+            try
+            {
+
+                Database.CurrentTransaction.Commit(); ;
+            }
+            catch (Exception e)
+            {
+                Database.RollbackTransaction();
+                
+                Console.WriteLine(e);
+            }
+            //base.OnScopeSaving(auditScope);
+        }
     }
 }

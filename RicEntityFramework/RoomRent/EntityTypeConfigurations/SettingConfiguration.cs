@@ -4,7 +4,7 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {
-    public class SettingMap : IEntityTypeConfiguration<Setting>
+    public class SettingConfiguration : IEntityTypeConfiguration<Setting>
     {
         public void Configure(EntityTypeBuilder<Setting> builder)
         {

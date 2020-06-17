@@ -25,6 +25,7 @@ namespace RicAuthServer
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
+                .WriteTo.File(".\\logs\\ric-auth-server.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             try
@@ -88,6 +89,7 @@ namespace RicAuthServer
                         .ReadFrom.Configuration(hostingContext.Configuration)
                         .MinimumLevel.Debug()
                         .Enrich.FromLogContext()
+                        .WriteTo.File(".\\logs\\ric-auth-server.txt", rollingInterval: RollingInterval.Day)
                         .WriteTo.Console(theme: AnsiConsoleTheme.Code));
 
                 });

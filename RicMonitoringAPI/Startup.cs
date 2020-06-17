@@ -1,4 +1,6 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System;
+using Audit.Core;
+using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,7 @@ using RicEntityFramework.RoomRent.PropertyMappings;
 using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.Services;
 using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
@@ -76,6 +79,21 @@ namespace RicMonitoringAPI
 
             services.AddHealthChecks();
 
+            Audit.Core.Configuration.Setup()
+                .UseEntityFramework(ef => ef
+                    .AuditTypeExplicitMapper(m => m
+                        .Map<Room, AuditRoom>()
+                        .Map<Renter, AuditRenter>()
+                        .Map<RentTransaction, AuditRentTransaction>()
+                        .AuditEntityAction<IAudit>((evt, entry, auditEntity) =>
+                        {
+                            auditEntity.AuditDateTime = DateTime.UtcNow;
+                            auditEntity.Username = evt.Environment.UserName;
+                            auditEntity.AuditAction = entry.Action;
+                        })
+                    )
+                );
+
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddNewtonsoftJson();
@@ -126,8 +144,6 @@ namespace RicMonitoringAPI
                     setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 }); //use for data shaping
 
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,6 +158,8 @@ namespace RicMonitoringAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                //Audit.Core.Configuration.AuditDisabled = true;
             }
             else
             {

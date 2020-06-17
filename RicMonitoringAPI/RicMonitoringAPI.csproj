@@ -64,6 +64,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.23" />
+    <PackageReference Include="Audit.EntityFramework.Core" Version="15.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,10 +73,10 @@
 
   <ItemGroup>
     <Reference Include="RicEntityFramework">
-      <HintPath>..\RicEntityFramework\bin\Release\netcoreapp3.1\RicEntityFramework.dll</HintPath>
+      <HintPath>..\RicEntityFramework\bin\Debug\netcoreapp3.1\RicEntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="RicModel">
-      <HintPath>..\RicModel\bin\Release\netcoreapp3.1\RicModel.dll</HintPath>
+      <HintPath>..\RicModel\bin\Debug\netcoreapp3.1\RicModel.dll</HintPath>
     </Reference>
   </ItemGroup>
 

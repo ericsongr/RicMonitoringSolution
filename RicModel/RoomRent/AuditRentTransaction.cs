@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using RicModel.Enumeration;
+using RicModel.RoomRent.Audits;
 
 namespace RicModel.RoomRent
 {
-    public class RentTransaction
+    public class AuditRentTransaction : IAudit
     {
+        public int AuditRentTransactionId { get; set; }
         public int Id { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime? PaidDate { get; set; }
@@ -28,15 +28,13 @@ namespace RicModel.RoomRent
 
         public decimal AdjustmentBalancePaymentDueAmount { get; set; }
 
+        public DateTime AuditDateTime { get; set; }
+        public string Username { get; set; }
+        public string AuditAction { get; set; }
+
         public virtual Room Room { get; set; }
         public virtual Renter Renter { get; set; }
-
-        public ICollection<RentTransactionDetail> RentTransactionDetails { get; set; }
-        public ICollection<RentArrear> RentArrears { get; set; }
-
-        //audit tables
-        public ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }
-
+        public virtual RentTransaction RentTransaction { get; set; }
 
         public string DueDateString => DueDate.ToString("dd-MMM-yyyy");
 
@@ -44,5 +42,6 @@ namespace RicModel.RoomRent
 
         public string DateUsedDepositString => SystemDateTimeProcessed?.ToString("dd-MMM-yyyy");
 
+      
     }
 }
