@@ -85,6 +85,7 @@ namespace RicMonitoringAPI
                         .Map<Room, AuditRoom>()
                         .Map<Renter, AuditRenter>()
                         .Map<RentTransaction, AuditRentTransaction>()
+                        .Map<RentTransactionPayment, AuditRentTransactionPayment>()
                         .AuditEntityAction<IAudit>((evt, entry, auditEntity) =>
                         {
                             auditEntity.AuditDateTime = DateTime.UtcNow;

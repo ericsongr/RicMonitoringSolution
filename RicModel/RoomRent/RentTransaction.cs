@@ -33,6 +33,7 @@ namespace RicModel.RoomRent
 
         public ICollection<RentTransactionDetail> RentTransactionDetails { get; set; }
         public ICollection<RentArrear> RentArrears { get; set; }
+        public ICollection<RentTransactionPayment> RentTransactionPayments { get; set; }
 
         //audit tables
         public ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }

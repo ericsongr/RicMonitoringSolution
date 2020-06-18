@@ -32,10 +32,12 @@ namespace RicEntityFramework
 
         public DbSet<RentArrear> RentArrears { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<RentTransactionPayment> RentTransactionPayments { get; set; }
 
         public DbSet<AuditRenter> AuditRenters { get; set; }
         public DbSet<AuditRoom> AuditRooms { get; set; }
         public DbSet<AuditRentTransaction> AuditRentTransactions { get; set; }
+        public DbSet<AuditRentTransactionPayment> AuditRentTransactionPayments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
