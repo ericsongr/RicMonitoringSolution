@@ -33,11 +33,11 @@ BEGIN
 		[AuditAction] [nvarchar](20) NOT NULL,
 		CONSTRAINT [PK_AuditRentTransactionPayments] PRIMARY KEY CLUSTERED 
 	(
-		[Id] ASC
+		[AuditRentTransactionPaymentId] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
-	ALTER TABLE [dbo].[AuditRentTransactionPayments]  WITH CHECK ADD  CONSTRAINT [FK_AuditRentTransactionPayments_RentTransactions_AuditRentTransactionPaymentId] FOREIGN KEY(Id)
+	ALTER TABLE [dbo].[AuditRentTransactionPayments]  WITH CHECK ADD  CONSTRAINT [FK_AuditRentTransactionPayments_RentTransactions_Id] FOREIGN KEY(Id)
 	REFERENCES [dbo].[RentTransactionPayments] ([Id])
 	ON DELETE CASCADE
 

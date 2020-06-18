@@ -8,7 +8,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AuditRentTransactionPayment> builder)
         {
-            builder.HasKey(o => o.Id).HasName("PK_AuditRentTransactionPayments");
+            builder.HasKey(o => o.AuditRentTransactionPaymentId).HasName("PK_AuditRentTransactionPayments");
 
             builder.Property(o => o.Amount).HasColumnType("decimal(18,2)");
 

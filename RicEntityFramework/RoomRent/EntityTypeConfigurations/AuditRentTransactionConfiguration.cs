@@ -9,7 +9,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 
         public void Configure(EntityTypeBuilder<AuditRentTransaction> builder)
         {
-            builder.HasKey(t => t.AuditRentTransactionId);
+            builder.HasKey(t => t.AuditRentTransactionId).HasName("PK_AuditRentTransactionPayments");
 
             builder
                 .Property(p => p.PaidAmount)

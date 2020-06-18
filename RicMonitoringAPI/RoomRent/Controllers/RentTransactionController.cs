@@ -13,6 +13,7 @@ using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicModel.RoomRent.Enumerations;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -27,6 +28,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRentTransactionPropertyMappingService _rentTransactionPropertyMappingService;
         private readonly IRenterRepository _renterRepository;
         private readonly IRentArrearRepository _rentArrearRepository;
+        private readonly IRentTransactionPaymentRepository _rentTransactionPaymentRepository;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
 
@@ -36,16 +38,18 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionPropertyMappingService rentTransactionPropertyMappingService,
             IRenterRepository renterRepository, 
             IRentArrearRepository rentArrearRepository,
+            IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
-            _rentTransactionRepository = rentTransactionRepository;
-            _rentDetailTransactionRepository = rentDetailTransactionRepository;
-            _rentTransactionPropertyMappingService = rentTransactionPropertyMappingService;
-            _renterRepository = renterRepository;
-            _rentArrearRepository = rentArrearRepository;
-            _urlHelper = urlHelper;
-            _typeHelperService = typeHelperService;
+            _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
+            _rentDetailTransactionRepository = rentDetailTransactionRepository ?? throw new ArgumentNullException(nameof(rentDetailTransactionRepository));
+            _rentTransactionPropertyMappingService = rentTransactionPropertyMappingService ?? throw new ArgumentNullException(nameof(rentTransactionPropertyMappingService));
+            _renterRepository = renterRepository ?? throw new ArgumentNullException(nameof(renterRepository));
+            _rentArrearRepository = rentArrearRepository ?? throw new ArgumentNullException(nameof(rentArrearRepository));
+            _rentTransactionPaymentRepository = rentTransactionPaymentRepository ?? throw new ArgumentNullException(nameof(rentTransactionPaymentRepository));
+            _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
+            _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
         }
 
         [HttpGet("{renterId}/{monthFilter}", Name = "Get")]
@@ -150,10 +154,31 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 //detect 1 month to field MonthUsed
                 AddOrDeductMonthUsed(rentTransactionEntity.RenterId, true);
+
+                //save payment history
+                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                {
+                    Amount = 0,
+                    DatePaid = DateTime.Now.Date,
+                    PaymentTransactionType = PaymentTransactionType.Deposit,
+                    RentTransactionId = rentTransactionEntity.Id
+                });
             }
+            else
+            {
+                //save payment history
+                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                {
+                    Amount = rentTransactionEntity.PaidAmount ?? 0,
+                    DatePaid = rentTransactionEntity.PaidDate.Value,
+                    PaymentTransactionType = PaymentTransactionType.Paid,
+                    RentTransactionId = rentTransactionEntity.Id
+                });
+            }
+            _rentTransactionPaymentRepository.Commit();
 
             ////update previous arrear
-            //var updatePreviousArrear = _rentArrearRepository.FindBy(o => o.Id == rentTransaction.RentArrearId).FirstOrDefault();
+            //var updatePreviousArrear = _rentArrearRepository.FindBy(o => o.Id == rentTran0saction.RentArrearId).FirstOrDefault();
             //if (updatePreviousArrear != null)
             //{
             //    updatePreviousArrear.IsProcessed = true;
