@@ -30,22 +30,26 @@
         </div>
       </div>
       <!-- /APP TITLE -->
+      <div>
+        
       
-      <button mat-raised-button 
-              class="mt-16 mt-sm-0"
-              *ngIf="rentTransaction.transactionType == 1 && !rentTransaction.isProcessed"
-              [disabled]="rentTransactionForm.invalid"
-              (click)="save()">
-        <span>SAVE</span>
+        <button mat-raised-button 
+                class="mr-20"
+                color="warn"
+                *ngIf="isAddingAdvancePayment"
+                (click)="cancelAdvancePayment()">
+          <span>CANCEL</span>
+        </button>
+
+        <button mat-raised-button 
+            class="mt-16 mt-sm-0"
+            *ngIf="rentTransaction.transactionType == 1 && !rentTransaction.isProcessed"
+            [disabled]="rentTransactionForm.invalid"
+            (click)="save()">
+          <span>SAVE</span>
       </button>
-      <!-- adjust payment -->
-      <button mat-raised-button 
-              class="mt-16 mt-sm-0"
-              *ngIf="rentTransaction.isProcessed && rentTransaction.isBalanceEditable"
-              [disabled]="rentTransactionForm.invalid"
-              (click)="saveBalanceAdjustment()">
-        <span>Save Balance Adjustment</span>
-      </button>
+
+      </div>
     </div>
       <!-- / HEADER -->
 
@@ -104,7 +108,14 @@
               
 
               <div fxLayout="row" [hidden]="rentTransaction.isProcessed">
-                <mat-form-field fxFlex="20" appearance="outline" floatLabel="always">
+                <div style="margin-top: 10px; margin-bottom: 20px;">
+                  <button mat-raised-button color="accent" class="mt-16 mt-sm-0" style="height: 50px;"
+                    [hidden]="!isTransactionHasBeenCompleted"
+                    (click)="addAdvancePayment()">
+                    <span style="font-size: 16px">Add Advance Payment</span>
+                  </button>
+                </div>
+                <mat-form-field fxFlex="20" appearance="outline" floatLabel="always" *ngIf="!isTransactionHasBeenCompleted">
                   <mat-label>Paid Amount</mat-label>
                   <input matInput
                         name="paidAmount"
@@ -115,9 +126,9 @@
                         <show-errors [control]="rentTransactionForm.controls.paidAmount"></show-errors>
                 </mat-form-field>
 
-                <mat-form-field fxFlex="20" appearance="outline" floatLabel="always">
-                  <mat-label>{{rentTransaction.isDepositUsed ? 'Date Use The Deposit' : 'Date Paid'}}</mat-label>
-                  <input matInput [matDatepicker]="paidDatePicker" formControlName="paidDate" [(ngModel)]="defaultPaidDate" required>
+                <mat-form-field fxFlex="20" appearance="outline" floatLabel="always" *ngIf="!isTransactionHasBeenCompleted">
+                  <mat-label>{{rentTransaction.isDepositUsed && !isAddingAdvancePayment ? 'Date Use The Deposit' : 'Date Paid'}}</mat-label>
+                  <input matInput [matDatepicker]="paidDatePicker" formControlName="paidDate" [(ngModel)]="rentTransaction.paidDate" required>
                   <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
                   <mat-datepicker #paidDatePicker></mat-datepicker>
                   <show-errors [control]="rentTransactionForm.controls.paidDate"></show-errors>
@@ -155,16 +166,6 @@
 
               <div fxLayout="row" [hidden]="!rentTransaction.isProcessed">
                 
-                <mat-form-field *ngIf="rentTransaction.isProcessed && rentTransaction.isBalanceEditable" fxFlex="30" appearance="outline" floatLabel="always">
-                  <mat-label>Paid Amount [Balance Adjustment]</mat-label>
-                  <input matInput
-                        name="adjustmentBalancePaymentDueAmount"
-                        formControlName="adjustmentBalancePaymentDueAmount"
-                        [(ngModel)]="rentTransaction.adjustmentBalancePaymentDueAmount"
-                        (keyup)="onChangeAdjustmentBalancePaymentDueAmount()">
-                        <show-errors [control]="rentTransactionForm.controls.adjustmentBalancePaymentDueAmount"></show-errors>
-                </mat-form-field>
-
                 <div *ngIf="rentTransaction.isDepositUsed" class="pr-40 pb-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Deposit Used?</div>
                   <div class="font-weight-300 py-8 message-box success">
@@ -191,9 +192,9 @@
                 </mat-form-field>
               </div>
               <div fxLayout="row">
-                <div *ngIf="rentTransaction.id > 0 && rentTransaction.paidAmount > 0" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
+                <div *ngIf="rentTransaction.id > 0 && currentTotalPaidAmount > 0" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h4 secondary-text">Amount Paid</div>
-                  <div class="h2 font-weight-300 py-8" style="color: maroon;">{{(rentTransaction.paidAmount) | number: '1.0-2'}}</div>
+                  <div class="h2 font-weight-300 py-8" style="color: maroon;">{{currentTotalPaidAmount | number: '1.0-2'}}</div>
                 </div>
 
                 <div *ngIf="hasBalance" class="pr-20" fxLayout="column" fxLayoutAlign="start left">
@@ -204,8 +205,46 @@
                 <div *ngIf="rentTransaction.transactionType == 2" class="message-box warning">
                   Please modify the tenant information via <a href="#" [routerLink]="'/apartment/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
                 </div>
+
+                <br>
+                <div *ngIf="payments.length > 0">
+                  <!--payments transactions-->
+                  <table mat-table [dataSource]="payments" class="table-payments mat-elevation-z8">
+                     <!-- Paid Date Column -->
+                     <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef> ID </th>
+                      <td mat-cell *matCellDef="let payment"> {{payment.id}} </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+
+                    <!-- Paid Date Column -->
+                    <ng-container matColumnDef="datePaid">
+                      <th mat-header-cell *matHeaderCellDef> Paid </th>
+                      <td mat-cell *matCellDef="let payment"> {{payment.datePaid}} </td>
+                      <td mat-footer-cell *matFooterCellDef> Total </td>
+                    </ng-container>
+                  
+                    <!-- Amount Column -->
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef> Amount </th>
+                      <td mat-cell *matCellDef="let payment"> {{payment.amount | number: '1.0-2'}} </td>
+                      <td mat-footer-cell *matFooterCellDef> {{getTotalAmount() | number: '1.0-2'}} </td>
+                    </ng-container>
+                  
+                     <!-- Amount Column -->
+                     <ng-container matColumnDef="paymentTransactionType">
+                      <th mat-header-cell *matHeaderCellDef>Transaction</th>
+                      <td mat-cell *matCellDef="let payment"> {{payment.paymentTransactionType}} </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                  </table>
+                </div>
             </div>
-              
+              <br>
           </div>
           
           </form>

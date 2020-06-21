@@ -197,7 +197,7 @@ CREATE TABLE [dbo].[RentTransactions](
 	[SystemDateTimeProcessed] [datetime2](7) NULL,
 	[TotalAmountDue] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
 	[IsProcessed] [bit] NOT NULL DEFAULT ((0)),
-	[AdjustmentBalancePaymentDueAmount] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
+	[ExcessPaidAmount] [decimal](18,2) NOT NULL DEFAULT(0),
  CONSTRAINT [PK_RentTransactions] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -400,7 +400,7 @@ CREATE TABLE [dbo].[AuditRentTransactions](
 	[SystemDateTimeProcessed] [datetime2](7) NULL,
 	[TotalAmountDue] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
 	[IsProcessed] [bit] NOT NULL DEFAULT ((0)),
-	[AdjustmentBalancePaymentDueAmount] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
+	[ExcessPaidAmount] [decimal](18,2) NOT NULL DEFAULT(0),
 	[AuditDateTime] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[Username] [nvarchar](50) NOT NULL,
 	[AuditAction] [nvarchar](20) NOT NULL,
@@ -728,7 +728,8 @@ CREATE TABLE [dbo].[RentTransactionPayments](
 	[Amount] [decimal](18, 2) NULL,
 	[DatePaid] [datetime2](7) NULL,
 	[PaymentTransactionType] [int] NOT NULL,
-	[RentTransactionId] [int] NOT NULL
+	[RentTransactionId] [int] NOT NULL,
+	[IsDeleted] [BIT] NOT NULL DEFAULT(0)
  CONSTRAINT [PK_RentTransactionPayments] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -754,6 +755,7 @@ CREATE TABLE [dbo].[AuditRentTransactionPayments](
 	[Amount] [decimal](18, 2) NULL,
 	[DatePaid] [datetime2](7) NULL,
 	[PaymentTransactionType] [int] NOT NULL,
+	[IsDeleted] [BIT] NOT NULL DEFAULT(0),
 	[AuditDateTime] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[Username] [nvarchar](50) NOT NULL,
 	[AuditAction] [nvarchar](20) NOT NULL,

@@ -23,8 +23,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .Property(p => p.TotalAmountDue)
                 .HasColumnType("decimal(18,2)");
 
-            builder
-                .Property(p => p.AdjustmentBalancePaymentDueAmount)
+            builder.Property(p => p.ExcessPaidAmount)
                 .HasColumnType("decimal(18,2)");
 
             builder
@@ -38,7 +37,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .WithMany(p => p.RentTransactions)
                 .HasForeignKey(f => f.RenterId)
                 .HasConstraintName("FK_RentTransactions_Renters_RenterId");
-
+            
             builder.ToTable("RentTransactions");
         }
     }

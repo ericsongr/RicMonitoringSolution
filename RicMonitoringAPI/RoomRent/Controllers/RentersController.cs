@@ -16,7 +16,8 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    [Authorize(Policy = "Superuser")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Superuser")]
     [Route("api/renters")]
     [ApiController]
     public class RentersController : ControllerBase
@@ -143,7 +144,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 RoomId = renter.RoomId,
                 RenterId = renterEntity.Id,
                 DueDate = dueDate,
-                IsDepositUsed = true,
                 Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}",
                 TransactionType = TransactionTypeEnum.AdvanceAndDeposit
             };

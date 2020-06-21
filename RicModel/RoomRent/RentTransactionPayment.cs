@@ -14,6 +14,8 @@ namespace RicModel.RoomRent
         public int RentTransactionId { get; set; }
         public RentTransaction RentTransaction { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public virtual ICollection<AuditRentTransactionPayment> AuditRentTransactionPayments { get; set; }
     }
 }

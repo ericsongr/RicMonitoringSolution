@@ -3,7 +3,7 @@
     public enum PaymentTransactionType
     {
         Paid = 1,
-        Deposit = 2,
+        DepositUsed = 2,
         CarryOverExcessPayment = 3
     }
 }

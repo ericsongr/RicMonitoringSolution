@@ -14,11 +14,12 @@ using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
+using RicModel.RoomRent.Extensions;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    //[AllowAnonymous]
-    [Authorize(Policy = "Superuser")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Superuser")]
     [Route("api/rent-transactions")]
     [ApiController]
     public class RentTransactionsController : ControllerBase
@@ -36,7 +37,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionRepository rentTransactionRepository,
             IRentTransactionDetailRepository rentDetailTransactionRepository,
             IRentTransactionPropertyMappingService rentTransactionPropertyMappingService,
-            IRenterRepository renterRepository, 
+            IRenterRepository renterRepository,
             IRentArrearRepository rentArrearRepository,
             IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IUrlHelper urlHelper,
@@ -61,13 +62,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var rentTransactionFromRepo =  _rentTransactionRepository.GetTransactionQueryResult(monthFilter, renterId).SingleOrDefault();
+            var rentTransactionFromRepo = _rentTransactionRepository.GetTransaction(monthFilter, renterId).SingleOrDefault();
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();
-            }   
+            }
 
             var rentTransaction = Mapper.Map<RentTransaction2Dto>(rentTransactionFromRepo);
+            rentTransaction.Payments =
+                Mapper.Map<IEnumerable<RentTransactionPaymentDto>>(rentTransactionFromRepo.RentTransactionPayments)
+                    .OrderByDescending(o => o.DatePaid)
+                    .ToList();
 
             return Ok(rentTransaction.ShapeData(fields));
         }
@@ -89,7 +94,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             var rentTransactionFromRepo = _rentTransactionRepository.GetRentTransactions(rentTransactionResourceParameters);
-             
+
             var previousPageLink = rentTransactionFromRepo.HasPrevious
                 ? CreateResourceUri(rentTransactionResourceParameters,
                     ResourceUriType.PreviousPage)
@@ -160,7 +165,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 {
                     Amount = 0,
                     DatePaid = DateTime.Now.Date,
-                    PaymentTransactionType = PaymentTransactionType.Deposit,
+                    PaymentTransactionType = PaymentTransactionType.DepositUsed,
                     RentTransactionId = rentTransactionEntity.Id
                 });
             }
@@ -177,68 +182,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
             _rentTransactionPaymentRepository.Commit();
 
-            ////update previous arrear
-            //var updatePreviousArrear = _rentArrearRepository.FindBy(o => o.Id == rentTran0saction.RentArrearId).FirstOrDefault();
-            //if (updatePreviousArrear != null)
-            //{
-            //    updatePreviousArrear.IsProcessed = true;
-            //    _rentArrearRepository.Update(updatePreviousArrear);
-            //}
-
-            //if (rentTransaction.Balance > 0)
-            //{
-            //    _rentArrearRepository.Add(new RentArrear
-            //    {
-            //        RenterId = rentTransaction.RenterId,
-            //        RentTransactionId = rentTransactionEntity.Id,
-            //        UnpaidAmount = rentTransaction.Balance ?? 0,
-            //        IsProcessed = false
-            //    });
-            //}
-            //_rentArrearRepository.Commit();
 
             return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
-        }
-
-        [HttpPut(Name = "BalanceAdjustment")]
-        [Route("{transactionId:int}/BalanceAdjustment")]
-        public async Task<IActionResult> BalanceAdjustment(int transactionId, [FromBody] RentTransactionBalanceAdjustmentDto balanceAdjustment)
-        {
-            if (balanceAdjustment == null)
-            {
-                return NotFound();
-            }
-
-            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(o => o.Id == balanceAdjustment.TransactionId);
-            if (rentTransactionEntity == null)
-            {
-                return NotFound();
-            }
-
-            rentTransactionEntity.AdjustmentBalancePaymentDueAmount = balanceAdjustment.AdjustmentBalancePaymentDueAmount;
-            rentTransactionEntity.Note = balanceAdjustment.Note +
-                                         $"\n>>Adjustment {balanceAdjustment.AdjustmentBalancePaymentDueAmount} pesos date of {DateTime.Now.ToString("dd-MMM-yyyy")}";
-
-            _rentTransactionRepository.Update(rentTransactionEntity);
-            _rentTransactionRepository.Commit();
-
-            var rentArrear = await _rentArrearRepository.GetSingleAsync(o => o.RentTransactionId == balanceAdjustment.TransactionId);
-            if (rentArrear != null)
-            {
-                rentArrear.UnpaidAmount = ((rentTransactionEntity.Balance ?? 0) - balanceAdjustment.AdjustmentBalancePaymentDueAmount);
-
-                _rentArrearRepository.Update(rentArrear);
-                _rentArrearRepository.Commit();
-            }
-
-
-            var fields =
-                "id,renterName,renterId,roomName,roomId,monthlyRent,dueDate,dueDateString,period,paidDate," +
-                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount,rentArrearId,totalAmountDue,isDepositUsed," +
-                "note,transactionType,isNoAdvanceDepositLeft,isProcessed,adjustmentBalancePaymentDueAmount,isBalanceEditable";
-
-            return Redirect($"/api/rent-transactions/{rentTransactionEntity.RenterId}?fields={fields}");
-
         }
 
         [HttpPut("{id}", Name = "Update")]
@@ -249,29 +194,99 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var rentTransactionEntity = await _rentTransactionRepository.GetSingleAsync(o => o.Id == id);
+            var rentTransactionEntity = await _rentTransactionRepository
+                .GetSingleIncludesAsync(o => o.Id == id,
+                            o => o.RentTransactionPayments);
             if (rentTransactionEntity == null)
             {
                 return NotFound();
             }
 
-            //if change existing transacton from used deposit to just pay the rent 
-            if (rentTransactionEntity.IsDepositUsed != rentTransaction.IsDepositUsed)
+            if (rentTransaction.IsAddingAdvancePayment)
+            {
+                //save payment history
+                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                {
+                    Amount = rentTransaction.PaidAmount ?? 0,
+                    DatePaid = rentTransaction.PaidDate.Value,
+                    PaymentTransactionType = PaymentTransactionType.Paid,
+                    RentTransactionId = id
+                });
+            }
+            else
             {
                 if (rentTransaction.IsDepositUsed)
+                {
                     AddOrDeductMonthUsed(rentTransaction.RenterId, true);
-                else
-                    AddOrDeductMonthUsed(rentTransaction.RenterId, false);
 
+                    _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                    {
+                        Amount = 0,
+                        DatePaid = rentTransaction.PaidDate.Value,
+                        PaymentTransactionType = PaymentTransactionType.DepositUsed,
+                        RentTransactionId = id
+                    });
+                }
+                else
+                {
+                    //if change existing transacton from used deposit to just pay the rent 
+                    //if edit and not use the deposit instead pay the amount
+                    if (rentTransactionEntity.RentTransactionPayments
+                            .Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed) && !rentTransaction.IsDepositUsed)
+                    {
+                        AddOrDeductMonthUsed(rentTransaction.RenterId, false);
+
+                        //tagged IsDeposit record from payment once edit to payment instead.
+                        var useDepositAsPayment = await _rentTransactionPaymentRepository
+                            .GetSingleAsync(o =>
+                                o.RentTransactionId == id &&
+                                o.PaymentTransactionType == PaymentTransactionType.DepositUsed);
+
+                        //deleted record of deposit once edit
+                        useDepositAsPayment.IsDeleted = true;
+
+                        _rentTransactionPaymentRepository.Update(useDepositAsPayment);
+                    }
+
+                    //save payment history
+                    _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                    {
+                        Amount = rentTransaction.PaidAmount ?? 0,
+                        DatePaid = rentTransaction.PaidDate.Value,
+                        PaymentTransactionType = PaymentTransactionType.Paid,
+                        RentTransactionId = id
+                    });
+                }
+            }
+
+            //commit
+            _rentTransactionPaymentRepository.Commit();
+
+            //get total
+            decimal totalPaidAmount = GetTotalPaidAmount(id);
+            //get excess payment if had.
+            decimal excessPaidAmount = 0;
+            if (rentTransaction.Balance == null || rentTransaction.Balance == 0)
+            {
+                if (rentTransactionEntity.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed))
+                {
+                    //don't deduct monthly due if ticked deposit within the month
+                    excessPaidAmount = totalPaidAmount;
+                }
+                else if (totalPaidAmount > rentTransaction.TotalAmountDue)
+                {
+                    excessPaidAmount = totalPaidAmount - rentTransaction.TotalAmountDue;
+                }
             }
 
             rentTransactionEntity.PaidDate = rentTransaction.PaidDate;
-            rentTransactionEntity.PaidAmount = rentTransaction.PaidAmount;
+            rentTransactionEntity.PaidAmount = totalPaidAmount;
+            rentTransactionEntity.ExcessPaidAmount = excessPaidAmount;
             rentTransactionEntity.Balance = rentTransaction.Balance;
             rentTransactionEntity.BalanceDateToBePaid = rentTransaction.BalanceDateToBePaid;
-            rentTransactionEntity.IsDepositUsed = rentTransaction.IsDepositUsed;
+            //rentTransactionEntity.IsDepositUsed = rentTransaction.IsDepositUsed;
             rentTransactionEntity.Note = rentTransaction.Note;
-            
+
             _rentTransactionRepository.Update(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
@@ -279,14 +294,26 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         }
 
+        /// <summary>
+        /// total paid amount of the renter filter by transaction id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private decimal GetTotalPaidAmount(int id)
+        {
+            return _rentTransactionPaymentRepository
+                .FindBy(o => o.RentTransactionId == id)
+                .Sum(o => o.Amount);
+        }
+
         private void AddOrDeductMonthUsed(int renterId, bool isAdd)
         {
             var renter = _renterRepository.GetSingleAsync(o => o.Id == renterId);
             if (renter != null)
             {
-                renter.Result.MonthsUsed = 
-                    (isAdd ? 
-                        renter.Result.MonthsUsed + 1 : 
+                renter.Result.MonthsUsed =
+                    (isAdd ?
+                        renter.Result.MonthsUsed + 1 :
                         renter.Result.MonthsUsed - 1);
 
                 _renterRepository.Update(renter.Result);
@@ -347,7 +374,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionRepository.Delete(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
-            return Ok(new { message = "Rent Transaction successfully deleted."});
+            return Ok(new { message = "Rent Transaction successfully deleted." });
         }
 
     }

@@ -19,6 +19,10 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasForeignKey(o => o.RentTransactionId)
                 .HasConstraintName("FK_RentTransactionPayments_RentTransactions_RentTransactionId")
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasQueryFilter(o => !o.IsDeleted);
+
+            builder.ToTable("RentTransactionPayments");
         }
     }
 }

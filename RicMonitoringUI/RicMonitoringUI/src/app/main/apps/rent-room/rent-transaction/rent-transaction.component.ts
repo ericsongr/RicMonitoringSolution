@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
 import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
 import { ActivatedRoute } from '@angular/router';
+import { RentTransactionPayment } from './rent-transaction.payment.model';
 
 @Component({
   selector: 'page-rent-transaction',
@@ -28,12 +29,19 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   isShowBreakdown: boolean = false;
   monthlyRentPrice: number;
   hasBalance: boolean;
-  
-  defaultPaidDate: Date;
+  isTransactionHasBeenCompleted: boolean = false;
+  isAddingAdvancePayment: boolean = false;
+
+  currentTotalPaidAmount: number;
+  paidDate: Date;
   datePaidLabel: string = 'Date Paid';
   monthFilter: string;
 
   billingStatement: BillingStatement;
+
+  //payments table
+  payments: RentTransactionPayment[];
+  displayedColumns: string[] = ['id','datePaid','amount','paymentTransactionType'];
 
   constructor(
     private _rentTransactionService: RentTransactionService,
@@ -55,16 +63,17 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
             .subscribe(transaction => {
               
               this.rentTransaction = new RentTransaction(transaction);
-            
+              this.payments = this.rentTransaction.payments;
+              
               if (this.rentTransaction.paidDate != "")
               {
-                this.defaultPaidDate = new Date();
+                this.paidDate = new Date();
               }
               
               this.rentTransactionForm = this.createRentTransactionForm();
               
               if (this.rentTransaction.isDepositUsed) {
-                this.onChangeDepositUsed(true);
+                this.isTransactionHasBeenCompleted = true;
               }else{
                 this.onChangePaidAmount();
               }
@@ -82,39 +91,19 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
             paidAmount           : [this.rentTransaction.paidAmount, Validators.required],
             balanceDateToBePaid  : [this.rentTransaction.balanceDateToBePaid],
             isDepositUsed        : [this.rentTransaction.isDepositUsed],
-            note                 : [this.rentTransaction.note],
-            adjustmentBalancePaymentDueAmount: [this.rentTransaction.adjustmentBalancePaymentDueAmount],
+            note                 : [this.rentTransaction.note]
         });
 
   }
 
-  saveBalanceAdjustment() {
-    if (this.rentTransactionForm.invalid){
-      this._snackBar.open('Invalid form. Please verify.', 'OK', {
-        verticalPosition  : 'top',
-        duration          : 2000
-      });
+  addAdvancePayment() {
+    this.isTransactionHasBeenCompleted = false;
+    this.isAddingAdvancePayment = true;
+  }
 
-      this._cdr.detectChanges();
-  
-    } else {
-
-      const formData = this.rentTransactionForm.getRawValue();
-      
-      this._rentTransactionService.saveBalanceAdjustment(
-            this.rentTransaction.id,
-            formData.adjustmentBalancePaymentDueAmount,
-            formData.note)
-          .then((rentTransaction: RentTransaction) => {
-            this.rentTransaction = new RentTransaction(rentTransaction);  
-            });
-
-            this._snackBar.open("Payment has been saved.", 'OK', {
-              verticalPosition: 'top',
-              duration        : 200
-            });
-
-    }
+  cancelAdvancePayment() {
+    this.isTransactionHasBeenCompleted = true;
+    this.isAddingAdvancePayment = false;
   }
 
   save() {
@@ -136,6 +125,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.rentTransaction.balanceDateToBePaid = formData.balanceDateToBePaid;
       this.rentTransaction.note = formData.note;
       this.rentTransaction.transactionType = TransactionTypeEnum.MonthlyRent;
+      this.rentTransaction.isAddingAdvancePayment = this.isAddingAdvancePayment;
 
       if (!this.hasBalance) {
         this.rentTransaction.balanceDateToBePaid = null;
@@ -178,32 +168,18 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     return this.rentTransactionForm.get('balanceDateToBePaid');
   }
 
-  get adjustmentBalancePaymentDueAmount() {
-    return this.rentTransactionForm.get('adjustmentBalancePaymentDueAmount');
-  }
-
-  onChangeAdjustmentBalancePaymentDueAmount() {
-    //  this.rentTransaction.balance = this.rentTransaction.totalAmountDue - (this.rentTransaction.paidAmount + this.rentTransaction.adjustmentBalancePaymentDueAmount)
-  }
-
   onChangePaidAmount() {
     
     if (this.rentTransaction.isProcessed) {
       //isProcessed meaning the batch file has been run.
       this.hasBalance = this.rentTransaction.balance > 0;
-      if (this.hasBalance) {
-        this.adjustmentBalancePaymentDueAmount.setValidators([Validators.required]);
-      } else {
-        this.adjustmentBalancePaymentDueAmount.setValidators(null);
-      }
-      this.adjustmentBalancePaymentDueAmount.updateValueAndValidity();
-
     } else {
       //not yet run the batch file
       if (this.rentTransaction.isDepositUsed) {
         this.hasBalance = false;
       } else {
-        this.hasBalance = Number(this.rentTransaction.totalAmountDue) > Number(this.rentTransaction.paidAmount);
+        this.currentTotalPaidAmount = Number(this.rentTransaction.paidAmount) + Number(this.rentTransaction.totalPaidAmount)
+        this.hasBalance = Number(this.rentTransaction.totalAmountDue) > this.currentTotalPaidAmount;
       }
       
       if (this.rentTransaction.transactionType == TransactionTypeEnum.AdvanceAndDeposit){
@@ -216,9 +192,10 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       }
       else {
   
-        if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent){
+        if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent) {
+          this.currentTotalPaidAmount = Number(this.rentTransaction.paidAmount) + Number(this.rentTransaction.totalPaidAmount);
           this.rentTransaction.balance = 
-            (Number(this.rentTransaction.paidAmount) >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - Number(this.rentTransaction.paidAmount))
+            (this.currentTotalPaidAmount >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - this.currentTotalPaidAmount)
         }
         
           this.balanceDateToBePaid.setValidators([Validators.required])
@@ -241,9 +218,8 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   }
  
   onChangeDepositUsed(isUsedDeposit: boolean) {
-    
     if (isUsedDeposit) {
-      
+      this.rentTransaction.isNoAdvanceDepositLeft = false;
       this.rentTransaction.paidAmount = 0;
       this.hasBalance = false;
       this.rentTransaction.balance = 0;
@@ -258,6 +234,10 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.paidAmount.enable();
     }
     
+  }
+
+  getTotalAmount() {
+    return this.payments.map(t => t.amount).reduce((acc, value) => acc + value, 0);
   }
 
   ngOnDestroy(): void {

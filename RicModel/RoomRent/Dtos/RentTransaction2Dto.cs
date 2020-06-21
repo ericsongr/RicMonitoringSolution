@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RicModel.RoomRent.Dtos
 {
@@ -11,6 +12,8 @@ namespace RicModel.RoomRent.Dtos
         public string DatePaidString => PaidDate?.ToString("dd-MMM-yyyy");
 
         public string Period { get; set; }
+
+        public List<RentTransactionPaymentDto> Payments { get; set; }
 
         public BillingStatementDto BillingStatement =>
             new BillingStatementDto

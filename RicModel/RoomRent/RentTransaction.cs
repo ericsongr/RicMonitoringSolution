@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using RicModel.Enumeration;
 
@@ -14,8 +15,8 @@ namespace RicModel.RoomRent
         public decimal? PaidAmount { get; set; }
         public DateTime? BalanceDateToBePaid { get; set; }
         public decimal? Balance { get; set; }
+        public decimal ExcessPaidAmount { get; set; }
         public decimal TotalAmountDue { get; set; }
-        public bool IsDepositUsed { get; set; }
         public string Note { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
 
@@ -25,8 +26,6 @@ namespace RicModel.RoomRent
         public bool IsSystemProcessed { get; set; }
         public DateTime? SystemDateTimeProcessed { get; set; }
         public bool IsProcessed { get; set; }
-
-        public decimal AdjustmentBalancePaymentDueAmount { get; set; }
 
         public virtual Room Room { get; set; }
         public virtual Renter Renter { get; set; }
@@ -38,6 +37,8 @@ namespace RicModel.RoomRent
         //audit tables
         public ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }
 
+        [NotMapped]
+        public bool IsDepositUsed { get; set; }
 
         public string DueDateString => DueDate.ToString("dd-MMM-yyyy");
 
