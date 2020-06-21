@@ -1,5 +1,6 @@
 import { FuseUtils } from "@fuse/utils";
 import { BillingStatement } from "../rent-transactions/billing-statement/billing-statement.model";
+import { RentTransactionPayment } from "./rent-transaction.payment.model";
 
 export class RentTransaction {
     id                  : number;
@@ -13,19 +14,21 @@ export class RentTransaction {
     period              : string;
     paidDate            : string;
     paidAmount          : number;
+    totalPaidAmount     : number;
     balanceDateToBePaid : string;
     balance             : number;
-    isBalanceEditable   : boolean;
     totalAmountDue      : number;
     rentArrearId        : number;
     previousUnpaidAmount: number;
     isDepositUsed       : boolean;
     note                : string;
-    adjustmentBalancePaymentDueAmount   : number;
     transactionType     : number;
     isNoAdvanceDepositLeft : boolean;
     isProcessed         : boolean;
     billingStatement    : BillingStatement;
+    payments            : RentTransactionPayment[];
+
+    isAddingAdvancePayment : boolean;
     handle              : string;
     
 
@@ -40,23 +43,19 @@ export class RentTransaction {
         this.dueDate = transaction.dueDate;
         this.dueDateString = transaction.dueDateString;
         this.period = transaction.period;
-        this.paidDate = transaction.paidDate;
+        this.totalPaidAmount = transaction.paidAmount;
         this.balanceDateToBePaid = transaction.balanceDateToBePaid;
         this.balance = transaction.balance;
-        this.isBalanceEditable = transaction.isBalanceEditable;
         this.totalAmountDue = transaction.totalAmountDue;
         this.rentArrearId = transaction.rentArrearId;
         this.previousUnpaidAmount = transaction.previousUnpaidAmount;
-        this.paidAmount = transaction.paidAmount || 
-            (transaction.isDepositUsed ? 0 : 
-                (this.monthlyRent == this.totalAmountDue ? transaction.monthlyRent : 0));
         this.isDepositUsed = transaction.isDepositUsed || false;
         this.note = transaction.note;
-        this.adjustmentBalancePaymentDueAmount = transaction.adjustmentBalancePaymentDueAmount;
         this.transactionType = transaction.transactionType;
         this.isNoAdvanceDepositLeft = transaction.isNoAdvanceDepositLeft;
         this.isProcessed = transaction.isProcessed;
         this.billingStatement = transaction.billingStatement;
+        this.payments = transaction.payments;
         this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
         
     }

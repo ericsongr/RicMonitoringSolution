@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "https://localhost:5001",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:56283",
       "sslPort": 44363
@@ -19,13 +23,22 @@
       "ancmHostingModel": "OutOfProcess"
     },
     "RicMonitoringAPI": {
-      "commandName": "Project",
+      "commandName": "IIS",
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001"
+    },
+    "RicMonitoringUI-IIS": {
+      "commandName": "IIS",
+      "workingDirectory": "C:\\ricman\\projects\\RicMonitoringSolution\\RicMonitoringAPI",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

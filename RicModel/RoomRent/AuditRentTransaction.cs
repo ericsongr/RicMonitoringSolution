@@ -14,19 +14,18 @@ namespace RicModel.RoomRent
         public decimal? PaidAmount { get; set; }
         public DateTime? BalanceDateToBePaid { get; set; }
         public decimal? Balance { get; set; }
+        public decimal ExcessPaidAmount { get; set; }
         public decimal TotalAmountDue { get; set; }
         public bool IsDepositUsed { get; set; }
         public string Note { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
-
+        
         public int RoomId { get; set; }
         public int RenterId { get; set; }
 
         public bool IsSystemProcessed { get; set; }
         public DateTime? SystemDateTimeProcessed { get; set; }
         public bool IsProcessed { get; set; }
-
-        public decimal AdjustmentBalancePaymentDueAmount { get; set; }
 
         public DateTime AuditDateTime { get; set; }
         public string Username { get; set; }

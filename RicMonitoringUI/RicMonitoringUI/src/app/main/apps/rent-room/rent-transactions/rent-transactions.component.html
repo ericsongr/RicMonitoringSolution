@@ -161,8 +161,8 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>D.Used</mat-header-cell>
                 <mat-cell *matCellDef="let rentTransaction" fxHide fxShow.gt-xs [style.color]="getColor(rentTransaction.transactionType)">
                   <div class="pl-20">
-                    <mat-icon *ngIf="rentTransaction.isDepositUsed" class="active-icon mat-green-600-bg s-16">check</mat-icon>
-                    <mat-icon *ngIf="!rentTransaction.isDepositUsed" class="active-icon mat-red-500-bg s-16">close</mat-icon>
+                    <mat-icon *ngIf="rentTransaction.isDepositUsed" class="active-icon mat-green-600-bg s-16" style="color: red">check</mat-icon>
+                    <mat-icon *ngIf="!rentTransaction.isDepositUsed" class="active-icon mat-red-500-bg s-16" style="color: green">close</mat-icon>
                   </div>
                 </mat-cell>
                 <mat-footer-cell *matFooterCellDef></mat-footer-cell>

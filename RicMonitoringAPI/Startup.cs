@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using Audit.Core;
 using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -58,7 +60,7 @@ namespace RicMonitoringAPI
             services.AddScoped<IRentArrearRepository, RentArrearRepository>();
             services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
             services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
-
+            services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddScoped<IUrlHelper, UrlHelper>(implementationFactory =>
@@ -85,6 +87,7 @@ namespace RicMonitoringAPI
                         .Map<Room, AuditRoom>()
                         .Map<Renter, AuditRenter>()
                         .Map<RentTransaction, AuditRentTransaction>()
+                        .Map<RentTransactionPayment, AuditRentTransactionPayment>()
                         .AuditEntityAction<IAudit>((evt, entry, auditEntity) =>
                         {
                             auditEntity.AuditDateTime = DateTime.UtcNow;
@@ -144,6 +147,9 @@ namespace RicMonitoringAPI
                     setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 }); //use for data shaping
 
+            //remove the data protection log
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@".\logs\shared"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -194,12 +200,15 @@ namespace RicMonitoringAPI
                     .ForMember(dest => dest.MonthlyRent,
                         opt => opt.MapFrom(src => src.GetMonthlyRent()))
                     .ForMember(dest => dest.CurrentBalance,
-                        opt => opt.MapFrom(src => src.Balance))
-                    ;
+                        opt => opt.MapFrom(src => src.Balance));
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
                 cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();
-
+                cfg.CreateMap<RentTransactionPayment, RentTransactionPaymentDto>()
+                    .ForMember(dest => dest.DatePaid, 
+                                opt => opt.MapFrom(src => src.DatePaid.ToShortDateString()))
+                    .ForMember(dest => dest.PaymentTransactionType,
+                        opt => opt.MapFrom(src => src.GetTransactionPaymentType()));
             });
 
             //Enable CORS policy "AllowCors"

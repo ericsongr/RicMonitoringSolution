@@ -60,6 +60,39 @@
         .is-rent-end mat-radio-group mat-radio-button {
             padding-left: 5px;
         }
+
+        
     }
 
+    .table-payments {
+        width: 100%;
+
+        .mat-column-id {
+            // flex: 0 1 50px;
+            display: none;
+        }
+
+        .mat-column-amount {
+            flex: 0 1 300px;
+            padding-left: 20px;
+            width: 150px;
+        }
+
+        .mat-column-datePaid {
+            flex: 0 1 200px;
+            padding-left: 20px;
+            width: 150px;
+        }
+
+        .mat-column-paymentTransactionType {
+            flex: 0 1 200px;
+            padding-left: 20px;
+            width: 150px;
+        }
+
+    }
+    
+    tr.mat-footer-row {
+        font-weight: bold;
+    }
 }

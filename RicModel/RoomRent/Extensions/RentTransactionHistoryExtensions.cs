@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RicModel.RoomRent.Enumerations;
 
 namespace RicModel.RoomRent.Extensions
 {   
@@ -34,6 +35,21 @@ namespace RicModel.RoomRent.Extensions
             var monthlyRent = rentTransaction.Room.Price;
 
             return monthlyRent;
+        }
+
+        public static string GetTransactionPaymentType(this RentTransactionPayment payment)
+        {
+            if (payment == null)
+            {
+                throw new ArgumentNullException("Source");
+            }
+
+            var name = Enum.GetName(typeof(PaymentTransactionType), payment.PaymentTransactionType);
+
+            //use to add space before capital letter. eg. 'CarryOverExcessPayment' replace with 'Carry Over Excess Payment'
+            name = System.Text.RegularExpressions.Regex.Replace(name, "[A-Z]", " $0").TrimStart(); 
+            
+            return name;
         }
     }
 }
