@@ -3,8 +3,7 @@ import { RentTransaction } from './rent-transaction.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { RentTransactionService } from './rent-transaction.service';
-import { MatSnackBar, MatRadioChange } from '@angular/material';
-import { FuseUtils } from '@fuse/utils';
+import { MatSnackBar, MatRadioChange, MatDialog } from '@angular/material';
 import { Location } from '@angular/common';
 import { RoomsService } from '../rooms/rooms.service';
 import * as moment from 'moment';
@@ -12,6 +11,7 @@ import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
 import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
 import { ActivatedRoute } from '@angular/router';
 import { RentTransactionPayment } from './rent-transaction.payment.model';
+import { DialogDeletePaymentConfirmationComponent } from './dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 
 @Component({
   selector: 'page-rent-transaction',
@@ -41,10 +41,11 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
   //payments table
   payments: RentTransactionPayment[];
-  displayedColumns: string[] = ['id','datePaid','amount','paymentTransactionType'];
+  displayedColumns: string[] = ['id','datePaid','amount','paymentTransactionType', 'edit_delete_icon'];
 
   constructor(
     private _rentTransactionService: RentTransactionService,
+    private _dialog: MatDialog,
     private _route: ActivatedRoute,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
@@ -158,6 +159,28 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
           
           this._cdr.detectChanges();
     }
+}
+
+deletePayment(paymentId) {
+
+  var confirmationDialog = this._dialog.open(DialogDeletePaymentConfirmationComponent, {
+    width: '350px'
+  });
+
+  confirmationDialog.afterClosed().subscribe(result => {
+    if (result == "ConfirmedYes") {
+      this._rentTransactionService.deletePayment(paymentId)
+        .then(response => {
+          this._snackBar.open("Payment has been deleted.", 'OK', {
+            verticalPosition  : 'top',
+            duration          : 2000
+          });
+
+        });
+    }
+  })
+
+  
 }
 
   get paidAmount() {

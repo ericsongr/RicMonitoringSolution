@@ -86,4 +86,16 @@ export class RentTransactionService implements Resolve<any>
    
   }
 
+  deletePayment(id) {
+
+    var url = `${this._apiUrl}${ApiControllers.RentTransactionPayments}/${id}`
+    return new Promise((resolve, reject) => {
+      this._authService.delete(url)
+        .subscribe((response: any) => {
+          resolve(response);
+        }, reject);
+    });
+    
+  }
+
 }
