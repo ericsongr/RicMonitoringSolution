@@ -28,8 +28,10 @@ export class RentTransaction {
     billingStatement    : BillingStatement;
     payments            : RentTransactionPayment[];
 
-    isAddingAdvancePayment : boolean;
-    handle              : string;
+    isAddingPayment             : boolean;
+    isEditingPayment            : boolean;
+    rentTransactionPaymentId    : number;
+    handle                      : string;
     
 
     constructor(transaction?) {

@@ -9,7 +9,7 @@ import { RoomsService } from '../rooms/rooms.service';
 import * as moment from 'moment';
 import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
 import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RentTransactionPayment } from './rent-transaction.payment.model';
 import { DialogDeletePaymentConfirmationComponent } from './dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 
@@ -30,7 +30,8 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   monthlyRentPrice: number;
   hasBalance: boolean;
   isTransactionHasBeenCompleted: boolean = false;
-  isAddingAdvancePayment: boolean = false;
+  isAddingPayment: boolean = false;
+  isEditingPayment: boolean = false;
 
   currentTotalPaidAmount: number;
   paidDate: Date;
@@ -41,24 +42,24 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
   //payments table
   payments: RentTransactionPayment[];
-  displayedColumns: string[] = ['id','datePaid','amount','paymentTransactionType', 'edit_delete_icon'];
+  displayedColumns: string[] = ['id','datePaid','datePaidString','amount','paymentTransactionType', 'edit_delete_icon'];
 
   constructor(
     private _rentTransactionService: RentTransactionService,
     private _dialog: MatDialog,
     private _route: ActivatedRoute,
+    private _router: Router,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
-    private _location : Location,
     private _cdr: ChangeDetectorRef
     ) { }
     
     ngOnInit() {
-      
+     
       this._route.params.subscribe((params) => {
         this.monthFilter = params['monthFilter'];
       })
-
+     
       this.onRentTransactionChanged =
         this._rentTransactionService.onRentTransactionChanged
             .subscribe(transaction => {
@@ -73,7 +74,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
               
               this.rentTransactionForm = this.createRentTransactionForm();
               
-              if (this.rentTransaction.isDepositUsed) {
+              if (this.rentTransaction.id > 0) {
                 this.isTransactionHasBeenCompleted = true;
               }else{
                 this.onChangePaidAmount();
@@ -99,12 +100,17 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
   addAdvancePayment() {
     this.isTransactionHasBeenCompleted = false;
-    this.isAddingAdvancePayment = true;
+    this.isAddingPayment = true;
   }
 
-  cancelAdvancePayment() {
+  cancelPayment() {
     this.isTransactionHasBeenCompleted = true;
-    this.isAddingAdvancePayment = false;
+    this.isAddingPayment = false;
+    this.isEditingPayment = false;
+
+    this.rentTransaction.rentTransactionPaymentId = 0;
+    this.rentTransaction.paidAmount = null;
+    this.rentTransaction.paidDate = null;
   }
 
   save() {
@@ -126,7 +132,8 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
       this.rentTransaction.balanceDateToBePaid = formData.balanceDateToBePaid;
       this.rentTransaction.note = formData.note;
       this.rentTransaction.transactionType = TransactionTypeEnum.MonthlyRent;
-      this.rentTransaction.isAddingAdvancePayment = this.isAddingAdvancePayment;
+      this.rentTransaction.isAddingPayment = this.isAddingPayment;
+      this.rentTransaction.isEditingPayment = this.isEditingPayment;
 
       if (!this.hasBalance) {
         this.rentTransaction.balanceDateToBePaid = null;
@@ -155,10 +162,23 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
           })
           
-          this._location.go(`/apartment/tenant-transactions/${this.rentTransaction.renterId}/${this.rentTransaction.handle}`);
-          
-          this._cdr.detectChanges();
+          this._router.navigate([`apartment/tenant-transactions/${this.monthFilter}`]);
     }
+}
+
+editPayment(paymentId) {
+  var payment = this.payments.find(o => o.id == paymentId);
+  if (payment != null) {
+    
+    this.rentTransaction.rentTransactionPaymentId = payment.id;
+    this.rentTransaction.paidAmount = payment.amount;
+    this.rentTransaction.paidDate = payment.datePaid;
+
+    this.isTransactionHasBeenCompleted = false;
+    this.isEditingPayment = true;
+
+  }
+
 }
 
 deletePayment(paymentId) {
@@ -169,14 +189,19 @@ deletePayment(paymentId) {
 
   confirmationDialog.afterClosed().subscribe(result => {
     if (result == "ConfirmedYes") {
+
       this._rentTransactionService.deletePayment(paymentId)
         .then(response => {
+
           this._snackBar.open("Payment has been deleted.", 'OK', {
             verticalPosition  : 'top',
             duration          : 2000
           });
-
+          
+          this._router.navigate([`apartment/tenant-transactions/${this.monthFilter}`]);
         });
+
+        
     }
   })
 
