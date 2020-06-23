@@ -1,0 +1,8 @@
+<div mat-dialog-title class="mb-0">Confirmation</div>
+<div mat-dialog-content>
+  <h2>Are you sure you want to delete?</h2>
+</div>
+<div mat-button-actions fxLayoutAlign="end center">
+  <button mat-button class="warn" style="margin-right: 10px" (click)="confirm()">Yes</button>
+  <button mat-button class="accent" [mat-dialog-close]>No</button>
+</div>

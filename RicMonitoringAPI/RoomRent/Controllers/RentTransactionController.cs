@@ -202,7 +202,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            if (rentTransaction.IsAddingAdvancePayment)
+            if (rentTransaction.IsAddingPayment)
             {
                 //save payment history
                 _rentTransactionPaymentRepository.Add(new RentTransactionPayment
@@ -215,7 +215,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
             else
             {
-                if (rentTransaction.IsDepositUsed)
+                if (rentTransaction.IsDepositUsed && !rentTransaction.IsEditingPayment)
                 {
                     AddOrDeductMonthUsed(rentTransaction.RenterId, true);
 
@@ -248,14 +248,31 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         _rentTransactionPaymentRepository.Update(useDepositAsPayment);
                     }
 
-                    //save payment history
-                    _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                    if (rentTransaction.IsEditingPayment)
                     {
-                        Amount = rentTransaction.PaidAmount ?? 0,
-                        DatePaid = rentTransaction.PaidDate.Value,
-                        PaymentTransactionType = PaymentTransactionType.Paid,
-                        RentTransactionId = id
-                    });
+                        var payment = _rentTransactionPaymentRepository
+                            .GetSingleAsync(o => o.Id == rentTransaction.RentTransactionPaymentId)
+                            .GetAwaiter()
+                            .GetResult();
+                        if (payment != null)
+                        {
+                            payment.Amount = rentTransaction.PaidAmount ?? 0;
+                            payment.DatePaid = rentTransaction.PaidDate.Value;
+                            _rentTransactionPaymentRepository.Update(payment);
+                            _rentTransactionPaymentRepository.Commit();
+                        }
+                    }
+                    else
+                    {
+                        //save payment history
+                        _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                        {
+                            Amount = rentTransaction.PaidAmount ?? 0,
+                            DatePaid = rentTransaction.PaidDate.Value,
+                            PaymentTransactionType = PaymentTransactionType.Paid,
+                            RentTransactionId = id
+                        });
+                    }
                 }
             }
 

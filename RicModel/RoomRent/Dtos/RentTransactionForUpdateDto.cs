@@ -2,6 +2,8 @@
 {
     public class RentTransactionForUpdateDto : RentTransaction
     {
-        public bool IsAddingAdvancePayment { get; set; }
+        public bool IsAddingPayment { get; set; }
+        public bool IsEditingPayment { get; set; }
+        public int RentTransactionPaymentId { get; set; }
     }
 }

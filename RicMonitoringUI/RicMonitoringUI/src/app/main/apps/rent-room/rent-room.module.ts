@@ -22,6 +22,7 @@ import { CopyClipboardModule } from '../common/directives/copy-clipboard.module'
 import { BillingStatementComponent } from './rent-transactions/billing-statement/billing-statement.component';
 import { RentTransactionHistoryService } from './rent-transaction-history/rent-transaction-history.service';
 import { RentTransactionHistoryComponent } from './rent-transaction-history/rent-transaction-history.component';
+import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -94,6 +95,7 @@ const routes : Routes= [
     CopyClipboardModule
   ],
   declarations: [
+    DialogDeletePaymentConfirmationComponent,
     RoomsComponent,
     RoomComponent,
     RentersComponent,
@@ -119,7 +121,10 @@ const routes : Routes= [
     //   multi: true
     // }
   ],
-  entryComponents: [RentTransactionHistoryComponent]
+  entryComponents: [
+    DialogDeletePaymentConfirmationComponent,
+    RentTransactionHistoryComponent
+  ]
 })
 export class RentRoomModule { 
 

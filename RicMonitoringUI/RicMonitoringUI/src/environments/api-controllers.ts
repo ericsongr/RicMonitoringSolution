@@ -3,6 +3,7 @@ export const ApiControllers = {
     Rooms                   : "rooms",
     Renters                 : "renters",
     RentTransactions        : "rent-transactions",
+    RentTransactionPayments : "rent-transaction-payments",
     RentTransactionHistory  : "rent-transaction-history",
     LookupTypeItems         : "lookup-type-items",
     ExecStoreProc           : "exec-store-proc"

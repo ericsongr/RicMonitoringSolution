@@ -67,7 +67,8 @@
     .table-payments {
         width: 100%;
 
-        .mat-column-id {
+        .mat-column-id,
+        .mat-column-datePaid {
             // flex: 0 1 50px;
             display: none;
         }
@@ -78,7 +79,7 @@
             width: 150px;
         }
 
-        .mat-column-datePaid {
+        .mat-column-datePaidString {
             flex: 0 1 200px;
             padding-left: 20px;
             width: 150px;
@@ -87,7 +88,7 @@
         .mat-column-paymentTransactionType {
             flex: 0 1 200px;
             padding-left: 20px;
-            width: 150px;
+            width: 130px;
         }
 
     }
