@@ -45,13 +45,12 @@ export class RentTransaction {
         this.dueDate = transaction.dueDate;
         this.dueDateString = transaction.dueDateString;
         this.period = transaction.period;
-        this.totalPaidAmount = transaction.paidAmount;
         this.balanceDateToBePaid = transaction.balanceDateToBePaid;
         this.balance = transaction.balance;
+        this.totalPaidAmount = transaction.paidAmount;
         this.totalAmountDue = transaction.totalAmountDue;
         this.rentArrearId = transaction.rentArrearId;
         this.previousUnpaidAmount = transaction.previousUnpaidAmount;
-        this.isDepositUsed = transaction.isDepositUsed || false;
         this.note = transaction.note;
         this.transactionType = transaction.transactionType;
         this.isNoAdvanceDepositLeft = transaction.isNoAdvanceDepositLeft;

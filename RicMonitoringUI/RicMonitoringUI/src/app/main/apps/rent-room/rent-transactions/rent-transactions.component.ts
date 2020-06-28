@@ -20,7 +20,6 @@ export class RentTransactionsComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
   displayedColumns = ['id','renterId','roomId','renterName','roomName','dueDateString','paidAmount','datePaidString','balance','balanceDateToBePaid', 'totalAmountDue','isDepositUsed','transactionType','buttons'];
-  monthFilter: string;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
@@ -36,10 +35,6 @@ export class RentTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.route.params.subscribe((params) => {
-      this.monthFilter = params['monthFilter'];
-    });
-
     this.dataSource = new FilesDataSource(this._rentTransactionsService, this.paginator, this.sort);
     
     fromEvent(this.filter.nativeElement, 'keyup')
@@ -58,14 +53,12 @@ export class RentTransactionsComponent implements OnInit {
               })
   }
 
-  fetchTransactions(filter) {
+  fetchTransactions() {
     
-    this.monthFilter = filter;
-
     this._fuseProgressBarService.show
 
     this._rentTransactionsService
-        .getRentTransactions(filter)
+        .getRentTransactions()
         .then(() => {
           this._fuseProgressBarService.hide();
         });

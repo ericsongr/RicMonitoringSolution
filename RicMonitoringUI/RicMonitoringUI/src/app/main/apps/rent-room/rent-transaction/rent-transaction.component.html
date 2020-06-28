@@ -11,7 +11,7 @@
       <!-- APP TITLE -->
       <div fxLayout="row" fxLayoutAlign="start center">
 
-        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apartment/tenant-transactions/' + monthFilter">
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/apartment/tenant-transactions'">
           <mat-icon>arrow_back</mat-icon>
         </button>
 
@@ -36,14 +36,14 @@
         <button mat-raised-button 
                 class="mr-20"
                 color="warn"
-                *ngIf="isAddingPayment || isEditingPayment"
+                *ngIf="isAddingPayment || isEditingPayment || rentTransaction.isDepositUsed"
                 (click)="cancelPayment()">
           <span>CANCEL</span>
         </button>
 
         <button mat-raised-button 
             class="mt-16 mt-sm-0"
-            *ngIf="rentTransaction.transactionType == 1 && !rentTransaction.isProcessed"
+            *ngIf="(rentTransaction.transactionType == 1 && !rentTransaction.isProcessed)"
             [disabled]="rentTransactionForm.invalid"
             (click)="save()">
           <span>SAVE</span>
@@ -110,7 +110,8 @@
               <div fxLayout="row" [hidden]="rentTransaction.isProcessed">
                 <div style="margin-top: 10px; margin-bottom: 20px;">
                   <button mat-raised-button color="accent" class="mt-16 mt-sm-0" style="height: 50px;"
-                    [hidden]="!isTransactionHasBeenCompleted"
+                    type="button"
+                    [hidden]="!isTransactionHasBeenCompleted || rentTransaction.isDepositUsed"
                     (click)="addAdvancePayment()">
                     <span style="font-size: 16px">Add Payment</span>
                   </button>
@@ -127,7 +128,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="20" appearance="outline" floatLabel="always" *ngIf="!isTransactionHasBeenCompleted">
-                  <mat-label>{{rentTransaction.isDepositUsed && !isAddingPayment ? 'Date Use The Deposit' : 'Date Paid'}}</mat-label>
+                  <mat-label>Date Paid</mat-label>
                   <input matInput [matDatepicker]="paidDatePicker" formControlName="paidDate" [(ngModel)]="rentTransaction.paidDate" required>
                   <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
                   <mat-datepicker #paidDatePicker></mat-datepicker>
@@ -144,8 +145,10 @@
                     <show-errors [control]="rentTransactionForm.controls.balanceDateToBePaid"></show-errors>
                   </mat-form-field>
                   
-                  <div class="is-rent-end" fxFlex="30" style="padding-left: 20px;">
-                    <div *ngIf="!rentTransaction.isNoAdvanceDepositLeft" class="px-20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="is-rent-end" fxFlex="30" style="padding-left: 20px; margin-bottom: 20px;">
+                    <div *ngIf="!rentTransaction.isNoAdvanceDepositLeft" 
+                          [hidden]="isAddingPayment || isEditingPayment || rentTransaction.totalPaidAmount >= rentTransaction.totalAmountDue" 
+                          class="px-20" fxLayout="column" fxLayoutAlign="start left">
                       <div class="h4 secondary-text">Use Deposit?</div>
                       <div class="h2 font-weight-300 py-8">
                         <mat-radio-group formControlName="isDepositUsed" 
@@ -249,13 +252,16 @@
                       <th mat-header-cell *matHeaderCellDef></th>
                       <td mat-cell *matCellDef="let payment">
                         <button type="button" mat-mini-fab color="accent"
+                          *ngIf = "payment.paymentTransactionType == 'Paid'"
                           style="margin-right: 5px;"
-                          [hidden]="isEditingPayment || isAddingPayment"
+                          [hidden]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
                           (click)="editPayment(payment.id)">
                           <mat-icon>edit</mat-icon>
                         </button>
                         <button type="button" mat-mini-fab color="warn"
-                          [hidden]="isEditingPayment || isAddingPayment"
+                          *ngIf="payment.paymentTransactionType != 'Carry Over Excess Payment'"
+                          [ngStyle]="{'margin-left': payment.paymentTransactionType == 'Paid' ? '' : '45px'}"
+                          [hidden]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
                           (click)="deletePayment(payment.id)">
                           <mat-icon>delete</mat-icon>
                         </button>

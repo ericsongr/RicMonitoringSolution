@@ -11,7 +11,7 @@ import { AuthService } from '../../common/core/auth/auth.service';
 const fields = "id,renterName,renterId,roomName,roomId," +
                "monthlyRent,dueDate,dueDateString,period,paidDate," +
                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount," + 
-               "rentArrearId,totalAmountDue,isDepositUsed,note,transactionType," + 
+               "rentArrearId,totalAmountDue,note,transactionType," + 
                "isNoAdvanceDepositLeft,isProcessed," +
                "billingStatement,payments";
 
@@ -45,7 +45,7 @@ export class RentTransactionService implements Resolve<any>
 
   getRentTransaction(): Promise<any> {
     
-    var url = `${this.apiUrl}${this.routeParams.renterId}/${this.routeParams.monthFilter}?fields=${fields}`;
+    var url = `${this.apiUrl}${this.routeParams.id}?fields=${fields}`;
     
     return new Promise((resolve, reject) => {
 
@@ -86,9 +86,9 @@ export class RentTransactionService implements Resolve<any>
    
   }
 
-  deletePayment(id) {
+  deletePayment(id, renterId) {
 
-    var url = `${this._apiUrl}${ApiControllers.RentTransactionPayments}/${id}`
+    var url = `${this._apiUrl}${ApiControllers.RentTransactionPayments}/${id}?renterId=${renterId}`
     return new Promise((resolve, reject) => {
       this._authService.delete(url)
         .subscribe((response: any) => {

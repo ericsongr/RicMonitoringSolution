@@ -52,6 +52,7 @@ namespace RicMonitoringAPI
             services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
 
+            services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
             services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();

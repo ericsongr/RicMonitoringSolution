@@ -11,6 +11,7 @@ using RicModel.Enumeration;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
+using RicModel.RoomRent.Extensions;
 
 namespace RicEntityFramework.RoomRent.Repositories
 {
@@ -28,150 +29,87 @@ namespace RicEntityFramework.RoomRent.Repositories
             _propertyMappingService = propertyMappingService ?? throw new ArgumentNullException(nameof(propertyMappingService));
         }
 
-        public IQueryable<RentTransaction2> GetTransaction(string monthFilter, int renterId)
+        public IQueryable<RentTransaction2> GetTransaction(int id)
         {
-            var selectedDate = DateTime.Now;
-            if (monthFilter == RentTransactionMonthFilterConstant.Current)
-            {
-                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
-            else if (monthFilter == RentTransactionMonthFilterConstant.Previous)
-            {
-                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            }
-
-            var renters = _context.Renters.Where(o => !o.IsEndRent)
-                           .Select(o => new
-                           {
-                               RenterId = o.Id,
-                               RenterName = o.Name,
-                               RoomId = o.RoomId,
-                               RoomName = o.Room.Name,
-                               MonthlyRent = o.Room.Price,
-                               DueDay = o.DueDay,
-                               AdvanceMonths = o.AdvanceMonths,
-                               MonthsUsed = o.MonthsUsed
-                           });
-
-            var transactions = (from r in renters
-                                join t in _context.RentTransactions
-                                        .Include(o => o.RentTransactionPayments)
-                                on new { r.RenterId, selectedDate.Month, selectedDate.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
-                                into rentTrans
-                                from trans in rentTrans.DefaultIfEmpty()
-                                join arrear in _context.RentArrears.Where(o=> !o.IsProcessed) on r.RenterId equals arrear.RenterId
-                                into arrearTempTable
-                                from arrearTable in arrearTempTable.DefaultIfEmpty()
-                                where r.RenterId == renterId
-                                select new RentTransaction2
-                                {
-                                    Id = trans == null ? 0 : trans.Id,
-                                    RenterId = r.RenterId,
-                                    RenterName = r.RenterName,
-                                    RoomId = r.RoomId,
-                                    RoomName = r.RoomName,
-                                    MonthlyRent = r.MonthlyRent,
-                                    DueDay = r.DueDay,
-                                    PaidDate = trans.PaidDate,
-                                    PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
-                                    Balance = trans.Balance == null ? 0 : trans.Balance,
-                                    RentArrearId = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.Id : 0),
-                                    PreviousUnpaidAmount =
-                                        trans != null && trans.IsProcessed ?
-                                            (trans.Balance ?? 0) : 
-                                            (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0 ),
-                                    TotalAmountDue = 
-                                        trans != null && trans.IsProcessed ? 
-                                            trans.TotalAmountDue : 
-                                                (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
-                                    IsDepositUsed = trans == null ? false : 
-                                        trans.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
-                                    BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
-                                    Note = trans == null ? "" : trans.Note,
-                                    Month = selectedDate.Month,
-                                    Year = selectedDate.Year,
-                                    TransactionType = trans == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
-                                    IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths,
-                                    IsProcessed = trans == null ? false : trans.IsProcessed,
-                                    RentTransactionPayments = trans.RentTransactionPayments
-                                });
+            var transactions = _context.RentTransactions
+                                    .Where(o => o.Id == id)
+                                    .Include(o => o.Renter)
+                                    .ThenInclude(o => o.RentArrears)
+                                    .Include(o => o.Room)
+                                    .Include(o => o.RentTransactionPayments)
+                                    .Select(t => new RentTransaction2
+                                    {
+                                        Id = t.Id,
+                                        RenterId = t.RenterId,
+                                        RenterName = t.Renter.Name,
+                                        RoomId = t.RoomId,
+                                        RoomName = t.Room.Name,
+                                        MonthlyRent = t.Room.Price,
+                                        DueDay = t.Renter.DueDay,
+                                        PaidDate = t.PaidDate,
+                                        PaidAmount = t.PaidAmount,
+                                        Balance = t.Balance,
+                                        RentArrearId = 
+                                            t.Renter.RentArrears.Any(o => !o.IsProcessed) ?
+                                                t.Renter.RentArrears.Where(o => !o.IsProcessed).First().Id : 0,
+                                        PreviousUnpaidAmount = 
+                                            t.Renter.RentArrears.Any(o => !o.IsProcessed) ? 
+                                                t.Renter.RentArrears.Where(o => !o.IsProcessed).First().UnpaidAmount : 0,
+                                        TotalAmountDue = t.TotalAmountDue + 
+                                                (t.Renter.RentArrears.Any(o => !o.IsProcessed) ? 
+                                                    t.Renter.RentArrears.Where(o => !o.IsProcessed).First().UnpaidAmount : 0),
+                                        IsDepositUsed = t.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
+                                        BalanceDateToBePaid = t.BalanceDateToBePaid,
+                                        Note = t.Note,
+                                        Month = t.DueDate.Month,
+                                        Year = t.DueDate.Year,
+                                        TransactionType = t.TransactionType,
+                                        IsNoAdvanceDepositLeft = t.Renter.MonthsUsed >= t.Renter.AdvanceMonths,
+                                        IsProcessed = t.IsProcessed,
+                                        RentTransactionPayments = t.RentTransactionPayments
+                                    });
 
             return transactions;
         }
 
-        public IQueryable<RentTransaction2> GetAllTransactions(string monthFilter)
+        public IQueryable<RentTransaction2> GetAllTransactions()
         {
-            var selectedDate = DateTime.Now;
-            if (monthFilter == RentTransactionMonthFilterConstant.Current)
-            {
-                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
-            else if (monthFilter == RentTransactionMonthFilterConstant.Previous)
-            {
-                selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            }
-
-            var renters = _context.Renters.Where(o => !o.IsEndRent)
-                           .Select(o => new
-                           {
-                               RenterId = o.Id,
-                               RenterName = o.Name,
-                               RoomId = o.RoomId,
-                               RoomName = o.Room.Name,
-                               MonthlyRent = o.Room.Price,
-                               DueDay = o.DueDay,
-                               AdvanceMonths = o.AdvanceMonths,
-                               MonthsUsed = o.MonthsUsed
-                           });
-
-            var transactions = (from r in renters
-                                join t in _context.RentTransactions
-                                        .Include(o => o.RentTransactionPayments)
-                                on new { r.RenterId, selectedDate.Month, selectedDate.Year } equals new { t.RenterId, t.DueDate.Month, t.DueDate.Year }
-                                into rentTrans
-                                from trans in rentTrans.DefaultIfEmpty()
-                                join arrear in _context.RentArrears.Where(o => !o.IsProcessed) on r.RenterId equals arrear.RenterId
-                                into arrearTempTable
-                                from arrearTable in arrearTempTable.DefaultIfEmpty()
-
-                                select new RentTransaction2
-                                {
-                                    Id = trans == null ? 0 : trans.Id,
-                                    RenterId = r.RenterId,
-                                    RenterName = r.RenterName,
-                                    RoomId = r.RoomId,
-                                    RoomName = r.RoomName,
-                                    MonthlyRent = r.MonthlyRent,
-                                    DueDay = r.DueDay,
-                                    PaidDate = trans.PaidDate,
-                                    PaidAmount = trans.PaidAmount == null ? 0 : trans.PaidAmount,
-                                    Balance = trans.Balance == null ? 0 : trans.Balance,
-                                    RentArrearId = (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.Id : 0),
-                                    PreviousUnpaidAmount =
-                                        trans != null && trans.IsProcessed ?
-                                            (trans.Balance ?? 0) :
-                                            (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0),
-                                    TotalAmountDue =
-                                        trans != null && trans.IsProcessed ?
-                                            trans.TotalAmountDue :
-                                                (r.MonthlyRent + (arrearTable != null && !arrearTable.IsProcessed ? arrearTable.UnpaidAmount : 0)),
-                                    IsDepositUsed = trans == null ? false :
-                                        trans.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
-                                    BalanceDateToBePaid = trans.BalanceDateToBePaid == null ? null : trans.BalanceDateToBePaid,
-                                    Note = trans == null ? "" : trans.Note,
-                                    Month = selectedDate.Month,
-                                    Year = selectedDate.Year,
-                                    TransactionType = trans == null ? TransactionTypeEnum.MonthlyRent : trans.TransactionType,
-                                    IsNoAdvanceDepositLeft = r.MonthsUsed >= r.AdvanceMonths,
-                                    IsProcessed = trans == null ? false : trans.IsProcessed
-                                });
+            var transactions = _context.RentTransactions
+                                    .Where(o => !o.IsProcessed)
+                                    .Include(o => o.Renter)
+                                    .Include(o => o.Room)
+                                    .Include(o => o.RentTransactionPayments)
+                                    .Select(t => new RentTransaction2
+                                    {
+                                        Id = t.Id,
+                                        RenterId = t.RenterId,
+                                        RenterName = t.Renter.Name,
+                                        RoomId = t.RoomId,
+                                        RoomName = t.Room.Name,
+                                        MonthlyRent = t.Room.Price,
+                                        DueDay = t.Renter.DueDay,
+                                        PaidDate = t.PaidDate,
+                                        PaidAmount = t.PaidAmount,
+                                        Balance = t.Balance,
+                                        TotalAmountDue = t.TotalAmountDue +
+                                                         (t.Renter.RentArrears.Any(o => !o.IsProcessed) ?
+                                                             t.Renter.RentArrears.Where(o => !o.IsProcessed).First().UnpaidAmount : 0),
+                                        IsDepositUsed = t.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
+                                        BalanceDateToBePaid = t.BalanceDateToBePaid,
+                                        Note = t.Note,
+                                        Month = t.DueDate.Month,
+                                        Year = t.DueDate.Year,
+                                        TransactionType = t.TransactionType,
+                                        IsNoAdvanceDepositLeft = t.Renter.MonthsUsed >= t.Renter.AdvanceMonths,
+                                        IsProcessed = t.IsProcessed
+                                    });
 
             return transactions;
         }
 
         public PagedList<RentTransaction2> GetRentTransactions(RentTransactionResourceParameters rentTransactionResourceParameters)
         {
-            var transactions = GetAllTransactions(rentTransactionResourceParameters.MonthFilter);
+            var transactions = GetAllTransactions();
             var collectionBeforPaging =
                 transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());

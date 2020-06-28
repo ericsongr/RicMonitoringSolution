@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
@@ -53,8 +54,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
         }
 
-        [HttpGet("{renterId}/{monthFilter}", Name = "Get")]
-        public IActionResult Get(int renterId, string monthFilter, [FromQuery] string fields)
+        [HttpGet("{id}", Name = "Get")]
+        public IActionResult Get(int id, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<RentTransaction2Dto>(fields))
@@ -62,7 +63,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var rentTransactionFromRepo = _rentTransactionRepository.GetTransaction(monthFilter, renterId).SingleOrDefault();
+            var rentTransactionFromRepo = _rentTransactionRepository.GetTransaction(id).First();
             if (rentTransactionFromRepo == null)
             {
                 return NotFound();
@@ -122,70 +123,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return Ok(rentTransactions.ShapeData(rentTransactionResourceParameters.Fields));
 
         }
-
-        [HttpPost()]
-        public IActionResult Create([FromBody] RentTransactionForCreateDto rentTransaction)
-        {
-            if (rentTransaction == null)
-            {
-                return NotFound();
-            }
-
-            var rentTransactionEntity = Mapper.Map<RentTransaction>(rentTransaction);
-
-            _rentTransactionRepository.Add(rentTransactionEntity);
-            _rentTransactionRepository.Commit();
-
-            //save the arrear to transaction detail
-            if (rentTransaction.PreviousUnpaidAmount > 0)
-            {
-                _rentDetailTransactionRepository.Add(new RentTransactionDetail
-                {
-                    TransactionId = rentTransactionEntity.Id,
-                    RentArrearId = rentTransaction.RentArrearId,
-                    Amount = rentTransaction.PreviousUnpaidAmount,
-                });
-            }
-
-            //save transaction detail
-            _rentDetailTransactionRepository.Add(new RentTransactionDetail
-            {
-                TransactionId = rentTransactionEntity.Id,
-                Amount = rentTransaction.MonthlyRent,
-            });
-            _rentDetailTransactionRepository.Commit();
-
-            if (rentTransaction.IsDepositUsed)
-            {
-                //detect 1 month to field MonthUsed
-                AddOrDeductMonthUsed(rentTransactionEntity.RenterId, true);
-
-                //save payment history
-                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
-                {
-                    Amount = 0,
-                    DatePaid = DateTime.Now.Date,
-                    PaymentTransactionType = PaymentTransactionType.DepositUsed,
-                    RentTransactionId = rentTransactionEntity.Id
-                });
-            }
-            else
-            {
-                //save payment history
-                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
-                {
-                    Amount = rentTransactionEntity.PaidAmount ?? 0,
-                    DatePaid = rentTransactionEntity.PaidDate.Value,
-                    PaymentTransactionType = PaymentTransactionType.Paid,
-                    RentTransactionId = rentTransactionEntity.Id
-                });
-            }
-            _rentTransactionPaymentRepository.Commit();
-
-
-            return CreatedAtRoute("GetAll", new { id = rentTransactionEntity.Id });
-        }
-
+        
         [HttpPut("{id}", Name = "Update")]
         public async Task<IActionResult> Update(int id, [FromBody] RentTransactionForUpdateDto rentTransaction)
         {
@@ -222,31 +160,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     _rentTransactionPaymentRepository.Add(new RentTransactionPayment
                     {
                         Amount = 0,
-                        DatePaid = rentTransaction.PaidDate.Value,
+                        DatePaid = DateTime.UtcNow,
                         PaymentTransactionType = PaymentTransactionType.DepositUsed,
                         RentTransactionId = id
                     });
                 }
                 else
                 {
-                    //if change existing transacton from used deposit to just pay the rent 
-                    //if edit and not use the deposit instead pay the amount
-                    if (rentTransactionEntity.RentTransactionPayments
-                            .Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed) && !rentTransaction.IsDepositUsed)
-                    {
-                        AddOrDeductMonthUsed(rentTransaction.RenterId, false);
-
-                        //tagged IsDeposit record from payment once edit to payment instead.
-                        var useDepositAsPayment = await _rentTransactionPaymentRepository
-                            .GetSingleAsync(o =>
-                                o.RentTransactionId == id &&
-                                o.PaymentTransactionType == PaymentTransactionType.DepositUsed);
-
-                        //deleted record of deposit once edit
-                        useDepositAsPayment.IsDeleted = true;
-
-                        _rentTransactionPaymentRepository.Update(useDepositAsPayment);
-                    }
 
                     if (rentTransaction.IsEditingPayment)
                     {

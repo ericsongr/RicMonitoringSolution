@@ -18,7 +18,7 @@
               <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                   shopping_basket
               </mat-icon>
-              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Tenant Transactions ({{monthFilter == 'curr' ? 'Current' : 'Previous'}})</span>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Tenant Transactions</span>
           </div>
           <!-- / APP TITLE -->
 
@@ -26,7 +26,6 @@
             <button mat-icon-button (click)="fetchTransactions('prev')">
               <mat-icon class="s-60">arrow_left</mat-icon>
             </button>
-            <!-- <span class="mat-headline" style="padding-left: 18px;">{{monthFilter == 'curr' ? 'Current' : 'Previous'}}</span> -->
             <button mat-icon-button (click)="fetchTransactions('curr')">
               <mat-icon class="s-60" >arrow_right</mat-icon>
             </button>
@@ -191,7 +190,7 @@
               <mat-row *matRowDef="let rentTransaction; columns: displayedColumns;"
                        class="rentTransaction"
                        matRipple
-                       [routerLink]="'/apartment/tenant-transactions/' + rentTransaction.renterId + '/' + handleize(rentTransaction.renterName) + '/' + monthFilter">
+                       [routerLink]="'/apartment/tenant-transactions/' + rentTransaction.id + '/' + handleize(rentTransaction.renterName)">
               </mat-row>
               <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
           </mat-table>
