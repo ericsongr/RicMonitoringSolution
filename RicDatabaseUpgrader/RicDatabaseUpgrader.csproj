@@ -14,30 +14,26 @@
     <None Remove="Scripts\Update\0004-update-data-and-alter-renter.sql" />
     <None Remove="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
     <None Remove="Scripts\Update\v1.0001\0006.0-tenants-has-arrears.sql" />
-    <None Remove="Scripts\Update\v1.0001\0006.1-RentTransactionBatchFile.sql" />
     <None Remove="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <None Remove="Scripts\Update\v1.0001\0008-rent-transaction-history-of-tenants.sql" />
-    <None Remove="Scripts\Update\v1.0001\0009-RentTransactionBatchFile.sql" />
     <None Remove="Scripts\Update\v1.0001\0010-AuditTables.sql" />
     <None Remove="Scripts\Update\v1.0001\0011-RentTransactionPayments.sql" />
     <None Remove="Scripts\Update\v1.0001\0012-excess-paid-amount.sql" />
+    <None Remove="Scripts\Update\v1.0001\0013-added-index.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create\0001-Schema.sql" />
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0013-added-index.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0012-excess-paid-amount.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0011-RentTransactionPayments.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0010-AuditTables.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0001\0009-RentTransactionBatchFile.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0001\0006.1-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0006.0-tenants-has-arrears.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0008-rent-transaction-history-of-tenants.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0001\0003-RentTransactionBatchFile.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0001\0002-RentTransactionBatchFile.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-DbErrorLogs.sql" />
   </ItemGroup>
 

@@ -71,14 +71,14 @@ const routes : Routes= [
   },
   //rent transactions
   {
-    path      :  'tenant-transactions/:monthFilter',
+    path      :  'tenant-transactions',
     component :  RentTransactionsComponent,
     resolve   : {
           data: RentTransactionsService
     }
   },
   {
-    path      : 'tenant-transactions/:renterId/:handle/:monthFilter',
+    path      : 'tenant-transactions/:id/:handle',
     component : RentTransactionComponent,
     resolve: {
       data: RentTransactionService

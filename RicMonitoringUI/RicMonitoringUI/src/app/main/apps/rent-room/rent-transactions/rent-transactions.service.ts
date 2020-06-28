@@ -23,22 +23,20 @@ export class RentTransactionsService implements Resolve<any> {
   }
   
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    this.routeParams = route.params;
     
     return new Promise((resolve, reject) => {
       Promise.all([
-        this.getRentTransactions(this.routeParams.monthFilter)
+        this.getRentTransactions()
       ]).then(() => {
         resolve();
       }, reject);
     });
   }
 
-  getRentTransactions(filter): Promise<any> {
+  getRentTransactions(): Promise<any> {
 
       return new Promise((resolve, reject) => {
-
-      var url = `${this.apiUrl}?monthFilter=${filter}&${TABLE_FIELDS}`;
+      var url = `${this.apiUrl}?${TABLE_FIELDS}`;
       
       this._authService.get(url)
           .subscribe((response: any) => {

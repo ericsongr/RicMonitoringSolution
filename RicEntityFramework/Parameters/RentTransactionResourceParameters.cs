@@ -8,6 +8,5 @@ namespace RicEntityFramework.Parameters
         public int Month { get; set; }
         public int Year { get; set; }
 
-        public string MonthFilter { get; set; }
     }
 }

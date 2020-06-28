@@ -14,6 +14,9 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .Property(t => t.UnpaidAmount)
                 .HasColumnType("decimal(18,2)");
 
+            builder.Property(t => t.ManualEntryDateTime)
+                .HasColumnName("ManualEntryDateTimeLocal");
+
             builder
                 .HasOne(t => t.RentTransaction)
                 .WithMany(p => p.RentArrears)

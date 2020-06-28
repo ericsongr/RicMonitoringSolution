@@ -36,7 +36,6 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
   currentTotalPaidAmount: number;
   paidDate: Date;
   datePaidLabel: string = 'Date Paid';
-  monthFilter: string;
 
   billingStatement: BillingStatement;
 
@@ -55,10 +54,6 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     ) { }
     
     ngOnInit() {
-     
-      this._route.params.subscribe((params) => {
-        this.monthFilter = params['monthFilter'];
-      })
      
       this.onRentTransactionChanged =
         this._rentTransactionService.onRentTransactionChanged
@@ -111,6 +106,14 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
     this.rentTransaction.rentTransactionPaymentId = 0;
     this.rentTransaction.paidAmount = null;
     this.rentTransaction.paidDate = null;
+
+    if(this.rentTransaction.isDepositUsed) {
+
+      this.rentTransaction.isDepositUsed = false;
+
+      this.onChangeDepositUsed(false);
+    }
+
   }
 
   save() {
@@ -162,7 +165,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
           })
           
-          this._router.navigate([`apartment/tenant-transactions/${this.monthFilter}`]);
+          this._router.navigate([`apartment/tenant-transactions`]);
     }
 }
 
@@ -190,7 +193,7 @@ deletePayment(paymentId) {
   confirmationDialog.afterClosed().subscribe(result => {
     if (result == "ConfirmedYes") {
 
-      this._rentTransactionService.deletePayment(paymentId)
+      this._rentTransactionService.deletePayment(paymentId, this.rentTransaction.renterId)
         .then(response => {
 
           this._snackBar.open("Payment has been deleted.", 'OK', {
@@ -198,7 +201,7 @@ deletePayment(paymentId) {
             duration          : 2000
           });
           
-          this._router.navigate([`apartment/tenant-transactions/${this.monthFilter}`]);
+          this._router.navigate([`apartment/tenant-transactions`]);
         });
 
         
@@ -210,6 +213,10 @@ deletePayment(paymentId) {
 
   get paidAmount() {
     return this.rentTransactionForm.get('paidAmount');
+  }
+
+  get paidDateDatePicker() {
+    return this.rentTransactionForm.get('paidDate');
   }
 
   get balanceDateToBePaid() {
@@ -266,21 +273,20 @@ deletePayment(paymentId) {
   }
  
   onChangeDepositUsed(isUsedDeposit: boolean) {
+ 
     if (isUsedDeposit) {
-      this.rentTransaction.isNoAdvanceDepositLeft = false;
-      this.rentTransaction.paidAmount = 0;
-      this.hasBalance = false;
-      this.rentTransaction.balance = 0;
-      this.balanceDateToBePaid.setValidators(null);
-      this.balanceDateToBePaid.updateValueAndValidity();
 
-      this.rentTransaction.balanceDateToBePaid = null;
-      this.paidAmount.disable();
+      this.paidDateDatePicker.setValidators(null);
+      this.paidAmount.setValidators(null);
+      
+    
     } else {
-      this.rentTransaction.paidAmount = 
-        (this.rentTransaction.monthlyRent == this.rentTransaction.totalAmountDue ? this.rentTransaction.monthlyRent : 0);
-      this.paidAmount.enable();
+      this.paidDateDatePicker.setValidators([Validators.required]);
+      this.paidAmount.setValidators([Validators.required]);
     }
+
+    this.paidDateDatePicker.updateValueAndValidity();
+    this.paidAmount.updateValueAndValidity();
     
   }
 
