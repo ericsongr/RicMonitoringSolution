@@ -10,6 +10,7 @@ namespace RicModel.RoomRent
         public int RentTransactionId { get; set; }
         public decimal UnpaidAmount { get; set; }
         public bool IsProcessed { get; set; }
+        public DateTime? ProcessedDateTime { get; set; }
         public string Note { get; set; }
         public bool IsManualEntry { get; set; }
         public DateTime? ManualEntryDateTime { get; set; }

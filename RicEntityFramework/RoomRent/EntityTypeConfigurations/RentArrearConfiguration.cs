@@ -17,6 +17,9 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
             builder.Property(t => t.ManualEntryDateTime)
                 .HasColumnName("ManualEntryDateTimeLocal");
 
+            builder.Property(t => t.ProcessedDateTime)
+                .HasColumnName("ProcessedDateTimeUtc");
+
             builder
                 .HasOne(t => t.RentTransaction)
                 .WithMany(p => p.RentArrears)
