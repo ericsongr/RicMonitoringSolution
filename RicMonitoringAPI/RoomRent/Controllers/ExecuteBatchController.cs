@@ -79,8 +79,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 string note = "PROCESSED BY THE SYSTEM";
 
                 var transactions = _rentTransactionRepository
-                    .FindBy(o => !o.IsProcessed && !o.Renter.IsEndRent && o.DueDate <= dateIncludedGracePeriod, 
-                        r => r.Renter, 
+                    .FindBy(o => !o.IsProcessed && !o.Renter.IsEndRent && o.DueDate <= dateIncludedGracePeriod,
+                        r => r.Renter,
                                              rm => rm.Renter.Room,
                                               ar => ar.Renter.RentArrears,
                                                 paid => paid.RentTransactionPayments)
@@ -96,16 +96,16 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         ExcessPaidAmount = o.ExcessPaidAmount,
                         DueDate = o.Renter.NextDueDate,
                         HasMonthDeposit = o.Renter.MonthsUsed < o.Renter.AdvanceMonths,
-                        
+
                         IsUsedDeposit = o.RentTransactionPayments == null ? false :
                             o.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
 
                         IsPaidTotalDueAmount = o.RentTransactionPayments == null ? false :
                             o.RentTransactionPayments.Sum(o => o.Amount) >= o.TotalAmountDue,
-                        
-                        Arrear = Mapper.Map<RentArrearDto>(o.RentArrears?.FirstOrDefault(o => !o.IsProcessed)) 
+
+                        Arrear = Mapper.Map<RentArrearDto>(o.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
                     });
-                
+
                 foreach (var transaction in transactions)
                 {
                     //previous unpaid balance
@@ -162,17 +162,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         //START RentTransactionDetails
                         if (previousArrearUnpaidBalance > 0)
                             InsertArrearInRentTransactionDetail(transaction, previousArrearUnpaidBalance);
-                        
+
                         MarkAsProcessedPreviousTotalBalance(transaction.RenterId, systemDateTimeProcessed);
 
                         //insert new arrear / unpaid balance
                         if (totalBalance > 0)
                             InsertNewArrear(transaction, totalBalance);
 
+                        //create next billing cycle
+                        CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
                     }
                     else if (transaction.Balance > 0)
                     {
-                        
+
                         MarkAsProcessedPreviousTotalBalance(transaction.RenterId, systemDateTimeProcessed);
 
                         MarkTransactionAsProcessed(transaction.Id);
@@ -184,6 +186,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                         InsertNewArrear(transaction, transaction.Balance ?? 0);
 
+                        //create next billing cycle
+                        CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
                     }
                     else if (transaction.IsUsedDeposit)
                     {
@@ -196,10 +200,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         if (previousArrearUnpaidBalance > 0)
                             InsertArrearInRentTransactionDetail(transaction, previousArrearUnpaidBalance);
 
-                        //TODO: test
                         //previous unpaid amount
                         if (previousArrearUnpaidBalance > 0)
                             InsertNewArrear(transaction, previousArrearUnpaidBalance);
+
+                        //create next billing cycle
+                        CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
 
                     }
                     else if (transaction.IsPaidTotalDueAmount)
@@ -214,68 +220,72 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         if (previousArrearUnpaidBalance > 0)
                             InsertArrearInRentTransactionDetail(transaction, previousArrearUnpaidBalance);
 
+                        //create next billing cycle
+                        CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
+
                     }
 
-                    //update due date and create new transaction
-                    var updateRenter = _renterRepository
-                        .GetSingleIncludesAsync(o => o.Id == transaction.RenterId, rm => rm.Room)
-                        .GetAwaiter().GetResult();
-                    if (updateRenter != null)
-                    {
-                        var previousDueDate = updateRenter.NextDueDate;
-                        var nextDueDate = updateRenter.NextDueDate.AddMonths(1);
-
-                        updateRenter.PreviousDueDate = previousDueDate;
-                        updateRenter.NextDueDate = nextDueDate;
-                        _renterRepository.Commit();
-
-                        //for the next billing cycle
-                        DateTime dateStart = nextDueDate.AddDays(1);
-                        DateTime dateEnd = nextDueDate.AddMonths(1);
-                        string period = $"{dateStart.ToString("dd-MMM")} to {dateEnd.ToString("dd-MMM-yyyy")}";
-
-                        //add new rent transaction
-                        var newTransaction = new RentTransaction
-                        {
-                            RenterId = updateRenter.Id,
-                            RoomId = updateRenter.RoomId,
-                            DueDate = nextDueDate,
-                            Period = period,
-                            TransactionType = TransactionTypeEnum.MonthlyRent,
-                            IsProcessed = false,
-                            TotalAmountDue = updateRenter.Room.Price + (transaction.Balance ?? 0) //compute already unpaid balance and 
-                        };
-
-                        //set paid amount to value of excess paid amount from previous transaction
-                        newTransaction.PaidAmount = transaction.ExcessPaidAmount;
-
-                        _rentTransactionRepository.Add(newTransaction);
-                        _rentTransactionRepository.Commit();
-
-                        //save to rent payment transaction table if there's excess payment on the previous transaction
-                        if (transaction.ExcessPaidAmount > 0)
-                        {
-                            InsertExcessPaidAmountToRentTransactionPayment(
-                                newTransaction.Id, 
-                                transaction.ExcessPaidAmount,
-                                systemDateTimeProcessed);
-                        }
-                    }
-
+                    
                 }
 
                 UpdateMonthlyRentBatch(monthlyRentBatchId);
-
-                //List<SqlParameter> pc = new List<SqlParameter>()
-                //{
-                //    new SqlParameter("@CurrentDate", DateTime.Now)
-                //};
-                //await _context.Database.ExecuteSqlCommandAsync($"RentTransactionBatchFile @CurrentDate", pc.ToArray());
             }
 
-            //Thread.Sleep(5000);
+            return Ok(new { status });
+        }
 
-            return Ok(new {status});
+        /// <summary>
+        /// This function use to create new/next billing cycle for renter transaction
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <param name="systemDateTimeProcessed"></param>
+        private void CreateNewRenterBillingCycle(BatchRentTransactionDto transaction, DateTime systemDateTimeProcessed)
+        {
+            //update due date and create new transaction
+            var updateRenter = _renterRepository
+                .GetSingleIncludesAsync(o => o.Id == transaction.RenterId, rm => rm.Room)
+                .GetAwaiter().GetResult();
+            if (updateRenter != null)
+            {
+                var previousDueDate = updateRenter.NextDueDate;
+                var nextDueDate = updateRenter.NextDueDate.AddMonths(1);
+
+                updateRenter.PreviousDueDate = previousDueDate;
+                updateRenter.NextDueDate = nextDueDate;
+                _renterRepository.Commit();
+
+                //for the next billing cycle
+                DateTime dateStart = nextDueDate.AddDays(1);
+                DateTime dateEnd = nextDueDate.AddMonths(1);
+                string period = $"{dateStart.ToString("dd-MMM")} to {dateEnd.ToString("dd-MMM-yyyy")}";
+
+                //add new rent transaction
+                var newTransaction = new RentTransaction
+                {
+                    RenterId = updateRenter.Id,
+                    RoomId = updateRenter.RoomId,
+                    DueDate = nextDueDate,
+                    Period = period,
+                    TransactionType = TransactionTypeEnum.MonthlyRent,
+                    IsProcessed = false,
+                    TotalAmountDue = updateRenter.Room.Price + (transaction.Balance ?? 0) //compute already unpaid balance and 
+                };
+
+                //set paid amount to value of excess paid amount from previous transaction
+                newTransaction.PaidAmount = transaction.ExcessPaidAmount;
+
+                _rentTransactionRepository.Add(newTransaction);
+                _rentTransactionRepository.Commit();
+
+                //save to rent payment transaction table if there's excess payment on the previous transaction
+                if (transaction.ExcessPaidAmount > 0)
+                {
+                    InsertExcessPaidAmountToRentTransactionPayment(
+                        newTransaction.Id,
+                        transaction.ExcessPaidAmount,
+                        systemDateTimeProcessed);
+                }
+            }
         }
 
         private void InsertMonthlyRentToRentTransactionDetail(int transactionId, decimal dueAmount)
@@ -336,17 +346,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         /// <param name="note"></param>
         /// <param name="datePaid"></param>
         private void MarkTransactionAsProcessed(
-            int transactionId, 
-            decimal? totalBalance = 0, 
-            string note = "", 
-            DateTime? datePaid = null, 
+            int transactionId,
+            decimal? totalBalance = 0,
+            string note = "",
+            DateTime? datePaid = null,
             bool isSystemProcessed = false)
         {
             var updateTransaction = _rentTransactionRepository
                 .GetSingleAsync(o => o.Id == transactionId)
                 .GetAwaiter()
                 .GetResult();
-            
+
             if (updateTransaction != null)
             {
                 if (totalBalance > 0)
@@ -358,7 +368,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 if (!string.IsNullOrEmpty(note))
                     updateTransaction.Note = note;
 
-                if(isSystemProcessed)
+                if (isSystemProcessed)
                     updateTransaction.IsSystemProcessed = true;
 
                 updateTransaction.IsProcessed = true;
@@ -433,7 +443,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     _rentArrearRepository.Commit();
                 }
             }
-            
+
         }
 
         private int GetTenantGracePeriod()

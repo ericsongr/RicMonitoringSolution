@@ -53,19 +53,6 @@ export class RentTransactionsComponent implements OnInit {
               })
   }
 
-  fetchTransactions() {
-    
-    this._fuseProgressBarService.show
-
-    this._rentTransactionsService
-        .getRentTransactions()
-        .then(() => {
-          this._fuseProgressBarService.hide();
-        });
-  }
-
-
-
   handleize(name) {
     return FuseUtils.handleize(name);
   }
