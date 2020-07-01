@@ -121,6 +121,7 @@ CREATE TABLE [dbo].[RentArrears](
 	[Note] NVARCHAR(2000),
 	[IsManualEntry] BIT NOT NULL DEFAULT(0),
 	[ManualEntryDateTimeLocal] DATETIME NULL,
+	[ProcessedDateTimeUtc] DATETIME NULL,
  CONSTRAINT [PK_RentArrears] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

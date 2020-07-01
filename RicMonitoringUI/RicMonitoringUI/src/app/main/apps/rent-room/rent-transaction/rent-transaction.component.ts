@@ -242,19 +242,23 @@ deletePayment(paymentId) {
       }
   
       if (!this.hasBalance) {
+
         this.balanceDateToBePaid.setValidators(null);
         this.rentTransaction.balanceDateToBePaid = null;
+
       }
       else {
   
         if (this.rentTransaction.transactionType == TransactionTypeEnum.MonthlyRent) {
           this.currentTotalPaidAmount = Number(this.rentTransaction.paidAmount) + Number(this.rentTransaction.totalPaidAmount);
           this.rentTransaction.balance = 
-            (this.currentTotalPaidAmount >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - this.currentTotalPaidAmount)
+              (this.currentTotalPaidAmount >  Number(this.rentTransaction.totalAmountDue)) ? 0 : (Number(this.rentTransaction.totalAmountDue) - this.currentTotalPaidAmount)
         }
         
           this.balanceDateToBePaid.setValidators([Validators.required])
       }
+
+
       this.balanceDateToBePaid.updateValueAndValidity();
 
     }
