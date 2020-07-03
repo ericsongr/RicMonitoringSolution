@@ -17,7 +17,8 @@ using RicModel.RoomRent.Dtos;
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
     //[Authorize(Policy = "Superuser")]
-    [AllowAnonymous]
+    [Authorize(Policy = "ProcessTenantsTransaction")]
+    //[AllowAnonymous]
     [Route("api/rent-transaction-history")]
     [ApiController]
     public class RentTransactionHistoryController : ControllerBase

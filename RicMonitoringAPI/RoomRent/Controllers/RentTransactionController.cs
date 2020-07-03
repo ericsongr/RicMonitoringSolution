@@ -19,8 +19,8 @@ using RicModel.RoomRent.Extensions;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    [AllowAnonymous]
-    //[Authorize(Policy = "Superuser")]
+    //[AllowAnonymous]
+    [Authorize(Policy = "Superuser")]
     [Route("api/rent-transactions")]
     [ApiController]
     public class RentTransactionsController : ControllerBase
