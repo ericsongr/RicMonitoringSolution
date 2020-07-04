@@ -4,9 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { RentTransactionService } from './rent-transaction.service';
 import { MatSnackBar, MatRadioChange, MatDialog } from '@angular/material';
-import { Location } from '@angular/common';
-import { RoomsService } from '../rooms/rooms.service';
-import * as moment from 'moment';
 import { TransactionTypeEnum } from '../../common/enums/transaction-type.enum';
 import { BillingStatement } from '../rent-transactions/billing-statement/billing-statement.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -145,27 +142,32 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
       this._rentTransactionService.saveTransaction(this.rentTransaction)
           .then((transactionId: number) => {
-            
-            this.rentTransaction.id = transactionId;
 
-            this._rentTransactionService.onRentTransactionChanged.next(this.rentTransaction);
-            
-            var message = "";
-            if (this.rentTransaction.id > 0) {
-              message = "Transaction detail has been updated."
-            } else {
-              message = "Transaction has been added."
-            }
+              this.rentTransaction.id = transactionId;
 
-            //show the success message
-            this._snackBar.open(message, 'OK', {
-              verticalPosition  : 'top',
-              duration          : 2000
-            });
+              this._rentTransactionService.onRentTransactionChanged.next(this.rentTransaction);
 
-          })
-          
-          this._router.navigate([`apartment/tenant-transactions`]);
+              var message = "";
+              if (this.rentTransaction.id > 0) {
+                  message = "Transaction detail has been updated."
+              } else {
+                  message = "Transaction has been added."
+              }
+
+              //show the success message
+              this._snackBar.open(message,
+                  'OK',
+                  {
+                      verticalPosition: 'top',
+                      duration: 2000
+                  });
+
+          });
+
+      setTimeout(() => {
+              this._router.navigate([`apartment/tenant-transactions`]);
+          },
+          1000);
     }
 }
 

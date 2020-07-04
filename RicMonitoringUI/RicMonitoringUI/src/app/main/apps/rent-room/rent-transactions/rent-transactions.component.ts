@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { Subject, fromEvent, BehaviorSubject, Observable, merge } from 'rxjs';
@@ -27,16 +27,14 @@ export class RentTransactionsComponent implements OnInit {
   
   private _unsubscribeAll = new Subject();
   constructor(
-    private _rentTransactionsService: RentTransactionsService,
-    private _fuseProgressBarService: FuseProgressBarService,
-    private route: ActivatedRoute
+    private _rentTransactionsService: RentTransactionsService
   ) { }
 
 
   ngOnInit(): void {
     
     this.dataSource = new FilesDataSource(this._rentTransactionsService, this.paginator, this.sort);
-    
+
     fromEvent(this.filter.nativeElement, 'keyup')
               .pipe(
                 takeUntil(this._unsubscribeAll),
@@ -49,7 +47,7 @@ export class RentTransactionsComponent implements OnInit {
                   return;
                 }
                 this.dataSource.filter = this.filter.nativeElement.value;
-
+                
               })
   }
 
