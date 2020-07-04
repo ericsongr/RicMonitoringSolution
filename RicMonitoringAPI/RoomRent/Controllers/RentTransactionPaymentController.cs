@@ -9,7 +9,8 @@ using RicModel.RoomRent.Enumerations;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
+    [Authorize(Policy = "Superuser")]
     [Route("api/rent-transaction-payments")]
     public class RentTransactionPaymentController : Controller
     {

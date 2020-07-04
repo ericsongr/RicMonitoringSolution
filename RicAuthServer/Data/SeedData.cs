@@ -130,13 +130,13 @@ namespace RicAuthServer.Data
             }
 
             var sherineRole = userManager.FindByNameAsync("sherine").GetAwaiter().GetResult();
-            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            if (!userManager.IsInRoleAsync(sherineRole, administrator).GetAwaiter().GetResult())
             {
                 userManager.AddToRoleAsync(sherineRole, administrator).GetAwaiter().GetResult();
             }
 
             var egboyRole = userManager.FindByNameAsync("egboy").GetAwaiter().GetResult();
-            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            if (!userManager.IsInRoleAsync(egboyRole, administrator).GetAwaiter().GetResult())
             {
                 userManager.AddToRoleAsync(egboyRole, administrator).GetAwaiter().GetResult();
             }

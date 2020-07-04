@@ -19,7 +19,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 {
 
     [AllowAnonymous]
-    //[Authorize(Policy = "ProcessTenantsTransaction")]
+    [Authorize(Policy = "ProcessTenantsTransaction")]
     [Route("api/exec-store-proc")]
     [ApiController]
     public class ExecuteBatchController : ControllerBase
@@ -225,11 +225,29 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                     }
 
-                    
+
                 }
 
                 UpdateMonthlyRentBatch(monthlyRentBatchId);
             }
+
+            //var renterIds = new List<int> {53,
+            //    54,
+            //    55,
+            //    56,
+            //    57,
+            //    58,
+            //    59};
+
+            //foreach (var renterId in renterIds)
+            //{
+            //    CreateNewRenterBillingCycle(new BatchRentTransactionDto
+            //    {
+            //        RenterId = renterId
+            //    }, DateTime.Now);
+            //}
+
+            //var status = "ok";
 
             return Ok(new { status });
         }
@@ -252,6 +270,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 updateRenter.PreviousDueDate = previousDueDate;
                 updateRenter.NextDueDate = nextDueDate;
+                _renterRepository.Update(updateRenter);
                 _renterRepository.Commit();
 
                 //for the next billing cycle
