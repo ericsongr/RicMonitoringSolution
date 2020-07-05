@@ -44,7 +44,6 @@ namespace RicModel.RoomRent
 
         public string PaidDateString => PaidDate?.ToString("dd-MMM-yyyy");
 
-        public string DateUsedDepositString => SystemDateTimeProcessed?.ToString("dd-MMM-yyyy");
 
     }
 }

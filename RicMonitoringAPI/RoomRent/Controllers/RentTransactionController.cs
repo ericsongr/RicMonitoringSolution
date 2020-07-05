@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using RicEntityFramework;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Parameters;
@@ -15,12 +13,11 @@ using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
-using RicModel.RoomRent.Extensions;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    //[AllowAnonymous]
-    [Authorize(Policy = "Superuser")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Superuser")]
     [Route("api/rent-transactions")]
     [ApiController]
     public class RentTransactionsController : ControllerBase
@@ -155,12 +152,15 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 if (rentTransaction.IsDepositUsed && !rentTransaction.IsEditingPayment)
                 {
+                    //when use deposit date paid should be current date of entry
+                    rentTransaction.PaidDate = DateTime.Now.Date;
+
                     AddOrDeductMonthUsed(rentTransaction.RenterId, true);
 
                     _rentTransactionPaymentRepository.Add(new RentTransactionPayment
                     {
                         Amount = 0,
-                        DatePaid = DateTime.UtcNow,
+                        DatePaid = rentTransaction.PaidDate.Value.Date,
                         PaymentTransactionType = PaymentTransactionType.DepositUsed,
                         RentTransactionId = id
                     });

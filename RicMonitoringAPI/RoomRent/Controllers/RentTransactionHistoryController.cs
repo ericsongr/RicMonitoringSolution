@@ -16,9 +16,8 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    //[Authorize(Policy = "Superuser")]
-    [Authorize(Policy = "ProcessTenantsTransaction")]
-    //[AllowAnonymous]
+    //[Authorize(Policy = "ProcessTenantsTransaction")]
+    [AllowAnonymous]
     [Route("api/rent-transaction-history")]
     [ApiController]
     public class RentTransactionHistoryController : ControllerBase
@@ -54,15 +53,18 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var rentTransactionHistories = _context.RentTransactions
                 .Where(o => o.RenterId == parameters.Id)
+                .Include(o => o.Renter)
+                .ThenInclude(o => o.RentArrears)
                 .Include(o => o.Room)
                 .Include(o => o.RentTransactionDetails)
+                .Include(o => o.RentTransactionPayments)
                 .ApplySort(parameters.OrderBy,
                     _rentTransactionHistoryPropertyMappingService
                         .GetPropertyMapping<RentTransactionHistoryDto, RentTransaction>());
-                
+
 
             var histories = Mapper.Map<IEnumerable<RentTransactionHistoryDto>>(rentTransactionHistories);
-            
+
             return Ok(histories.ShapeData(parameters.Fields));
         }
 

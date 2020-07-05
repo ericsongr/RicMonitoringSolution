@@ -14,7 +14,6 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
             {
                 {"DueDate", new PropertyMappingValue(new List<string>() {"DueDate"}, isRevert:true) },
                 {"DueDateString", new PropertyMappingValue(new List<string>() {"DueDateString"}) },
-                {"PaidDateString", new PropertyMappingValue(new List<string>() {"PaidDateString"}) },
                 {"Period", new PropertyMappingValue(new List<string>() {"Period"}) },
                 {"PaidAmount", new PropertyMappingValue(new List<string>() {"PaidAmount"}) },
                 {"BalanceDateToBePaid", new PropertyMappingValue(new List<string>() {"BalanceDateToBePaid"}) },
@@ -25,7 +24,7 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"IsDepositUsed", new PropertyMappingValue(new List<string>() {"IsDepositUsed"}) },
                 {"Note", new PropertyMappingValue(new List<string>() {"Note"}) },
                 {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
-                {"DateUsedDepositString", new PropertyMappingValue(new List<string>() {"DateUsedDepositString"}) },
+                {"PaidOrUsedDepositDateString", new PropertyMappingValue(new List<string>() {"PaidOrUsedDepositDateString"}) },
             };
 
         public RentTransactionHistoryPropertyMappingService()
