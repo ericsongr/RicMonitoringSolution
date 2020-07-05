@@ -3,11 +3,11 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable } from 'rxjs/Observable';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AuthService } from '../../common/core/auth/auth.service';
-import { RentTransactionHistoryService } from '../rent-transaction-history/rent-transaction-history.service';
+import { AuthService } from '../../../common/core/auth/auth.service';
+import { RentTransactionHistoryService } from '../../rent-transaction-history/rent-transaction-history.service';
 
 @Injectable()
-export class RenterService implements Resolve<any> 
+export class RenterDetailService implements Resolve<any> 
 {
   apiUrl: string;
   routeParams: any;
@@ -22,8 +22,7 @@ export class RenterService implements Resolve<any>
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    this.routeParams = route.params;
-
+    this.routeParams = route.parent.params;
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getRenter()

@@ -11,8 +11,8 @@ import { MaterialModule } from 'app/main/module/material.module';
 import { TenantShowErrorsComponent } from '../common/tenant-show-errors.component';
 import { RentersComponent } from './renters/renters.component';
 import { RentersService } from './renters/renters.service';
-import { RenterComponent } from './renter/renter.component';
-import { RenterService } from './renter/renter.service';
+import { RenterDetailComponent } from './renter/details/renter-details.component';
+import { RenterDetailService } from './renter/details/renter-details.service';
 import { RentTransactionsComponent } from './rent-transactions/rent-transactions.component';
 import { RentTransactionsService } from './rent-transactions/rent-transactions.service';
 import { RentTransactionService } from './rent-transaction/rent-transaction.service';
@@ -23,6 +23,9 @@ import { BillingStatementComponent } from './rent-transactions/billing-statement
 import { RentTransactionHistoryService } from './rent-transaction-history/rent-transaction-history.service';
 import { RentTransactionHistoryComponent } from './rent-transaction-history/rent-transaction-history.component';
 import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
+import { RenterComponent } from './renter/renter.component';
+import { PaymentHistoryComponent } from './renter/payment-history/payment-history.component';
+import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -59,16 +62,33 @@ const routes : Routes= [
     path      : 'tenants/:id',
     component : RenterComponent,
     resolve: {
-      data: RenterService
+      data: RenterDetailService
     }
   },
   {
     path      : 'tenants/:id/:handle',
     component : RenterComponent,
-    resolve: {
-      data: RenterService
-    }
+  
+    children: [
+      // { path: '', redirectTo: 'details', pathMatch: 'full' },
+      {
+        path      : 'details',
+        outlet    : 'tab',
+        component : RenterDetailComponent,
+          resolve: {
+            data: RenterDetailService
+          },
+        // pathMatch: 'full'
+      },
+      {
+        path      : 'payment-history',
+        outlet    : 'tab',
+        component : PaymentHistoryComponent,
+        // pathMatch: 'full'
+      }
+    ]
   },
+
   //rent transactions
   {
     path      :  'tenant-transactions',
@@ -83,7 +103,7 @@ const routes : Routes= [
     resolve: {
       data: RentTransactionService
     }
-  }
+  },
 ]
 
 @NgModule({
@@ -104,13 +124,16 @@ const routes : Routes= [
     RentTransactionComponent,
     RentTransactionHistoryComponent,
     BillingStatementComponent,
-    TenantShowErrorsComponent
+    TenantShowErrorsComponent,
+    RenterDetailComponent,
+    PaymentHistoryComponent,
+    RenterTabsComponent
   ],
   providers: [
     RoomsService,
     RoomService,
     RentersService,
-    RenterService,
+    RenterDetailService,
     RentTransactionsService,
     RentTransactionService,
     RentTransactionHistoryService,

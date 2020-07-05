@@ -1,6 +1,6 @@
 import { FuseUtils } from "@fuse/utils";
 
-export class Renter {
+export class RenterDetail {
     id              : number;
     name            : string;
     advanceMonths   : number;
