@@ -34,19 +34,6 @@
         </div>
       </div>
       <!-- /APP TITLE -->
-      <button mat-raised-button 
-              class="save-renter-button mat-white-bg mt-16 mt-sm-0"
-              [disabled]="renterForm.invalid"
-              *ngIf="pageType === 'add'" (click)="add()">
-        <span>ADD</span>
-      </button>
-
-      <button mat-raised-button 
-              class="save-renter mat-white-bg mt-16 mt-sm-0"
-              [disabled]="renterForm.invalid || renterForm.pristine"
-              *ngIf="pageType === 'edit'" (click)="save()">
-        <span>SAVE</span>
-      </button>
     </div>
       <!-- / HEADER -->
 

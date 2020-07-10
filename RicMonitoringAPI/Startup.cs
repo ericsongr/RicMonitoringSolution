@@ -205,7 +205,9 @@ namespace RicMonitoringAPI
                     .ForMember(dest => dest.CurrentBalance,
                         opt => opt.MapFrom(src => src.Balance))
                     .ForMember(dest => dest.IsDepositUsed, 
-                        opt => opt.MapFrom(src => src.CheckIfUsedDeposit()));
+                        opt => opt.MapFrom(src => src.CheckIfUsedDeposit()))
+                    .ForMember(dest => dest.BalanceDateToBePaidString, 
+                        opt => opt.MapFrom(src => src.GetBalanceDateToBePaid()));
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
                 cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();

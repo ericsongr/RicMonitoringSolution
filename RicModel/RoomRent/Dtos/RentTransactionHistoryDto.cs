@@ -4,11 +4,13 @@ namespace RicModel.RoomRent.Dtos
 {
     public class RentTransactionHistoryDto
     {
+        public int Id { get; set; }
+        public DateTime DueDate { get; set; }
         public string DueDateString { get; set; }
         public string PaidOrUsedDepositDateString { get; set; }
         public string Period { get; set; }
         public decimal? PaidAmount { get; set; }
-        public DateTime? BalanceDateToBePaid { get; set; }
+        public string BalanceDateToBePaidString { get; set; }
         public decimal MonthlyRent { get; set; }
         public decimal PreviousBalance { get; set; }
         public decimal CurrentBalance { get; set; }

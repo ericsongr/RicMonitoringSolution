@@ -9,8 +9,8 @@ import { Location } from '@angular/common';
 import { RoomsService } from '../../rooms/rooms.service';
 import { AppFunctionsService } from '../../../common/services/app-functions.service';
 import * as moment from 'moment'
-import { RentTransactionHistoryService } from '../../rent-transaction-history/rent-transaction-history.service';
-import { RentTransactionHistory } from '../../rent-transaction-history/rent-transaction-history.model';
+import { RentTransactionHistoryService } from '../rent-transaction-history/rent-transaction-history.service';
+import { RentTransactionHistory } from '../rent-transaction-history/rent-transaction-history.model';
 import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -223,23 +223,6 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get dateEndRent() {
     return this.renterForm.get('dateEndRent');
-  }
-
-
-  onClickTabHistory() {
-    
-      this._fuseProgressBarService.show();
-      
-      this._rentTransactionHistoryService.getHistory(this.renter.id)
-      
-          .then((response: RentTransactionHistory[]) => {
-            
-            this.rentTransactionHistory = response;
-            
-            this._fuseProgressBarService.hide();
-
-          })
-    
   }
 
   onChangeTotalPaidAmount() {

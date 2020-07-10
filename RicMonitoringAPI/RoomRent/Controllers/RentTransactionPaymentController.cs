@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,8 +8,8 @@ using RicModel.RoomRent.Enumerations;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    //[AllowAnonymous]
-    [Authorize(Policy = "Superuser")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Superuser")]
     [Route("api/rent-transaction-payments")]
     public class RentTransactionPaymentController : Controller
     {

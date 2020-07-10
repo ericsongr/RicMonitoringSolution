@@ -16,8 +16,8 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    //[AllowAnonymous]
-    [Authorize(Policy = "Superuser")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Superuser")]
     [Route("api/renters")]
     [ApiController]
     public class RentersController : ControllerBase

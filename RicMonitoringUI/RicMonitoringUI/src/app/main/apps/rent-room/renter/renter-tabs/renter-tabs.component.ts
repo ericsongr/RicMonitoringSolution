@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'renter-tabs',
@@ -10,8 +10,15 @@ export class RenterTabsComponent implements OnInit, AfterViewInit {
 
   navLinks: any[];
   activeLinkIndex = -1; 
+  routerParams: any;
+  id:any;
 
-  constructor(private _router: Router) { 
+  constructor(private _router: Router
+              ,private _activatedRoute: ActivatedRoute
+              ) 
+  { 
+    this.id = this._activatedRoute.snapshot.paramMap.get('id');
+    
     this.initNavLink();
   }
 
@@ -26,13 +33,6 @@ export class RenterTabsComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-
-    // this._router.navigate([{ outlets: { 'tab': ['payment-history'] } }]);
-  //   this._router.navigate([
-  //     'details', {
-  //         outlets: { tab: ['./details'] }
-  //     }
-  // ]);
   }
 
   initNavLink() {
@@ -42,12 +42,16 @@ export class RenterTabsComponent implements OnInit, AfterViewInit {
         link: 'details',
         icon: 'library_books',
         index: 0
-      },{
-        label: 'History',
-        link: 'payment-history',
-        icon: 'history',
-        index: 1
-    }];
+      }];
+
+    if (this.id != 'new') {
+        this.navLinks.push({
+          label: 'History',
+          link: 'payment-history',
+          icon: 'history',
+          index: 1
+        });
+    }
 
   }
 

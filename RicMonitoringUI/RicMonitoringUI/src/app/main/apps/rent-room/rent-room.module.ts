@@ -20,11 +20,10 @@ import { AppFunctionsService } from '../common/services/app-functions.service';
 import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
 import { CopyClipboardModule } from '../common/directives/copy-clipboard.module';
 import { BillingStatementComponent } from './rent-transactions/billing-statement/billing-statement.component';
-import { RentTransactionHistoryService } from './rent-transaction-history/rent-transaction-history.service';
-import { RentTransactionHistoryComponent } from './rent-transaction-history/rent-transaction-history.component';
+import { RentTransactionHistoryService } from './renter/rent-transaction-history/rent-transaction-history.service';
+import { RentTransactionHistoryComponent } from './renter/rent-transaction-history/rent-transaction-history.component';
 import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 import { RenterComponent } from './renter/renter.component';
-import { PaymentHistoryComponent } from './renter/payment-history/payment-history.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
@@ -61,30 +60,40 @@ const routes : Routes= [
   {
     path      : 'tenants/:id',
     component : RenterComponent,
-    resolve: {
-      data: RenterDetailService
-    }
-  },
-  {
-    path      : 'tenants/:id/:handle',
-    component : RenterComponent,
-  
     children: [
-      // { path: '', redirectTo: 'details', pathMatch: 'full' },
+      { path: '', redirectTo: 'details', outlet: 'tab', pathMatch: 'full' },
       {
         path      : 'details',
-        outlet    : 'tab',
         component : RenterDetailComponent,
           resolve: {
             data: RenterDetailService
           },
+          outlet    : 'tab',
+      }
+    ]
+  },
+  {
+    path      : 'tenants/:id/:handle',
+    component : RenterComponent,
+    children: [
+      { path: '', redirectTo: 'details', outlet: 'tab', pathMatch: 'full' },
+      {
+        path      : 'details',
+        component : RenterDetailComponent,
+          resolve: {
+            data: RenterDetailService
+          },
+          outlet    : 'tab',
         // pathMatch: 'full'
       },
       {
         path      : 'payment-history',
-        outlet    : 'tab',
-        component : PaymentHistoryComponent,
+        component : RentTransactionHistoryComponent,
+          resolve: {
+            data: RentTransactionHistoryService
+          },
         // pathMatch: 'full'
+        outlet    : 'tab',
       }
     ]
   },
@@ -126,7 +135,6 @@ const routes : Routes= [
     BillingStatementComponent,
     TenantShowErrorsComponent,
     RenterDetailComponent,
-    PaymentHistoryComponent,
     RenterTabsComponent
   ],
   providers: [
@@ -145,8 +153,7 @@ const routes : Routes= [
     // }
   ],
   entryComponents: [
-    DialogDeletePaymentConfirmationComponent,
-    RentTransactionHistoryComponent
+    DialogDeletePaymentConfirmationComponent
   ]
 })
 export class RentRoomModule { 

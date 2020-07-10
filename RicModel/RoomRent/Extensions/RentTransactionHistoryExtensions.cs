@@ -77,6 +77,18 @@ namespace RicModel.RoomRent.Extensions
             return rentTransaction.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed);
         }
 
+        public static string GetBalanceDateToBePaid(this RentTransaction rentTransaction)
+        {
+            if (rentTransaction == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            return rentTransaction.BalanceDateToBePaid.HasValue
+                ? rentTransaction.BalanceDateToBePaid.Value.ToShortDateString()
+                : "";
+        }
+
         public static decimal GetMonthlyRent(this RentTransaction rentTransaction)
         {
             if (rentTransaction == null)
