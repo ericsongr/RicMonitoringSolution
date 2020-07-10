@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RicModel.RoomRent.Enumerations;
 
@@ -13,17 +14,80 @@ namespace RicModel.RoomRent.Extensions
                 throw new ArgumentNullException("Source");
             }
 
-            var item = rentTransaction.RentTransactionDetails.FirstOrDefault(o => o.RentArrearId != null);
-            if (item != null)
+            decimal totalPreviousBalance = 0;
+
+            var transactionDetail = rentTransaction.RentTransactionDetails.FirstOrDefault(o => o.RentArrearId != null);
+            if (transactionDetail != null)
             {
-                return item.Amount;
+                totalPreviousBalance = transactionDetail.Amount;
             }
-            else
-            {
-                return 0;
-            }
+
+            return totalPreviousBalance;
+
         }
 
+        public static decimal GetManualUnpaidAmountEntry(this ICollection<RentArrear> rentArrears)
+        {
+            if (rentArrears == null)
+            {
+                throw new ArgumentNullException("Source");
+            }
+
+            var totalManualEntryArrear = rentArrears.Where(o => !o.IsProcessed && o.IsManualEntry).Sum(t => t.UnpaidAmount);
+
+            return totalManualEntryArrear;
+
+        }
+
+        public static string GetPaidOrUsedDepositDate(this RentTransaction rentTransaction)
+        {
+            if (rentTransaction == null)
+            {
+                throw new ArgumentNullException("Source");
+            }
+
+            string paidOrUsedDepositDate = "";
+            var payments = rentTransaction.RentTransactionPayments.ToList();
+            if (payments.Any())
+            {
+                var useDeposit =
+                    payments.FirstOrDefault(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed);
+                if (useDeposit != null)
+                {
+                    paidOrUsedDepositDate = useDeposit.DatePaid.ToShortDateString();
+                }
+                else
+                {
+                    //paid or carry over payment
+                    paidOrUsedDepositDate = rentTransaction.PaidDateString;
+                }
+
+            }
+
+            return paidOrUsedDepositDate;
+        }
+
+        public static bool CheckIfUsedDeposit(this RentTransaction rentTransaction)
+        {
+            if (rentTransaction == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            return rentTransaction.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed);
+        }
+
+        public static string GetBalanceDateToBePaid(this RentTransaction rentTransaction)
+        {
+            if (rentTransaction == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            return rentTransaction.BalanceDateToBePaid.HasValue
+                ? rentTransaction.BalanceDateToBePaid.Value.ToShortDateString()
+                : "";
+        }
 
         public static decimal GetMonthlyRent(this RentTransaction rentTransaction)
         {

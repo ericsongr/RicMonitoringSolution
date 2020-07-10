@@ -197,11 +197,17 @@ namespace RicMonitoringAPI
                 //histories
                 cfg.CreateMap<RentTransaction, RentTransactionHistoryDto>()
                     .ForMember(dest => dest.PreviousBalance,
-                                                opt => opt.MapFrom(src => src.GetPreviousBalance()))
+                                                opt => opt.MapFrom(src => src.GetPreviousBalance() + src.Renter.RentArrears.GetManualUnpaidAmountEntry()))
+                    .ForMember(dest => dest.PaidOrUsedDepositDateString,
+                        opt => opt.MapFrom(src => src.GetPaidOrUsedDepositDate()))
                     .ForMember(dest => dest.MonthlyRent,
                         opt => opt.MapFrom(src => src.GetMonthlyRent()))
                     .ForMember(dest => dest.CurrentBalance,
-                        opt => opt.MapFrom(src => src.Balance));
+                        opt => opt.MapFrom(src => src.Balance))
+                    .ForMember(dest => dest.IsDepositUsed, 
+                        opt => opt.MapFrom(src => src.CheckIfUsedDeposit()))
+                    .ForMember(dest => dest.BalanceDateToBePaidString, 
+                        opt => opt.MapFrom(src => src.GetBalanceDateToBePaid()));
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
                 cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();

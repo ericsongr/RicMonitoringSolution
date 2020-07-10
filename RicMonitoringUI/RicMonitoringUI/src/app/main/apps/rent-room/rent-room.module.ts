@@ -11,8 +11,8 @@ import { MaterialModule } from 'app/main/module/material.module';
 import { TenantShowErrorsComponent } from '../common/tenant-show-errors.component';
 import { RentersComponent } from './renters/renters.component';
 import { RentersService } from './renters/renters.service';
-import { RenterComponent } from './renter/renter.component';
-import { RenterService } from './renter/renter.service';
+import { RenterDetailComponent } from './renter/details/renter-details.component';
+import { RenterDetailService } from './renter/details/renter-details.service';
 import { RentTransactionsComponent } from './rent-transactions/rent-transactions.component';
 import { RentTransactionsService } from './rent-transactions/rent-transactions.service';
 import { RentTransactionService } from './rent-transaction/rent-transaction.service';
@@ -20,9 +20,11 @@ import { AppFunctionsService } from '../common/services/app-functions.service';
 import { RentTransactionComponent } from './rent-transaction/rent-transaction.component';
 import { CopyClipboardModule } from '../common/directives/copy-clipboard.module';
 import { BillingStatementComponent } from './rent-transactions/billing-statement/billing-statement.component';
-import { RentTransactionHistoryService } from './rent-transaction-history/rent-transaction-history.service';
-import { RentTransactionHistoryComponent } from './rent-transaction-history/rent-transaction-history.component';
+import { RentTransactionHistoryService } from './renter/rent-transaction-history/rent-transaction-history.service';
+import { RentTransactionHistoryComponent } from './renter/rent-transaction-history/rent-transaction-history.component';
 import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
+import { RenterComponent } from './renter/renter.component';
+import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -58,17 +60,44 @@ const routes : Routes= [
   {
     path      : 'tenants/:id',
     component : RenterComponent,
-    resolve: {
-      data: RenterService
-    }
+    children: [
+      { path: '', redirectTo: 'details', outlet: 'tab', pathMatch: 'full' },
+      {
+        path      : 'details',
+        component : RenterDetailComponent,
+          resolve: {
+            data: RenterDetailService
+          },
+          outlet    : 'tab',
+      }
+    ]
   },
   {
     path      : 'tenants/:id/:handle',
     component : RenterComponent,
-    resolve: {
-      data: RenterService
-    }
+    children: [
+      { path: '', redirectTo: 'details', outlet: 'tab', pathMatch: 'full' },
+      {
+        path      : 'details',
+        component : RenterDetailComponent,
+          resolve: {
+            data: RenterDetailService
+          },
+          outlet    : 'tab',
+        // pathMatch: 'full'
+      },
+      {
+        path      : 'payment-history',
+        component : RentTransactionHistoryComponent,
+          resolve: {
+            data: RentTransactionHistoryService
+          },
+        // pathMatch: 'full'
+        outlet    : 'tab',
+      }
+    ]
   },
+
   //rent transactions
   {
     path      :  'tenant-transactions',
@@ -83,7 +112,7 @@ const routes : Routes= [
     resolve: {
       data: RentTransactionService
     }
-  }
+  },
 ]
 
 @NgModule({
@@ -104,13 +133,15 @@ const routes : Routes= [
     RentTransactionComponent,
     RentTransactionHistoryComponent,
     BillingStatementComponent,
-    TenantShowErrorsComponent
+    TenantShowErrorsComponent,
+    RenterDetailComponent,
+    RenterTabsComponent
   ],
   providers: [
     RoomsService,
     RoomService,
     RentersService,
-    RenterService,
+    RenterDetailService,
     RentTransactionsService,
     RentTransactionService,
     RentTransactionHistoryService,
@@ -122,8 +153,7 @@ const routes : Routes= [
     // }
   ],
   entryComponents: [
-    DialogDeletePaymentConfirmationComponent,
-    RentTransactionHistoryComponent
+    DialogDeletePaymentConfirmationComponent
   ]
 })
 export class RentRoomModule { 

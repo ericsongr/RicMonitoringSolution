@@ -1,0 +1,127 @@
+<div id="payment-history">
+    <br>
+    <div>
+        <mat-table class="history-payment-table"
+            #table [dataSource]="dataSource"
+            matSort
+            [@animateStagger]="{value:'50'}"
+            fusePerfectScrollbar>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.id}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="period">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Period</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.period}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- # Of Persons Column -->
+        <ng-container matColumnDef="dueDateString">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.dueDateString}}</p>
+        </mat-cell>
+        </ng-container>
+        
+        <!-- Advance Paid Date Column -->
+        <ng-container matColumnDef="monthlyRent">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Rent</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate center">{{paymentHistory.monthlyRent | number: '1.0-2'}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- Start Date Column -->
+        <ng-container matColumnDef="previousBalance">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Previous Bal.</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.previousBalance | number: '1.0-2'}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- Current Balance -->
+        <ng-container matColumnDef="currentBalance">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Current Bal.</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.currentBalance | number: '1.0-2'}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- Due Date Column -->
+        <ng-container matColumnDef="totalAmountDue">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount Due</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.totalAmountDue | number: '1.0-2'}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="paidAmount">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.paidAmount | number: '1.0-2'}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="isDepositUsed">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Deposit Used</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+            <div class="pl-20">
+                <mat-icon *ngIf="paymentHistory.isDepositUsed" class="active-icon mat-green-600-bg s-16" style="color: red">check</mat-icon>
+                <mat-icon *ngIf="!paymentHistory.isDepositUsed" class="active-icon mat-red-500-bg s-16" style="color: green">close</mat-icon>
+              </div>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="paidOrUsedDepositDateString">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Paid / Used Deposit Date</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.paidOrUsedDepositDateString}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <!-- # Of Persons Column -->
+        <ng-container matColumnDef="balanceDateToBePaidString">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Promise Date Paid Bal.</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.balanceDateToBePaidString}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Type</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.transactionType}}</p>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Note</mat-header-cell>
+        <mat-cell *matCellDef="let paymentHistory">
+        <p class="text-truncate">{{paymentHistory.note}}</p>
+        </mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+        <mat-row *matRowDef="let paymentHistory; columns: displayedColumns;"
+        class="paymentHistory"
+        matRipple>
+        </mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator
+            [length]="dataSource.filteredData.length"
+            [pageIndex]="0"
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+</div>

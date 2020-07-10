@@ -12,12 +12,13 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
         private Dictionary<string, PropertyMappingValue> _historyPropertyMapping = 
             new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
             {
+                {"Id", new PropertyMappingValue(new List<string>() {"Id"}) },
                 {"DueDate", new PropertyMappingValue(new List<string>() {"DueDate"}, isRevert:true) },
                 {"DueDateString", new PropertyMappingValue(new List<string>() {"DueDateString"}) },
-                {"PaidDateString", new PropertyMappingValue(new List<string>() {"PaidDateString"}) },
+                {"PaidOrUsedDepositDateString", new PropertyMappingValue(new List<string>() {"PaidOrUsedDepositDateString"}) },
                 {"Period", new PropertyMappingValue(new List<string>() {"Period"}) },
                 {"PaidAmount", new PropertyMappingValue(new List<string>() {"PaidAmount"}) },
-                {"BalanceDateToBePaid", new PropertyMappingValue(new List<string>() {"BalanceDateToBePaid"}) },
+                {"BalanceDateToBePaidString", new PropertyMappingValue(new List<string>() {"BalanceDateToBePaidString"}) },
                 {"MonthlyRent", new PropertyMappingValue(new List<string>() {"MonthlyRent"}) },
                 {"PreviousBalance", new PropertyMappingValue(new List<string>() {"PreviousBalance"}) },
                 {"CurrentBalance", new PropertyMappingValue(new List<string>() {"CurrentBalance"}) },
@@ -25,7 +26,6 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"IsDepositUsed", new PropertyMappingValue(new List<string>() {"IsDepositUsed"}) },
                 {"Note", new PropertyMappingValue(new List<string>() {"Note"}) },
                 {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
-                {"DateUsedDepositString", new PropertyMappingValue(new List<string>() {"DateUsedDepositString"}) },
             };
 
         public RentTransactionHistoryPropertyMappingService()

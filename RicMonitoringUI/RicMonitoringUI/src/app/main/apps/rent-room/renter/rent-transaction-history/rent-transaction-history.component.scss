@@ -1,0 +1,72 @@
+
+@import "src/@fuse/scss/fuse";
+
+tab-rent-transaction-history {
+
+    #payment-history {
+
+        .top-bg {
+
+            @include media-breakpoint('lt-md') {
+                height: 256px;
+            }
+        }
+
+        .history-payment-table {
+            flex: 1 1 auto;
+            border-bottom: 1px solid rgba(0, 0, 0, .12);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+    
+            .mat-header-row {
+                min-height: 64px;
+            }
+    
+            .paymentHistory {
+                position: relative;
+                cursor: pointer;
+                height: 55px;
+            }
+    
+            .mat-cell {
+                min-width: 0;
+                display: flex;
+                align-items: center;
+            }
+    
+        }
+    
+    }
+    
+   
+    .tab-icon {
+        margin-right : 8px;
+    }
+
+   
+
+}
+
+.mat-column-id {
+    display: none;
+}
+
+.mat-column-transactionType {
+    display: none;
+}
+
+.mat-column-note {
+    display: none;
+}
+
+.mat-column-period {
+    flex: 0 1 170px;
+    margin-left: 25px
+}
+
+// .mat-cell {
+//     min-width: 0;
+//     display: flex;
+//     align-items: center;
+// }
+
