@@ -4,6 +4,7 @@
     {
         Paid = 1,
         DepositUsed = 2,
-        CarryOverExcessPayment = 3
+        CarryOverExcessPayment = 3,
+        AdvanceAndDeposit = 4,
     }
 }

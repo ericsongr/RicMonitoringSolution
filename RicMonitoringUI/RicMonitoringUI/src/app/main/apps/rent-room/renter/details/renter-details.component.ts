@@ -12,7 +12,7 @@ import * as moment from 'moment'
 import { RentTransactionHistoryService } from '../rent-transaction-history/rent-transaction-history.service';
 import { RentTransactionHistory } from '../rent-transaction-history/rent-transaction-history.model';
 import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-renter-detail',
@@ -45,7 +45,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     private _fuseProgressBarService: FuseProgressBarService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
-    private _location : Location,
+    private _router : Router,
     private _cdr: ChangeDetectorRef
     ) {}
 
@@ -57,13 +57,15 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this._renterService.onRenterChanged
           .subscribe(renter => {
 
-            //fetch rooms
-            this.fetchRooms();
+            
 
             if(renter) {
               this.renter = new RenterDetail(renter);
               this.pageType = 'edit';
               
+              //fetch rooms
+              this.fetchRooms(this.renter.roomId);
+
               //delay after 1 second
               setTimeout(() => {
                 this.selectRoom();
@@ -81,6 +83,9 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
             {
               this.pageType = 'add';
               this.renter = new RenterDetail();
+
+              //fetch rooms
+              this.fetchRooms();
 
               var dateStart = moment().format('YYYY-MM-DD');
               //fetch days with suffix
@@ -117,11 +122,11 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   
-  fetchRooms() {
-    this._roomsService.getRooms("dropdown")
-        .then(response => {
-          this.rooms = response;
-        })
+  fetchRooms(roomId = 0) {
+      this._roomsService.getRooms("dropdown", roomId)
+          .then(response => {
+              this.rooms = response;
+          });
   }
 
   fetchDaysWithSuffix(selectedDate: string) {
@@ -150,10 +155,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this._renterService.saveRenter(data)
-        .then(() => {
-
-            //Trigger the subscription with new data
-            // this._renterService.onRenterChanged.next(data);
+        .then((renter: RenterDetail) => {
 
             //show the success message
             this._snackBar.open('Renter detail saved.',
@@ -163,8 +165,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
                     duration: 2000
                 });
 
-            //change the location with new one
-            this._location.go(`/apartment/tenants/${this.renter.id}/${this.renter.handle}`);
+                this._router.navigate([`/apartment/tenants/${renter.id}/${renter.name}`]);
         });
   }
 
@@ -176,23 +177,18 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     data.handle = FuseUtils.handleize(data.name);
     data.startDateInput = moment(data.startDate).format('YYYY-MM-DD');
     data.advancePaidDateInput = moment(data.advancePaidDate).format('YYYY-MM-DD');
-    
-    this._renterService.addRenter(data)
-        .then((renterId) => {
-          //Trigger the subscription with new data
 
-          data.id = renterId;
-          // this._renterService.onRenterChanged.next(data);
+    this._renterService.addRenter(data)
+        .then((renter: RenterDetail) => {
 
           //show the success message
           this._snackBar.open('New renter added.', 'OK', {
             verticalPosition  : 'top',
             duration          : 2000
           });
+          
+          this._router.navigate([`/apartment/tenants/${renter.id}/${renter.name}`]);
 
-          //change the location with new one
-          this._location.go(`/apartment/tenants/${this.renter.id}/${this.renter.handle}`);
-          this._cdr.detectChanges();
         }).catch(error =>{
           console.log('error: ', error);
         });

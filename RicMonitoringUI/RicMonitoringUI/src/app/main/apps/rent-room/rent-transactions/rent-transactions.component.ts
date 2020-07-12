@@ -59,6 +59,10 @@ export class RentTransactionsComponent implements OnInit {
     return transactionType == 2 ? 'purple' : 'black'
   }
 
+  isShow(transactionType: number){
+    return transactionType == 2 ? true : false
+  }
+
   getTotalBalance() {
     var totalBalance = this.dataSource.filteredData.map(o => o.balance).reduce((totalBalance, value) => totalBalance + value, 0);
     return totalBalance;

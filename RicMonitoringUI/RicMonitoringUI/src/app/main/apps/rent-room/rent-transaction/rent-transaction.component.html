@@ -43,7 +43,7 @@
 
         <button mat-raised-button 
             class="mt-16 mt-sm-0"
-            *ngIf="(rentTransaction.transactionType == 1 && !rentTransaction.isProcessed)"
+            *ngIf="((rentTransaction.transactionType == 1 || rentTransaction.transactionType == 2) && !rentTransaction.isProcessed)"
             [disabled]="rentTransactionForm.invalid"
             (click)="save()">
           <span>SAVE</span>
@@ -205,11 +205,6 @@
                   <div class="h2 font-weight-300 py-8" style="color: maroon;">{{rentTransaction.balance | number: '1.0-2'}}</div>
                 </div>
 
-                <div *ngIf="rentTransaction.transactionType == 2" class="message-box warning">
-                  Please modify the tenant information via <a href="#" [routerLink]="'/apartment/tenants/' + rentTransaction.renterId + '/' + renterName">Tenant Page Form.</a>
-                </div>
-
-                <br>
                 <div *ngIf="payments.length > 0">
                   <!--payments transactions-->
                   <table mat-table [dataSource]="payments" class="table-payments mat-elevation-z8">
@@ -259,7 +254,8 @@
                           <mat-icon>edit</mat-icon>
                         </button>
                         <button type="button" mat-mini-fab color="warn"
-                          *ngIf="payment.paymentTransactionType != 'Carry Over Excess Payment'"
+                          *ngIf="payment.paymentTransactionType != 'Carry Over Excess Payment' && 
+                                 payment.paymentTransactionType != 'Advance And Deposit'"
                           [ngStyle]="{'margin-left': payment.paymentTransactionType == 'Paid' ? '' : '45px'}"
                           [hidden]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
                           (click)="deletePayment(payment.id)">
@@ -274,8 +270,9 @@
                     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                   </table>
                 </div>
-            </div>
-              <br>
+
+              </div>
+
           </div>
           
           </form>

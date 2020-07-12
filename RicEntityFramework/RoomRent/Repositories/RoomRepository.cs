@@ -45,7 +45,7 @@ namespace RicEntityFramework.RoomRent.Repositories
 
             collectionBeforPaging.ToList().ForEach(room =>
             {
-                room.IsOccupied = roomIds.Contains(room.Id);
+                room.IsOccupied = roomIds.Contains(room.Id) && !roomResourceParameters.RenterId.Equals(room.Id);
                 room.Name = $"{room.Name} {(room.IsOccupied ? "(Occupied)" : "")}";
             });
 

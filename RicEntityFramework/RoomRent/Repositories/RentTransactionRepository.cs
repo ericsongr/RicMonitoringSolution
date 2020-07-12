@@ -90,6 +90,10 @@ namespace RicEntityFramework.RoomRent.Repositories
                                         PaidDate = t.PaidDate,
                                         PaidAmount = t.PaidAmount,
                                         Balance = t.Balance,
+                                        PreviousUnpaidAmount =
+                                            t.Renter.RentArrears.Any(o => !o.IsProcessed) ?
+                                                t.Renter.RentArrears
+                                                    .Where(o => !o.IsProcessed).First().UnpaidAmount : 0,
                                         TotalAmountDue = t.TotalAmountDue,
                                         IsDepositUsed = t.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
                                         BalanceDateToBePaid = t.BalanceDateToBePaid,
