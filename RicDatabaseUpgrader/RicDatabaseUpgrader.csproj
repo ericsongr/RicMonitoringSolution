@@ -21,6 +21,7 @@
     <None Remove="Scripts\Update\v1.0001\0012-excess-paid-amount.sql" />
     <None Remove="Scripts\Update\v1.0001\0013-added-index.sql" />
     <None Remove="Scripts\Update\v1.0001\0014-balance-is-manual-entry.sql" />
+    <None Remove="Scripts\Update\v1.0001\0015-drop-renter-rent-transaction-id.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0014-balance-is-manual-entry.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0015-drop-renter-rent-transaction-id.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0013-added-index.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0012-excess-paid-amount.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0011-RentTransactionPayments.sql" />

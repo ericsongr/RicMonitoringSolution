@@ -13,6 +13,7 @@ using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.Enumeration;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicModel.RoomRent.Enumerations;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -24,6 +25,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     {
         private readonly IRenterRepository _renterRepository;
         private readonly IRentTransactionRepository _rentTransactionRepository;
+        private readonly IRentTransactionPaymentRepository _rentTransactionPaymentRepository;
         private readonly IRenterPropertyMappingService _renterPropertyMappingService;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
@@ -31,15 +33,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         public RentersController(
             IRenterRepository renterRepository,
             IRentTransactionRepository rentTransactionRepository,
+            IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IRenterPropertyMappingService renterPropertyMappingService,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService)
         {
-            _renterRepository = renterRepository;
-            _rentTransactionRepository = rentTransactionRepository;
-            _renterPropertyMappingService = renterPropertyMappingService;
-            _urlHelper = urlHelper;
-            _typeHelperService = typeHelperService;
+            _renterRepository = renterRepository ?? throw new ArgumentNullException(nameof(renterRepository));
+            _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
+            _rentTransactionPaymentRepository = rentTransactionPaymentRepository ?? throw new ArgumentNullException(nameof(rentTransactionPaymentRepository));
+            _renterPropertyMappingService = renterPropertyMappingService ?? throw new ArgumentNullException(nameof(renterPropertyMappingService));
+            _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
+            _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
         }
 
         [HttpGet("{id}", Name = "GetRenter")]
@@ -138,6 +142,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 PaidDate = advancePaidDateInput,
                 PaidAmount = renter.TotalPaidAmount,
+                TotalAmountDue = renter.TotalPaidAmount,
                 Balance = renter.BalanceAmount,
                 BalanceDateToBePaid = renter.BalancePaidDate,
                 Note = "Advance/Deposit",
@@ -150,15 +155,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionRepository.Add(rentTransaction);
             _rentTransactionRepository.Commit();
 
-            //update renter table with the generated rent transaction id
-            renterEntity.MonthsUsed = (renterEntity.MonthsUsed + 1); // tagged 1 meaning advance will use to ongoing month period
-            
-            _renterRepository.Update(renterEntity);
-            _renterRepository.Commit();
+            ProcessRentTransactionPayment(renter, rentTransaction.Id);
 
             var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
 
-            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id });
+            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
         }
 
         [HttpPut("{id}", Name = "UpdateRenter")]
@@ -217,17 +218,36 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 rentTransaction.Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}";
                 _rentTransactionRepository.Update(rentTransaction);
                 _rentTransactionRepository.Commit();
+
+                ProcessRentTransactionPayment(renter, rentTransaction.Id);
             }
 
             var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
 
-            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id});
+            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Renter>> DeleteRenter(int id)
+        {
+            var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
+            if (renterEntity == null)
+            {
+                return NotFound();
+            }
+
+            _renterRepository.Delete(renterEntity);
+            _renterRepository.Commit();
+
+            return Ok(new { message = "Renter successfully deleted."});
+        }
+
+        #region Private Methods
+
         private string CreateRenterResourceUri(
-                            RenterResourceParameters renterResourceParamaters,
-                            ResourceUriType type)
+            RenterResourceParameters renterResourceParamaters,
+            ResourceUriType type)
         {
             switch (type)
             {
@@ -255,31 +275,51 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 default:
                     return _urlHelper.Link("GetRenters",
-                            new
-                            {
-                                fields = renterResourceParamaters.Fields,
-                                orderBy = renterResourceParamaters.OrderBy,
-                                searchQuery = renterResourceParamaters.SearchQuery,
-                                pageNumber = renterResourceParamaters.PageNumber,
-                                pageSize = renterResourceParamaters.PageSize
-                            });
+                        new
+                        {
+                            fields = renterResourceParamaters.Fields,
+                            orderBy = renterResourceParamaters.OrderBy,
+                            searchQuery = renterResourceParamaters.SearchQuery,
+                            pageNumber = renterResourceParamaters.PageNumber,
+                            pageSize = renterResourceParamaters.PageSize
+                        });
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Renter>> DeleteRenter(int id)
+        /// <summary>
+        /// if new renter insert to RentTransactionPayments table
+        /// if update renter mark as deleted the existing one and insert new payment detail.
+        /// </summary>
+        /// <param name="renter"></param>
+        /// <param name="rentTransactionId"></param>
+        private void ProcessRentTransactionPayment(Renter renter, int rentTransactionId)
         {
-            var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
-            if (renterEntity == null)
+            var payment =
+                _rentTransactionPaymentRepository.GetSingleAsync(o => o.RentTransactionId == rentTransactionId)
+                    .GetAwaiter().GetResult();
+            if (payment == null)
             {
-                return NotFound();
+                //insert to RentTransactionPayments table
+                _rentTransactionPaymentRepository.Add(new RentTransactionPayment
+                {
+                    PaymentTransactionType = PaymentTransactionType.AdvanceAndDeposit,
+                    Amount = renter.TotalPaidAmount,
+                    DatePaid = renter.AdvancePaidDate,
+                    RentTransactionId = rentTransactionId
+                });
             }
-
-            _renterRepository.Delete(renterEntity);
-            _renterRepository.Commit();
-
-            return Ok(new { message = "Renter successfully deleted."});
+            else
+            {
+                //insert to RentTransactionPayments table
+                payment.Amount = renter.TotalPaidAmount;
+                payment.DatePaid = renter.AdvancePaidDate;
+                _rentTransactionPaymentRepository.Update(payment);
+            }
+            
+            _rentTransactionPaymentRepository.Commit();
         }
+        
+        #endregion
 
     }
 }

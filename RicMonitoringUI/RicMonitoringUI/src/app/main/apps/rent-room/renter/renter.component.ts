@@ -19,7 +19,7 @@ export class RenterComponent implements OnInit {
     this.pageType = this._activatedRoute.snapshot.paramMap.get('id') == 'new' ? 'new' : 'edit';
     
     if (this.pageType == 'edit')
-      this.renterName = this._activatedRoute.snapshot.paramMap.get('handle').replace('-', ' ').toUpperCase();
+      this.renterName = this._activatedRoute.snapshot.paramMap.get('handle').replace(/-/g, ' ').toUpperCase();
   
   }
   

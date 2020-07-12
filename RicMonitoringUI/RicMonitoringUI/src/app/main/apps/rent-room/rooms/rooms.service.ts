@@ -34,14 +34,17 @@ export class RoomsService implements Resolve<any> {
     });
   }
 
-  getRooms(htmlComponent): Promise<any> {
+  getRooms(htmlComponent, renterId = 0): Promise<any> {
     var fields = TABLE_FIELDS;
+    var url = `${this.apiUrl}${ApiControllers.Rooms}${fields}`;
+    
     if (htmlComponent == "dropdown"){
-      fields = DROPDOWN_FIELDS;
+      fields = DROPDOWN_FIELDS.replace('?', '');
+      url = `${this.apiUrl}${ApiControllers.Rooms}?renterId=${renterId}&${fields}`;
     }
 
     return new Promise((resolve, reject) => {
-      var url = `${this.apiUrl}${ApiControllers.Rooms}${fields}`;
+      
       this._authService.get(url)
           .subscribe((response: any) => {
               this.rooms = response;

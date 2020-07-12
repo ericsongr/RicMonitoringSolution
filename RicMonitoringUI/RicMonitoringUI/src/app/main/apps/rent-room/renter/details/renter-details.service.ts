@@ -56,7 +56,7 @@ export class RenterDetailService implements Resolve<any>
     return new Promise((resolve, reject) => {
       this._authService.put(this.apiUrl + renter.id, renter)
           .subscribe((response: any) => {
-            resolve(response.id);
+            resolve(response);
           }, reject);
     });
   }
@@ -65,7 +65,7 @@ export class RenterDetailService implements Resolve<any>
     return new Promise((resolve, reject) => {
       this._authService.post(this.apiUrl, renter)
           .subscribe((response: any) => {
-            resolve(response.id);
+            resolve(response);
           }, reject);
     });
   }
