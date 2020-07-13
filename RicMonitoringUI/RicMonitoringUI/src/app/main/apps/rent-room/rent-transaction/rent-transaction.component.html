@@ -205,71 +205,13 @@
                   <div class="h2 font-weight-300 py-8" style="color: maroon;">{{rentTransaction.balance | number: '1.0-2'}}</div>
                 </div>
 
-                <div *ngIf="payments.length > 0">
-                  <!--payments transactions-->
-                  <table mat-table [dataSource]="payments" class="table-payments mat-elevation-z8">
-                     <!-- Paid Date Column -->
-                     <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef> ID </th>
-                      <td mat-cell *matCellDef="let payment"> {{payment.id}} </td>
-                      <td mat-footer-cell *matFooterCellDef> </td>
-                    </ng-container>
-
-                    <!-- Paid Date Column (hidden)-->
-                    <ng-container matColumnDef="datePaid">
-                      <th mat-header-cell *matHeaderCellDef> Paid </th>
-                      <td mat-cell *matCellDef="let payment"> {{payment.datePaid}} </td>
-                      <td mat-footer-cell *matFooterCellDef> </td>
-                    </ng-container>
-
-                    <!-- Paid Date String Column -->
-                    <ng-container matColumnDef="datePaidString">
-                      <th mat-header-cell *matHeaderCellDef> Paid </th>
-                      <td mat-cell *matCellDef="let payment"> {{payment.datePaidString}} </td>
-                      <td mat-footer-cell *matFooterCellDef> Total </td>
-                    </ng-container>
-                  
-                    <!-- Amount Column -->
-                    <ng-container matColumnDef="amount">
-                      <th mat-header-cell *matHeaderCellDef> Amount </th>
-                      <td mat-cell *matCellDef="let payment"> {{payment.amount | number: '1.0-2'}} </td>
-                      <td mat-footer-cell *matFooterCellDef> {{getTotalAmount() | number: '1.0-2'}} </td>
-                    </ng-container>
-                  
-                     <!-- Amount Column -->
-                     <ng-container matColumnDef="paymentTransactionType">
-                      <th mat-header-cell *matHeaderCellDef>Transaction</th>
-                      <td mat-cell *matCellDef="let payment"> {{payment.paymentTransactionType}} </td>
-                      <td mat-footer-cell *matFooterCellDef> </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="edit_delete_icon">
-                      <th mat-header-cell *matHeaderCellDef></th>
-                      <td mat-cell *matCellDef="let payment">
-                        <button type="button" mat-mini-fab color="accent"
-                          *ngIf = "payment.paymentTransactionType == 'Paid'"
-                          style="margin-right: 5px;"
-                          [hidden]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
-                          (click)="editPayment(payment.id)">
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <button type="button" mat-mini-fab color="warn"
-                          *ngIf="payment.paymentTransactionType != 'Carry Over Excess Payment' && 
-                                 payment.paymentTransactionType != 'Advance And Deposit'"
-                          [ngStyle]="{'margin-left': payment.paymentTransactionType == 'Paid' ? '' : '45px'}"
-                          [hidden]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
-                          (click)="deletePayment(payment.id)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      </td>
-                      <td mat-footer-cell *matFooterCellDef></td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-                  </table>
-                </div>
+                <!--payments transactions-->
+                <rent-transaction-payment-table *ngIf="payments.length > 0" 
+                  [payments]="payments" 
+                  [isHiddenButtons]="isEditingPayment || isAddingPayment || rentTransaction.isDepositUsed"
+                  (editPayment)="editPayment($event)"
+                  (deletePayment)="deletePayment($event)">
+                </rent-transaction-payment-table>
 
               </div>
 

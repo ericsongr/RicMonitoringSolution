@@ -63,37 +63,4 @@
 
         
     }
-
-    .table-payments {
-        width: 100%;
-
-        .mat-column-id,
-        .mat-column-datePaid {
-            // flex: 0 1 50px;
-            display: none;
-        }
-
-        .mat-column-amount {
-            flex: 0 1 300px;
-            padding-left: 20px;
-            width: 150px;
-        }
-
-        .mat-column-datePaidString {
-            flex: 0 1 200px;
-            padding-left: 20px;
-            width: 150px;
-        }
-
-        .mat-column-paymentTransactionType {
-            flex: 0 1 200px;
-            padding-left: 20px;
-            width: 130px;
-        }
-
-    }
-    
-    tr.mat-footer-row {
-        font-weight: bold;
-    }
 }
