@@ -9,11 +9,13 @@ import { BillingStatement } from '../rent-transactions/billing-statement/billing
 import { ActivatedRoute, Router } from '@angular/router';
 import { RentTransactionPayment } from './rent-transaction.payment.model';
 import { DialogDeletePaymentConfirmationComponent } from './dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'page-rent-transaction',
   templateUrl: './rent-transaction.component.html', 
-  styleUrls: ['./rent-transaction.component.scss']
+  styleUrls: ['./rent-transaction.component.scss'],
+  animations: fuseAnimations
 })
 export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewInit {
   
@@ -38,7 +40,6 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
   //payments table
   payments: RentTransactionPayment[];
-  displayedColumns: string[] = ['id','datePaid','datePaidString','amount','paymentTransactionType', 'edit_delete_icon'];
 
   constructor(
     private _rentTransactionService: RentTransactionService,
@@ -187,7 +188,6 @@ editPayment(paymentId) {
 }
 
 deletePayment(paymentId) {
-
   var confirmationDialog = this._dialog.open(DialogDeletePaymentConfirmationComponent, {
     width: '350px'
   });
@@ -294,10 +294,6 @@ deletePayment(paymentId) {
     this.paidDateDatePicker.updateValueAndValidity();
     this.paidAmount.updateValueAndValidity();
     
-  }
-
-  getTotalAmount() {
-    return this.payments.map(t => t.amount).reduce((acc, value) => acc + value, 0);
   }
 
   ngOnDestroy(): void {

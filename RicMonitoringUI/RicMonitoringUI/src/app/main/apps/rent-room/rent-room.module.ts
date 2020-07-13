@@ -25,6 +25,7 @@ import { RentTransactionHistoryComponent } from './renter/rent-transaction-histo
 import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 import { RenterComponent } from './renter/renter.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
+import { RentTransactionPaymentComponent } from './rent-transaction/rent-transaction-payment/rent-transaction-payment.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
 
@@ -84,7 +85,6 @@ const routes : Routes= [
             data: RenterDetailService
           },
           outlet    : 'tab',
-        // pathMatch: 'full'
       },
       {
         path      : 'payment-history',
@@ -92,7 +92,6 @@ const routes : Routes= [
           resolve: {
             data: RentTransactionHistoryService
           },
-        // pathMatch: 'full'
         outlet    : 'tab',
       }
     ]
@@ -131,6 +130,7 @@ const routes : Routes= [
     RenterComponent,
     RentTransactionsComponent,
     RentTransactionComponent,
+    RentTransactionPaymentComponent,
     RentTransactionHistoryComponent,
     BillingStatementComponent,
     TenantShowErrorsComponent,
