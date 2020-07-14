@@ -26,8 +26,22 @@ import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dia
 import { RenterComponent } from './renter/renter.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 import { RentTransactionPaymentComponent } from './rent-transaction/rent-transaction-payment/rent-transaction-payment.component';
+//import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+//import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { AuthInterceptor } from '../common/core/http-interceptor/AuthInterceptor';
+
+//export const US_FORMATS = {
+//  parse: {
+//    dateInput: 'MM/DD/YYYY',
+//  },
+//  display: {
+//    dateInput: 'MM/DD/YYYY',
+//    monthYearLabel: 'MMM DD YYYY',
+//    dateA11yLabel: 'LL',
+//    monthYearA11yLabel: 'MMMM DD YYYY',
+//  },
+//};
 
 const routes : Routes= [
    {
@@ -138,6 +152,9 @@ const routes : Routes= [
     RenterTabsComponent
   ],
   providers: [
+    // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    // { provide: MAT_DATE_FORMATS, useValue: US_FORMATS },
+    // { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {strict: true}},
     RoomsService,
     RoomService,
     RentersService,
@@ -145,7 +162,7 @@ const routes : Routes= [
     RentTransactionsService,
     RentTransactionService,
     RentTransactionHistoryService,
-    AppFunctionsService,
+    AppFunctionsService
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor,

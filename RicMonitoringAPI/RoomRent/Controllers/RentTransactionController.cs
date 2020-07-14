@@ -129,6 +129,15 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
+            DateTime paidDate;
+            DateTime balanceDateToBePaid;
+
+            if (DateTime.TryParse(rentTransaction.PaidDateInput, out paidDate))
+                rentTransaction.PaidDate = paidDate;
+
+            if (DateTime.TryParse(rentTransaction.BalanceDateToBePaidInput, out balanceDateToBePaid))
+                rentTransaction.BalanceDateToBePaid = balanceDateToBePaid;
+
             var rentTransactionEntity = await _rentTransactionRepository
                 .GetSingleIncludesAsync(o => o.Id == id,
                             o => o.RentTransactionPayments);
