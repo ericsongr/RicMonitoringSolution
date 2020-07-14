@@ -5,5 +5,8 @@
         public bool IsAddingPayment { get; set; }
         public bool IsEditingPayment { get; set; }
         public int RentTransactionPaymentId { get; set; }
+
+        public string PaidDateInput { get; set; }
+        public string BalanceDateToBePaidInput { get; set; }
     }
 }

@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RentTransactionPayment } from './rent-transaction.payment.model';
 import { DialogDeletePaymentConfirmationComponent } from './dialog-delete-payment-confirmation/dialog-delete-payment-confirmation.component';
 import { fuseAnimations } from '@fuse/animations';
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-rent-transaction',
@@ -128,9 +129,10 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
 
       const formData = this.rentTransactionForm.getRawValue();
 
-      this.rentTransaction.paidDate = formData.paidDate;
+      this.rentTransaction.paidDateInput = moment(formData.paidDate).format('YYYY-MM-DD');
+      this.rentTransaction.balanceDateToBePaidInput = moment(formData.balanceDateToBePaid).format('YYYY-MM-DD');
+      
       this.rentTransaction.paidAmount = formData.paidAmount;
-      this.rentTransaction.balanceDateToBePaid = formData.balanceDateToBePaid;
       this.rentTransaction.note = formData.note;
       this.rentTransaction.transactionType = TransactionTypeEnum.MonthlyRent;
       this.rentTransaction.isAddingPayment = this.isAddingPayment;
@@ -140,7 +142,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
         this.rentTransaction.balanceDateToBePaid = null;
         this.rentTransaction.balance = null;
       }
-
+      
       this._rentTransactionService.saveTransaction(this.rentTransaction)
           .then((transactionId: number) => {
 

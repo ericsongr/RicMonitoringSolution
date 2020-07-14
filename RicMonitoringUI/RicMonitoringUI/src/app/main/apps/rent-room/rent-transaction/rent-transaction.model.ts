@@ -13,9 +13,11 @@ export class RentTransaction {
     dueDateString       : string;
     period              : string;
     paidDate            : string;
+    paidDateInput       : string;
     paidAmount          : number;
     totalPaidAmount     : number;
     balanceDateToBePaid : string;
+    balanceDateToBePaidInput : string;
     balance             : number;
     totalAmountDue      : number;
     rentArrearId        : number;
