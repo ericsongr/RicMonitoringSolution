@@ -347,7 +347,6 @@ CREATE TABLE [dbo].[AuditRenters](
 	[BalancePaidDate] [datetime2](7) NULL,
 	[TotalPaidAmount] [decimal](18, 2) NOT NULL DEFAULT ((0.0)),
 	[DueDay] [int] NOT NULL DEFAULT ((0)),
-	[RentTransactionId] [int] NULL,
 	[NextDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[PreviousDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[AuditDateTime] [datetime2](7) NOT NULL DEFAULT (GETDATE()),

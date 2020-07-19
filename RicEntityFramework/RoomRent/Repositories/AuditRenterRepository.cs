@@ -2,20 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using RicEntityFramework.BaseRepository;
 using RicEntityFramework.Helpers;
-using RicEntityFramework.Parameters;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
+using RicModel.RoomRent.Dtos.Audits;
 
 namespace RicEntityFramework.RoomRent.Repositories
 {
-    public class RenterRepository : EntityBaseRepository<Renter>, IRenterRepository
+    public class AuditRenterRepository : EntityBaseRepository<AuditRenter>, IAuditRenterRepository
     {
         private readonly RicDbContext _context;
         private readonly IRenterPropertyMappingService _propertyMappingService;
 
-        public RenterRepository(
+        public AuditRenterRepository(
             RicDbContext context
             , IRenterPropertyMappingService propertyMappingService
             ) : base(context)
@@ -29,29 +30,26 @@ namespace RicEntityFramework.RoomRent.Repositories
             return _context.Renters;
         }
 
-        public PagedList<Renter> GetRenters(RenterResourceParameters renterResourceParameters)
+        public PagedList<AuditRenter> GetRenters(BaseResourceParameters auditRenterResourceParameters)
         {
             var collectionBeforPaging =
-                _context.Renters.ApplySort(renterResourceParameters.OrderBy,
-                    _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
+                _context.AuditRenters.ApplySort(auditRenterResourceParameters.OrderBy,
+                    _propertyMappingService.GetPropertyMapping<AuditRenterDto, AuditRenter>());
 
 
-            collectionBeforPaging = collectionBeforPaging
-                .Where(a => !a.IsEndRent);
-
-            if (!string.IsNullOrEmpty(renterResourceParameters.SearchQuery))
+            if (!string.IsNullOrEmpty(auditRenterResourceParameters.SearchQuery))
             {
                 var searchQueryForWhereClause =
-                    renterResourceParameters.SearchQuery.Trim().ToLowerInvariant();
+                    auditRenterResourceParameters.SearchQuery.Trim().ToLowerInvariant();
 
                 collectionBeforPaging = collectionBeforPaging
                     .Where(a => a.Name.ToLowerInvariant().Contains(searchQueryForWhereClause));
 
             }
 
-            return PagedList<Renter>.Create(collectionBeforPaging,
-                renterResourceParameters.PageNumber,
-                renterResourceParameters.PageSize);
+            return PagedList<AuditRenter>.Create(collectionBeforPaging,
+                auditRenterResourceParameters.PageNumber,
+                auditRenterResourceParameters.PageSize);
         }
     }
 }

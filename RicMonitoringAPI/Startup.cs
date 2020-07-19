@@ -21,7 +21,9 @@ using RicEntityFramework.Interfaces.PropertyMappings;
 using RicEntityFramework.PropertyMappings;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
+using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings.IAudits;
 using RicEntityFramework.RoomRent.PropertyMappings;
+using RicEntityFramework.RoomRent.PropertyMappings.Audits;
 using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.Services;
 using RicModel.RoomRent;
@@ -62,6 +64,9 @@ namespace RicMonitoringAPI
             services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
             services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
             services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
+
+            services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddScoped<IUrlHelper, UrlHelper>(implementationFactory =>
@@ -78,6 +83,10 @@ namespace RicMonitoringAPI
             services.AddTransient<ILookupTypePropertyMappingService, LookupTypePropertyMappingService>();
             services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
             services.AddTransient<IRentTransactionHistoryPropertyMappingService, RentTransactionHistoryPropertyMappingService>();
+            
+            services.AddTransient<IAuditRenterPropertyMappingService, AuditRenterPropertyMappingService>();
+
+
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
             services.AddHealthChecks();
