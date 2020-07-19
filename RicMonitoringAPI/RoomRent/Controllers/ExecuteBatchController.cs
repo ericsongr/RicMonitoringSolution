@@ -118,7 +118,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                         decimal totalAmountDue = transaction.MonthlyRent + previousArrearUnpaidBalance;
                         decimal totalBalance = 0;
-                        decimal paidBalance = 0;
 
                         if (transaction.HasMonthDeposit)
                         {

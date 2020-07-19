@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
-using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IAudits;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings.IAudits;
 using RicModel.RoomRent.Audits;
-using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Dtos.Audits;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -21,17 +19,47 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     public class AuditsController : Controller
     {
         private readonly ITypeHelperService _typeHelperService;
+
         private readonly IAuditRenterRepository _auditRenterRepository;
         private readonly IAuditRenterPropertyMappingService _auditRenterPropertyMappingService;
+        //
+        private readonly IAuditRoomPropertyMappingService _auditRoomPropertyMappingService;
+        private readonly IAuditRoomRepository _auditRoomRenterRepository;
+        //
+        private readonly IAuditRentTransactionPaymentRepository _auditRentTransactionPaymentRepository;
+        private readonly IAuditRentTransactionPaymentPropertyMappingService _auditRentTransactionPaymentPropertyMappingService;
+        //
+        private readonly IAuditRentTransactionRepository _auditRentTransactionRepository;
+        private readonly IAuditRentTransactionPropertyMappingService _auditRentTransactionPropertyMappingService;
 
         public AuditsController(
             ITypeHelperService typeHelperService,
+            //
             IAuditRenterRepository auditRenterRepository,
-                IAuditRenterPropertyMappingService auditRenterPropertyMappingService)
+            IAuditRoomPropertyMappingService auditRoomPropertyMappingService,
+            //
+            IAuditRoomRepository auditRoomRenterRepository,
+            IAuditRentTransactionPaymentRepository auditRentTransactionPaymentRepository,
+            //
+            IAuditRenterPropertyMappingService auditRenterPropertyMappingService,
+            IAuditRentTransactionPaymentPropertyMappingService auditRentTransactionPaymentPropertyMappingService,
+            //
+            IAuditRentTransactionRepository auditRentTransactionRepository,
+            IAuditRentTransactionPropertyMappingService auditRentTransactionPropertyMappingService)
         {
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            //
             _auditRenterRepository = auditRenterRepository ?? throw new ArgumentNullException(nameof(auditRenterRepository));
             _auditRenterPropertyMappingService = auditRenterPropertyMappingService ?? throw new ArgumentNullException(nameof(auditRenterPropertyMappingService));
+            //
+            _auditRoomPropertyMappingService = auditRoomPropertyMappingService ?? throw new ArgumentNullException(nameof(auditRoomRenterRepository));
+            _auditRoomRenterRepository = auditRoomRenterRepository ?? throw new ArgumentNullException(nameof(auditRoomRenterRepository));
+            //
+            _auditRentTransactionPaymentRepository = auditRentTransactionPaymentRepository ?? throw new ArgumentNullException(nameof(auditRentTransactionPaymentRepository));
+            _auditRentTransactionPaymentPropertyMappingService = auditRentTransactionPaymentPropertyMappingService ?? throw new ArgumentNullException(nameof(auditRentTransactionPaymentPropertyMappingService));
+            //
+            _auditRentTransactionRepository = auditRentTransactionRepository ?? throw new ArgumentNullException(nameof(auditRentTransactionRepository));
+            _auditRentTransactionPropertyMappingService = auditRentTransactionPropertyMappingService ?? throw new ArgumentNullException(nameof(auditRentTransactionPropertyMappingService));
         }
 
         [HttpGet("{id}/renters", Name = "GetAuditRenters")]
@@ -61,47 +89,87 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         }
 
-        [HttpGet("{id}/transactions")]
-        public IActionResult Transactions(int id)
+        [HttpGet("{id}/transactions", Name = "GetAuditRentTransactions")]
+        public IActionResult Transactions(int id, [FromQuery] string fields)
         {
-            var auditRenters = _auditRenterRepository.FindBy(o => o.Id == id);
+            if (!_auditRentTransactionPropertyMappingService.ValidMappingExistsFor<AuditRentTransactionDto, AuditRentTransaction>("auditDateTimeString"))
+            {
+                return BadRequest();
+            }
 
-            return Json(null);
+            if (!_typeHelperService.TypeHasProperties<AuditRentTransactionDto>(fields))
+            {
+                return BadRequest();
+            }
+
+            var auditRenters = _auditRentTransactionRepository
+                .FindBy(o => o.Id == id, 
+                    o => o.Room, o => o.Renter)
+                .OrderByDescending(o => o.AuditDateTime);
+            if (!auditRenters.Any())
+            {
+                return NotFound();
+            }
+
+            var auditRentTransactionRepo = Mapper.Map<IEnumerable<AuditRentTransactionDto>>(auditRenters);
+
+            return Ok(auditRentTransactionRepo.ShapeData(fields));
         }
 
         [HttpGet("{id}/payments")]
-        public IActionResult Payments(int id)
+        public IActionResult Payments(int id, [FromQuery] string fields)
         {
-            var auditRenters = _auditRenterRepository.FindBy(o => o.Id == id);
+            //id is the transactionId
 
-            return Json(null);
+            if (!_auditRentTransactionPaymentPropertyMappingService.ValidMappingExistsFor<AuditRentTransactionPaymentDto, AuditRentTransactionPayment>("AuditDateTimeString"))
+            {
+                return BadRequest();
+            }
+
+            if (!_typeHelperService.TypeHasProperties<AuditRentTransactionPaymentDto>(fields))
+            {
+                return BadRequest();
+            }
+
+            var auditPayments = _auditRentTransactionPaymentRepository
+                .FindBy(o => o.RentTransactionPayment.RentTransactionId == id)
+                .OrderByDescending(o => o.AuditDateTime);
+
+            if (!auditPayments.Any())
+            {
+                return NotFound();
+            }
+
+            var auditPaymentRepo = Mapper.Map<IEnumerable<AuditRentTransactionPaymentDto>>(auditPayments);
+
+            return Ok(auditPaymentRepo.ShapeData(fields));
+
         }
 
         [HttpGet("Rooms")]
-        public IActionResult Payments([FromQuery] string fields)
+        public IActionResult Rooms([FromQuery] string fields)
         {
-            //if (!_auditRenterPropertyMappingService.ValidMappingExistsFor<AuditRenterDto, AuditRenter>("AuditDateTimeString"))
-            //{
-            //    return BadRequest();
-            //}
+            if (!_auditRoomPropertyMappingService.ValidMappingExistsFor<AuditRoomDto, AuditRoom>("AuditDateTimeString"))
+            {
+                return BadRequest();
+            }
 
-            //if (!_typeHelperService.TypeHasProperties<AuditRenterDto>(fields))
-            //{
-            //    return BadRequest();
-            //}
+            if (!_typeHelperService.TypeHasProperties<AuditRoomDto>(fields))
+            {
+                return BadRequest();
+            }
 
-            //var auditRenters = _auditRenterRepository
-            //    .FindBy(o => o.Id == id, o => o.Room)
-            //    .OrderByDescending(o => o.AuditDateTime);
-            //if (!auditRenters.Any())
-            //{
-            //    return NotFound();
-            //}
+            var auditRenters = _auditRoomRenterRepository
+                .FindAll()
+                .OrderByDescending(o => o.AuditDateTime);
+            if (!auditRenters.Any())
+            {
+                return NotFound();
+            }
 
-            //var auditRenterRepo = Mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters);
+            var auditRenterRepo = Mapper.Map<IEnumerable<AuditRoomDto>>(auditRenters);
 
-            //return Ok(auditRenterRepo.ShapeData(fields));
-            return null;
+            return Ok(auditRenterRepo.ShapeData(fields));
         }
     }
 }

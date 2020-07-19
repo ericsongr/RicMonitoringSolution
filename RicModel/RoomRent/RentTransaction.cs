@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection;
 using RicModel.Enumeration;
+using RicModel.RoomRent.Audits;
 
 namespace RicModel.RoomRent
 {

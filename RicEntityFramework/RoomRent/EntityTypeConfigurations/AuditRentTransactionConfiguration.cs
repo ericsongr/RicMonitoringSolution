@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {

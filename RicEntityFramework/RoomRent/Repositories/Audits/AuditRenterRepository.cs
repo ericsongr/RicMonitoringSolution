@@ -2,14 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using RicEntityFramework.BaseRepository;
 using RicEntityFramework.Helpers;
-using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IAudits;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
-using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Dtos.Audits;
 
-namespace RicEntityFramework.RoomRent.Repositories
+namespace RicEntityFramework.RoomRent.Repositories.Audits
 {
     public class AuditRenterRepository : EntityBaseRepository<AuditRenter>, IAuditRenterRepository
     {
@@ -30,7 +29,7 @@ namespace RicEntityFramework.RoomRent.Repositories
             return _context.Renters;
         }
 
-        public PagedList<AuditRenter> GetRenters(BaseResourceParameters auditRenterResourceParameters)
+        public PagedList<AuditRenter> GetAuditRenters(BaseResourceParameters auditRenterResourceParameters)
         {
             var collectionBeforPaging =
                 _context.AuditRenters.ApplySort(auditRenterResourceParameters.OrderBy,

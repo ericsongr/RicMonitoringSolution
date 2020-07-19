@@ -1,8 +1,7 @@
 ﻿using System;
 using RicModel.Enumeration;
-using RicModel.RoomRent.Audits;
 
-namespace RicModel.RoomRent
+namespace RicModel.RoomRent.Audits
 {
     public class AuditRentTransaction : IAudit
     {
@@ -35,11 +34,7 @@ namespace RicModel.RoomRent
         public virtual Renter Renter { get; set; }
         public virtual RentTransaction RentTransaction { get; set; }
 
-        public string DueDateString => DueDate.ToString("dd-MMM-yyyy");
-
-        public string PaidDateString => PaidDate?.ToString("dd-MMM-yyyy");
-
-        public string DateUsedDepositString => SystemDateTimeProcessed?.ToString("dd-MMM-yyyy");
+        
 
       
     }

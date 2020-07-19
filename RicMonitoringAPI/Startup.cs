@@ -20,11 +20,13 @@ using RicEntityFramework.Interfaces;
 using RicEntityFramework.Interfaces.PropertyMappings;
 using RicEntityFramework.PropertyMappings;
 using RicEntityFramework.RoomRent.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces.IAudits;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings.IAudits;
 using RicEntityFramework.RoomRent.PropertyMappings;
 using RicEntityFramework.RoomRent.PropertyMappings.Audits;
 using RicEntityFramework.RoomRent.Repositories;
+using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
@@ -66,6 +68,9 @@ namespace RicMonitoringAPI
             services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
 
             services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
+            services.AddScoped<IAuditRoomRepository, AuditRoomRepository>();
+            services.AddScoped<IAuditRentTransactionRepository, AuditRentTransactionRepository>();
+            services.AddScoped<IAuditRentTransactionPaymentRepository, AuditRentTransactionPaymentRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -85,6 +90,9 @@ namespace RicMonitoringAPI
             services.AddTransient<IRentTransactionHistoryPropertyMappingService, RentTransactionHistoryPropertyMappingService>();
             
             services.AddTransient<IAuditRenterPropertyMappingService, AuditRenterPropertyMappingService>();
+            services.AddTransient<IAuditRoomPropertyMappingService, AuditRoomPropertyMappingService>();
+            services.AddTransient<IAuditRentTransactionPropertyMappingService, AuditRentTransactionPropertyMappingService>();
+            services.AddTransient<IAuditRentTransactionPaymentPropertyMappingService, AuditRentTransactionPaymentPropertyMappingService>();
 
 
             services.AddTransient<ITypeHelperService, TypeHelperService>();

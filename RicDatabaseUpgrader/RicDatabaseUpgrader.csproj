@@ -23,6 +23,7 @@
     <None Remove="Scripts\Update\v1.0001\0014-balance-is-manual-entry.sql" />
     <None Remove="Scripts\Update\v1.0001\0015-drop-renter-rent-transaction-id.sql" />
     <None Remove="Scripts\Update\v1.0001\0016-drop-audit-renter-rent-transaction-id.sql" />
+    <None Remove="Scripts\Update\v1.0001\0017-drop-column-adjustmentBalancePaymentDueAmount.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0014-balance-is-manual-entry.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0017-drop-column-adjustmentBalancePaymentDueAmount.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0016-drop-audit-renter-rent-transaction-id.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0015-drop-renter-rent-transaction-id.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0013-added-index.sql" />

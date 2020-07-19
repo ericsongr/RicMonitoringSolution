@@ -57,6 +57,11 @@ namespace RicEntityFramework.BaseRepository
             return await query.Where(predicate).FirstOrDefaultAsync();
         }
 
+        public virtual IEnumerable<T> FindAll()
+        {
+            return Context.Set<T>();
+        }
+
         public virtual IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
             return Context.Set<T>().Where(predicate);

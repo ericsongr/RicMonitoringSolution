@@ -35,7 +35,6 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
                 {"IsNoAdvanceDepositLeft", new PropertyMappingValue(new List<string>() {"IsNoAdvanceDepositLeft"}) },
                 {"IsProcessed", new PropertyMappingValue(new List<string>() {"IsProcessed"}) },
-                {"AdjustmentBalancePaymentDueAmount", new PropertyMappingValue(new List<string>() {"AdjustmentBalancePaymentDueAmount"}) },
                 {"IsBalanceEditable", new PropertyMappingValue(new List<string>() {"IsBalanceEditable"}) },
                 {"BillingStatement", new PropertyMappingValue(new List<string>() {"BillingStatement"}) },
             };

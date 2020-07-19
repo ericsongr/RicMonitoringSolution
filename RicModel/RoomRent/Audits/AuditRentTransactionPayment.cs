@@ -1,8 +1,7 @@
 ﻿using System;
-using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Enumerations;
 
-namespace RicModel.RoomRent
+namespace RicModel.RoomRent.Audits
 {
     public class AuditRentTransactionPayment : IAudit
     {
@@ -15,6 +14,7 @@ namespace RicModel.RoomRent
         public DateTime AuditDateTime { get; set; }
         public string Username { get; set; }
         public string AuditAction { get; set; }
+        public bool IsDeleted { get; set; }
 
         public RentTransactionPayment RentTransactionPayment { get; set; }
         
