@@ -1,0 +1,58 @@
+<mat-table class="audit-rooms-table"
+  #table [dataSource]="dataSource"
+  matSort
+  [@animateStagger]="{value:'50'}"
+  fusePerfectScrollbar>
+
+<!-- ID Column -->
+<ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+    <mat-cell *matCellDef="let room">
+    <p class="text-truncate">{{room.id}}</p>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+</ng-container>
+
+<!-- Name Column -->
+<ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let room">
+    <p class="text-truncate">{{room.name}}</p>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+</ng-container>
+
+<!-- Mobile# Column -->
+<ng-container matColumnDef="frequency">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Frequency</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.frequency}}</p>
+  </mat-cell>
+  <mat-footer-cell *matFooterCellDef>
+  <strong>Total</strong>
+  </mat-footer-cell>
+</ng-container>
+
+<!-- Email Column -->
+<ng-container matColumnDef="price">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+    <mat-cell *matCellDef="let room">
+    <p class="text-truncate">{{room.price | number: '1.0-2' }}</p>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>
+    <strong>{{getTotal() | number: '1.0-2'}}</strong>
+  </mat-footer-cell>
+</ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+  <mat-row *matRowDef="let room; columns: displayedColumns;" class="audit-room" matRipple>
+  </mat-row>
+  <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+</mat-table>
+
+<mat-paginator #paginator
+    [length]="dataSource.filteredData.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

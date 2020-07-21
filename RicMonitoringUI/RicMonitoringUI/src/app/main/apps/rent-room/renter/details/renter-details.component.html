@@ -154,10 +154,11 @@
 
   </form>
 </div>
-<div>
+<div class="mr-20">
   <button mat-raised-button 
         class="save-renter-button accent mt-16 mt-sm-0"
         [disabled]="renterForm.invalid"
+        style="float: right"
         *ngIf="pageType === 'add'" (click)="add()">
   <span>ADD</span>
   </button>
@@ -165,6 +166,7 @@
   <button mat-raised-button 
           class="save-renter accent mt-16 mt-sm-0"
           [disabled]="renterForm.invalid || renterForm.pristine"
+          style="float: right"
           *ngIf="pageType === 'edit'" (click)="save()">
     <span>SAVE</span>
   </button>
