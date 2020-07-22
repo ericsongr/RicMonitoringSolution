@@ -8,6 +8,7 @@ import { MaterialModule } from 'app/main/module/material.module';
 import { AuditRoomsComponent } from './audit-rooms/audit-rooms.component';
 import { AuditRentersComponent } from './audit-renters/audit-renters.component';
 import { AuditRentTransactionsComponent } from './audit-rent-transactions/audit-rent-transactions.component';
+import { AuditRoomsService } from './audit-rooms/audit-rooms.service';
 
 @NgModule({
   imports: [
@@ -16,12 +17,18 @@ import { AuditRentTransactionsComponent } from './audit-rent-transactions/audit-
     MaterialModule,
     AuditsRoutingModule
   ],
+  exports: [
+    AuditsComponent
+  ],
   declarations: [
     AuditsComponent,
     AuditTabsComponent,
     AuditRoomsComponent,
     AuditRentersComponent,
     AuditRentTransactionsComponent
+  ],
+  providers: [
+    AuditRoomsService
   ]
 })
 export class AuditsModule { }

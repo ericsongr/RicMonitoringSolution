@@ -4,6 +4,7 @@ import { Route, RouterModule } from '@angular/router';
 import { AuditsComponent } from './audits.component';
 import { AuditRoomsComponent } from './audit-rooms/audit-rooms.component';
 import { AuditRentersComponent } from './audit-renters/audit-renters.component';
+import { AuditRoomsService } from './audit-rooms/audit-rooms.service';
 
 const routes : Route[] = [
   {
@@ -13,9 +14,9 @@ const routes : Route[] = [
       {
         path      : 'rooms',
         component : AuditRoomsComponent,
-          // resolve: {
-          //   data: RenterDetailService
-          // },
+          resolve: {
+            data: AuditRoomsService
+          },
           outlet    : 'tab',
       },
       {
@@ -34,7 +35,7 @@ const routes : Route[] = [
           // },
         outlet    : 'tab',
       },
-      { path: '', redirectTo: 'rooms', outlet: 'tab', pathMatch: 'full' },
+      { path: '', redirectTo: 'renters', outlet: 'tab', pathMatch: 'full' },
     ]
   }
 ]

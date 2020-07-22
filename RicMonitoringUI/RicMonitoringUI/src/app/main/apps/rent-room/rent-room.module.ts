@@ -26,6 +26,7 @@ import { DialogDeletePaymentConfirmationComponent } from './rent-transaction/dia
 import { RenterComponent } from './renter/renter.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 import { RentTransactionPaymentComponent } from './rent-transaction/rent-transaction-payment/rent-transaction-payment.component';
+import { AuditsModule } from './audits/audits-api';
 
 const routes : Routes= [
    {
@@ -122,7 +123,8 @@ const routes : Routes= [
     RouterModule.forChild(routes),
     FuseWidgetModule,
     MaterialModule,
-    CopyClipboardModule
+    CopyClipboardModule,
+    AuditsModule
   ],
   declarations: [
     DialogDeletePaymentConfirmationComponent,

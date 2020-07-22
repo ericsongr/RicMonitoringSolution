@@ -8,11 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class AuditsComponent implements OnInit {
 
   constructor() {
-    debugger;
    }
 
   ngOnInit() {
-    debugger;
   }
 
 }
