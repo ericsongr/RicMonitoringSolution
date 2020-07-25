@@ -6,6 +6,8 @@ export const ApiControllers = {
     RentTransactionPayments : "rent-transaction-payments",
     RentTransactionHistory  : "rent-transaction-history",
     LookupTypeItems         : "lookup-type-items",
-    ExecStoreProc           : "exec-store-proc"
+    ExecStoreProc           : "exec-store-proc",
+
+    Audits                   : "audits",
     
 }

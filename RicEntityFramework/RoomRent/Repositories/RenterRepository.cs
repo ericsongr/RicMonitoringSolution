@@ -29,20 +29,20 @@ namespace RicEntityFramework.RoomRent.Repositories
             return _context.Renters;
         }
 
-        public PagedList<Renter> GetRenters(RenterResourceParameters RenterResourceParameters)
+        public PagedList<Renter> GetRenters(RenterResourceParameters renterResourceParameters)
         {
             var collectionBeforPaging =
-                _context.Renters.ApplySort(RenterResourceParameters.OrderBy,
+                _context.Renters.ApplySort(renterResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
 
 
             collectionBeforPaging = collectionBeforPaging
                 .Where(a => !a.IsEndRent);
 
-            if (!string.IsNullOrEmpty(RenterResourceParameters.SearchQuery))
+            if (!string.IsNullOrEmpty(renterResourceParameters.SearchQuery))
             {
                 var searchQueryForWhereClause =
-                    RenterResourceParameters.SearchQuery.Trim().ToLowerInvariant();
+                    renterResourceParameters.SearchQuery.Trim().ToLowerInvariant();
 
                 collectionBeforPaging = collectionBeforPaging
                     .Where(a => a.Name.ToLowerInvariant().Contains(searchQueryForWhereClause));
@@ -50,8 +50,8 @@ namespace RicEntityFramework.RoomRent.Repositories
             }
 
             return PagedList<Renter>.Create(collectionBeforPaging,
-                RenterResourceParameters.PageNumber,
-                RenterResourceParameters.PageSize);
+                renterResourceParameters.PageNumber,
+                renterResourceParameters.PageSize);
         }
     }
 }

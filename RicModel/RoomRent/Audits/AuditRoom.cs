@@ -1,8 +1,7 @@
 ﻿
 using System;
-using RicModel.RoomRent.Audits;
 
-namespace RicModel.RoomRent
+namespace RicModel.RoomRent.Audits
 {
     public class AuditRoom : IAudit
     {

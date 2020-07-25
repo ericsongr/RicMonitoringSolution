@@ -48,6 +48,13 @@ export const navigation: FuseNavigation[] = [
                         type      : 'item',
                         url       :'/apartment/tenant-transactions',
                         exactMatch:true
+                    },
+                    {
+                        id        : 'RENTAUDITS',
+                        title     : 'Audits',
+                        type      : 'item',
+                        url       :'/apartment/audit/logs',
+                        exactMatch:true
                     }
                 ],
             },

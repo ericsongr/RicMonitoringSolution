@@ -1,0 +1,171 @@
+
+<mat-table class="audit-rent-transaction-table"
+#table [dataSource]="dataSource"
+matSort
+[@animateStagger]="{value:'50'}"
+fusePerfectScrollbar>
+
+<!-- Audit ID Room Column -->
+<ng-container matColumnDef="auditRentTransactionId">
+<mat-header-cell *matHeaderCellDef mat-sort-header>AUDIT</mat-header-cell>
+<mat-cell *matCellDef="let transaction">
+<p class="text-truncate">{{transaction.auditRentTransactionId}}</p>
+</mat-cell>
+<mat-footer-cell *matFooterCellDef></mat-footer-cell>
+</ng-container>
+
+<!-- ID Column -->
+<ng-container matColumnDef="id">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.id}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="paidDateString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Paid Date</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.paidDateString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="paidAmount">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</mat-header-cell>
+<mat-cell *matCellDef="let transaction">
+<p class="text-truncate">{{transaction.paidAmount | number: '1.0-2' }}</p>
+</mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="balance">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Balance</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.balance | number: '1.0-2' }}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="balanceDateToBePaidString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Date To Be Paid</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.balanceDateToBePaidString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="isDepositUsed">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Deposit Use</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+    <mat-icon *ngIf="transaction.isDepositUsed" class="active-icon mat-green-600-bg s-16" style="color: red">check</mat-icon>
+    <mat-icon *ngIf="!transaction.isDepositUsed" class="active-icon mat-red-500-bg s-16" style="color: green">close</mat-icon>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="note">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Note</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.note}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="roomName">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Room</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.roomName}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="renterName">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Renter</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.renterName}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="dueDateString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.dueDateString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="period">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Period</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.period}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="transactionType">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Type</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.transactionType}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="isSystemProcessed">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>System Processed</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+    <mat-icon *ngIf="transaction.isSystemProcessed" class="active-icon mat-green-600-bg s-16" style="color: red">check</mat-icon>
+    <mat-icon *ngIf="!transaction.isSystemProcessed" class="active-icon mat-red-500-bg s-16" style="color: green">close</mat-icon>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="systemDateTimeProcessedString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>System Date/Time Processed</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.systemDateTimeProcessedString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="isProcessed">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Is Processed</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+    <mat-icon *ngIf="transaction.isProcessed" class="active-icon mat-green-600-bg s-16" style="color: red">check</mat-icon>
+    <mat-icon *ngIf="!transaction.isProcessed" class="active-icon mat-red-500-bg s-16" style="color: green">close</mat-icon>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="totalAmountDue">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount Due</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.totalAmountDue | number: '1.0-2' }}</p>
+  </mat-cell>
+</ng-container>
+
+  <ng-container matColumnDef="excessPaidAmount">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Excess Paid Amount</mat-header-cell>
+    <mat-cell *matCellDef="let transaction">
+    <p class="text-truncate">{{transaction.excessPaidAmount | number: '1.0-2' }}</p>
+    </mat-cell>
+  </ng-container>
+
+<ng-container matColumnDef="auditDateTimeString">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Audit DateTime</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.auditDateTimeString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="username">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.username }}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="auditAction">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+  <mat-cell *matCellDef="let transaction">
+  <p class="text-truncate">{{transaction.auditAction }}</p>
+  </mat-cell>
+</ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+<mat-row *matRowDef="let transaction; columns: displayedColumns;" class="audit-room" matRipple>
+</mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+  [length]="dataSource.filteredData.length"
+  [pageIndex]="0"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Enumerations;
 
 namespace RicModel.RoomRent

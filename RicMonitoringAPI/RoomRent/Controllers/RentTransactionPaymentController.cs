@@ -12,6 +12,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     //[Authorize(Policy = "Superuser")]
     [Route("api/rent-transaction-payments")]
     public class RentTransactionPaymentController : Controller
+
+
     {
         private readonly IRentTransactionPaymentRepository _rentTransactionPaymentRepository;
         private readonly IRentTransactionRepository _rentTransactionRepository;

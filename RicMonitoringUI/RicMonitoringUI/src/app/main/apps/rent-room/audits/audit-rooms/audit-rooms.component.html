@@ -1,0 +1,78 @@
+
+<mat-table class="audit-rooms-table"
+#table [dataSource]="dataSource"
+matSort
+[@animateStagger]="{value:'50'}"
+fusePerfectScrollbar>
+
+<!-- Audit ID Room Column -->
+<ng-container matColumnDef="auditRoomId">
+<mat-header-cell *matHeaderCellDef mat-sort-header>AUDIT</mat-header-cell>
+<mat-cell *matCellDef="let room">
+<p class="text-truncate">{{room.auditRoomId}}</p>
+</mat-cell>
+<mat-footer-cell *matFooterCellDef></mat-footer-cell>
+</ng-container>
+
+<!-- ID Column -->
+<ng-container matColumnDef="id">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.id}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="name">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Room Name</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.name}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="frequency">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Frequency</mat-header-cell>
+<mat-cell *matCellDef="let room">
+<p class="text-truncate">{{room.frequency}}</p>
+</mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="price">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.price | number: '1.0-2' }}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="auditDateTimeString">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Audit DateTime</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.auditDateTimeString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="username">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.username }}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="auditAction">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+  <mat-cell *matCellDef="let room">
+  <p class="text-truncate">{{room.auditAction }}</p>
+  </mat-cell>
+</ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+<mat-row *matRowDef="let room; columns: displayedColumns;" class="audit-room" matRipple>
+</mat-row>
+<!-- <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row> -->
+</mat-table>
+
+<mat-paginator #paginator
+  [length]="dataSource.filteredData.length"
+  [pageIndex]="0"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

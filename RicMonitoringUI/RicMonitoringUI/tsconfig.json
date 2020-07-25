@@ -8,10 +8,14 @@
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "module": "esnext",
         "paths": {
             "@fuse": [
                 "@fuse/"
             ]
+            //,"@audits" : [
+            //    "./src/app/main/apps/rent-room/audits/audits-api.ts"
+            //]
         },
         "target": "es5",
         "typeRoots": [
