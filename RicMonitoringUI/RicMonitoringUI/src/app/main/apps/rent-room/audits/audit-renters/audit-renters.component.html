@@ -1,3 +1,162 @@
-<p>
-  audit-renters works!
-</p>
+
+<mat-table class="audit-rent-transaction-table"
+#table [dataSource]="dataSource"
+matSort
+[@animateStagger]="{value:'50'}"
+fusePerfectScrollbar>
+
+<!-- Audit ID Room Column -->
+<ng-container matColumnDef="auditRenterId">
+<mat-header-cell *matHeaderCellDef mat-sort-header>AUDIT</mat-header-cell>
+<mat-cell *matCellDef="let renter">
+<p class="text-truncate">{{renter.auditRenterId}}</p>
+</mat-cell>
+<mat-footer-cell *matFooterCellDef></mat-footer-cell>
+</ng-container>
+
+<!-- ID Column -->
+<ng-container matColumnDef="id">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.id}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="name">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Renter</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.name}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="advancePaidDateString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Advance Paid Date</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.advancePaidDateString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="dueDayString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Due Day</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.dueDayString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="noOfPersons">
+  <mat-header-cell *matHeaderCellDef mat-sort-header># Persons</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.noOfPersons}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="roomName">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Room</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.roomName}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="advanceMonths">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Advance Months</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.advanceMonths}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="startDateString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.startDateString}}</p>
+  </mat-cell>
+</ng-container>
+
+
+<ng-container matColumnDef="monthsUsed">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Months Used</mat-header-cell>
+<mat-cell *matCellDef="let renter">
+<p class="text-truncate">{{renter.monthsUsed }}</p>
+</mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="dateEndString">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>Date End</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.dateEndString }}</p>
+  </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="isEndRent">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Is End Rent</mat-header-cell>
+    <mat-cell *matCellDef="let renter">
+    <p class="text-truncate">{{renter.isEndRent}}</p>
+    </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="balanceAmount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Amount</mat-header-cell>
+    <mat-cell *matCellDef="let renter">
+    <p class="text-truncate">{{renter.balanceAmount | number: '1.0-2' }}</p>
+    </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="balancePaidDateString">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Paid Date</mat-header-cell>
+      <mat-cell *matCellDef="let renter">
+      <p class="text-truncate">{{renter.balancePaidDateString }}</p>
+      </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="totalPaidAmount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Total Paid Amount</mat-header-cell>
+      <mat-cell *matCellDef="let renter">
+      <p class="text-truncate">{{renter.totalPaidAmount | number: '1.0-2' }}</p>
+      </mat-cell>
+      </ng-container>
+      
+    <ng-container matColumnDef="nextDueDateString">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Next Due Date</mat-header-cell>
+      <mat-cell *matCellDef="let renter">
+      <p class="text-truncate">{{renter.nextDueDateString }}</p>
+      </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="previousDueDateString">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Previous Due Date</mat-header-cell>
+        <mat-cell *matCellDef="let renter">
+        <p class="text-truncate">{{renter.previousDueDateString }}</p>
+        </mat-cell>
+        </ng-container>
+
+<ng-container matColumnDef="auditDateTimeString">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Audit DateTime</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.auditDateTimeString}}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="username">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.username }}</p>
+  </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="auditAction">
+<mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+  <mat-cell *matCellDef="let renter">
+  <p class="text-truncate">{{renter.auditAction }}</p>
+  </mat-cell>
+</ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+<mat-row *matRowDef="let renter; columns: displayedColumns;" class="audit-room" matRipple>
+</mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+  [length]="dataSource.filteredData.length"
+  [pageIndex]="0"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

@@ -9,6 +9,8 @@ import { AuditRoomsComponent } from './audit-rooms/audit-rooms.component';
 import { AuditRentersComponent } from './audit-renters/audit-renters.component';
 import { AuditRentTransactionsComponent } from './audit-rent-transactions/audit-rent-transactions.component';
 import { AuditRoomsService } from './audit-rooms/audit-rooms.service';
+import { AuditRentersService } from './audit-renters/audit-renters.service';
+import { AuditRentTransactionsService } from './audit-rent-transactions/audit-rent-transactions.service';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { AuditRoomsService } from './audit-rooms/audit-rooms.service';
     AuditRentTransactionsComponent
   ],
   providers: [
-    AuditRoomsService
+    AuditRoomsService,
+    AuditRentersService,
+    AuditRentTransactionsService
   ]
 })
 export class AuditsModule { }

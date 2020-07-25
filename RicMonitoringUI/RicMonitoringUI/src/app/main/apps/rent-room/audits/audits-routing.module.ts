@@ -5,6 +5,9 @@ import { AuditsComponent } from './audits.component';
 import { AuditRoomsComponent } from './audit-rooms/audit-rooms.component';
 import { AuditRentersComponent } from './audit-renters/audit-renters.component';
 import { AuditRoomsService } from './audit-rooms/audit-rooms.service';
+import { AuditRentersService } from './audit-renters/audit-renters.service';
+import { AuditRentTransactionsService } from './audit-rent-transactions/audit-rent-transactions.service';
+import { AuditRentTransactionsComponent } from './audit-rent-transactions/audit-rent-transactions.component';
 
 const routes : Route[] = [
   {
@@ -22,17 +25,17 @@ const routes : Route[] = [
       {
         path      : 'renters',
         component : AuditRentersComponent,
-          // resolve: {
-          //   data: RentTransactionHistoryService
-          // },
+          resolve: {
+            data: AuditRentersService
+          },
         outlet    : 'tab',
       },
       {
         path      : 'rent-transactions',
-        component : AuditRentersComponent,
-          // resolve: {
-          //   data: RentTransactionHistoryService
-          // },
+        component : AuditRentTransactionsComponent,
+          resolve: {
+            data: AuditRentTransactionsService
+          },
         outlet    : 'tab',
       },
       { path: '', redirectTo: 'renters', outlet: 'tab', pathMatch: 'full' },

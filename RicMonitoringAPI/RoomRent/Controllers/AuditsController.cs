@@ -75,15 +75,15 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var auditRenters = _auditRenterRepository
-                .FindBy(o => o.Id == id, o => o.Room)
-                .OrderByDescending(o => o.AuditDateTime);
+            var auditRenters = 
+                    id > 0 ? _auditRenterRepository.FindBy(o => o.Id == id, o => o.Room) :
+                        _auditRenterRepository.FindAll(o => o.Room);
             if (!auditRenters.Any())
             {
                 return NotFound();
             }
 
-            var auditRenterRepo = Mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters);
+            var auditRenterRepo = Mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters.OrderByDescending(o => o.AuditDateTime));
 
             return Ok(auditRenterRepo.ShapeData(fields));
 
@@ -102,10 +102,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var auditRenters = _auditRentTransactionRepository
-                .FindBy(o => o.Id == id, 
-                    o => o.Room, o => o.Renter)
-                .OrderByDescending(o => o.AuditDateTime);
+            var auditRenters = (id > 0 ? 
+                    _auditRentTransactionRepository
+                        .FindBy(o => o.Id == id, o => o.Room, o => o.Renter) : 
+                            _auditRentTransactionRepository.FindAll(o => o.Room, o => o.Renter))
+                                .OrderByDescending(o => o.AuditDateTime);
             if (!auditRenters.Any())
             {
                 return NotFound();

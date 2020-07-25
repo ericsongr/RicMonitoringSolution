@@ -12,7 +12,7 @@ namespace RicEntityFramework.BaseRepository.Interfaces
         int Count();
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetSingleIncludesAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-        IEnumerable<T> FindAll();
+        IEnumerable<T> FindAll(params Expression<Func<T, object>>[] includeProperties);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
