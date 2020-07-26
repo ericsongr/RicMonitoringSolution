@@ -38,7 +38,7 @@ const routes : Route[] = [
           },
         outlet    : 'tab',
       },
-      { path: '', redirectTo: 'renters', outlet: 'tab', pathMatch: 'full' },
+      { path: '', redirectTo: 'rent-transactions', outlet: 'tab', pathMatch: 'full' },
     ]
   }
 ]

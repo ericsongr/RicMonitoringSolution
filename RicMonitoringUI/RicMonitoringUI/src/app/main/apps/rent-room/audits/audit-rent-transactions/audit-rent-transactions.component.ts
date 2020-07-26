@@ -9,9 +9,11 @@ import { FuseUtils } from '@fuse/utils';
 import { DataSource } from '@angular/cdk/collections';
 
 @Component({
-  selector: 'app-audit-rent-transactions',
+  selector: 'audit-rent-transactions',
   templateUrl: './audit-rent-transactions.component.html',
-  styleUrls: ['./audit-rent-transactions.component.scss']
+  styleUrls: ['./audit-rent-transactions.component.scss'],
+  animations: fuseAnimations,
+  encapsulation: ViewEncapsulation.None
 })
 export class AuditRentTransactionsComponent implements OnInit {
 
