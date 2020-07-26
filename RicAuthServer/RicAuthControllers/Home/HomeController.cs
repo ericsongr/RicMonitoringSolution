@@ -6,7 +6,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Home
 {
     [SecurityHeaders]
     public class HomeController : Controller

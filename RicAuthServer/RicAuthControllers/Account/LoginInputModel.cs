@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Account
 {
     public class LoginInputModel
     {

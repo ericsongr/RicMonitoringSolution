@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Account
 {
     public class LoginViewModel : LoginInputModel
     {

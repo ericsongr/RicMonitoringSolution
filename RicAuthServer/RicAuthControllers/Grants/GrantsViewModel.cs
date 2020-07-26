@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Grants
 {
     public class GrantsViewModel
     {

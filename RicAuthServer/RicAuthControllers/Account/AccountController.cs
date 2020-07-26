@@ -21,7 +21,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using RicAuthServer.Data;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Account
 {
     /// <summary>
     /// This sample controller implements a typical login/logout/provision workflow for local and external accounts.

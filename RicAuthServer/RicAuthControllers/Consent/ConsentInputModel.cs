@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Consent
 {
     public class ConsentInputModel
     {

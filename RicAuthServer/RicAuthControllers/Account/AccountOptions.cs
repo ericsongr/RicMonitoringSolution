@@ -4,7 +4,7 @@
 
 using System;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Account
 {
     public class AccountOptions
     {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RicAuthServer.Quickstart.UI
+namespace RicAuthServer.RicAuthControllers.Consent
 {
     /// <summary>
     /// This controller processes the consent UI
