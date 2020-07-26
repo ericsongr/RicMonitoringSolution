@@ -9,7 +9,7 @@ import { FuseUtils } from '@fuse/utils';
 import { DataSource } from '@angular/cdk/collections';
 
 @Component({
-  selector: 'app-audit-renters',
+  selector: 'audit-renters',
   templateUrl: './audit-renters.component.html',
   styleUrls: ['./audit-renters.component.scss'],
   animations: fuseAnimations,

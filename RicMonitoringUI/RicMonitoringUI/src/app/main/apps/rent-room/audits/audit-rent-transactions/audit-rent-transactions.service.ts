@@ -23,7 +23,7 @@ export class AuditRentTransactionsService implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
       var url = `${this.apiUrl}${ApiControllers.Audits}/0/transactions${TABLE_FIELDS}`;
       return new Promise((resolve, reject) => {
-        debugger;
+        
         this._authService.get(url)
             .subscribe((response: any) => {
                 this.auditRentTransactions = response;

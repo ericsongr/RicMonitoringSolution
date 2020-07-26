@@ -6,7 +6,7 @@ import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
   templateUrl: './audit-tabs.component.html',
   styleUrls: ['./audit-tabs.component.scss']
 })
-export class AuditTabsComponent implements OnInit, AfterViewInit {
+export class AuditTabsComponent implements OnInit {
 
   navLinks: any[];
   activeLinkIndex = -1; 
@@ -31,10 +31,7 @@ export class AuditTabsComponent implements OnInit, AfterViewInit {
     });
 
   }
-
-  public ngAfterViewInit() {
-  }
-
+  
   initNavLink() {
       
     this.navLinks = [{
