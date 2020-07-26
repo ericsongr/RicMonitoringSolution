@@ -29,4 +29,7 @@
 		<DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.1" />
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\RicMonitoringAPI\RicMonitoringAPI.csproj" />
+	</ItemGroup>
 </Project>
