@@ -20,6 +20,16 @@ namespace RicAuthServer.RicAuthControllers
             };
         }
 
+        protected BaseRestApiModel HandleApiSuccess(object data)
+        {
+            return new BaseRestApiModel
+            {
+                Payload = data,
+                Errors = new List<BaseErrorModel>(),
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+
         protected BaseRestApiModel HandleApiException(object message, HttpStatusCode httpStatusCode)
         {
             return new BaseRestApiModel

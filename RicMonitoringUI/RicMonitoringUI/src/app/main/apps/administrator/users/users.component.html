@@ -1,4 +1,4 @@
-<div id="rooms" class="page-layout carded fullwidth inner-scroll">
+<div id="users" class="page-layout carded fullwidth inner-scroll">
 
   <!-- TOP BACKGROUND -->
   <div class="top-bg accent"></div>
@@ -18,7 +18,7 @@
               <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                   shopping_basket
               </mat-icon>
-              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">rooms</span>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Users</span>
           </div>
           <!-- / APP TITLE -->
 
@@ -26,25 +26,25 @@
           <div class="search-wrapper ml-sm-32">
               <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                   <mat-icon>search</mat-icon>
-                  <input #filter placeholder="Search for room(s)">
+                  <input #filter placeholder="Search for user(s)">
               </div>
           </div>
           <!-- / SEARCH -->
 
-          <!-- add new room -->
+          <!-- add new user -->
           <button mat-raised-button
-                [routerLink]="'/apartment/rooms/new'"
-                class="add-room-button mat-white-bg my-12 mt-sm-0">
-            <span>ADD NEW ROOM</span>
+                [routerLink]="'/administrator/users/new'"
+                class="add-user-button mat-white-bg my-12 mt-sm-0">
+            <span>ADD NEW USER</span>
           </button>
-          <!-- / add new room -->
+          <!-- / add new user -->
       </div>
       <!-- / HEADER -->
 
       <!-- CONTENT CARD -->
       <div class="content-card">
 
-          <mat-table class="rooms-table"
+          <mat-table class="users-table"
                      #table [dataSource]="dataSource"
                      matSort
                      [@animateStagger]="{value:'50'}"
@@ -53,50 +53,48 @@
               <!-- ID Column -->
               <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                  <mat-cell *matCellDef="let room">
-                      <p class="text-truncate">{{room.id}}</p>
+                  <mat-cell *matCellDef="let user">
+                      <p class="text-truncate">{{user.id}}</p>
                   </mat-cell>
-                  <mat-footer-cell *matFooterCellDef></mat-footer-cell>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                  <mat-cell *matCellDef="let room">
-                      <p class="text-truncate">{{room.name}}</p>
+                  <mat-cell *matCellDef="let user">
+                      <p class="text-truncate">{{user.name}}</p>
                   </mat-cell>
-                  <mat-footer-cell *matFooterCellDef></mat-footer-cell>
               </ng-container>
 
               <!-- Mobile# Column -->
-              <ng-container matColumnDef="frequency">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Frequency</mat-header-cell>
-                <mat-cell *matCellDef="let room">
-                    <p class="text-truncate">{{room.frequency}}</p>
+              <ng-container matColumnDef="mobileNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Mobile#</mat-header-cell>
+                <mat-cell *matCellDef="let user">
+                    <p class="text-truncate">{{user.mobileNumber}}</p>
                 </mat-cell>
-                <mat-footer-cell *matFooterCellDef>
-                   <strong>Total</strong>
-                </mat-footer-cell>
               </ng-container>
 
             <!-- Email Column -->
-            <ng-container matColumnDef="price">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
-                <mat-cell *matCellDef="let room">
-                <p class="text-truncate">{{room.price | number: '1.0-2' }}</p>
+            <ng-container matColumnDef="phoneNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Phone #</mat-header-cell>
+                <mat-cell *matCellDef="let user">
+                <p class="text-truncate">{{user.phoneNumber}}</p>
                 </mat-cell>
-                <mat-footer-cell *matFooterCellDef>
-                    <strong>{{getTotal() | number: '1.0-2'}}</strong>
-                </mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                <mat-cell *matCellDef="let user">
+                <p class="text-truncate">{{user.email}}</p>
+                </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
-            <mat-row *matRowDef="let room; columns: displayedColumns;"
-                    class="room"
+            <mat-row *matRowDef="let user; columns: displayedColumns;"
+                    class="users"
                     matRipple
-                    [routerLink]="'/apartment/rooms/' + room.id + '/' + handleize(room.name)">
+                    [routerLink]="'/administrator/users/' + user.id + '/' + handleize(user.name)">
             </mat-row>
-            <mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
           </mat-table>
 
           <mat-paginator #paginator

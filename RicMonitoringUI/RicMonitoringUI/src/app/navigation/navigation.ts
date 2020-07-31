@@ -1,5 +1,11 @@
 import { FuseNavigation } from '@fuse/types';
 
+var userData = JSON.parse(sessionStorage.getItem("userData_spaRicMonitoringCodeClient"));
+var role = userData.role;
+//TODO: here
+console.log('role: ', role);
+debugger;
+
 export const navigation: FuseNavigation[] = [
     {
         id       : 'applications',
@@ -56,6 +62,22 @@ export const navigation: FuseNavigation[] = [
                         url       :'/apartment/audit/logs',
                         exactMatch:true
                     }
+                ],
+            },
+            {
+                id          : 'administrator', 
+                title       : 'Administrator',
+                translate   : 'NAV.ADMINISTRATOR',
+                type        : 'collapsable',
+                icon        : 'person',
+                children    : [
+                    {
+                        id: 'USERS',
+                        title: 'Users',
+                        type: 'item',
+                        url: '/administrator/users',
+                        exactMatch: true
+                    },
                 ],
             },
         ]

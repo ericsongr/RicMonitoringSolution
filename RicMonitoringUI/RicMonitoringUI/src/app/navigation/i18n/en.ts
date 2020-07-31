@@ -7,7 +7,8 @@ export const locale = {
             //     'TITLE': 'Sample',
             //     'BADGE': '25'
             // },
-            'RENTROOM': 'Rent Room'
-        }
+            'RENTROOM': 'Rent Room',
+            'ADMINISTRATOR': 'Administrator'
+        },
     }
 };

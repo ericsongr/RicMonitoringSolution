@@ -33,9 +33,13 @@ const appRoutes: Routes = [
     {
         path          : 'booking',
         loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
-      },
-      { path: 'unauthorized', component: UnauthorizedComponent },
-      { path: 'forbidden', component: UnauthorizedComponent },
+    },
+    {
+      path          : 'administrator',
+      loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
+    },
+    { path: 'unauthorized', component: UnauthorizedComponent },
+    { path: 'forbidden', component: UnauthorizedComponent },
 
    
     {

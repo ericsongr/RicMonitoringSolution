@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
 using RicAuthServer.ViewModels;
 
@@ -10,7 +12,7 @@ namespace RicAuthServer.Data
         public ApplicationUser()
         { }
 
-        public ApplicationUser(UserViewModel userEntry)
+        public ApplicationUser(UserEntryViewModel userEntry)
         {
             UserName = userEntry.UserName;
             FirstName = userEntry.FirstName;
@@ -31,5 +33,24 @@ namespace RicAuthServer.Data
         [StringLength(20)]
         public string MobileNumber { get; set; }
 
+        //for multiple result
+        public static Expression<Func<ApplicationUser, UserViewModel>> Projection
+        {
+            get
+            {
+                return u => new UserViewModel
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    MobileNumber = u.MobileNumber,
+                    PhoneNumber = u.PhoneNumber
+                };
+            }
+        }
+
+        
     }
 }

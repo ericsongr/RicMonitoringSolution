@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RicAuthServer.Data;
 using RicAuthServer.Services;
 using System.Reflection;
-using FluentValidation.AspNetCore;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -50,6 +49,19 @@ namespace RicAuthServer
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            //cors
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors", builder =>
+                {
+                    builder
+                        //.AllowAnyOrigin()
+                        .WithOrigins(Configuration["clientUrl"]) //client url
+                        .WithMethods("GET", "PUT", "POST", "DELETE")
+                        .AllowAnyHeader();
+                });
+            });
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
@@ -109,6 +121,7 @@ namespace RicAuthServer
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseCors("AllowCors");
             app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains());
             app.UseXContentTypeOptions();
             app.UseReferrerPolicy(opts => opts.NoReferrer());

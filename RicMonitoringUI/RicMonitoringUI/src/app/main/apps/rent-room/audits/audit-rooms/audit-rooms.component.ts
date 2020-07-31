@@ -15,7 +15,7 @@ import { DataSource } from '@angular/cdk/collections';
   encapsulation: ViewEncapsulation.None
 })
 export class AuditRoomsComponent implements OnInit {
-  debugger;
+  
   dataSource: FilesDataSource | null;
   displayedColumns = ['auditRoomId','id','name','frequency','price','auditDateTimeString','username','auditAction'];
   

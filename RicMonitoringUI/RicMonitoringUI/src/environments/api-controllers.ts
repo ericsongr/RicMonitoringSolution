@@ -8,6 +8,8 @@ export const ApiControllers = {
     LookupTypeItems         : "lookup-type-items",
     ExecStoreProc           : "exec-store-proc",
 
-    Audits                   : "audits",
+    Audits                  : "audits",
+
+    Account                 : "account"
     
 }

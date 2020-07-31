@@ -76,7 +76,8 @@ export class AuthService implements OnDestroy {
         this.oidcSecurityService.onAuthorizationResult.subscribe(
             (authorizationResult: AuthorizationResult) => {
                 this.onAuthorizationResultComplete(authorizationResult);
-                localStorage.setItem('isCallback', 'true');
+                
+                localStorage.setItem('isCallback', 'true'); 
             });
 
     }

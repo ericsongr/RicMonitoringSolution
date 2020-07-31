@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using RicAuthServer.Data;
-
+﻿
 namespace RicAuthServer.ViewModels
 {
-    public class UserViewModel : ApplicationUser
+    public class UserViewModel
     {
-        public string CurrentPassword { get; set; }
-        public string Password { get; set; }
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string MobileNumber { get; set; }
 
-        [Required(ErrorMessage = "Please select role.")]
-        public string Role { get; set; }
+        public string Name => $"{FirstName} {LastName}";
     }
 }
