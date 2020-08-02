@@ -46,7 +46,7 @@ namespace RicAuthServer.Data
                     UserName = u.UserName,
                     Email = u.Email,
                     MobileNumber = u.MobileNumber,
-                    PhoneNumber = u.PhoneNumber
+                    PhoneNumber = u.PhoneNumber,
                 };
             }
         }

@@ -10,6 +10,7 @@ export const ApiControllers = {
 
     Audits                  : "audits",
 
-    Account                 : "account"
+    Account                 : "account",
+    Role                    : "role"
     
 }

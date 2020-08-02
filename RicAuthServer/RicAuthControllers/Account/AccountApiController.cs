@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace RicAuthServer.RicAuthControllers.Account
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            _context = context ?? throw new ArgumentNullException(nameof(roleManager));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [HttpGet()]
@@ -42,10 +43,16 @@ namespace RicAuthServer.RicAuthControllers.Account
             }
             else
             {
-                var user = _context.Users
-                        .FirstOrDefault(o => o.UserName.Trim().ToLower() == username.Trim().ToLower())
-                        .Projection();
-                       
+                var appUser = _context.Users
+                    .FirstOrDefault(o => o.UserName.Trim().ToLower() == username.Trim().ToLower());
+
+                var user = appUser.Projection();
+                var role = _userManager.GetRolesAsync(appUser).GetAwaiter().GetResult();
+                if (role.Any())
+                {
+                    user.Role = role.FirstOrDefault();
+                }
+
                 return Ok(HandleApiSuccess(user));
 
             }
@@ -60,7 +67,7 @@ namespace RicAuthServer.RicAuthControllers.Account
             if (ModelState.IsValid)
             {
                 var role = userEntryEntry.Role;
-                var password = userEntryEntry.Password;
+                var password = "Pa$$w0rd"; //default password for new user
 
                 var user = new ApplicationUser(userEntryEntry);
 
@@ -95,7 +102,6 @@ namespace RicAuthServer.RicAuthControllers.Account
             if (ModelState.IsValid)
             {
                 var role = userEntryEntry.Role;
-                var password = userEntryEntry.Password;
 
                 var user = new ApplicationUser(userEntryEntry);
 

@@ -155,6 +155,7 @@ export class AuthService implements OnDestroy {
     public getHeaders() {
         let headers = new HttpHeaders();
         headers = headers.set('Content-Type', 'application/json');
+        headers = headers.set('Accept', 'application/json');
         return this.appendAuthHeader(headers);
     }
 

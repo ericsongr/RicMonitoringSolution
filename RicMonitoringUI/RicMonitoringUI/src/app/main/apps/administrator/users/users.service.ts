@@ -37,16 +37,20 @@ export class UsersService implements Resolve<any> {
       
       this._httpClient.get(url, {headers: httpHeaders} )
           .subscribe((response: any) => {
-              this.users = response.payload;
+             
+            this.users = response.payload;
+             
               this.onUsersChanged.next(this.users);
+            
               resolve(response);
-          }, reject);
+          
+            }, reject);
     })
 
     
   }
 
-  public getHeaders() {
+  private getHeaders() {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('Accept', 'application/json');

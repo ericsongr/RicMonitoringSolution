@@ -17,12 +17,12 @@ import { DataSource } from '@angular/cdk/collections';
 export class UsersComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id','name','mobileNumber','phoneNumber','email'];
+  displayedColumns = ['id', 'name', 'userName', 'mobileNumber', 'phoneNumber', 'email'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   private _unsubscribeAll = new Subject();
   constructor(
     private _usersService: UsersService
@@ -30,38 +30,37 @@ export class UsersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
     this.dataSource = new FilesDataSource(this._usersService, this.paginator, this.sort);
-    
+
     fromEvent(this.filter.nativeElement, 'keyup')
-              .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(150),
-                distinctUntilChanged()
-              )
-              .subscribe(() => {
+      .pipe(
+        takeUntil(this._unsubscribeAll),
+        debounceTime(150),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
 
-                if ( !this.dataSource) {
-                  return;
-                }
-                this.dataSource.filter = this.filter.nativeElement.value;
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter.nativeElement.value;
 
-              })
+      })
   }
 
   handleize(name) {
     return FuseUtils.handleize(name);
   }
 
-  ngOnDestroy():void
-  {
+  ngOnDestroy(): void {
     //unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
 }
 
-export class FilesDataSource extends DataSource<any> 
+export class FilesDataSource extends DataSource<any>
 {
   // private
   private _filterChange = new BehaviorSubject('');
@@ -70,8 +69,7 @@ export class FilesDataSource extends DataSource<any>
   constructor(
     private _usersService: UsersService,
     private _paginator: MatPaginator,
-    private _sort: MatSort)
-  {
+    private _sort: MatSort) {
 
     super();
 
@@ -79,44 +77,40 @@ export class FilesDataSource extends DataSource<any>
 
   }
 
-  
+
   // -----------------------------------------------------------------------------------------------------
   // @ Accessors
   // -----------------------------------------------------------------------------------------------------
 
-  get filteredData(): any{
-      return this._filteredDataChange.value;
+  get filteredData(): any {
+    return this._filteredDataChange.value;
   }
 
-  set filteredData(value: any)
-  {
+  set filteredData(value: any) {
     this._filteredDataChange.next(value);
   }
 
-  get filter() : string 
-  {
+  get filter(): string {
     return this._filterChange.value;
   }
 
-  set filter(filter: string)
-  {
+  set filter(filter: string) {
     this._filterChange.next(filter);
   }
 
 
 
-      // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------
+  // @ Public methods
+  // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Connect function called by the table to retrieve one stream containing the data to render.
-     *
-     * @returns {Observable<any[]>}
-     */
+  /**
+   * Connect function called by the table to retrieve one stream containing the data to render.
+   *
+   * @returns {Observable<any[]>}
+   */
 
-  connect(): Observable<any[]>
-  {
+  connect(): Observable<any[]> {
     const displayDataChanges = [
       this._usersService.onUsersChanged,
       this._paginator.page,
@@ -125,20 +119,20 @@ export class FilesDataSource extends DataSource<any>
     ];
 
     return merge(...displayDataChanges).pipe(map(() => {
-      
-        let data = this._usersService.users.slice();
 
-        data = this.filterData(data);
+      let data = this._usersService.users.slice();
 
-        this.filteredData = [...data];
+      data = this.filterData(data);
 
-        data = this.sortData(data);
-        
-        // Grab the page's slice of data.
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      this.filteredData = [...data];
 
-        return data.splice(startIndex, this._paginator.pageSize);
-      })
+      data = this.sortData(data);
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+
+      return data.splice(startIndex, this._paginator.pageSize);
+    })
     );
   }
 
@@ -148,8 +142,8 @@ export class FilesDataSource extends DataSource<any>
    * @param data
    * @returns {any}
    */
-  
-  filterData(data){
+
+  filterData(data) {
     if (!this.filter) {
       return data;
     }
@@ -157,41 +151,39 @@ export class FilesDataSource extends DataSource<any>
     return FuseUtils.filterArrayByString(data, this.filter);
   }
 
-    /**
-     * Sort data
-     *
-     * @param data
-     * @returns {any[]}
-     */
-  sortData(data): any[]
-  {
+  /**
+   * Sort data
+   *
+   * @param data
+   * @returns {any[]}
+   */
+  sortData(data): any[] {
 
-    if ( !this._sort.active || this._sort.direction === ''){
+    if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
 
-    return data.sort((a, b) =>{
+    return data.sort((a, b) => {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
 
-      switch ( this._sort.active) {
+      switch (this._sort.active) {
         case 'id':
-            [propertyA, propertyB] = [a.id, b.id];
-            break;
+          [propertyA, propertyB] = [a.id, b.id];
+          break;
         case 'name':
-            [propertyA, propertyB] = [a.phoneNumber, b.phoneNumber];
-            break;
+          [propertyA, propertyB] = [a.phoneNumber, b.phoneNumber];
+          break;
       }
 
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
-      return (valueA < valueB ? -1: 1) * (this._sort.direction === 'asc' ? 1 : -1);
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
     });
 
   }
 
-  disconnect(): void
-  {}
+  disconnect(): void { }
 }
 
