@@ -16,7 +16,7 @@ import { DataSource } from '@angular/cdk/collections';
   encapsulation: ViewEncapsulation.None
 })
 export class AuditRentersComponent implements OnInit {
-  debugger;
+  
   dataSource: FilesDataSource | null;
   displayedColumns = ['id','name','advancePaidDateString','startDateString','dueDayString','noOfPersons','roomName','advanceMonths','monthsUsed','dateEndString','isEndRent','balanceAmount','balancePaidDateString','totalPaidAmount','nextDueDateString','previousDueDateString','auditDateTimeString','username','auditAction'];
   

@@ -1,6 +1,15 @@
 import { FuseNavigation } from '@fuse/types';
 
-export const navigation: FuseNavigation[] = [
+userData : userData;
+var userData = JSON.parse(sessionStorage.getItem("userData_spaRicMonitoringCodeClient"));
+if (userData != null) {
+    var role = userData.role;
+    //TODO: here
+    console.log('role: ', role);
+    
+}
+
+var navigationContainer: FuseNavigation[] = [
     {
         id       : 'applications',
         title    : 'Applications',
@@ -58,6 +67,45 @@ export const navigation: FuseNavigation[] = [
                     }
                 ],
             },
+            {
+                id          : 'administrator', 
+                title       : 'Administrator',
+                translate   : 'NAV.ADMINISTRATOR',
+                type        : 'collapsable',
+                icon        : 'person',
+                children    : [
+                    {
+                        id: 'USERS',
+                        title: 'Users',
+                        type: 'item',
+                        url: '/administrator/users',
+                        exactMatch: true
+                    },
+                ],
+            }
         ]
     }
 ];
+
+// if (userData.role == "Superuser") {
+
+//     navigationContainer.push({
+//         id          : 'administrator', 
+//         title       : 'Administrator',
+//         translate   : 'NAV.ADMINISTRATOR',
+//         type        : 'collapsable',
+//         icon        : 'person',
+//         children    : [
+//             {
+//                 id: 'USERS',
+//                 title: 'Users',
+//                 type: 'item',
+//                 url: '/administrator/users',
+//                 exactMatch: true
+//             },
+//         ],
+//     });
+    
+// }
+
+export const navigation: FuseNavigation[] = navigationContainer;

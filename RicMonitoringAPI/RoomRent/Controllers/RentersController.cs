@@ -82,31 +82,31 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return BadRequest();
             }
 
-            var RenterFromRepo = _renterRepository.GetRenters(renterResourceParameters);
+            var renterFromRepo = _renterRepository.GetRenters(renterResourceParameters);
 
-            var previousPageLink = RenterFromRepo.HasPrevious
+            var previousPageLink = renterFromRepo.HasPrevious
                 ? CreateRenterResourceUri(renterResourceParameters,
                     ResourceUriType.PreviousPage)
                 : null;
 
-            var nextPageLink = RenterFromRepo.HasPrevious
+            var nextPageLink = renterFromRepo.HasPrevious
                 ? CreateRenterResourceUri(renterResourceParameters,
                     ResourceUriType.NextPage)
                 : null;
 
             var paginationMetaData = new
             {
-                totalCount = RenterFromRepo.TotalCount,
-                pageSize = RenterFromRepo.PageSize,
-                currentPage = RenterFromRepo.CurrentPage,
-                totalPages = RenterFromRepo.TotalPages,
+                totalCount = renterFromRepo.TotalCount,
+                pageSize = renterFromRepo.PageSize,
+                currentPage = renterFromRepo.CurrentPage,
+                totalPages = renterFromRepo.TotalPages,
                 previousPageLink = previousPageLink,
                 nextPageLink = nextPageLink
             };
 
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
-            var Renters = Mapper.Map<IEnumerable<RenterDto>>(RenterFromRepo);
+            var Renters = Mapper.Map<IEnumerable<RenterDto>>(renterFromRepo);
 
             return Ok(Renters.ShapeData(renterResourceParameters.Fields));
 

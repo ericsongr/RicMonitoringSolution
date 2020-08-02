@@ -34,7 +34,7 @@ export class AuditRentTransactionsComponent implements OnInit {
     ngOnInit(): void {
       
       this.dataSource = new FilesDataSource(this._auditRentTransactionsService, this.paginator, this.sort);
-      debugger;
+      
     }
     
     

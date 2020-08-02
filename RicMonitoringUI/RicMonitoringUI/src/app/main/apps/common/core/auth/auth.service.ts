@@ -76,7 +76,8 @@ export class AuthService implements OnDestroy {
         this.oidcSecurityService.onAuthorizationResult.subscribe(
             (authorizationResult: AuthorizationResult) => {
                 this.onAuthorizationResultComplete(authorizationResult);
-                localStorage.setItem('isCallback', 'true');
+                
+                localStorage.setItem('isCallback', 'true'); 
             });
 
     }
@@ -154,6 +155,7 @@ export class AuthService implements OnDestroy {
     public getHeaders() {
         let headers = new HttpHeaders();
         headers = headers.set('Content-Type', 'application/json');
+        headers = headers.set('Accept', 'application/json');
         return this.appendAuthHeader(headers);
     }
 

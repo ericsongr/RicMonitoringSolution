@@ -8,8 +8,11 @@ using RicAuthServer.Data;
 using RicAuthServer.Services;
 using System.Reflection;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Hosting;
-using RicAuthServer.Data.Migrations.IdentityServer;
+using Newtonsoft.Json.Serialization;
+using RicAuthServer.RicAuthControllers;
 
 namespace RicAuthServer
 {
@@ -33,17 +36,32 @@ namespace RicAuthServer
 
             //added IProfileService here
             services.AddTransient<IProfileService, ProfileService>();
-            
+
             //TODO: temporarily removed the password complexity
-            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-                {
-                    config.Password.RequiredLength = 4;
-                    config.Password.RequireDigit = false;
-                    config.Password.RequireNonAlphanumeric = false;
-                    config.Password.RequireUppercase = false;
-                })
+            //services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            //{
+            //    config.Password.RequiredLength = 4;
+            //    config.Password.RequireDigit = false;
+            //    config.Password.RequireNonAlphanumeric = false;
+            //    config.Password.RequireUppercase = false;
+            //})
+            services
+                .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            //cors
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors", builder =>
+                {
+                    builder
+                        //.AllowAnyOrigin()
+                        .WithOrigins(Configuration["clientUrl"]) //client url
+                        .WithMethods("GET", "PUT", "POST", "DELETE")
+                        .AllowAnyHeader();
+                });
+            });
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
@@ -75,6 +93,18 @@ namespace RicAuthServer
                 })
                 .AddProfileService<ProfileService>();
 
+
+            services.AddMvc(setupAction =>
+                {
+                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
+                    setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                    setupAction.Filters.Add(typeof(ValidatorActionFilter));
+                })
+                .AddNewtonsoftJson(setupAction =>
+                {
+                    setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }); //use for data shaping
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +121,7 @@ namespace RicAuthServer
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseCors("AllowCors");
             app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains());
             app.UseXContentTypeOptions();
             app.UseReferrerPolicy(opts => opts.NoReferrer());
