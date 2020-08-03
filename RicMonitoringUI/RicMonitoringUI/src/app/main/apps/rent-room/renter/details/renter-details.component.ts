@@ -57,8 +57,6 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this._renterService.onRenterChanged
           .subscribe(renter => {
 
-            
-
             if(renter) {
               this.renter = new RenterDetail(renter);
               this.pageType = 'edit';

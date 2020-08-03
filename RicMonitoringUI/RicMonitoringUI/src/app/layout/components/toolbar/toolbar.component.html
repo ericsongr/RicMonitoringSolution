@@ -46,7 +46,7 @@
                     <span>My Profile</span>
                 </button>
 
-                <button mat-menu-item>
+                <button mat-menu-item [routerLink]="[ {outlets: { dialog: ['auth', 'change-password'] }} ]">
                     <mat-icon>vpn_key</mat-icon>
                     <span>Change Password</span>
                 </button>
