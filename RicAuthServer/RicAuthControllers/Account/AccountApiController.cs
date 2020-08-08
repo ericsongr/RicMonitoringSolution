@@ -155,7 +155,10 @@ namespace RicAuthServer.RicAuthControllers.Account
                 {
                     var result = _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.Password).GetAwaiter().GetResult();
                     if (!result.Succeeded)
+                    {
                         return Ok(HandleApiException(result.ShowErrors(), HttpStatusCode.BadRequest));
+                    }
+                       
                 }
                 else
                     return Ok(HandleApiException("Username does not exists.", HttpStatusCode.NotFound));

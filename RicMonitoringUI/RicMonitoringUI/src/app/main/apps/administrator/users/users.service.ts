@@ -27,6 +27,22 @@ export class UsersService implements Resolve<any> {
     });
   }
 
+  changePassword(formData) {
+
+    var url = `${this.authUrl}/api/${ApiControllers.Account}/change-password`;
+    var httpHeaders = this.getHeaders();
+    
+    this._httpClient.post(url, formData, {headers: httpHeaders} )
+
+    return new Promise((resolve, reject) => {
+      this._httpClient.post(url, formData, {headers: httpHeaders} )
+          .subscribe((response: any) => {
+            resolve(response);
+          }, reject);
+    });
+
+  }
+
   getUsers(): Promise<any> {
 
     var url = `${this.authUrl}/api/${ApiControllers.Account}`;

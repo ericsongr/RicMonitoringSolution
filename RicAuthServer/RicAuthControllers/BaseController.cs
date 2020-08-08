@@ -44,6 +44,20 @@ namespace RicAuthServer.RicAuthControllers
             };
         }
 
+        protected BaseRestApiModel HandleApiException(object message, string messageFields, HttpStatusCode httpStatusCode)
+        {
+            return new BaseRestApiModel
+            {
+                Payload = new List<object>(),
+                Errors = new BaseErrorModel
+                {
+                    Message = message,
+                    MessageFields = messageFields
+                },
+                StatusCode = (int)httpStatusCode
+            };
+        }
+
         #endregion
 
 

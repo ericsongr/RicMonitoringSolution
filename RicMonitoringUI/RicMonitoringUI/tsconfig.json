@@ -12,6 +12,9 @@
         "paths": {
             "@fuse": [
                 "@fuse/"
+            ],
+            "@auth": [
+                "./src/app/main/apps/administrator/auth/auth-api.ts"
             ]
             //,"@audits" : [
             //    "./src/app/main/apps/rent-room/audits/audits-api.ts"
