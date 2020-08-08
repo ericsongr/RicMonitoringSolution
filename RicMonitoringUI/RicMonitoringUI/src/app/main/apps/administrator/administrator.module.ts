@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TenantShowErrorsComponent } from '../common/tenant-show-errors.component';
-
 import { UserComponent } from './user/user.component';
 import { UserService } from './user/user.service';
 
@@ -13,6 +11,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule, FuseDemoModule } from '@fuse/components';
 import { MaterialModule } from 'app/main/module/material.module';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country'
+import { AdministratorShowErrorsComponent } from './administrator-show-errors.component';
 
 const routes : Routes = [
   {
@@ -52,7 +51,7 @@ const routes : Routes = [
     UsersService
   ],
   declarations: [
-    TenantShowErrorsComponent,
+    AdministratorShowErrorsComponent,
     UserComponent,
     UsersComponent
   ]
