@@ -38,6 +38,11 @@ const appRoutes: Routes = [
       path          : 'administrator',
       loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
     },
+    {
+      path          : 'auth',
+      outlet        : 'dialog',
+      loadChildren  : () => import('./main/apps/administrator/auth/auth.module').then(m => m.AuthModule) //'./main/apps/administrator/auth/change-password'
+    },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'forbidden', component: UnauthorizedComponent },
 

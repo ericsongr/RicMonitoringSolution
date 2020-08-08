@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
@@ -157,7 +155,10 @@ namespace RicAuthServer.RicAuthControllers.Account
                 {
                     var result = _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.Password).GetAwaiter().GetResult();
                     if (!result.Succeeded)
+                    {
                         return Ok(HandleApiException(result.ShowErrors(), HttpStatusCode.BadRequest));
+                    }
+                       
                 }
                 else
                     return Ok(HandleApiException("Username does not exists.", HttpStatusCode.NotFound));

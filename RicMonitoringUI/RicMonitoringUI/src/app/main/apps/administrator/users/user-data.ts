@@ -1,7 +1,7 @@
 export class UserData {
     sub                 : string;
-    preferred_username  : string;
+    username            : string;
     name                : string;
-    FullName            : string;
+    fullName            : string;
     role                : string;
 }
