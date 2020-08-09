@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, Inject, OnInit} from '@angular/core';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { AuthService } from '../apps/common/core/auth/auth.service';
@@ -15,9 +15,6 @@ export class HomeComponent {
     private _authService: AuthService,
     private _fuseSplashScreenService: FuseSplashScreenService,
     @Inject("API_URL") private _apiUrl: string
-  ) 
-  { 
-
-  }
+  )  { }
 
 }

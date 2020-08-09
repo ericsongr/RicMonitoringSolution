@@ -1,14 +1,5 @@
 import { FuseNavigation } from '@fuse/types';
 
-userData : userData;
-var userData = JSON.parse(sessionStorage.getItem("userData_spaRicMonitoringCodeClient"));
-if (userData != null) {
-    var role = userData.role;
-    //TODO: here
-    console.log('role: ', role);
-    
-}
-
 var navigationContainer: FuseNavigation[] = [
     {
         id       : 'applications',
@@ -57,13 +48,6 @@ var navigationContainer: FuseNavigation[] = [
                         type      : 'item',
                         url       :'/apartment/tenant-transactions',
                         exactMatch:true
-                    },
-                    {
-                        id        : 'RENTAUDITS',
-                        title     : 'Audits',
-                        type      : 'item',
-                        url       :'/apartment/audit/logs',
-                        exactMatch:true
                     }
                 ],
             },
@@ -75,37 +59,23 @@ var navigationContainer: FuseNavigation[] = [
                 icon        : 'person',
                 children    : [
                     {
+                        id        : 'RENTAUDITS',
+                        title     : 'Audits',
+                        type      : 'item',
+                        url       :'/apartment/audit/logs',
+                        exactMatch:true
+                    },
+                    {
                         id: 'USERS',
                         title: 'Users',
                         type: 'item',
                         url: '/administrator/users',
                         exactMatch: true
-                    },
+                    }
                 ],
             }
         ]
     }
 ];
-
-// if (userData.role == "Superuser") {
-
-//     navigationContainer.push({
-//         id          : 'administrator', 
-//         title       : 'Administrator',
-//         translate   : 'NAV.ADMINISTRATOR',
-//         type        : 'collapsable',
-//         icon        : 'person',
-//         children    : [
-//             {
-//                 id: 'USERS',
-//                 title: 'Users',
-//                 type: 'item',
-//                 url: '/administrator/users',
-//                 exactMatch: true
-//             },
-//         ],
-//     });
-    
-// }
 
 export const navigation: FuseNavigation[] = navigationContainer;

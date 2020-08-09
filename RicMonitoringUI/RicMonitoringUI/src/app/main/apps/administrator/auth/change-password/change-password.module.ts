@@ -32,8 +32,8 @@ export class ChangePasswordRoutingModule {}
     ReactiveFormsModule
   ],
   providers: [
-    UsersService, 
-    UserDataService],
+    UsersService
+  ],
   declarations: [
     ChangePasswordComponent,
     ChangePasswordShowErrorsComponent]

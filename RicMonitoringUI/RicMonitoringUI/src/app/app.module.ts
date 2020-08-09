@@ -24,6 +24,7 @@ import { httpInterceptorProvider } from './main/apps/common/core/http-intercepto
 import { APP_BASE_HREF } from '@angular/common';
 import { HomeModule } from './main/home/home.module';
 import { ConfigService } from './main/apps/common/services/config.service';
+import { UserDataService } from './main/apps/administrator/users/user-data.service';
 
 const appRoutes: Routes = [
     {
@@ -89,7 +90,8 @@ const appRoutes: Routes = [
         CoreModule
     ],
     providers: [
-        ConfigService
+        ConfigService,
+        UserDataService
     ],
       bootstrap   : [
         AppComponent
