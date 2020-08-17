@@ -11,7 +11,9 @@ using RicAuthServer.ViewModels;
 
 namespace RicAuthServer.RicAuthControllers.Account
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
+    //[Authorize(Roles = "Superuser")]
+    [Authorize()]
     [Route("api/account")]
     public class AccountApiController : BaseController
     {
@@ -145,6 +147,7 @@ namespace RicAuthServer.RicAuthControllers.Account
                 return Ok(HandleApiException(result.ShowErrors(), HttpStatusCode.BadRequest));
         }
 
+        //[Authorize(Roles = "Staff,Administrator,Superuser")]
         [HttpPost("change-password", Name = "ChangePassword")]
         public IActionResult ChangePassword([FromBody]UserChangePasswordViewModel user)
         {

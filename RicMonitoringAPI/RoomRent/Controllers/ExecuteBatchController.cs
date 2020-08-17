@@ -18,8 +18,8 @@ using RicMonitoringAPI.Common.Constants;
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
 
-    [AllowAnonymous]
-    //[Authorize(Policy = "ProcessTenantsTransaction")]
+    //[AllowAnonymous]
+    [Authorize(Policy = "ProcessTenantsTransaction")]
     [Route("api/exec-store-proc")]
     [ApiController]
     public class ExecuteBatchController : ControllerBase

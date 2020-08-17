@@ -13,8 +13,8 @@ using RicModel.RoomRent.Dtos.Audits;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
-    [AllowAnonymous]
-    //[Authorize("Superuser")]
+    //[AllowAnonymous]
+    [Authorize(Policy = "SuperAndAdmin")]
     [Route("api/audits")]
     public class AuditsController : Controller
     {
@@ -117,7 +117,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return Ok(auditRentTransactionRepo.ShapeData(fields));
         }
 
-        [HttpGet("{id}/payments")]
+        [HttpGet("{id}/payments", Name = "GetAuditPayments")]
         public IActionResult Payments(int id, [FromQuery] string fields)
         {
             //id is the transactionId
@@ -147,8 +147,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         }
 
-        [HttpGet("Rooms")]
-        public IActionResult Rooms([FromQuery] string fields)
+        [HttpGet("{id}/Rooms", Name = "GetAuditRooms")]
+        public IActionResult Rooms(int id, [FromQuery] string fields)
         {
             if (!_auditRoomPropertyMappingService.ValidMappingExistsFor<AuditRoomDto, AuditRoom>("AuditDateTimeString"))
             {
@@ -163,10 +163,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var auditRenters = _auditRoomRenterRepository
                 .FindAll()
                 .OrderByDescending(o => o.AuditDateTime);
-            if (!auditRenters.Any())
-            {
-                return NotFound();
-            }
 
             var auditRenterRepo = Mapper.Map<IEnumerable<AuditRoomDto>>(auditRenters);
 

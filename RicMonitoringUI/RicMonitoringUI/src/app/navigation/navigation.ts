@@ -62,16 +62,16 @@ var navigationContainer: FuseNavigation[] = [
                         id        : 'RENTAUDITS',
                         title     : 'Audits',
                         type      : 'item',
-                        url       :'/apartment/audit/logs',
-                        exactMatch:true
-                    },
-                    {
-                        id: 'USERS',
-                        title: 'Users',
-                        type: 'item',
-                        url: '/administrator/users',
+                        url       : '/apartment/audit/logs',
                         exactMatch: true
-                    }
+                    },
+                    // {
+                    //     id: 'USERS',
+                    //     title: 'Users',
+                    //     type: 'item',
+                    //     url: '/administrator/users',
+                    //     exactMatch: true
+                    // }
                 ],
             }
         ]

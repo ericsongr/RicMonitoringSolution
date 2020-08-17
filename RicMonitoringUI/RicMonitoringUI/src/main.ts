@@ -17,15 +17,27 @@ export function getBaseUrl() {
     return document.getElementsByTagName('base')[0].href;
   }
 
-const providers = [
-   { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
-      { provide: 'AUTH_URL', useValue: 'https://localhost:5002' }, //9003
-      { provide: 'API_URL', useValue: 'https://localhost:5001/api/' }, //
-    // { provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com' },
-    // { provide: 'API_URL', useValue: 'https://tenantsapi.ericsonramos.com/api/' }
+const devProviders = [
+      { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+      { provide: 'AUTH_URL', useValue: 'https://localhost:5002' }, 
+      { provide: 'API_URL', useValue: 'https://localhost:5001/api/' }, 
   ];
 
-const bootstrap = () => platformBrowserDynamic(providers).bootstrapModule(AppModule);
+const prodProviders = [
+    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+    { provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com' },
+    { provide: 'API_URL', useValue: 'https://tenantsapi.ericsonramos.com/api/' }
+];
+
+  //note :***************************************************************************************************
+  // run
+  // ng build --prod --aot=false --build-optimizer=false
+  // because we are getting error on lazy loading of route if only ng build --prod
+  //note :***************************************************************************************************
+
+  var providers = environment.production ? prodProviders : devProviders;
+
+  const bootstrap = () => platformBrowserDynamic(providers).bootstrapModule(AppModule);
 
 if ( environment.hmr )
 {

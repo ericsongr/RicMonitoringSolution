@@ -133,9 +133,9 @@ namespace RicMonitoringAPI
 
             services.AddAuthorization(config =>
             {
-                config.AddPolicy("Superuser", policy => policy.RequireRole("Superuser", "Administrator"));
+                config.AddPolicy("SuperAndAdmin", policy => policy.RequireRole("Superuser", "Administrator"));
                 config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
-                config.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+                config.AddPolicy("Admin", policy => policy.RequireRole("Administrator"));
             });
 
             //cors

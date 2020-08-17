@@ -17,11 +17,11 @@ import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
-import { SampleModule } from 'app/main/sample/sample.module';
+// import { SampleModule } from 'app/main/sample/sample.module';
 import { UnauthorizedComponent } from './main/apps/unauthorized/unauthorized.component';
 import { CoreModule } from './main/apps/common/core/core.module';
-import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
-import { APP_BASE_HREF } from '@angular/common';
+// import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
+// import { APP_BASE_HREF } from '@angular/common';
 import { HomeModule } from './main/home/home.module';
 import { ConfigService } from './main/apps/common/services/config.service';
 import { UserDataService } from './main/apps/administrator/users/user-data.service';
@@ -35,15 +35,15 @@ const appRoutes: Routes = [
         path          : 'booking',
         loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
     },
-    {
-      path          : 'administrator',
-      loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
-    },
-    {
-      path          : 'auth',
-      outlet        : 'dialog',
-      loadChildren  : () => import('./main/apps/administrator/auth/auth.module').then(m => m.AuthModule) //'./main/apps/administrator/auth/change-password'
-    },
+    // {
+    //   path          : 'administrator',
+    //   loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
+    // },
+    // {
+    //   path          : 'auth',
+    //   outlet        : 'dialog',
+    //   loadChildren  : () => import('./main/apps/administrator/auth/auth.module').then(m => m.AuthModule) //'./main/apps/administrator/auth/change-password'
+    // },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'forbidden', component: UnauthorizedComponent },
 

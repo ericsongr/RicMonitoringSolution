@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable()
 export class UsersService implements Resolve<any> {
@@ -11,6 +12,7 @@ export class UsersService implements Resolve<any> {
   onUsersChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
+    private _oidcSecurityService: OidcSecurityService,
     private _httpClient: HttpClient,
     @Inject('AUTH_URL') private authUrl: string)  
   { 
@@ -66,11 +68,25 @@ export class UsersService implements Resolve<any> {
     
   }
 
-  private getHeaders() {
+  public getHeaders() {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('Accept', 'application/json');
-    return headers;
+    return this.appendAuthHeader(headers);
+  }
+
+  public getToken() {
+      const token = this._oidcSecurityService.getToken();
+      return token;
+  }
+
+  private appendAuthHeader(headers: HttpHeaders) {
+      const token = this._oidcSecurityService.getToken();
+      
+      if (token === '') { return headers; }
+      const tokenValue = 'Bearer ' + token;
+      
+      return headers.set('Authorization', tokenValue);
   }
 
 }
