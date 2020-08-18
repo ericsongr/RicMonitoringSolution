@@ -24,13 +24,15 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasOne(t => t.RentTransaction)
                 .WithMany(p => p.RentArrears)
                 .HasForeignKey(f => f.RentTransactionId)
-                .HasConstraintName("ForeignKey_RentArrears_RentTransaction_RentTransactionId");
+                .HasConstraintName("ForeignKey_RentArrears_RentTransaction_RentTransactionId")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasOne(t => t.Renter)
                 .WithMany(p => p.RentArrears)
                 .HasForeignKey(f => f.RenterId)
-                .HasConstraintName("ForeignKey_RentArrears_Renter_RenterId");
+                .HasConstraintName("ForeignKey_RentArrears_Renter_RenterId")
+                .OnDelete(DeleteBehavior.Cascade); ;
 
             builder.ToTable("RentArrears");
         }

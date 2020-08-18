@@ -7,7 +7,7 @@ namespace RicModel.RoomRent
     {
         public int Id { get; set; }
         public int RenterId { get; set; }
-        public int RentTransactionId { get; set; }
+        public int? RentTransactionId { get; set; }
         public decimal UnpaidAmount { get; set; }
         public bool IsProcessed { get; set; }
         public DateTime? ProcessedDateTime { get; set; }
