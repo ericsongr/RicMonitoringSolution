@@ -4,16 +4,21 @@ import { Observable ,  Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { UserDataService } from 'app/main/apps/administrator/users/user-data.service';
+import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 
 @Injectable()
 export class AuthService implements OnDestroy {
 
     isAuthorized = false;
-    
+    navigation: any;
+    userDataService: UserDataService;
+
     constructor(
-        private oidcSecurityService: OidcSecurityService,
-        private http: HttpClient,
-        private router: Router,
+        private _oidcSecurityService: OidcSecurityService,
+        private _http: HttpClient,
+        private _router: Router,
+        private _fuseNavigationService: FuseNavigationService,
         @Inject('BASE_URL') private originUrl: string,
         @Inject('AUTH_URL') private authUrl: string,
     ) {
@@ -60,24 +65,27 @@ export class AuthService implements OnDestroy {
             introspection_endpoint: this.authUrl + '/connect/introspect',
         };
        
-        this.oidcSecurityService.setupModule(openIdConfiguration, authWellKnownEndpoints);
+        this._oidcSecurityService.setupModule(openIdConfiguration, authWellKnownEndpoints);
 
-        if (this.oidcSecurityService.moduleSetup) {
+        if (this._oidcSecurityService.moduleSetup) {
             this.doCallbackLogicIfRequired();
         } else {
-            this.oidcSecurityService.onModuleSetup.subscribe(() => {
+            this._oidcSecurityService.onModuleSetup.subscribe(() => {
                 this.doCallbackLogicIfRequired();
             });
         }
-        this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe((isAuthorized => {
+        this.isAuthorizedSubscription = this._oidcSecurityService.getIsAuthorized().subscribe((isAuthorized => {
             this.isAuthorized = isAuthorized;
+
+
         }));
 
-        this.oidcSecurityService.onAuthorizationResult.subscribe(
+        this._oidcSecurityService.onAuthorizationResult.subscribe(
             (authorizationResult: AuthorizationResult) => {
                 this.onAuthorizationResultComplete(authorizationResult);
-                
+
                 localStorage.setItem('isCallback', 'true'); 
+
             });
 
     }
@@ -91,7 +99,7 @@ export class AuthService implements OnDestroy {
         if (authorizationResult.authorizationState === AuthorizationState.unauthorized) {
             if (window.parent) {
                 // sent from the child iframe, for example the silent renew
-                this.router.navigate(['/unauthorized']);
+                this._router.navigate(['/unauthorized']);
             } else {
                 window.location.href = '/unauthorized';
             }
@@ -99,55 +107,57 @@ export class AuthService implements OnDestroy {
     }
 
     private doCallbackLogicIfRequired() {
-        this.oidcSecurityService.authorizedCallbackWithCode(window.location.toString());
+        this._oidcSecurityService.authorizedCallbackWithCode(window.location.toString());
     }
 
     getIsAuthorized(): Observable<boolean> {
-        return this.oidcSecurityService.getIsAuthorized();
+        return this._oidcSecurityService.getIsAuthorized();
     }
 
     getUserData() : Observable<any> {
-        return this.oidcSecurityService.getUserData()
+        return this._oidcSecurityService.getUserData()
     }
 
     login() {
         localStorage.setItem('isCallback', 'false');
-        this.oidcSecurityService.authorize();
+        this._oidcSecurityService.authorize();
     }
 
     logout() {
-        this.oidcSecurityService.logoff();
+        
+        this._oidcSecurityService.logoff();
+    
     }
 
     get(url: string): Observable<any> {
-        return this.http.get(url, { headers: this.getHeaders() })
+        return this._http.get(url, { headers: this.getHeaders() })
         .pipe(catchError((error) => {
-            this.oidcSecurityService.handleError(error);
+            this._oidcSecurityService.handleError(error);
             return throwError(error);
         }));
     }
 
     put(url: string, data: any): Observable<any> {
         const body = JSON.stringify(data);
-        return this.http.put(url, body, { headers: this.getHeaders() })
+        return this._http.put(url, body, { headers: this.getHeaders() })
         .pipe(catchError((error) => {
-            this.oidcSecurityService.handleError(error);
+            this._oidcSecurityService.handleError(error);
             return throwError(error);
         }));
     }
 
     delete(url: string): Observable<any> {
-        return this.http.delete(url, { headers: this.getHeaders() })
+        return this._http.delete(url, { headers: this.getHeaders() })
         .pipe(catchError((error) => {
-            this.oidcSecurityService.handleError(error);
+            this._oidcSecurityService.handleError(error);
             return throwError(error);
         }));
     }
 
     post(url: string, body: any): Observable<any> {
-        return this.http.post(url, body, { headers: this.getHeaders() })
+        return this._http.post(url, body, { headers: this.getHeaders() })
         .pipe(catchError((error) => {
-            this.oidcSecurityService.handleError(error);
+            this._oidcSecurityService.handleError(error);
             return throwError(error);
         }));
     }
@@ -160,12 +170,12 @@ export class AuthService implements OnDestroy {
     }
 
     public getToken() {
-        const token = this.oidcSecurityService.getToken();
+        const token = this._oidcSecurityService.getToken();
         return token;
     }
 
     private appendAuthHeader(headers: HttpHeaders) {
-        const token = this.oidcSecurityService.getToken();
+        const token = this._oidcSecurityService.getToken();
         
         if (token === '') { return headers; }
         const tokenValue = 'Bearer ' + token;

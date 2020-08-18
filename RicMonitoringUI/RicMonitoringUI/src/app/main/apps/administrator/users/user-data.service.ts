@@ -7,6 +7,7 @@ export class UserDataService {
 userData = new UserData();
 
   constructor() { 
+    
     var data = JSON.parse(sessionStorage['userData_spaRicMonitoringCodeClient'])
     this.userData.sub = data.sub;
     this.userData.username = data.preferred_username;

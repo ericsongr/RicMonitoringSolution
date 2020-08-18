@@ -15,6 +15,8 @@ import { navigation } from 'app/navigation/navigation';
 import { locale as navigationEnglish } from 'app/navigation/i18n/en';
 import { locale as navigationTurkish } from 'app/navigation/i18n/tr';
 import { AuthService } from './main/apps/common/core/auth/auth.service';
+import { UserDataService } from './main/apps/administrator/users/user-data.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector   : 'app',
@@ -25,7 +27,9 @@ export class AppComponent implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
-
+    isHidden  : boolean = true;
+    userDataService: UserDataService;
+    
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -51,28 +55,60 @@ export class AppComponent implements OnInit, OnDestroy
         private _translateService: TranslateService,
         private _platform: Platform,
         private _authService: AuthService
-    )
-    {
-        // Get default navigation
-        this.navigation = navigation;
+    )  {
 
-        // Register the navigation to the service
-        this._fuseNavigationService.register('main', this.navigation);
+        
 
-        // Set the main navigation as our current navigation
-        this._fuseNavigationService.setCurrentNavigation('main');
+        if  (environment.production) {
 
-        // Add languages
-        this._translateService.addLangs(['en', 'tr']);
+            this._authService.getIsAuthorized().subscribe((isAuthorized: any) => {
 
-        // Set the default language
-        this._translateService.setDefaultLang('en');
+                if (isAuthorized) {
 
-        // Set the navigation translations
-        this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
+                    setTimeout(() => {
 
-        // Use a language
-        this._translateService.use('en');
+                        this.userDataService = new UserDataService();
+                    
+                        var role = this.userDataService.getRole();
+
+                        this.initNavigation();
+
+                        if (role == undefined) {
+                            setTimeout(() => {
+                                if  (role == 'Superuser') {
+                                    this.isHidden = false;
+                                }
+                                this.updateNavigationItem('administrator', this.isHidden);
+                            }, 1000);
+                        }else {
+                            if  (role == 'Superuser') {
+                                this.isHidden = false;
+                            }
+                            this.updateNavigationItem('administrator', this.isHidden);
+                        }
+
+                    
+                    }, 1000);
+
+                }
+                
+            });
+
+        } else {
+            this.initNavigation();
+        }
+
+       // Add languages
+       this._translateService.addLangs(['en', 'tr']);
+ 
+       // Set the default language
+       this._translateService.setDefaultLang('en');
+
+       // Set the navigation translations
+       this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
+
+       // Use a language
+       this._translateService.use('en');
 
         /**
          * ----------------------------------------------------------------------------------------------------
@@ -117,6 +153,28 @@ export class AppComponent implements OnInit, OnDestroy
         this._unsubscribeAll = new Subject();
     }
 
+    private updateNavigationItem(menuId: string, isHidden: boolean) {
+        //hide audit administrator
+        this._fuseNavigationService.updateNavigationItem(menuId, {
+            hidden: isHidden
+        })
+    }
+
+    private initNavigation() {
+
+         // Get default navigation
+         this.navigation = navigation;
+
+         // Unregister
+         this._fuseNavigationService.unregister('main')
+
+         // Register the navigation to the service
+         this._fuseNavigationService.register('main', this.navigation);
+ 
+         // Set the main navigation as our current navigation
+         this._fuseNavigationService.setCurrentNavigation('main');
+ 
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
@@ -126,6 +184,7 @@ export class AppComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        
         // Subscribe to config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))

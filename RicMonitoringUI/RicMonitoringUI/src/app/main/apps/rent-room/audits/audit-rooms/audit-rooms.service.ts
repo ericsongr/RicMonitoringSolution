@@ -18,7 +18,7 @@ export class AuditRoomsService implements Resolve<any> {
   { }
   
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-      var url = `${this.apiUrl}${ApiControllers.Audits}/rooms${TABLE_FIELDS}`;
+      var url = `${this.apiUrl}${ApiControllers.Audits}/0/rooms${TABLE_FIELDS}`;
       return new Promise((resolve, reject) => {
 
         this._authService.get(url)

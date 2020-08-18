@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RicAuthServer.Data;
 using RicAuthServer.Services;
 using System.Reflection;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -37,18 +38,27 @@ namespace RicAuthServer
             //added IProfileService here
             services.AddTransient<IProfileService, ProfileService>();
 
-            //TODO: temporarily removed the password complexity
-            //services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-            //{
-            //    config.Password.RequiredLength = 4;
-            //    config.Password.RequireDigit = false;
-            //    config.Password.RequireNonAlphanumeric = false;
-            //    config.Password.RequireUppercase = false;
-            //})
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            //services.AddAuthentication("Bearer")
+            //    .AddIdentityServerAuthentication("Bearer", options =>
+            //    {
+            //        //// name of the API resource //resourceApi
+            //        options.ApiName = "RicMonitoringAPI";
+
+            //        options.Authority = Configuration["authority"];
+            //    });
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("AdminAndSuperuser", policy => policy.RequireRole("Administrator", "Superuser"));
+
+                config.AddPolicy("Users", policy => policy.RequireRole("Staff", "Administrator", "Superuser"));
+
+            });
 
             //cors
             services.AddCors(options =>
@@ -131,6 +141,8 @@ namespace RicAuthServer
             app.UseRouting();
             
             app.UseIdentityServer();
+
+            //app.UseAuthentication();
 
             app.UseAuthorization();
 

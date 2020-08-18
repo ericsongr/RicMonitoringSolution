@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using RicAuthServer.Data.Constants;
 using RicAuthServer.Data.Migrations.IdentityServer;
 
 namespace RicAuthServer.Data
@@ -94,10 +95,14 @@ namespace RicAuthServer.Data
 
             var user = new ApplicationUser();
             user.UserName = "ericson";
+            user.FirstName = "Ericson";
+            user.LastName = "Ramos";
             var result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
 
             user = new ApplicationUser();
             user.UserName = "sherine";
+            user.FirstName = "Sherine";
+            user.LastName = "Ramos";
             result = userManager.CreateAsync(user, "ramos").GetAwaiter().GetResult();
 
             user = new ApplicationUser();
@@ -110,43 +115,46 @@ namespace RicAuthServer.Data
             var roleManager = scope.ServiceProvider
                 .GetService<RoleManager<IdentityRole>>();
 
-            string superuser = "Superuser";
-            string administrator = "Administrator";
-            if (!roleManager.RoleExistsAsync(superuser).GetAwaiter().GetResult())
+            if (!roleManager.RoleExistsAsync(RoleConstant.Superuser).GetAwaiter().GetResult())
             {
-                roleManager.CreateAsync(new IdentityRole(superuser)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(RoleConstant.Superuser)).GetAwaiter().GetResult();
             }
 
-            if (!roleManager.RoleExistsAsync(administrator).GetAwaiter().GetResult())
+            if (!roleManager.RoleExistsAsync(RoleConstant.Administrator).GetAwaiter().GetResult())
             {
-                roleManager.CreateAsync(new IdentityRole(administrator)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(RoleConstant.Administrator)).GetAwaiter().GetResult();
+            }
+
+            if (!roleManager.RoleExistsAsync(RoleConstant.Staff).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new IdentityRole(RoleConstant.Staff)).GetAwaiter().GetResult();
             }
 
             //seeding the user role
             var ericsonRole = userManager.FindByNameAsync("ericson").GetAwaiter().GetResult();
-            if (!userManager.IsInRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult())
+            if (ericsonRole != null && !userManager.IsInRoleAsync(ericsonRole, RoleConstant.Superuser).GetAwaiter().GetResult())
             {
-                userManager.AddToRoleAsync(ericsonRole, superuser).GetAwaiter().GetResult();
+                userManager.AddToRoleAsync(ericsonRole, RoleConstant.Superuser).GetAwaiter().GetResult();
             }
 
             var sherineRole = userManager.FindByNameAsync("sherine").GetAwaiter().GetResult();
-            if (!userManager.IsInRoleAsync(sherineRole, administrator).GetAwaiter().GetResult())
+            if (sherineRole != null && !userManager.IsInRoleAsync(sherineRole, RoleConstant.Administrator).GetAwaiter().GetResult())
             {
-                userManager.AddToRoleAsync(sherineRole, administrator).GetAwaiter().GetResult();
+                userManager.AddToRoleAsync(sherineRole, RoleConstant.Administrator).GetAwaiter().GetResult();
             }
 
             var egboyRole = userManager.FindByNameAsync("egboy").GetAwaiter().GetResult();
-            if (!userManager.IsInRoleAsync(egboyRole, administrator).GetAwaiter().GetResult())
+            if (egboyRole != null && !userManager.IsInRoleAsync(egboyRole, RoleConstant.Administrator).GetAwaiter().GetResult())
             {
-                userManager.AddToRoleAsync(egboyRole, administrator).GetAwaiter().GetResult();
+                userManager.AddToRoleAsync(egboyRole, RoleConstant.Administrator).GetAwaiter().GetResult();
             }
 
-            //seeding claim
-            var resultClaim = userManager.AddClaimAsync(user, new Claim("ric.test", "big.cookie"))
-                .GetAwaiter().GetResult();
+            ////seeding claim
+            //var resultClaim = userManager.AddClaimAsync(user, new Claim("ric.test", "big.cookie"))
+            //    .GetAwaiter().GetResult();
 
-            var resultClaim2 = userManager.AddClaimAsync(user, new Claim("ric.api.test", "big.api.cookie"))
-                .GetAwaiter().GetResult();
+            //var resultClaim2 = userManager.AddClaimAsync(user, new Claim("ric.api.test", "big.api.cookie"))
+            //    .GetAwaiter().GetResult();
         }
 
     }

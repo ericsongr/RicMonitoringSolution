@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { HomeComponent } from './home.component';
 
 const routes = [
   {
