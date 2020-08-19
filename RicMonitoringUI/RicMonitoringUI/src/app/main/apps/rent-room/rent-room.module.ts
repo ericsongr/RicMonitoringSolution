@@ -27,6 +27,8 @@ import { RenterComponent } from './renter/renter.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 import { RentTransactionPaymentComponent } from './rent-transaction/rent-transaction-payment/rent-transaction-payment.component';
 import { AuditsModule } from './audits/audits-api';
+import { DailyBatchComponent } from '../administrator/daily-batch/daily-batch.component';
+import { DailyBatchService } from '../administrator/daily-batch/daily-batch.service';
 
 const routes : Routes= [
    {

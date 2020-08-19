@@ -35,10 +35,10 @@ const appRoutes: Routes = [
         path          : 'booking',
         loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
     },
-    // {
-    //   path          : 'administrator',
-    //   loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
-    // },
+    {
+      path          : 'administrator',
+      loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
+    },
     // {
     //   path          : 'auth',
     //   outlet        : 'dialog',

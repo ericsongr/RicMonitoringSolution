@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RicEntityFramework;
+using RicEntityFramework.Helpers;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicModel.Enumeration;
 using RicModel.RoomRent;
@@ -52,6 +53,18 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionDetailRepository = rentTransactionDetailRepository ?? throw new ArgumentNullException(nameof(rentTransactionDetailRepository));
             _rentArrearRepository = rentArrearRepository ?? throw new ArgumentNullException(nameof(rentArrearRepository));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+        }
+
+        [HttpGet]
+        public IActionResult GetDailyBatch([FromQuery] string fields)
+        {
+            var dailyBatch = _monthlyRentBatchRepository.FindAll()
+                .OrderByDescending(o =>  o.ProcessStartDateTime);
+
+            var dto = Mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch); 
+
+            return Ok(dto.ShapeData(fields));
+
         }
 
         [HttpPost()]
@@ -486,8 +499,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         {
             var monthlyRentBatch = new MonthlyRentBatch
             {
-                Month = currentDate.Month,
-                Year = currentDate.Year,
                 ProcessStartDateTime = currentDate,
                 ProcesssEndDateTime = null
             };
@@ -505,7 +516,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ;
             if (monthlyRentBatch != null)
             {
-                monthlyRentBatch.ProcesssEndDateTime = DateTime.Now;
+                monthlyRentBatch.ProcesssEndDateTime = DateTime.UtcNow;
                 _monthlyRentBatchRepository.Commit();
             }
         }

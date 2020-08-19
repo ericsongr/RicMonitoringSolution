@@ -86,6 +86,7 @@ $typography: mat-typography-config(
 @import "src/app/main/apps/rent-room/rent-transactions/rent-transactions.theme";
 //administrator
 @import "src/app/main/apps/administrator/users/users.theme";
+@import "src/app/main/apps/administrator/daily-batch/daily-batch.theme";
 
 @import "src/app/main/apps/unauthorized/unauthorized.theme";
 
@@ -101,7 +102,11 @@ $typography: mat-typography-config(
     @include page-rooms-theme($theme);
     @include page-renters-theme($theme);
     @include page-rent-transactions-theme($theme);
+
+    //administrator
     @include page-users-theme($theme);
+    @include page-daily-batch-theme($theme);
+    
     @include unauthorized-theme($theme);
 
 }
