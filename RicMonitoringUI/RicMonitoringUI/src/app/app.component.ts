@@ -72,23 +72,25 @@ export class AppComponent implements OnInit, OnDestroy
                         var role = this.userDataService.getRole();
 
                         this.initNavigation();
+                        this.updateNavigationItem('administrator', true);
 
                         if (role == undefined) {
+
                             setTimeout(() => {
                                 if  (role == 'Superuser') {
                                     this.isHidden = false;
                                 }
                                 this.updateNavigationItem('administrator', this.isHidden);
                             }, 1000);
+                            
                         }else {
                             if  (role == 'Superuser') {
                                 this.isHidden = false;
                             }
                             this.updateNavigationItem('administrator', this.isHidden);
                         }
-
                     
-                    }, 1000);
+                    }, 2000);
 
                 }
                 

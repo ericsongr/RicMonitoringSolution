@@ -96,8 +96,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MonthlyRentBatch](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Month] [int] NOT NULL,
-	[Year] [int] NOT NULL,
 	[ProcessStartDateTime] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[ProcesssEndDateTime] [datetime2](7) NULL,
  CONSTRAINT [PK_MonthlyRentBatch] PRIMARY KEY CLUSTERED 

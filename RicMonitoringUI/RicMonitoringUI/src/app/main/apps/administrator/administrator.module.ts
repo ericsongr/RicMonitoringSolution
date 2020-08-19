@@ -12,29 +12,38 @@ import { FuseWidgetModule, FuseDemoModule } from '@fuse/components';
 import { MaterialModule } from 'app/main/module/material.module';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country'
 import { AdministratorShowErrorsComponent } from './administrator-show-errors.component';
+import { DailyBatchComponent } from './daily-batch/daily-batch.component';
+import { DailyBatchService } from './daily-batch/daily-batch.service';
 
 const routes : Routes = [
+  // {
+  //   path      : 'users',
+  //   component : UsersComponent,
+  //   resolve : {
+  //     data  : UsersService
+  //   },
+  // },
+  // {
+  //   path      : 'users/:id',  
+  //   component : UserComponent,
+  //   resolve : {
+  //     data  : UserService
+  //   },
+  // },
+  // {
+  //   path      : 'users/:id/:handle',
+  //   component : UserComponent,
+  //   resolve : {
+  //     data  : UserService
+  //   },
+  // }
   {
-    path      : 'users',
-    component : UsersComponent,
-    resolve : {
-      data  : UsersService
-    },
+    path          : 'daily-batch',
+    component : DailyBatchComponent,
+    resolve: {
+      data: DailyBatchService
+    }
   },
-  {
-    path      : 'users/:id',  
-    component : UserComponent,
-    resolve : {
-      data  : UserService
-    },
-  },
-  {
-    path      : 'users/:id/:handle',
-    component : UserComponent,
-    resolve : {
-      data  : UserService
-    },
-  }
 ]
 
 @NgModule({
@@ -47,13 +56,15 @@ const routes : Routes = [
     MatSelectCountryModule
   ],
   providers: [
-    UserService,
-    UsersService
+    // UserService,
+    // UsersService
+    DailyBatchService
   ],
   declarations: [
     AdministratorShowErrorsComponent,
-    UserComponent,
-    UsersComponent
+    // UserComponent,
+    // UsersComponent
+    DailyBatchComponent
   ]
 })
 export class AdministratorModule { }

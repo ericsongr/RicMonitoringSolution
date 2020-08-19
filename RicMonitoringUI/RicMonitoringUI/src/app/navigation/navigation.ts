@@ -65,6 +65,13 @@ var navigationContainer: FuseNavigation[] = [
                         url       : '/apartment/audit/logs',
                         exactMatch: true
                     },
+                    {
+                        id        : 'DailyBatch',
+                        title     : 'Daily Batch',
+                        type      : 'item',
+                        url       : '/administrator/daily-batch',
+                        exactMatch: true
+                    },
                     // {
                     //     id: 'USERS',
                     //     title: 'Users',
