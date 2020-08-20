@@ -29,6 +29,7 @@ import { RentTransactionPaymentComponent } from './rent-transaction/rent-transac
 import { AuditsModule } from './audits/audits-api';
 import { DailyBatchComponent } from '../administrator/daily-batch/daily-batch.component';
 import { DailyBatchService } from '../administrator/daily-batch/daily-batch.service';
+import { DialogPaymentsComponent } from './renter/rent-transaction-history/dialog-payments/dialog-payments.component';
 
 const routes : Routes= [
    {
@@ -141,7 +142,8 @@ const routes : Routes= [
     BillingStatementComponent,
     TenantShowErrorsComponent,
     RenterDetailComponent,
-    RenterTabsComponent
+    RenterTabsComponent,
+    DialogPaymentsComponent
   ],
   providers: [
     // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -162,7 +164,8 @@ const routes : Routes= [
     // }
   ],
   entryComponents: [
-    DialogDeletePaymentConfirmationComponent
+    DialogDeletePaymentConfirmationComponent,
+    DialogPaymentsComponent
   ]
 })
 export class RentRoomModule { 

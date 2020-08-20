@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 
 namespace RicModel.RoomRent.Extensions
-{   
+{
     public static class RentTransactionHistoryExtensions
     {
         public static decimal GetPreviousBalance(this RentTransaction rentTransaction)
@@ -111,9 +112,27 @@ namespace RicModel.RoomRent.Extensions
             var name = Enum.GetName(typeof(PaymentTransactionType), payment.PaymentTransactionType);
 
             //use to add space before capital letter. eg. 'CarryOverExcessPayment' replace with 'Carry Over Excess Payment'
-            name = System.Text.RegularExpressions.Regex.Replace(name, "[A-Z]", " $0").TrimStart(); 
-            
+            name = System.Text.RegularExpressions.Regex.Replace(name, "[A-Z]", " $0").TrimStart();
+
             return name;
+        }
+
+        public static List<RentTransactionHistoryPaymentDetailDto> GetPayments(this RentTransaction rentTransaction)
+        {
+            if (rentTransaction == null)
+            {
+                throw new ArgumentNullException("Source: GetPayments() >> rentTransaction");
+            }
+
+            var paymentsDto = rentTransaction.RentTransactionPayments
+                .Select(o => new RentTransactionHistoryPaymentDetailDto
+                {
+                    Amount = o.Amount,
+                    DatePaidString = o.DatePaid.ToShortDateString(),
+                    PaymentTransactionType = o.GetTransactionPaymentType()
+                }).ToList();
+
+            return paymentsDto;
         }
     }
 }
