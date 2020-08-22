@@ -5,9 +5,10 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { Subscription, Observable, Subject, merge, BehaviorSubject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/table';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { FuseUtils } from '@fuse/utils';
 import { fuseAnimations } from '@fuse/animations';
+import { DialogPaymentsComponent } from './dialog-payments/dialog-payments.component';
 
 @Component({
   selector: 'tab-rent-transaction-history',
@@ -28,8 +29,16 @@ export class RentTransactionHistoryComponent implements OnInit, OnDestroy  {
 
   private _unsubscribeAll = new Subject();
   constructor(
-    private _rentTransactionHistoryService: RentTransactionHistoryService
+    private _rentTransactionHistoryService: RentTransactionHistoryService,
+    private _dialog: MatDialog
   ) { }
+
+  onClickViewPayments(payments) {
+    this._dialog.open(DialogPaymentsComponent, {
+      width: '500px',
+      data: payments
+    });
+  }
 
   ngOnInit(): void {
     this.dataSource = new FilesDataSource(this._rentTransactionHistoryService, this.paginator, this.sort);

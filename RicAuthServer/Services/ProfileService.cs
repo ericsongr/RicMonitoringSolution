@@ -37,6 +37,9 @@ namespace RicAuthServer.Services
             //add first name and last name
             claims.Add(new Claim("FullName", $"{user.FirstName} {user.LastName}"));
 
+            //user name
+            claims.Add(new Claim("UserName", user.UserName));
+
             //add requested claims and first, last name
             context.IssuedClaims.AddRange(claims);
 

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace RicMonitoringAPI
@@ -15,6 +17,14 @@ namespace RicMonitoringAPI
         {
             try
             {
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console()
+                    .WriteTo.File(".\\logs\\RicMonitoringAPI.txt", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+
                 var host = CreateWebHostBuilder(args).Build();
                 host.Run();
                 return 0;
@@ -23,6 +33,10 @@ namespace RicMonitoringAPI
             {
                 Console.WriteLine(e);
                 return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
 
         }

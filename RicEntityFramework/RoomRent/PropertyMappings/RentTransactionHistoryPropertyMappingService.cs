@@ -26,6 +26,7 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"IsDepositUsed", new PropertyMappingValue(new List<string>() {"IsDepositUsed"}) },
                 {"Note", new PropertyMappingValue(new List<string>() {"Note"}) },
                 {"TransactionType", new PropertyMappingValue(new List<string>() {"TransactionType"}) },
+                {"Payments", new PropertyMappingValue(new List<string>() {"Payments"}) },
             };
 
         public RentTransactionHistoryPropertyMappingService()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RicModel.RoomRent.Dtos
 {
@@ -18,5 +19,7 @@ namespace RicModel.RoomRent.Dtos
         public bool IsDepositUsed { get; set; }
         public string Note { get; set; }
         public string TransactionType { get; set; }
+
+        public List<RentTransactionHistoryPaymentDetailDto> Payments { get; set; }
     }
 }

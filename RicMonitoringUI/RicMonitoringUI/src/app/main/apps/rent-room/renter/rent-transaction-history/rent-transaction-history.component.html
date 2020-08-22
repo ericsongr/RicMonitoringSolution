@@ -67,6 +67,14 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Paid Amount</mat-header-cell>
         <mat-cell *matCellDef="let paymentHistory">
         <p class="text-truncate">{{paymentHistory.paidAmount | number: '1.0-2'}}</p>
+            <a *ngIf="paymentHistory.paidAmount > 0" 
+                type="button" 
+                style="margin-left: 10px; cursor: pointer"
+                matTooltip="Show Payments"
+                matTooltipPosition="above"
+                (click)="onClickViewPayments(paymentHistory.payments)">
+            <mat-icon>monetization_on</mat-icon>
+            </a>
         </mat-cell>
         </ng-container>
 

@@ -5,7 +5,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { RentTransactionHistory } from './rent-transaction-history.model';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-const TABLE_FIELDS = "&orderBy=DueDate&field=dueDateString,paidOrUsedDepositDateString,period,paidAmount,balanceDateToBePaidString,monthlyRent,previousBalance,currentBalance,totalAmountDue,isDepositUsed,note,transactionType";
+const TABLE_FIELDS = "&orderBy=DueDate&field=dueDateString,paidOrUsedDepositDateString,"
+                     "period,paidAmount,balanceDateToBePaidString,monthlyRent,previousBalance,"
+                     "currentBalance,totalAmountDue,isDepositUsed,note,transactionType,payments";
 
 @Injectable()
 export class RentTransactionHistoryService implements Resolve<any> {
@@ -38,7 +40,7 @@ export class RentTransactionHistoryService implements Resolve<any> {
 
       var url = `${this._apiUrl}${ApiControllers.RentTransactionHistory}?id=${renterId}${TABLE_FIELDS}`;
       this._authServer.get(url)
-          .subscribe((response: RentTransactionHistory[]) => {
+          .subscribe((response: RentTransactionHistory[]) => {0
             this.onRentTransactionHistoryChanged.next(response);
             this.rentTransactionHistories = response;
             resolve(response);
