@@ -15,6 +15,7 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Constants;
+using Serilog;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -53,6 +54,27 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionDetailRepository = rentTransactionDetailRepository ?? throw new ArgumentNullException(nameof(rentTransactionDetailRepository));
             _rentArrearRepository = rentArrearRepository ?? throw new ArgumentNullException(nameof(rentArrearRepository));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+        }
+
+        [HttpGet]
+        [Route("claims/users")]
+        public IActionResult GetClaim()
+        {
+            var claims = User.Claims.Select(o => new
+            {
+                o.Value,
+                o.Type
+            }).ToList();
+
+            if (claims.Any())
+            {
+                return Ok(claims);
+            }
+            else
+            {
+                return Ok("NOT FOUND");
+            }
+
         }
 
         [HttpGet]

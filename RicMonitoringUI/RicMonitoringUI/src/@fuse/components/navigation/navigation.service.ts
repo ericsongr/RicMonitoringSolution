@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as _ from 'lodash';
 
 import { FuseNavigationItem } from '@fuse/types';
+import { environment } from 'environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -210,7 +211,7 @@ export class FuseNavigationService
      */
     getCurrentNavigation(): any
     {
-        if ( !this._currentNavigationKey )
+        if ( !this._currentNavigationKey && !environment.production)
         {
             console.warn(`The current navigation is not set.`);
 

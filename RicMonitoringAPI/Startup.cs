@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Audit.Core;
 using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using RicEntityFramework;
@@ -99,6 +102,12 @@ namespace RicMonitoringAPI
 
             services.AddHealthChecks();
 
+            // Add the HttpContextAccessor if needed.
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Get the service provider to access the http context
+            var svrProvider = services.BuildServiceProvider();
+
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
@@ -108,8 +117,12 @@ namespace RicMonitoringAPI
                         .Map<RentTransactionPayment, AuditRentTransactionPayment>()
                         .AuditEntityAction<IAudit>((evt, entry, auditEntity) =>
                         {
+                            // Get the current HttpContext 
+                            var httpContext = svrProvider.GetService<IHttpContextAccessor>().HttpContext;
+                            var userName = httpContext.User?.Claims.FirstOrDefault(o => o.Type == "UserName")?.Value;
+
                             auditEntity.AuditDateTime = DateTime.UtcNow;
-                            auditEntity.Username = evt.Environment.UserName;
+                            auditEntity.Username = userName;
                             auditEntity.AuditAction = entry.Action;
                         })
                     )
