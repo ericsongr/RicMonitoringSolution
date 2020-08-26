@@ -18,7 +18,7 @@ namespace RicAuthServer.Extensions
         public static Task SendResetPasswordAsync(this IEmailSender emailSender, string email, string callbackUrl)
         {
             return emailSender.SendEmailAsync(email, "Reset Password",
-                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                $"Please reset your password by <a href={HtmlEncoder.Default.Encode(callbackUrl)}' target='_blank'>clicking here</a>.");
         }
     }
 }
