@@ -27,13 +27,10 @@ namespace RicAuthServer.Extensions
                 protocol: scheme);
         }
 
-        public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
+        public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string email, string code, string scheme)
         {
-            return urlHelper.Page(
-                "/Account/ResetPassword",
-                pageHandler: null,
-                values: new { userId, code },
-                protocol: scheme);
+            return urlHelper.ActionLink(
+                "ResetPassword", "Account", values: new {code, email}, protocol:scheme);
         }
     }
 }

@@ -22,6 +22,11 @@ namespace RicAuthServer.Pages.Account
             _emailSender = emailSender;
         }
 
+        public ForgotPasswordModel()
+        {
+            
+        }
+
         [BindProperty]
         public InputModel Input { get; set; }
 

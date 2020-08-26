@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,10 @@ namespace RicAuthServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //when reset password the token should only valid for 2 hours.
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(1));
+
             //services.AddAuthentication("Bearer")
             //    .AddIdentityServerAuthentication("Bearer", options =>
             //    {
@@ -77,6 +82,7 @@ namespace RicAuthServer
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Account/Manage");
+                    options.Conventions.AuthorizeFolder("/Account");
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
 
