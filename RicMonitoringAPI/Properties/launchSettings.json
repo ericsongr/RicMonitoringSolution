@@ -7,8 +7,8 @@
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "http://localhost:56283",
-      "sslPort": 44363
+      "applicationUrl": "http://localhost:1893/",
+      "sslPort": 0
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -18,7 +18,8 @@
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "NO_PROXY": "localhost"
       },
       "ancmHostingModel": "OutOfProcess"
     },
@@ -39,6 +40,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "KestrelHttpsTest": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://127.0.0.1:5001/api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:8080/"
     }
   }
 }
