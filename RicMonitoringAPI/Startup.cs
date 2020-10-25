@@ -122,7 +122,7 @@ namespace RicMonitoringAPI
                             var userName = httpContext.User?.Claims.FirstOrDefault(o => o.Type == "UserName")?.Value;
 
                             auditEntity.AuditDateTime = DateTime.UtcNow;
-                            auditEntity.Username = userName;
+                            auditEntity.Username = string.IsNullOrEmpty(userName) ? "MANUAL_CALL" : userName;
                             auditEntity.AuditAction = entry.Action;
                         })
                     )
@@ -131,6 +131,22 @@ namespace RicMonitoringAPI
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddNewtonsoftJson();
+
+            //cors
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors", builder =>
+                {
+                    builder
+
+                        .AllowAnyHeader()
+                        //.AllowAnyOrigin()
+                        .WithOrigins(Configuration["clientUrl"]) //client url
+                        //.AllowAnyMethod()
+                        .WithMethods("GET", "PUT", "POST", "DELETE");
+                    //.AllowCredentials();
+                });
+            });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
@@ -149,19 +165,6 @@ namespace RicMonitoringAPI
                 config.AddPolicy("SuperAndAdmin", policy => policy.RequireRole("Superuser", "Administrator"));
                 config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
                 config.AddPolicy("Admin", policy => policy.RequireRole("Administrator"));
-            });
-
-            //cors
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowCors", builder =>
-                {
-                    builder
-                        //.AllowAnyOrigin()
-                        .WithOrigins(Configuration["clientUrl"]) //client url
-                        .WithMethods("GET", "PUT", "POST", "DELETE")
-                        .AllowAnyHeader();
-                });
             });
 
             services.AddMvc(setupAction =>
@@ -200,7 +203,7 @@ namespace RicMonitoringAPI
             else
             {
                 //check https://docs.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-3.1
-                //app.UseExceptionHandler("/Error"); 
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -252,7 +255,9 @@ namespace RicMonitoringAPI
             //Enable CORS policy "AllowCors"
             app.UseCors("AllowCors");
 
+            //uncomment when deploy to live server
             app.UseHttpsRedirection();
+
             // Matches request to an endpoint.
             app.UseRouting();
 

@@ -123,6 +123,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             DateTime.TryParse(renter.StartDateInput, out DateTime startDateInput);
             DateTime.TryParse(renter.AdvancePaidDateInput, out DateTime advancePaidDateInput);
 
+            startDateInput = renter.StartDate > startDateInput ? renter.StartDate : startDateInput;
+            advancePaidDateInput = renter.AdvancePaidDate > advancePaidDateInput ? renter.AdvancePaidDate : advancePaidDateInput;
+
             renter.StartDate = startDateInput;
             renter.AdvancePaidDate = advancePaidDateInput;
             renter.PreviousDueDate = startDateInput;

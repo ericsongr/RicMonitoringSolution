@@ -1,87 +1,88 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+		<TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+		<UseAppHost>false</UseAppHost>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Common\Helpers\**" />
-    <Compile Remove="Common\Services\**" />
-    <Compile Remove="Migrations\**" />
-    <Compile Remove="RicMonitoringUI\**" />
-    <Compile Remove="RicXplorer\Entities\**" />
-    <Compile Remove="RicXplorer\Interfaces\**" />
-    <Compile Remove="RoomRent\Helpers\**" />
-    <Compile Remove="RoomRent\Models\**" />
-    <Compile Remove="RoomRent\Services\**" />
-    <Content Remove="Common\Helpers\**" />
-    <Content Remove="Common\Services\**" />
-    <Content Remove="Migrations\**" />
-    <Content Remove="RicMonitoringUI\**" />
-    <Content Remove="RicXplorer\Entities\**" />
-    <Content Remove="RicXplorer\Interfaces\**" />
-    <Content Remove="RoomRent\Helpers\**" />
-    <Content Remove="RoomRent\Models\**" />
-    <Content Remove="RoomRent\Services\**" />
-    <EmbeddedResource Remove="Common\Helpers\**" />
-    <EmbeddedResource Remove="Common\Services\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <EmbeddedResource Remove="RicMonitoringUI\**" />
-    <EmbeddedResource Remove="RicXplorer\Entities\**" />
-    <EmbeddedResource Remove="RicXplorer\Interfaces\**" />
-    <EmbeddedResource Remove="RoomRent\Helpers\**" />
-    <EmbeddedResource Remove="RoomRent\Models\**" />
-    <EmbeddedResource Remove="RoomRent\Services\**" />
-    <None Remove="Common\Helpers\**" />
-    <None Remove="Common\Services\**" />
-    <None Remove="Migrations\**" />
-    <None Remove="RicMonitoringUI\**" />
-    <None Remove="RicXplorer\Entities\**" />
-    <None Remove="RicXplorer\Interfaces\**" />
-    <None Remove="RoomRent\Helpers\**" />
-    <None Remove="RoomRent\Models\**" />
-    <None Remove="RoomRent\Services\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Common\Helpers\**" />
+		<Compile Remove="Common\Services\**" />
+		<Compile Remove="Migrations\**" />
+		<Compile Remove="RicMonitoringUI\**" />
+		<Compile Remove="RicXplorer\Entities\**" />
+		<Compile Remove="RicXplorer\Interfaces\**" />
+		<Compile Remove="RoomRent\Helpers\**" />
+		<Compile Remove="RoomRent\Models\**" />
+		<Compile Remove="RoomRent\Services\**" />
+		<Content Remove="Common\Helpers\**" />
+		<Content Remove="Common\Services\**" />
+		<Content Remove="Migrations\**" />
+		<Content Remove="RicMonitoringUI\**" />
+		<Content Remove="RicXplorer\Entities\**" />
+		<Content Remove="RicXplorer\Interfaces\**" />
+		<Content Remove="RoomRent\Helpers\**" />
+		<Content Remove="RoomRent\Models\**" />
+		<Content Remove="RoomRent\Services\**" />
+		<EmbeddedResource Remove="Common\Helpers\**" />
+		<EmbeddedResource Remove="Common\Services\**" />
+		<EmbeddedResource Remove="Migrations\**" />
+		<EmbeddedResource Remove="RicMonitoringUI\**" />
+		<EmbeddedResource Remove="RicXplorer\Entities\**" />
+		<EmbeddedResource Remove="RicXplorer\Interfaces\**" />
+		<EmbeddedResource Remove="RoomRent\Helpers\**" />
+		<EmbeddedResource Remove="RoomRent\Models\**" />
+		<EmbeddedResource Remove="RoomRent\Services\**" />
+		<None Remove="Common\Helpers\**" />
+		<None Remove="Common\Services\**" />
+		<None Remove="Migrations\**" />
+		<None Remove="RicMonitoringUI\**" />
+		<None Remove="RicXplorer\Entities\**" />
+		<None Remove="RicXplorer\Interfaces\**" />
+		<None Remove="RoomRent\Helpers\**" />
+		<None Remove="RoomRent\Models\**" />
+		<None Remove="RoomRent\Services\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Common\DbInitializer.cs" />
-    <Compile Remove="Common\Enumeration\TransactionTypeEnum.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Common\DbInitializer.cs" />
+		<Compile Remove="Common\Enumeration\TransactionTypeEnum.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
-    <PackageReference Include="Serilog" Version="2.9.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.23" />
-    <PackageReference Include="Audit.EntityFramework.Core" Version="15.2.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="8.0.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
+		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+		<PackageReference Include="Serilog" Version="2.9.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.23" />
+		<PackageReference Include="Audit.EntityFramework.Core" Version="15.2.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Entities\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Common\Entities\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="RicEntityFramework">
-      <HintPath>..\RicEntityFramework\bin\Debug\netcoreapp3.1\RicEntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="RicModel">
-      <HintPath>..\RicModel\bin\Debug\netcoreapp3.1\RicModel.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="RicEntityFramework">
+			<HintPath>..\RicEntityFramework\bin\Debug\netcoreapp3.1\RicEntityFramework.dll</HintPath>
+		</Reference>
+		<Reference Include="RicModel">
+			<HintPath>..\RicModel\bin\Debug\netcoreapp3.1\RicModel.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>
