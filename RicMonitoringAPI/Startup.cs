@@ -142,7 +142,7 @@ namespace RicMonitoringAPI
                         .AllowAnyHeader()
                         //.AllowAnyOrigin()
                         .WithOrigins(Configuration["clientUrl"]) //client url
-                        //.AllowAnyMethod()
+                                                                 //.AllowAnyMethod()
                         .WithMethods("GET", "PUT", "POST", "DELETE");
                     //.AllowCredentials();
                 });

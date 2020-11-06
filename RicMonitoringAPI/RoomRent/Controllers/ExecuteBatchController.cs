@@ -112,15 +112,15 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     int tenantGracePeriod = GetTenantGracePeriod();
                     DateTime systemDateTimeProcessed = currentDateTimeUtc;
                     DateTime dateIncludedGracePeriod = currentDateTimeUtc.AddDays(-tenantGracePeriod).Date; //minus days of grace period to current date
-
+                    
                     string note = "PROCESSED BY THE SYSTEM";
 
                     var transactions = _rentTransactionRepository
-                        .FindBy(o => !o.IsProcessed && !o.Renter.IsEndRent && o.DueDate <= dateIncludedGracePeriod,
+                        .FindBy(o => !o.IsProcessed && !o.Renter.IsEndRent && o.DueDate <= dateIncludedGracePeriod && o.RenterId == 59,
                             r => r.Renter,
-                                                 rm => rm.Renter.Room,
-                                                  ar => ar.Renter.RentArrears,
-                                                    paid => paid.RentTransactionPayments)
+                            rm => rm.Renter.Room,
+                            ar => ar.Renter.RentArrears,
+                            paid => paid.RentTransactionPayments)
 
                         .Select(o => new BatchRentTransactionDto
                         {
@@ -140,7 +140,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                             IsPaidTotalDueAmount = o.RentTransactionPayments == null ? false :
                                 o.RentTransactionPayments.Sum(o => o.Amount) >= o.TotalAmountDue,
 
-                            Arrear = Mapper.Map<RentArrearDto>(o.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
+                            Arrear = Mapper.Map<RentArrearDto>(o.Renter.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
                         });
 
                     foreach (var transaction in transactions)
@@ -187,6 +187,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                             {
                                 totalBalance = totalAmountDue;
                                 datePaid = null;
+                                transaction.Balance = totalBalance;
                             }
 
                             MarkTransactionAsProcessed(transaction.Id, totalBalance, note, datePaid, true);
@@ -197,7 +198,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                             //START RentTransactionDetails
                             if (previousArrearUnpaidBalance > 0)
-                                InsertArrearInRentTransactionDetail(transaction, previousArrearUnpaidBalance);
+                                InsertArrearInRentTransactionDetail(transaction, totalBalance);
 
                             MarkAsProcessedPreviousTotalBalance(transaction.RenterId, systemDateTimeProcessed);
 
