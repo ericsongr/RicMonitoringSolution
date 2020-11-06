@@ -120,16 +120,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            DateTime.TryParse(renter.StartDateInput, out DateTime startDateInput);
-            DateTime.TryParse(renter.AdvancePaidDateInput, out DateTime advancePaidDateInput);
-
-            startDateInput = renter.StartDate > startDateInput ? renter.StartDate : startDateInput;
-            advancePaidDateInput = renter.AdvancePaidDate > advancePaidDateInput ? renter.AdvancePaidDate : advancePaidDateInput;
-
-            renter.StartDate = startDateInput;
-            renter.AdvancePaidDate = advancePaidDateInput;
-            renter.PreviousDueDate = startDateInput;
-            renter.NextDueDate = startDateInput.AddMonths(1);
+            renter.StartDate = renter.StartDate;
+            renter.AdvancePaidDate = renter.AdvancePaidDate;
+            renter.PreviousDueDate = renter.StartDate;
+            renter.NextDueDate = renter.StartDate.AddMonths(1);
 
             var renterEntity = Mapper.Map<Renter>(renter);
 
@@ -143,7 +137,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var rentTransaction = new RentTransaction
             {
-                PaidDate = advancePaidDateInput,
+                PaidDate = renter.AdvancePaidDate,
                 PaidAmount = renter.TotalPaidAmount,
                 TotalAmountDue = renter.TotalPaidAmount,
                 Balance = renter.BalanceAmount,
@@ -173,61 +167,71 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
-            if (renterEntity == null)
+            try
             {
-                return NotFound();
+
+
+                var renterEntity = await _renterRepository.GetSingleAsync(o => o.Id == id);
+                if (renterEntity == null)
+                {
+                    return NotFound();
+                }
+
+                //DateTime.TryParse(renter.StartDateInput,out DateTime startDateInput);
+                //DateTime.TryParse(renter.AdvancePaidDateInput,out DateTime advancePaidDateInput);
+
+                renterEntity.Name = renter.Name;
+                renterEntity.AdvanceMonths = renter.AdvanceMonths;
+                renterEntity.MonthsUsed = renter.MonthsUsed;
+                renterEntity.AdvancePaidDate = renter.AdvancePaidDate;
+                renterEntity.StartDate = renter.StartDate;
+                renterEntity.DueDay = renter.DueDay;
+                renterEntity.NoOfPersons = renter.NoOfPersons;
+                renterEntity.RoomId = renter.RoomId;
+
+                renterEntity.TotalPaidAmount = renter.TotalPaidAmount;
+                renterEntity.BalanceAmount = renter.BalanceAmount;
+                renterEntity.BalancePaidDate = renter.BalancePaidDate;
+
+                renterEntity.IsEndRent = renter.IsEndRent;
+                renterEntity.DateEndRent = renter.IsEndRent ? renter.DateEndRent : null;
+
+                _renterRepository.Update(renterEntity);
+                _renterRepository.Commit();
+
+                //fetch data from rent transaction table
+                var rentTransaction = _rentTransactionRepository.FindBy(o => o.RenterId == renterEntity.Id && o.TransactionType == TransactionTypeEnum.AdvanceAndDeposit).FirstOrDefault();
+                if (rentTransaction != null)
+                {
+                    //update data to rent transaction table
+                    var dueDate = new DateTime(renter.StartDate.Year, renter.StartDate.Month, renter.DueDay);
+                    var startDate = dueDate.AddDays(1);
+                    var endDate = dueDate.AddMonths(1);
+
+                    rentTransaction.PaidDate = renter.AdvancePaidDate;
+                    rentTransaction.PaidAmount = renter.TotalPaidAmount;
+                    rentTransaction.Balance = renter.BalanceAmount;
+                    rentTransaction.BalanceDateToBePaid = renter.BalancePaidDate;
+                    rentTransaction.Note = $"Advance/Deposit - Edit";
+                    rentTransaction.RoomId = renter.RoomId;
+                    rentTransaction.RenterId = renter.Id;
+                    rentTransaction.DueDate = dueDate;
+                    rentTransaction.Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}";
+                    _rentTransactionRepository.Update(rentTransaction);
+                    _rentTransactionRepository.Commit();
+
+                    ProcessRentTransactionPayment(renter, rentTransaction.Id);
+                }
+
+                var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
+
+                return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
+
             }
-
-            DateTime.TryParse(renter.StartDateInput,out DateTime startDateInput);
-            DateTime.TryParse(renter.AdvancePaidDateInput,out DateTime advancePaidDateInput);
-
-            renterEntity.Name = renter.Name;
-            renterEntity.AdvanceMonths = renter.AdvanceMonths;
-            renterEntity.MonthsUsed = renter.MonthsUsed;
-            renterEntity.AdvancePaidDate = advancePaidDateInput;
-            renterEntity.StartDate = startDateInput;
-            renterEntity.DueDay = renter.DueDay;
-            renterEntity.NoOfPersons = renter.NoOfPersons;
-            renterEntity.RoomId = renter.RoomId;
-
-            renterEntity.TotalPaidAmount = renter.TotalPaidAmount;
-            renterEntity.BalanceAmount = renter.BalanceAmount;
-            renterEntity.BalancePaidDate = renter.BalancePaidDate;
-
-            renterEntity.IsEndRent = renter.IsEndRent;
-            renterEntity.DateEndRent = renter.IsEndRent ? renter.DateEndRent : null;
-
-            _renterRepository.Update(renterEntity);
-            _renterRepository.Commit();
-
-            //fetch data from rent transaction table
-            var rentTransaction = _rentTransactionRepository.FindBy(o => o.RenterId == renterEntity.Id && o.TransactionType == TransactionTypeEnum.AdvanceAndDeposit).FirstOrDefault();
-            if (rentTransaction != null)
+            catch (Exception ex)
             {
-                //update data to rent transaction table
-                var dueDate = new DateTime(renter.StartDate.Year, renter.StartDate.Month, renter.DueDay);
-                var startDate = dueDate.AddDays(1);
-                var endDate = dueDate.AddMonths(1);
-
-                rentTransaction.PaidDate = renter.AdvancePaidDate;
-                rentTransaction.PaidAmount = renter.TotalPaidAmount;
-                rentTransaction.Balance = renter.BalanceAmount;
-                rentTransaction.BalanceDateToBePaid = renter.BalancePaidDate;
-                rentTransaction.Note = $"Advance/Deposit - Edit";
-                rentTransaction.RoomId = renter.RoomId;
-                rentTransaction.RenterId = renter.Id;
-                rentTransaction.DueDate = dueDate;
-                rentTransaction.Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}";
-                _rentTransactionRepository.Update(rentTransaction);
-                _rentTransactionRepository.Commit();
-
-                ProcessRentTransactionPayment(renter, rentTransaction.Id);
+                return Ok(new { message = "Error occurred when updating renter detail." });
             }
-
-            var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
-
-            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
 
         }
 
@@ -243,7 +247,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _renterRepository.Delete(renterEntity);
             _renterRepository.Commit();
 
-            return Ok(new { message = "Renter successfully deleted."});
+            return Ok(new { message = "Renter successfully deleted." });
         }
 
         #region Private Methods
@@ -318,10 +322,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 payment.DatePaid = renter.AdvancePaidDate;
                 _rentTransactionPaymentRepository.Update(payment);
             }
-            
+
             _rentTransactionPaymentRepository.Commit();
         }
-        
+
         #endregion
 
     }
