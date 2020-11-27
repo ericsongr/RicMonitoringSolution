@@ -62,25 +62,15 @@ export class RentTransactionService implements Resolve<any>
 
   saveTransaction(transaction: RentTransaction) {
       return new Promise((resolve, reject) => {
+
+        var url = this.apiUrl + transaction.id;
         
-        if (transaction.id > 0) {
-            var url = this.apiUrl + transaction.id;
-            this._authService.put(url, transaction)
-                .subscribe((response: any) => {
-                  
-                  resolve(response.id);
-                }, reject);
+        this._authService.put(url, transaction)
+            .subscribe((response: any) => {
+              
+              resolve(response.id);
+            }, reject);
 
-          }
-          else {
-
-            this._authService.post(this.apiUrl, transaction)
-                    .subscribe((response: any) => {
-                      
-                      resolve(response.id);
-                    }, reject);
-      
-          }
       });
 
    
