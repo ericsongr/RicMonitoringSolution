@@ -5,6 +5,7 @@
 		<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
 		<UseAppHost>false</UseAppHost>
+		<UserSecretsId>6c8f6828-28ca-4293-8e57-07dbaa81927f</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>

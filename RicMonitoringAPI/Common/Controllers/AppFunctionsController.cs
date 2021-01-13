@@ -30,7 +30,10 @@ namespace RicMonitoringAPI.Common.Controllers
                 });
             }
 
-            return Ok(daysOptions);
+            return Ok(new BaseRestApiModel
+            {
+                Payload = daysOptions
+            });
         }
     }
 }

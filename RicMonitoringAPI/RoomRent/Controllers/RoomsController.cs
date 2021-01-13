@@ -11,6 +11,8 @@ using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicMonitoringAPI.Common.Model;
+using System.Net;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -18,7 +20,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [Authorize(Policy = "SuperAndAdmin")]
     [Route("api/rooms")]
     [ApiController]
-    public class RoomsController : ControllerBase
+    public class RoomsController : ApiBaseController
     {
         private readonly IRoomRepository _roomRepository;
         private readonly IRoomPropertyMappingService _roomPropertyMappingService;
@@ -54,7 +56,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var room = Mapper.Map<RoomDto>(roomFromRepo);
 
-            return Ok(room.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = room.ShapeData(fields)
+            });
         }
 
         // GET: api/Rooms
@@ -99,10 +104,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
             var rooms = Mapper.Map<IEnumerable<RoomDto>>(roomFromRepo);
-
             var result = rooms.ShapeData(roomResourceParameters.Fields);
 
-            return Ok(result);
+            return Ok(new BaseRestApiModel
+            {
+                Payload = result
+            });
 
         }
 
@@ -115,17 +122,31 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var roomEntity = Mapper.Map<Room>(room);
+            try
+            {
+                var roomEntity = Mapper.Map<Room>(room);
 
-            _roomRepository.Add(roomEntity);
-            _roomRepository.Commit();
+                _roomRepository.Add(roomEntity);
+                _roomRepository.Commit();
 
-            //null to avoid error
-            roomEntity.AuditRooms = null;
+                //null to avoid error
+                roomEntity.AuditRooms = null;
 
-            var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
+                //var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
 
-            return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
+                //return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+            }
+            catch (System.Exception ex)
+            {
+                return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
+            }
         }
 
         [Authorize(Roles = "Superuser")]
@@ -137,25 +158,37 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var roomEntity = await _roomRepository.GetSingleAsync(o => o.Id == id);
-            if (roomEntity == null)
+            try
             {
-                return NotFound();
+                var roomEntity = await _roomRepository.GetSingleAsync(o => o.Id == id);
+                if (roomEntity == null)
+                {
+                    return NotFound();
+                }
+
+                roomEntity.Name = room.Name;
+                roomEntity.Frequency = room.Frequency;
+                roomEntity.Price = room.Price;
+                _roomRepository.Update(roomEntity);
+                _roomRepository.Commit();
+
+                //null to avoid error
+                roomEntity.AuditRooms = null;
+
+                //var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
+                //return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "update_success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
             }
-
-            roomEntity.Name = room.Name;
-            roomEntity.Frequency = room.Frequency;
-            roomEntity.Price = room.Price;
-            _roomRepository.Update(roomEntity);
-            _roomRepository.Commit();
-
-            //null to avoid error
-            roomEntity.AuditRooms = null;
-
-            var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
-
-            return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
-
+            catch (System.Exception ex)
+            {
+                return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
+            }
         }
 
         private string CreateRoomResourceUri(
@@ -212,7 +245,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _roomRepository.Delete(roomEntity);
             _roomRepository.Commit();
 
-            return Ok(new { message = "Room successfully deleted."});
+            return Ok(new { message = "Room successfully deleted." });
         }
 
     }

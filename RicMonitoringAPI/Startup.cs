@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Audit.Core;
 using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using RicEntityFramework;
 using RicEntityFramework.Interfaces;
@@ -149,16 +151,29 @@ namespace RicMonitoringAPI
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = Configuration["authority"]; //auth server
+                //.AddIdentityServerAuthentication(options =>
+                //{
+                //    options.Authority = Configuration["authority"]; //auth server
 
-                    options.RequireHttpsMetadata = true;
+                //    options.RequireHttpsMetadata = false;
 
-                    // name of the API resource //resourceApi
-                    options.ApiName = "RicMonitoringAPI";
-                });
+                //    // name of the API resource //resourceApi
+                //    options.ApiName = "RicMonitoringAPI";
+                //})
+                .AddJwtBearer(options => {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["JWT:ValidAudience"],
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    };
+                }); ;
 
+          
 
             services.AddAuthorization(config =>
             {
@@ -256,7 +271,7 @@ namespace RicMonitoringAPI
             app.UseCors("AllowCors");
 
             //uncomment when deploy to live server
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             // Matches request to an endpoint.
             app.UseRouting();

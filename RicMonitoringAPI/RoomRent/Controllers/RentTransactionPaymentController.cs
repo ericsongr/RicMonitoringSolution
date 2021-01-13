@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicModel.RoomRent.Enumerations;
+using RicMonitoringAPI.Common.Model;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
     //[AllowAnonymous]
     [Authorize(Policy = "SuperAndAdmin")]
     [Route("api/rent-transaction-payments")]
-    public class RentTransactionPaymentController : Controller
+    public class RentTransactionPaymentController : ApiBaseController
 
 
     {
@@ -35,12 +38,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             string message = "";
 
             bool status = true;
-            
+
             try
             {
                 int rentTransactionId = 0;
                 decimal totalPaidAmount = 0;
                 decimal totalDueAmount = 0;
+                bool isNoAdvanceDepositLeft = false;
 
                 var payment = await _rentTransactionPaymentRepository.GetSingleAsync(o => o.Id == id);
 
@@ -64,6 +68,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     {
                         renter.MonthsUsed = renter.MonthsUsed - 1;
                         _renterRepository.Commit();
+
+                        isNoAdvanceDepositLeft = renter.MonthsUsed >= renter.AdvanceMonths;
                     }
                 }
 
@@ -88,19 +94,28 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 transaction.PaidAmount = totalPaidAmount;
 
                 _rentTransactionRepository.Commit();
-                
 
-                message = "Payment has been deleted.";
+                //message = "Payment has been deleted.";
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = new
+                    {
+                        status = "delete_success",
+                        response = new
+                        {
+                            id,
+                            transactionType = payment.PaymentTransactionType.ToString(),
+                            isNoAdvanceDepositLeft = isNoAdvanceDepositLeft
+                        }
+                    },
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
             }
             catch (Exception ex)
             {
-                status = false;
-
-                message = ex.Message;
+                return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
             }
-           
-
-            return Ok(new {status, message });
         }
     }
 }

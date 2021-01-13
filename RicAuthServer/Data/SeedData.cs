@@ -32,16 +32,22 @@ namespace RicAuthServer.Data
 
         private static void EnsureSeedData(ConfigurationDbContext context)
         {
-            if (!context.Clients.Any())
+            Console.WriteLine("Clients being populated");
+            var clients = Config.GetClients().ToList();
+            var isSaveChanges = false;
+
+            foreach (var client in clients)
             {
-                Console.WriteLine("Clients being populated");
-                var clients = Config.GetClients().ToList();
-                foreach (var client in clients)
+                if (!context.Clients.Any(o => o.ClientId == client.ClientId))
                 {
                     var clientEntity = client.ToEntity();
                     context.Clients.Add(clientEntity);
+                    isSaveChanges = true;
                 }
+            }
 
+            if (isSaveChanges)
+            {
                 try
                 {
                     context.SaveChanges();
@@ -51,12 +57,10 @@ namespace RicAuthServer.Data
                     Console.WriteLine(e);
                     throw;
                 }
-              
             }
-            else
-            {
-                Console.WriteLine("Clients already populated");
-            }
+            Console.WriteLine("Clients already populated");
+
+
 
             if (!context.IdentityResources.Any())
             {

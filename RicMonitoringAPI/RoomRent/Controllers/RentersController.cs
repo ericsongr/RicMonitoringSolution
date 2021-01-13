@@ -14,6 +14,8 @@ using RicModel.Enumeration;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
+using RicMonitoringAPI.Common.Model;
+using System.Net;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -21,7 +23,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [Authorize(Policy = "SuperAndAdmin")]
     [Route("api/renters")]
     [ApiController]
-    public class RentersController : ControllerBase
+    public class RentersController : ApiBaseController
     {
         private readonly IRenterRepository _renterRepository;
         private readonly IRentTransactionRepository _rentTransactionRepository;
@@ -63,7 +65,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var Renter = Mapper.Map<RenterDto>(renterFromRepo);
 
-            return Ok(Renter.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = Renter.ShapeData(fields)
+            });
+
         }
 
         // GET: api/Renters
@@ -108,7 +114,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var Renters = Mapper.Map<IEnumerable<RenterDto>>(renterFromRepo);
 
-            return Ok(Renters.ShapeData(renterResourceParameters.Fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = Renters.ShapeData(renterResourceParameters.Fields)
+            });
 
         }
 
@@ -119,44 +128,58 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 return NotFound();
             }
-
-            renter.StartDate = renter.StartDate;
-            renter.AdvancePaidDate = renter.AdvancePaidDate;
-            renter.PreviousDueDate = renter.StartDate;
-            renter.NextDueDate = renter.StartDate.AddMonths(1);
-
-            var renterEntity = Mapper.Map<Renter>(renter);
-
-            _renterRepository.Add(renterEntity);
-            _renterRepository.Commit();
-
-            //add data to rent transaction table
-            var dueDate = new DateTime(renter.StartDate.Year, renter.StartDate.Month, renter.DueDay);
-            var startDate = dueDate.AddDays(1);
-            var endDate = dueDate.AddMonths(1);
-
-            var rentTransaction = new RentTransaction
+            
+            try
             {
-                PaidDate = renter.AdvancePaidDate,
-                PaidAmount = renter.TotalPaidAmount,
-                TotalAmountDue = renter.TotalPaidAmount,
-                Balance = renter.BalanceAmount,
-                BalanceDateToBePaid = renter.BalancePaidDate,
-                Note = "Advance/Deposit",
-                RoomId = renter.RoomId,
-                RenterId = renterEntity.Id,
-                DueDate = dueDate,
-                Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}",
-                TransactionType = TransactionTypeEnum.AdvanceAndDeposit
-            };
-            _rentTransactionRepository.Add(rentTransaction);
-            _rentTransactionRepository.Commit();
+                renter.StartDate = renter.StartDate;
+                renter.AdvancePaidDate = renter.AdvancePaidDate;
+                renter.PreviousDueDate = renter.StartDate;
+                renter.NextDueDate = renter.StartDate.AddMonths(1);
 
-            ProcessRentTransactionPayment(renter, rentTransaction.Id);
+                var renterEntity = Mapper.Map<Renter>(renter);
 
-            var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
+                _renterRepository.Add(renterEntity);
+                _renterRepository.Commit();
 
-            return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
+                //add data to rent transaction table
+                var dueDate = new DateTime(renter.StartDate.Year, renter.StartDate.Month, renter.DueDay);
+                var startDate = dueDate.AddDays(1);
+                var endDate = dueDate.AddMonths(1);
+
+                var rentTransaction = new RentTransaction
+                {
+                    PaidDate = renter.AdvancePaidDate,
+                    PaidAmount = renter.TotalPaidAmount,
+                    TotalAmountDue = renter.TotalPaidAmount,
+                    Balance = renter.BalanceAmount,
+                    BalanceDateToBePaid = renter.BalancePaidDate,
+                    Note = "Advance/Deposit",
+                    RoomId = renter.RoomId,
+                    RenterId = renterEntity.Id,
+                    DueDate = dueDate,
+                    Period = $"{startDate.ToString("dd-MMM")} to {endDate.ToString("dd-MMM-yyyy")}",
+                    TransactionType = TransactionTypeEnum.AdvanceAndDeposit
+                };
+                _rentTransactionRepository.Add(rentTransaction);
+                _rentTransactionRepository.Commit();
+
+                ProcessRentTransactionPayment(renter, rentTransaction.Id);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
+            }
+
+            //var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
+            //return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
         }
 
         [HttpPut("{id}", Name = "UpdateRenter")]
@@ -222,10 +245,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                     ProcessRentTransactionPayment(renter, rentTransaction.Id);
                 }
+                
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "update_success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
 
-                var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
+                //var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
 
-                return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
+                //return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
 
             }
             catch (Exception ex)
