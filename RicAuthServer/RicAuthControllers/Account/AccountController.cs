@@ -32,6 +32,7 @@ namespace RicAuthServer.RicAuthControllers.Account
     /// The interaction service provides a way for the UI to communicate with identityserver for validation and context retrieval
     /// </summary>
     [SecurityHeaders]
+
     public class AccountController : Controller
     {
         //private readonly TestUserStore _users; // comment due to direct checking to identity server
@@ -159,6 +160,7 @@ namespace RicAuthServer.RicAuthControllers.Account
         /// Show login page
         /// </summary>
         [HttpGet]
+        
         public async Task<IActionResult> Login(string returnUrl)
         {
             // build a model so we know what to show on the login page

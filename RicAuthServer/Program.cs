@@ -78,6 +78,7 @@ namespace RicAuthServer
                         .Build();
                     webBuilder.UseIISIntegration();
                     webBuilder.UseUrls($"https://localhost:{config.GetValue<int>("Host:Port")}");
+                    //webBuilder.UseUrls("https://172.0.0.1:5002");
                     webBuilder.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
                     webBuilder.UseStartup<Startup>();
 

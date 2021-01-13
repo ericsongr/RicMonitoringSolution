@@ -25,8 +25,8 @@ namespace RicAuthServer
             };
         }
 
-        //private static string spaClientUrl = "http://localhost:4200";
-        private static string spaClientUrl = "http://tenants.ericsonramos.com";
+        private static string spaClientUrl = "http://localhost:4200";
+        //private static string spaClientUrl = "http://tenants.ericsonramos.com";
 
         public static IEnumerable<Client> GetClients()
         {
@@ -88,45 +88,61 @@ namespace RicAuthServer
                 //        "resourceApi"
                 //    }
                 //},
-                 new Client
-                {
-                    ClientId = "spaRicMonitoringCodeClient",
-                    ClientName = "SPA Ric Monitoring Code Client",
-                    AccessTokenType = AccessTokenType.Jwt,
-                    // RequireConsent = false,
-                    AccessTokenLifetime = 330,// 330 seconds, default 60 minutes
-                    IdentityTokenLifetime = 30,
+                new Client
+                    {
+                      ClientId = "react-native.code",
+                      ClientName = "React Native Client (Code with PKCE)",
+                      RequireClientSecret = false,
+                      RedirectUris = new List<string>
+                        {
+                            $"{spaClientUrl}/callback",
+                            $"{spaClientUrl}",
+                            $"{spaClientUrl}/silent-renew.html"
+                        },
+                      AllowedGrantTypes = GrantTypes.Code,
+                      RequirePkce = true,
+                      AllowedScopes = { "openid", "profile", "RicMoniApp" },
+                      AllowOfflineAccess = true
+                    },
+                new Client
+                    {
+                        ClientId = "spaRicMonitoringCodeClient",
+                        ClientName = "SPA Ric Monitoring Code Client",
+                        AccessTokenType = AccessTokenType.Jwt,
+                        // RequireConsent = false,
+                        AccessTokenLifetime = 330,// 330 seconds, default 60 minutes
+                        IdentityTokenLifetime = 30,
 
-                    RequireClientSecret = false,
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
+                        RequireClientSecret = false,
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RequirePkce = true,
 
-                    AllowAccessTokensViaBrowser = true,
-                    RedirectUris = new List<string>
-                    {
-                        $"{spaClientUrl}/callback",
-                        $"{spaClientUrl}",
-                        $"{spaClientUrl}/silent-renew.html"
+                        AllowAccessTokensViaBrowser = true,
+                        RedirectUris = new List<string>
+                        {
+                            $"{spaClientUrl}/callback",
+                            $"{spaClientUrl}",
+                            $"{spaClientUrl}/silent-renew.html"
+                        },
+                        PostLogoutRedirectUris = new List<string>
+                        {
+                            $"{spaClientUrl}/unauthorized",
+                            $"{spaClientUrl}"
+                        },
+                        AllowedCorsOrigins = new List<string>
+                        {
+                            $"{spaClientUrl}"
+                        },
+                        AllowedScopes = new List<string>
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            "RicMonitoringAPI"
+                        },
+                        RequireConsent = false,
                     },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{spaClientUrl}/unauthorized",
-                        $"{spaClientUrl}"
-                    },
-                    AllowedCorsOrigins = new List<string>
-                    {
-                        $"{spaClientUrl}"
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "RicMonitoringAPI"
-                    },
-                    RequireConsent = false,
-                },
-                
-            };
+
+                };
         }
 
     }

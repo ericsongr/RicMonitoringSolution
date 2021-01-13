@@ -59,17 +59,17 @@ namespace RicMonitoringAPI
 
                     webBuilder.UseIISIntegration();
 
-                    webBuilder.UseUrls(
-                        //"https://tenants-api.ericsonramos.com",
-                        $"https://localhost:{config.GetValue<int>("Host:Port")}");
+                    webBuilder.UseUrls($"https://localhost:{config.GetValue<int>("Host:Port")}");
+                    //webBuilder.UseUrls($"https://172.0.0.1:{config.GetValue<int>("Host:Port")}");
+                    //webBuilder.UseUrls(
+                    //   "https://tenantsapi.ericsonramos.com",
+                    //   $"https://localhost:{config.GetValue<int>("Host:Port")}",
+                    //   "http://172.0.0.1:5001");
 
-                    webBuilder.ConfigureKestrel(serverOptions =>
-                    {
-                        serverOptions.AddServerHeader = false;
-                    });
+                    webBuilder.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 
-                    webBuilder.UseStartup<Startup>()
-                        .UseKestrel(options => options.ConfigureEndpoints());
+                    webBuilder.UseStartup<Startup>();
+                    //    .UseKestrel(options => options.ConfigureEndpoints()); 
 
                     webBuilder.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
