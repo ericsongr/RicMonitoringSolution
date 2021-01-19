@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,6 +72,7 @@ namespace RicMonitoringAPI
             services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
             services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
             services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
+            services.AddScoped<IMobileAppLogRepository, MobileAppLogRepository>();
 
             services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
             services.AddScoped<IAuditRoomRepository, AuditRoomRepository>();
@@ -151,17 +153,17 @@ namespace RicMonitoringAPI
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                //.AddIdentityServerAuthentication(options =>
-                //{
-                //    options.Authority = Configuration["authority"]; //auth server
+            //.AddIdentityServerAuthentication(options =>
+            //{
+            //    options.Authority = Configuration["authority"]; //auth server
 
-                //    options.RequireHttpsMetadata = false;
+            //    options.RequireHttpsMetadata = false;
 
-                //    // name of the API resource //resourceApi
-                //    options.ApiName = "RicMonitoringAPI";
-                //})
-                .AddJwtBearer(options => {
-                    options.SaveToken = true;
+            //    // name of the API resource //resourceApi
+            //    options.ApiName = "RicMonitoringAPI";
+            //})
+            .AddJwtBearer(options => {
+            options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -169,9 +171,9 @@ namespace RicMonitoringAPI
                         ValidateAudience = true,
                         ValidAudience = Configuration["JWT:ValidAudience"],
                         ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(WebEncoders.Base64UrlDecode(Configuration["JWT:Secret"])),
                     };
-                }); ;
+                }); 
 
           
 

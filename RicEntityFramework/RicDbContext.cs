@@ -39,6 +39,8 @@ namespace RicEntityFramework
         public DbSet<AuditRentTransaction> AuditRentTransactions { get; set; }
         public DbSet<AuditRentTransactionPayment> AuditRentTransactionPayments { get; set; }
 
+        public DbSet<MobileAppLog> MobileAppLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //register all fluent api entity type configuration or inherited by IEntityTypeConfiguration

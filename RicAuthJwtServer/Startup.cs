@@ -1,15 +1,25 @@
 using System;
 using System.Text;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
+using RicAuthJwtServer.Application;
+using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data;
+using RicAuthJwtServer.Data.Persistence.Interfaces;
+using RicAuthJwtServer.Data.Persistence.Repositories;
+using RicMonitoringAPI.Common.Validators;
+using RicMonitoringAPI.RoomRent.Validators;
 
 namespace RicAuthJwtServer
 {
@@ -28,6 +38,16 @@ namespace RicAuthJwtServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicAuthServerConnection")));
 
+            //Repositories
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IAspNetUserLoginTokenRepository, AspNetUserLoginTokenRepository>();
+            services.AddScoped<IRegisteredDeviceRepository, RegisteredDeviceRepository>();
+            
+            //Service
+            services.AddTransient<IAspNetUserLoginTokenService, AspNetUserLoginTokenService>();
+            services.AddTransient<IRefreshTokenService, RefreshTokenService>();
+            services.AddTransient<IRegisteredDeviceService, RegisteredDeviceService>();
+
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -36,6 +56,19 @@ namespace RicAuthJwtServer
             //when reset password the token should only valid for 2 hours.
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(1));
+
+            //cors
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors", builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        //.WithOrigins(Configuration["clientUrl"]) //client url
+                        .WithMethods("GET", "PUT", "POST", "DELETE")
+                        .AllowAnyHeader();
+                });
+            });
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,20 +95,17 @@ namespace RicAuthJwtServer
                 config.AddPolicy("Admin", policy => policy.RequireRole("Administrator"));
             });
 
-            //cors
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowCors", builder =>
+            services.AddMvc(setupAction =>
                 {
-                    builder
-                        .AllowAnyOrigin()
-                        //.WithOrigins(Configuration["clientUrl"]) //client url
-                        .WithMethods("GET", "PUT", "POST", "DELETE")
-                        .AllowAnyHeader();
-                });
-            });
-
-            services.AddControllers();
+                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
+                    setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                    setupAction.Filters.Add(typeof(ValidatorActionFilter));
+                })
+                .AddNewtonsoftJson(setupAction =>
+                {
+                    setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }); //use for data shaping
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

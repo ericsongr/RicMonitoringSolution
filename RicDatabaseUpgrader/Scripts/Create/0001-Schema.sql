@@ -479,3 +479,15 @@ CREATE INDEX IDX_RentArrears_IsProcessed ON RentArrears(IsProcessed)
 GO
 CREATE INDEX IDX_rentTransactions_IsProcessed ON renttransactions(IsProcessed)
 GO
+
+CREATE TABLE [dbo].[MobileAppLogs](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Type] [nvarchar](50) NULL,
+	[LogInfo] [nvarchar](max) NULL,
+	[UtcCreatedDateTime] [datetime2](7) NOT NULL DEFAULT (GETUTCDATE()),
+ CONSTRAINT [PK_MobileAppLogs] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO

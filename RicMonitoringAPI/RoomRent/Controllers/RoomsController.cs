@@ -81,34 +81,36 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var roomFromRepo = _roomRepository.GetRooms(roomResourceParameters);
 
 
-            var previousPageLink = roomFromRepo.HasPrevious
-                ? CreateRoomResourceUri(roomResourceParameters,
-                    ResourceUriType.PreviousPage)
-                : null;
+            //var previousPageLink = roomFromRepo.HasPrevious
+            //    ? CreateRoomResourceUri(roomResourceParameters,
+            //        ResourceUriType.PreviousPage)
+            //    : null;
 
-            var nextPageLink = roomFromRepo.HasPrevious
-                ? CreateRoomResourceUri(roomResourceParameters,
-                    ResourceUriType.NextPage)
-                : null;
+            //var nextPageLink = roomFromRepo.HasPrevious
+            //    ? CreateRoomResourceUri(roomResourceParameters,
+            //        ResourceUriType.NextPage)
+            //    : null;
 
-            var paginationMetaData = new
-            {
-                totalCount = roomFromRepo.TotalCount,
-                pageSize = roomFromRepo.PageSize,
-                currentPage = roomFromRepo.CurrentPage,
-                totalPages = roomFromRepo.TotalPages,
-                previousPageLink = previousPageLink,
-                nextPageLink = nextPageLink
-            };
+            //var paginationMetaData = new
+            //{
+            //    totalCount = roomFromRepo.TotalCount,
+            //    pageSize = roomFromRepo.PageSize,
+            //    currentPage = roomFromRepo.CurrentPage,
+            //    totalPages = roomFromRepo.TotalPages,
+            //    previousPageLink = previousPageLink,
+            //    nextPageLink = nextPageLink
+            //};
 
-            Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
+            //Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
             var rooms = Mapper.Map<IEnumerable<RoomDto>>(roomFromRepo);
             var result = rooms.ShapeData(roomResourceParameters.Fields);
 
             return Ok(new BaseRestApiModel
             {
-                Payload = result
+                Payload = result,
+                Errors = new List<BaseErrorModel>(),
+                StatusCode = (int)HttpStatusCode.OK
             });
 
         }
