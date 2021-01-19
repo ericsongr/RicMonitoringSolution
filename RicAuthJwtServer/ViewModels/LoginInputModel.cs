@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace RicAuthJwtServer.RicAuthControllers.Account
+namespace RicAuthJwtServer.ViewModels
 {
     public class LoginInputModel
     {
@@ -13,6 +13,13 @@ namespace RicAuthJwtServer.RicAuthControllers.Account
 
         [Required]
         public string Password { get; set; }
+        
+        [Required]
+        public string DeviceId { get; set; }
+
+        [Required]
+        public string Platform { get; set; }
+
         public bool RememberLogin { get; set; }
         public string ReturnUrl { get; set; }
     }

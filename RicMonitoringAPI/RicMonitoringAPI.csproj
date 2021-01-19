@@ -50,6 +50,7 @@
 	<ItemGroup>
 		<Compile Remove="Common\DbInitializer.cs" />
 		<Compile Remove="Common\Enumeration\TransactionTypeEnum.cs" />
+		<Compile Remove="Infrastructure\JwtFormat.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -75,6 +76,7 @@
 
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
+		<Folder Include="Infrastructure\" />
 	</ItemGroup>
 
 	<ItemGroup>
