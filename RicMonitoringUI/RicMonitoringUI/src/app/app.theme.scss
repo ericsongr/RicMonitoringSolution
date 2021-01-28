@@ -84,6 +84,13 @@ $typography: mat-typography-config(
 @import "src/app/main/apps/rent-room/rooms/rooms.theme";
 @import "src/app/main/apps/rent-room/renters/renters.theme";
 @import "src/app/main/apps/rent-room/rent-transactions/rent-transactions.theme";
+
+//auth
+@import "src/app/main/apps/auth/forgot-password/forgot-password.theme";
+@import "src/app/main/apps/auth/login/login.theme";
+@import "src/app/main/apps/auth/register/register.theme";
+@import "src/app/main/apps/auth/reset-password/reset-password.theme";
+
 //administrator
 @import "src/app/main/apps/administrator/users/users.theme";
 @import "src/app/main/apps/administrator/daily-batch/daily-batch.theme";
@@ -97,6 +104,12 @@ $typography: mat-typography-config(
     // Layout components
     @include chat-panel-theme($theme);
     @include toolbar-theme($theme);
+
+    //auth
+    @include login-theme($theme);
+    @include forgot-password-theme($theme);
+    @include register-theme($theme);
+    @include reset-password-theme($theme);
 
     //pages
     @include page-rooms-theme($theme);

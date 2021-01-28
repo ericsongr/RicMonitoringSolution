@@ -46,6 +46,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
     private _router : Router,
+    private _location : Location,
     private _cdr: ChangeDetectorRef
     ) {}
 
@@ -123,7 +124,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   fetchRooms(roomId = 0) {
       this._roomsService.getRooms("dropdown", roomId)
           .then(response => {
-              this.rooms = response;
+              this.rooms = response.payload;
           });
   }
 
@@ -153,17 +154,27 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this._renterService.saveRenter(data)
-        .then((renter: RenterDetail) => {
-
-            //show the success message
-            this._snackBar.open('Renter detail saved.',
+        .then((response: any) => {
+            if (!response.errors.message) {
+                //show the success message
+                this._snackBar.open('Renter detail saved.',
                 'OK',
                 {
                     verticalPosition: 'top',
                     duration: 2000
                 });
 
-                this._router.navigate([`/apartment/tenants/${renter.id}/${renter.name}`]);
+                this._router.navigate([`/apartment/tenants/${data.id}/${data.name}`]);
+            }
+            else {
+              this._snackBar.open('error occurred, saving renter detail.',
+              'OK',
+              {
+                  verticalPosition: 'top',
+                  duration: 2000
+              });
+            }
+            
         });
   }
 
@@ -177,15 +188,28 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     data.advancePaidDateInput = moment(data.advancePaidDate).format('YYYY-MM-DD');
 
     this._renterService.addRenter(data)
-        .then((renter: RenterDetail) => {
+        .then((response: any) => {
+          if (!response.errors.message) {
+            var renterId = parseInt(response.payload);
+            //show the success message
+            this._snackBar.open('New renter added.', 'OK', {
+              verticalPosition  : 'top',
+              duration          : 2000
+            });
 
-          //show the success message
-          this._snackBar.open('New renter added.', 'OK', {
-            verticalPosition  : 'top',
-            duration          : 2000
-          });
+            setTimeout(() => {
+                    this._router.navigate(['/apartment/tenants']);
+                }, 2000);
+
+          } else {
+            this._snackBar.open('error occurred, updating renter detail.',
+              'OK',
+              {
+                  verticalPosition: 'top',
+                  duration: 2000
+              });
+          }
           
-          this._router.navigate([`/apartment/tenants/${renter.id}/${renter.name}`]);
 
         }).catch(error =>{
           console.log('error: ', error);

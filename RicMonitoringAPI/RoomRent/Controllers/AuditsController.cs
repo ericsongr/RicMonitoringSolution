@@ -10,6 +10,7 @@ using RicEntityFramework.RoomRent.Interfaces.IAudits;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings.IAudits;
 using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos.Audits;
+using RicMonitoringAPI.Common.Model;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -85,8 +86,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var auditRenterRepo = Mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters.OrderByDescending(o => o.AuditDateTime));
 
-            return Ok(auditRenterRepo.ShapeData(fields));
-
+            return Ok(new BaseRestApiModel
+            {
+                Payload = auditRenterRepo.ShapeData(fields)
+            });
         }
 
         [HttpGet("{id}/transactions", Name = "GetAuditRentTransactions")]
@@ -114,7 +117,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var auditRentTransactionRepo = Mapper.Map<IEnumerable<AuditRentTransactionDto>>(auditRenters);
 
-            return Ok(auditRentTransactionRepo.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = auditRentTransactionRepo.ShapeData(fields)
+            });
         }
 
         [HttpGet("{id}/payments", Name = "GetAuditPayments")]
@@ -143,7 +149,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var auditPaymentRepo = Mapper.Map<IEnumerable<AuditRentTransactionPaymentDto>>(auditPayments);
 
-            return Ok(auditPaymentRepo.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = auditPaymentRepo.ShapeData(fields)
+            });
 
         }
 
@@ -166,7 +175,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var auditRenterRepo = Mapper.Map<IEnumerable<AuditRoomDto>>(auditRenters);
 
-            return Ok(auditRenterRepo.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = auditRenterRepo.ShapeData(fields)
+            });
         }
     }
 }

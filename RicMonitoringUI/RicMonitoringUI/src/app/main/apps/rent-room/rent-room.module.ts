@@ -32,7 +32,7 @@ import { DailyBatchService } from '../administrator/daily-batch/daily-batch.serv
 import { DialogPaymentsComponent } from './renter/rent-transaction-history/dialog-payments/dialog-payments.component';
 
 const routes : Routes= [
-   {
+  {
     path      :  'rooms',
     component :  RoomsComponent,
     resolve   : {

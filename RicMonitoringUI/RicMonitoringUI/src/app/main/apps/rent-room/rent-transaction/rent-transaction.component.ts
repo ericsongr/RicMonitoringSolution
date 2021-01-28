@@ -198,14 +198,16 @@ deletePayment(paymentId) {
     if (result == "ConfirmedYes") {
 
       this._rentTransactionService.deletePayment(paymentId, this.rentTransaction.renterId)
-        .then(response => {
+        .then((response: any) => {
 
-          this._snackBar.open("Payment has been deleted.", 'OK', {
-            verticalPosition  : 'top',
-            duration          : 2000
-          });
-          
-          this._router.navigate([`apartment/tenant-transactions`]);
+          if (!response.errors.message) {
+            this._snackBar.open("Payment has been deleted.", 'OK', {
+              verticalPosition  : 'top',
+              duration          : 2000
+            });
+            
+            this._router.navigate([`apartment/tenant-transactions`]);
+          }
         });
 
         

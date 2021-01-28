@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { AuthService } from '../../../common/core/auth/auth.service';
+// import { AuthService } from '../../../common/core/auth/auth.service';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RentTransactionHistory } from './rent-transaction-history.model';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 const TABLE_FIELDS = "&orderBy=DueDate&field=dueDateString,paidOrUsedDepositDateString,"
                      "period,paidAmount,balanceDateToBePaidString,monthlyRent,previousBalance,"
@@ -16,7 +17,7 @@ export class RentTransactionHistoryService implements Resolve<any> {
   onRentTransactionHistoryChanged: BehaviorSubject<any> = new BehaviorSubject({});
   rentTransactionHistories: RentTransactionHistory[];
     constructor(
-      private _authServer: AuthService,
+      private _http: HttpClient,
       @Inject("API_URL") private _apiUrl: string) {}
 
 
@@ -39,10 +40,10 @@ export class RentTransactionHistoryService implements Resolve<any> {
     return new Promise((resolve, reject) => {
 
       var url = `${this._apiUrl}${ApiControllers.RentTransactionHistory}?id=${renterId}${TABLE_FIELDS}`;
-      this._authServer.get(url)
-          .subscribe((response: RentTransactionHistory[]) => {0
-            this.onRentTransactionHistoryChanged.next(response);
-            this.rentTransactionHistories = response;
+      this._http.get(url)
+          .subscribe((response: any) => {0
+            this.onRentTransactionHistoryChanged.next(response.payload);
+            this.rentTransactionHistories = response.payload;
             resolve(response);
           }, reject);
     });

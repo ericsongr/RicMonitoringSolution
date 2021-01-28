@@ -348,7 +348,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionRepository.Delete(rentTransactionEntity);
             _rentTransactionRepository.Commit();
 
-            return Ok(new { message = "Rent Transaction successfully deleted." });
+            return Ok(new BaseRestApiModel
+            {
+                Payload = "Rent Transaction successfully deleted.",
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
         }
 
     }

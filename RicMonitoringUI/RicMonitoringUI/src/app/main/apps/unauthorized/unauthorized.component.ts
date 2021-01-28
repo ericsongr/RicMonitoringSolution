@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
-import { AuthService } from '../common/core/auth/auth.service';
+// import { AuthService } from '../common/core/auth/auth.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfigService } from '@fuse/services/config.service';
 
@@ -16,7 +16,8 @@ export class UnauthorizedComponent implements OnInit {
     constructor(
         private _location: Location,
         private _fuseConfigService: FuseConfigService, 
-        private _authService: AuthService) 
+        // private _authService: AuthService
+        ) 
     {
         this._fuseConfigService.config = {
             layout: {
@@ -40,7 +41,7 @@ export class UnauthorizedComponent implements OnInit {
     }
 
     login() {
-        this._authService.login();
+        // this._authService.login();
     }
 
     goback() {

@@ -8,7 +8,8 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
-import { AuthService } from 'app/main/apps/common/core/auth/auth.service';
+import { AuthenticationService } from 'app/core/auth/authentication.service';
+import { TokenStorage } from 'app/core/auth/token-storage.service';
 
 @Component({
     selector     : 'toolbar',
@@ -44,7 +45,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _authService: AuthService
+        private _authService: AuthenticationService,
+        private _tokenStorage: TokenStorage
     )
     {
         // Set the defaults
@@ -94,11 +96,11 @@ export class ToolbarComponent implements OnInit, OnDestroy
         // Set the private defaults
         this._unsubscribeAll = new Subject();
 
-        this._authService.getUserData().subscribe(userData => {
-            this.name = userData.name;
-        });
+        this._tokenStorage.getAccessData().subscribe(accessData => {
+                this.name = accessData && accessData.name;
+        })
 
-        this._authService.getIsAuthorized()
+        this._authService.isAuthorized()
          .subscribe((isAuthorized: boolean) => {
             this.isAuthorized = isAuthorized;
          });
@@ -140,12 +142,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    login() {
-        this._authService.login();
-    }
     
     logout() {
-        this._authService.logout();
+        this._authService.logout(true);
     }
     /**
      * Toggle sidebar open

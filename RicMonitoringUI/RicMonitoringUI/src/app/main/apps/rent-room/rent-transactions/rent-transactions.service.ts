@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
-import { AuthService } from '../../common/core/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 const TABLE_FIELDS = "fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note,billingStatement&orderBy=dueDay";
 
@@ -16,7 +16,7 @@ export class RentTransactionsService implements Resolve<any> {
   routeParams: any;
   
   constructor(
-    private _authService: AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private _apiUrl: string)  
   { 
     this.apiUrl = `${_apiUrl}${ApiControllers.RentTransactions}`;
@@ -38,10 +38,10 @@ export class RentTransactionsService implements Resolve<any> {
       return new Promise((resolve, reject) => {
       var url = `${this.apiUrl}?${TABLE_FIELDS}`;
       
-      this._authService.get(url)
+      this._http.get(url)
           .subscribe((response: any) => {
 
-              this.rentTransactions = response;
+              this.rentTransactions = response.payload;
               
               this.onRentTransactionsChanged.next(this.rentTransactions);
             

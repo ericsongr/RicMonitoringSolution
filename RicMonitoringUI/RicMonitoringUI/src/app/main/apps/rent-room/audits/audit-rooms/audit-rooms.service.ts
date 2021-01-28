@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
-import { AuthService } from '../../../common/core/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 const TABLE_FIELDS = "?fields=auditRoomId,id,name,frequency,price,auditDateTimeString,username,auditAction&orderBy=name";
 
@@ -13,7 +13,7 @@ export class AuditRoomsService implements Resolve<any> {
   onAuditRoomsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService: AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private apiUrl: string)  
   { }
   
@@ -21,11 +21,11 @@ export class AuditRoomsService implements Resolve<any> {
       var url = `${this.apiUrl}${ApiControllers.Audits}/0/rooms${TABLE_FIELDS}`;
       return new Promise((resolve, reject) => {
 
-        this._authService.get(url)
+        this._http.get(url)
             .subscribe((response: any) => {
-                this.auditRooms = response;
+                this.auditRooms = response.payload;
                 this.onAuditRoomsChanged.next(this.auditRooms);
-                resolve(response);
+                resolve(this.auditRooms);
             }, reject);
 
     })

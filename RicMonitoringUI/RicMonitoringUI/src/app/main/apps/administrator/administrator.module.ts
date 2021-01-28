@@ -14,6 +14,8 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
 import { AdministratorShowErrorsComponent } from './administrator-show-errors.component';
 import { DailyBatchComponent } from './daily-batch/daily-batch.component';
 import { DailyBatchService } from './daily-batch/daily-batch.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from 'app/core/http-interceptors/auth-interceptor';
 
 const routes : Routes = [
   // {
@@ -55,16 +57,24 @@ const routes : Routes = [
     FuseDemoModule,
     MatSelectCountryModule
   ],
-  providers: [
-    // UserService,
-    // UsersService
-    DailyBatchService
-  ],
+  // providers: [
+  //   // UserService,
+  //   // UsersService
+  //   DailyBatchService
+  // ],
   declarations: [
     AdministratorShowErrorsComponent,
     // UserComponent,
     // UsersComponent
     DailyBatchComponent
+  ],
+  providers: [
+    DailyBatchService,
+    {
+			provide: HTTP_INTERCEPTORS,
+			useClass: AuthInterceptor,
+			multi: true
+		}
   ]
 })
 export class AdministratorModule { }

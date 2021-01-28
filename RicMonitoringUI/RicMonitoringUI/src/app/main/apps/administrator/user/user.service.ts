@@ -3,8 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable } from 'rxjs/Observable';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AuthService } from '../../common/core/auth/auth.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
@@ -19,7 +18,7 @@ export class UserService implements Resolve<any>
   onUserChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService :AuthService,
+    private _http : HttpClient, 
     @Inject('AUTH_URL') private _authUrl: string
   ) {
     this.userUrl = `${_authUrl}/api/${ApiControllers.Account}`;
@@ -41,7 +40,7 @@ export class UserService implements Resolve<any>
   getRoles() : Promise<any> {
 
     return new Promise((resolve, reject) => {
-      this._authService.get(this.roleUrl)
+      this._http.get(this.roleUrl)
         .subscribe((response: any) => {
            resolve(response.payload);
         }, reject)
@@ -60,7 +59,7 @@ export class UserService implements Resolve<any>
       {
         var url = `${this.userUrl}?username=${this.routeParams.id}`;
         
-        this._authService.get(url)
+        this._http.get(url)
             .subscribe((response: any) => {
 
                 this.user = response;
@@ -77,7 +76,7 @@ export class UserService implements Resolve<any>
 
   saveUser(user){
     return new Promise((resolve, reject) => {
-      this._authService.put(this.userUrl, user)
+      this._http.put(this.userUrl, user)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
@@ -86,7 +85,7 @@ export class UserService implements Resolve<any>
 
   addUser(user){
     return new Promise((resolve, reject) => {
-      this._authService.post(this.userUrl, user)
+      this._http.post(this.userUrl, user)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

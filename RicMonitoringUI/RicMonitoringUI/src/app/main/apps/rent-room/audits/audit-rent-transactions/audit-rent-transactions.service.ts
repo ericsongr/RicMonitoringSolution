@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
-import { AuthService } from '../../../common/core/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 const TABLE_FIELDS = "?fields=auditRentTransactionId,id,paidDateString,paidAmount,balance," +
                              "balanceDateToBePaidString,isDepositUsed,note,roomName,renterName," + 
@@ -16,7 +16,7 @@ export class AuditRentTransactionsService implements Resolve<any> {
   onAuditRentTransactionsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService: AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private apiUrl: string)  
   { }
   
@@ -24,11 +24,11 @@ export class AuditRentTransactionsService implements Resolve<any> {
       var url = `${this.apiUrl}${ApiControllers.Audits}/0/transactions${TABLE_FIELDS}`;
       return new Promise((resolve, reject) => {
         
-        this._authService.get(url)
+        this._http.get(url)
             .subscribe((response: any) => {
-                this.auditRentTransactions = response;
+                this.auditRentTransactions = response.payload;
                 this.onAuditRentTransactionsChanged.next(this.auditRentTransactions);
-                resolve(response);
+                resolve(this.auditRentTransactions);
             }, reject);
 
     })

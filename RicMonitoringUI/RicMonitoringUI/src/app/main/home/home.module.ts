@@ -1,12 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { NgxPermissionsGuard } from 'ngx-permissions';
 import { HomeComponent } from './home.component';
 
 const routes = [
   {
     path        : 'home',
-    component   : HomeComponent   
+    component   : HomeComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: ['ADMIN', 'USER'],
+        // except: ['GUEST'],
+        redirectTo: '/auth' // will go to route /auth/login
+      }
+    },   
   }
 ]
 
