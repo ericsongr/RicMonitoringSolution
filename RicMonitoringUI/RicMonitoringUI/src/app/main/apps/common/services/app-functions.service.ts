@@ -21,9 +21,9 @@ constructor(private _httpClient: HttpClient,
       this._httpClient.get(url)
           .subscribe((daysWithSuffix: any) => {
 
-            this.onDaysWithSuffixChanged.next(daysWithSuffix);
+            this.onDaysWithSuffixChanged.next(daysWithSuffix.payload);
             
-            resolve(daysWithSuffix);
+            resolve(daysWithSuffix.payload);
 
           }, reject);
     

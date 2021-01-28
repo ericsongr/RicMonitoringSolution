@@ -4,8 +4,10 @@ import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/anim
 import { NavigationEnd, Router } from '@angular/router';
 
 import { filter, take } from 'rxjs/operators';
-import { AuthService } from 'app/main/apps/common/core/auth/auth.service';
+// import { AuthService } from 'app/main/apps/common/core/auth/auth.service';
 import { ApiControllers } from 'environments/api-controllers';
+import { AuthenticationService } from 'app/core/auth/authentication.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +29,8 @@ export class FuseSplashScreenService
         @Inject(DOCUMENT) private _document: any,
         @Inject("API_URL") private _apiUrl: string,
         private _router: Router,
-        private _authService : AuthService
+        private _authService : AuthenticationService,
+        private _http: HttpClient
         
     )
     {
@@ -83,8 +86,8 @@ export class FuseSplashScreenService
         localStorage.setItem('isCallback', 'false');
         console.log('start batch')
         var url = `${this._apiUrl}${ApiControllers.ExecStoreProc}`;
-        this._authService.post(url,{})
-            .subscribe((dailyBatch) => { 
+        this._http.post(url,{})
+            .subscribe((dailyBatch: any) => { 
                 if (dailyBatch.status == "Processing" || dailyBatch.status == "Processed"){
                 this.hide();
                 localStorage.setItem('isCallback', 'false');

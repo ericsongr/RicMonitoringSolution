@@ -140,7 +140,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 return Ok(new BaseRestApiModel
                 {
-                    Payload = "success",
+                    Payload = roomEntity.Id,
                     Errors = new List<BaseError>(),
                     StatusCode = (int)HttpStatusCode.OK
                 });
@@ -182,7 +182,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 return Ok(new BaseRestApiModel
                 {
-                    Payload = "update_success",
+                    Payload = roomEntity.Id,
                     Errors = new List<BaseError>(),
                     StatusCode = (int)HttpStatusCode.OK
                 });

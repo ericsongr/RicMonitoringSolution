@@ -8,11 +8,9 @@ userData = new UserData();
 
   constructor() { 
     
-    var data = JSON.parse(sessionStorage['userData_spaRicMonitoringCodeClient'])
-    this.userData.sub = data.sub;
-    this.userData.username = data.preferred_username;
+    var data = JSON.parse(sessionStorage['accessData'])
+    this.userData.username = data.username;
     this.userData.name = data.name;
-    this.userData.fullName = data.FullName;
     this.userData.role = data.role;
   }
 
@@ -20,10 +18,6 @@ userData = new UserData();
     return this.userData;
   }
 
-  getSub() {
-    return this.userData.sub;
-  }
-  
   getUsername() {
     return this.userData.username;
   }
@@ -32,10 +26,6 @@ userData = new UserData();
     return this.userData.name;
   }
   
-  getFullname() {
-    return this.userData.fullName;
-  }
-
   getRole() {
     return this.userData.role;
   }

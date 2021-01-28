@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
-import { AuthService } from '../../common/core/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DailyBatchService implements Resolve<any> {
@@ -11,7 +11,7 @@ export class DailyBatchService implements Resolve<any> {
   onDailyBatchChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService: AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private apiUrl: string)  
   { 
     
@@ -33,14 +33,14 @@ export class DailyBatchService implements Resolve<any> {
 
     return new Promise((resolve, reject) => {
       
-      this._authService.get(url)
+      this._http.get(url)
           .subscribe((response: any) => {
-             debugger;
-            this.dailyBatch = response;
+             
+            this.dailyBatch = response.payload;
              
               this.onDailyBatchChanged.next(this.dailyBatch);
             
-              resolve(response);
+              resolve(this.dailyBatch);
           
             }, reject);
     })

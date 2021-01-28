@@ -6,7 +6,6 @@ import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RentTransaction } from './rent-transaction.model';
-import { AuthService } from '../../common/core/auth/auth.service';
 
 const fields = "id,renterName,renterId,roomName,roomId," +
                "monthlyRent,dueDate,dueDateString,period,paidDate," +
@@ -25,7 +24,7 @@ export class RentTransactionService implements Resolve<any>
   onRentTransactionChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService : AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private _apiUrl: string) 
   {
     this.apiUrl = `${this._apiUrl}${ApiControllers.RentTransactions}/`
@@ -49,12 +48,12 @@ export class RentTransactionService implements Resolve<any>
     
     return new Promise((resolve, reject) => {
 
-      this._authService.get(url)
+      this._http.get(url)
             .subscribe((response: any) => {
 
-                this.rentTransaction = response;
-                this.onRentTransactionChanged.next(response);
-                resolve(response);
+                this.rentTransaction = response.payload;
+                this.onRentTransactionChanged.next(this.rentTransaction);
+                resolve(this.rentTransaction);
             }, reject);
 
     });
@@ -65,9 +64,8 @@ export class RentTransactionService implements Resolve<any>
 
         var url = this.apiUrl + transaction.id;
         
-        this._authService.put(url, transaction)
+        this._http.put(url, transaction)
             .subscribe((response: any) => {
-              
               resolve(response.id);
             }, reject);
 
@@ -80,7 +78,7 @@ export class RentTransactionService implements Resolve<any>
 
     var url = `${this._apiUrl}${ApiControllers.RentTransactionPayments}/${id}?renterId=${renterId}`
     return new Promise((resolve, reject) => {
-      this._authService.delete(url)
+      this._http.delete(url)
         .subscribe((response: any) => {
           resolve(response);
         }, reject);

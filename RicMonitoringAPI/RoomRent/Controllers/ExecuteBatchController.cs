@@ -15,6 +15,7 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Constants;
+using RicMonitoringAPI.Common.Model;
 using Serilog;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -85,7 +86,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var dto = Mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch); 
 
-            return Ok(dto.ShapeData(fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = dto.ShapeData(fields)
+            });
 
         }
 

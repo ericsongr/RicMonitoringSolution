@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from 'environments/environment';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AuthService } from '../../common/core/auth/auth.service';
 
 
 @Injectable()
@@ -18,7 +17,7 @@ export class RoomService implements Resolve<any>
   onRoomChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService :AuthService,
+    private _httpClient: HttpClient,
     @Inject('API_URL') private _apiUrl: string
   ) {
     this.apiUrl = `${_apiUrl}${ApiControllers.Rooms}/`;
@@ -45,9 +44,9 @@ export class RoomService implements Resolve<any>
       }
       else 
       {
-        this._authService.get(this.apiUrl + this.routeParams.id)
+        this._httpClient.get(this.apiUrl + this.routeParams.id)
             .subscribe((response: any) => {
-                this.room = response;
+                this.room = response.payload;
                 
                 this.onRoomChanged.next(this.room);
                 resolve(response);
@@ -59,7 +58,7 @@ export class RoomService implements Resolve<any>
 
   saveRoom(room){
     return new Promise((resolve, reject) => {
-      this._authService.put(this.apiUrl + room.id, room)
+      this._httpClient.put(this.apiUrl + room.id, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
@@ -68,7 +67,7 @@ export class RoomService implements Resolve<any>
 
   addRoom(room){
     return new Promise((resolve, reject) => {
-      this._authService.post(this.apiUrl, room)
+      this._httpClient.post(this.apiUrl, room)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

@@ -19,25 +19,56 @@ import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 // import { SampleModule } from 'app/main/sample/sample.module';
 import { UnauthorizedComponent } from './main/apps/unauthorized/unauthorized.component';
-import { CoreModule } from './main/apps/common/core/core.module';
-// import { httpInterceptorProvider } from './main/apps/common/core/http-interceptor/index';
-// import { APP_BASE_HREF } from '@angular/common';
+// import { CoreModule } from './main/apps/common/core/core.module';
+import { APP_BASE_HREF } from '@angular/common';
 import { HomeModule } from './main/home/home.module';
 import { ConfigService } from './main/apps/common/services/config.service';
 import { UserDataService } from './main/apps/administrator/users/user-data.service';
+import { httpInterceptorProviders } from './core/http-interceptors';
+
+import { AuthModule } from './main/apps/auth/auth.module';
+
+import { AuthenticationModule } from './core/auth/authentication.module';
+import { NgxPermissionsGuard, NgxPermissionsModule } from 'ngx-permissions';
 
 const appRoutes: Routes = [
     {
-        path      : 'apartment',
-        loadChildren: './main/apps/app-ricmonitoring.module#AppRicMonitoringModule'
+        path            : 'auth',
+        loadChildren    : () => import('./main/apps/auth/auth.module').then(m => m.AuthModule),
+        canActivate: [NgxPermissionsGuard],
+		data: {
+			permissions: {
+				except: ['ADMIN']
+			}
+		},
     },
     {
-        path          : 'booking',
-        loadChildren  : './main/apps/online-booking/online-booking.module#OnlineBookingModule'
+        path            : 'apartment',
+        loadChildren    : () => import('./main/apps/app-ricmonitoring.module').then(m => m.AppRicMonitoringModule),
+        canActivate: [NgxPermissionsGuard],
+		data: {
+			permissions: {
+				only: ['ADMIN', 'USER'],
+				// except: ['GUEST'],
+				redirectTo: '/auth' // will go to route /auth/login
+			}
+        },
     },
     {
-      path          : 'administrator',
-      loadChildren  : './main/apps/administrator/administrator.module#AdministratorModule'
+        path            : 'booking',
+        loadChildren    : () => import('./main/apps/online-booking/online-booking.module').then(m => m.OnlineBookingModule)
+    },
+    {
+        path            : 'administrator',
+        loadChildren    : () => import('./main/apps/administrator/administrator.module').then(m => m.AdministratorModule),
+        canActivate: [NgxPermissionsGuard],
+		data: {
+			permissions: {
+				only: ['ADMIN', 'USER'],
+				except: ['GUEST'],
+				redirectTo: '/auth' // will go to route /auth/login
+			}
+        }
     },
     // {
     //   path          : 'auth',
@@ -87,16 +118,19 @@ const appRoutes: Routes = [
         LayoutModule,
         // SampleModule,
         HomeModule,
-        CoreModule
+        // CoreModule, //Note: this module use for oidc authentication
+        AuthenticationModule,
+		NgxPermissionsModule.forRoot(),
     ],
     providers: [
         ConfigService,
-        UserDataService
+        UserDataService,
+        httpInterceptorProviders,
+		{
+			provide: APP_BASE_HREF,
+			useValue: '/'
+		},
     ],
-      bootstrap   : [
-        AppComponent
-    ]
+    bootstrap   : [AppComponent]
 })
-export class AppModule
-{
-}
+export class AppModule { }

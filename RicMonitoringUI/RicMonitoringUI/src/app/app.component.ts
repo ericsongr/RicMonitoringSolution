@@ -14,9 +14,10 @@ import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.
 import { navigation } from 'app/navigation/navigation';
 import { locale as navigationEnglish } from 'app/navigation/i18n/en';
 import { locale as navigationTurkish } from 'app/navigation/i18n/tr';
-import { AuthService } from './main/apps/common/core/auth/auth.service';
+// import { AuthService } from './main/apps/common/core/auth/auth.service';
 import { UserDataService } from './main/apps/administrator/users/user-data.service';
 import { environment } from 'environments/environment';
+import { AuthenticationService } from './core/auth/authentication.service';
 
 @Component({
     selector   : 'app',
@@ -54,51 +55,51 @@ export class AppComponent implements OnInit, OnDestroy
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
         private _platform: Platform,
-        private _authService: AuthService
+        private _authService: AuthenticationService 
     )  {
 
         
 
-        if  (environment.production) {
+        // if  (environment.production) {
+        //     debugger;
+        //     this._authService.isAuthorized().subscribe((isAuthorized: any) => {
+        //         console.log('isAuthorized: ', isAuthorized);
+        //         if (isAuthorized) {
 
-            this._authService.getIsAuthorized().subscribe((isAuthorized: any) => {
+        //             setTimeout(() => {
 
-                if (isAuthorized) {
-
-                    setTimeout(() => {
-
-                        this.userDataService = new UserDataService();
+        //                 this.userDataService = new UserDataService();
                     
-                        var role = this.userDataService.getRole();
+        //                 var role = this.userDataService.getRole();
 
-                        this.initNavigation();
-                        this.updateNavigationItem('administrator', true);
+        //                 this.initNavigation();
+        //                 this.updateNavigationItem('administrator', true);
 
-                        if (role == undefined) {
+        //                 if (role == undefined) {
 
-                            setTimeout(() => {
-                                if  (role == 'Superuser') {
-                                    this.isHidden = false;
-                                }
-                                this.updateNavigationItem('administrator', this.isHidden);
-                            }, 1000);
+        //                     setTimeout(() => {
+        //                         if  (role == 'Superuser') {
+        //                             this.isHidden = false;
+        //                         }
+        //                         this.updateNavigationItem('administrator', this.isHidden);
+        //                     }, 1000);
                             
-                        }else {
-                            if  (role == 'Superuser') {
-                                this.isHidden = false;
-                            }
-                            this.updateNavigationItem('administrator', this.isHidden);
-                        }
+        //                 }else {
+        //                     if  (role == 'Superuser') {
+        //                         this.isHidden = false;
+        //                     }
+        //                     this.updateNavigationItem('administrator', this.isHidden);
+        //                 }
                     
-                    }, 2000);
+        //             }, 2000);
 
-                }
+        //         }
                 
-            });
+        //     });
 
-        } else {
-            this.initNavigation();
-        }
+        // } else {
+             this.initNavigation();
+        // }
 
        // Add languages
        this._translateService.addLangs(['en', 'tr']);
@@ -219,7 +220,7 @@ export class AppComponent implements OnInit, OnDestroy
             });
 
             //initialize open id connect
-            this._authService.initAuth();
+            // this._authService.initAuth();
     }
 
     /**
@@ -230,7 +231,7 @@ export class AppComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
-        this._authService.ngOnDestroy();
+        // this._authService.ngOnDestroy();
     }
 
     // -----------------------------------------------------------------------------------------------------

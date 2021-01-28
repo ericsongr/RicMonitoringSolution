@@ -65,23 +65,31 @@ export class RoomComponent implements OnInit, OnDestroy {
       });
 
     } else {
+
       const data = this.roomForm.getRawValue();
       data.handle = FuseUtils.handleize(data.name);
 
       this._roomService.saveRoom(data)
-          .then(() => {
+          .then((response: any) => {
+            if (!response.errors.message) {
+                //Trigger the subscription with new data
+                this._roomService.onRoomChanged.next(data);
 
-            //Trigger the subscription with new data
-            this._roomService.onRoomChanged.next(data);
+                //show the success message
+                this._snackBar.open('Room detail saved.', 'OK', {
+                  verticalPosition  : 'top',
+                  duration          : 2000
+                });
 
-            //show the success message
-            this._snackBar.open('Room detail saved.', 'OK', {
-              verticalPosition  : 'top',
-              duration          : 2000
-            });
+                //change the location with new one
+                this._location.go(`/apartment/rooms/${this.room.id}/${this.room.handle}`);
 
-            //change the location with new one
-            this._location.go(`/apartment/rooms/${this.room.id}/${this.room.handle}`);
+              } else {
+                  this._snackBar.open('error occurred, updating room detail.', 'OK', {
+                    verticalPosition  : 'top',
+                    duration          : 2000
+                  });
+              }
           });
       }
   }
@@ -103,19 +111,29 @@ export class RoomComponent implements OnInit, OnDestroy {
       data.handle = FuseUtils.handleize(data.name);
   
       this._roomService.addRoom(data)
-          .then(() => {
-  
-            //Trigger the subscription with new data
-            this._roomService.onRoomChanged.next(data);
-  
-            //show the success message
-            this._snackBar.open('New room added.', 'OK', {
-              verticalPosition  : 'top',
-              duration          : 2000
-            });
-  
-            //change the location with new one
-            this._location.go(`/apartment/rooms/${this.room.id}/${this.room.handle}`);
+          .then((response: any) => {
+            if (!response.errors.message) {
+                //Trigger the subscription with new data
+                this._roomService.onRoomChanged.next(data);
+
+                var roomId = parseInt(response.payload);
+                //show the success message
+                this._snackBar.open('New room added.', 'OK', {
+                  verticalPosition  : 'top',
+                  duration          : 2000
+                });
+
+                //change the location with new one
+                this._location.go(`/apartment/rooms/${roomId}/${this.room.handle}`);
+            }
+            else 
+            {
+                this._snackBar.open('error occurred, adding room detail.', 'OK', {
+                  verticalPosition  : 'top',
+                  duration          : 2000
+                });
+            }
+            
           });
     }
     

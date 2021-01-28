@@ -25,7 +25,7 @@
 
         <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 
-            <button mat-button class="user-button" *ngIf="!isAuthorized" (click)="login()">
+            <button mat-button class="user-button" *ngIf="!isAuthorized" [routerLink]="'/auth/login'">
                 <mat-icon class="secondary-text mat-icon material-icons ng-tns-c60-85">account_circle</mat-icon>    
                 <span>Log-In</span>
             </button>

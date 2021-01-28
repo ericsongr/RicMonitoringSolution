@@ -7,7 +7,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
-import { AuthService } from 'app/main/apps/common/core/auth/auth.service';
+import { TokenStorage } from 'app/core/auth/token-storage.service';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -38,7 +38,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
         private _router: Router,
-        private _authServer: AuthService
+        private _tokenStorage: TokenStorage 
     )
     {
         // Set the private defaults
@@ -132,8 +132,8 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
                 this.navigation = this._fuseNavigationService.getCurrentNavigation();
             });
 
-        this._authServer.getUserData().subscribe(userData => {
-            this.name = userData.name;
+        this._tokenStorage.getAccessData().subscribe(userData => {
+            this.name = userData && userData.name;
         });
 
     }

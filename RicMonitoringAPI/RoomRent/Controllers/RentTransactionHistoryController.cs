@@ -13,6 +13,7 @@ using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicMonitoringAPI.Common.Model;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -65,7 +66,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var histories = Mapper.Map<IEnumerable<RentTransactionHistoryDto>>(rentTransactionHistories);
 
-            return Ok(histories.ShapeData(parameters.Fields));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = histories.ShapeData(parameters.Fields)
+            });
         }
 
     }

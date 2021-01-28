@@ -21,7 +21,7 @@ const devProviders = [
       { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
       { provide: 'AUTH_URL', useValue: 'https://localhost:5002' }, 
     //   { provide: 'API_URL', useValue: 'http://127.0.0.1:5555/api/' }, 
-      { provide: 'API_URL', useValue: 'https://localhost:5001/api/' }, 
+      { provide: 'API_URL', useValue: 'http://localhost:5001/api/' }, 
   ];
 
 const prodProviders = [

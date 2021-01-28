@@ -3,8 +3,9 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable } from 'rxjs/Observable';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AuthService } from '../../../common/core/auth/auth.service';
+// import { AuthService } from '../../../common/core/auth/auth.service';
 import { RentTransactionHistoryService } from '../rent-transaction-history/rent-transaction-history.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RenterDetailService implements Resolve<any> 
@@ -15,7 +16,7 @@ export class RenterDetailService implements Resolve<any>
   onRenterChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    private _authService : AuthService,
+    private _http: HttpClient,
     @Inject('API_URL') private _apiUrl: string) 
   { 
     this.apiUrl = `${_apiUrl}${ApiControllers.Renters}/`;
@@ -41,9 +42,9 @@ export class RenterDetailService implements Resolve<any>
       }
       else 
       {
-        this._authService.get(this.apiUrl + this.routeParams.id)
+        this._http.get(this.apiUrl + this.routeParams.id)
             .subscribe((response: any) => {
-                this.renter = response;
+                this.renter = response.payload;
                 this.onRenterChanged.next(this.renter);
                 resolve(response);
             }, reject);
@@ -54,7 +55,7 @@ export class RenterDetailService implements Resolve<any>
 
   saveRenter(renter){
     return new Promise((resolve, reject) => {
-      this._authService.put(this.apiUrl + renter.id, renter)
+      this._http.put(this.apiUrl + renter.id, renter)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
@@ -63,7 +64,7 @@ export class RenterDetailService implements Resolve<any>
 
   addRenter(renter){
     return new Promise((resolve, reject) => {
-      this._authService.post(this.apiUrl, renter)
+      this._http.post(this.apiUrl, renter)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
