@@ -142,38 +142,25 @@ namespace RicMonitoringAPI
                 options.AddPolicy("AllowCors", builder =>
                 {
                     builder
-
                         .AllowAnyHeader()
-                        //.AllowAnyOrigin()
-                        .WithOrigins(Configuration["clientUrl"]) //client url
-                                                                 //.AllowAnyMethod()
+                        .WithOrigins(Configuration["ClientUrl"]) 
                         .WithMethods("GET", "PUT", "POST", "DELETE");
-                    //.AllowCredentials();
                 });
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-            //.AddIdentityServerAuthentication(options =>
-            //{
-            //    options.Authority = Configuration["authority"]; //auth server
-
-            //    options.RequireHttpsMetadata = false;
-
-            //    // name of the API resource //resourceApi
-            //    options.ApiName = "RicMonitoringAPI";
-            //})
-            .AddJwtBearer(options => {
-            options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["JWT:ValidAudience"],
-                        ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(WebEncoders.Base64UrlDecode(Configuration["JWT:Secret"])),
-                    };
-                }); 
+                    .AddJwtBearer(options => {
+                            options.SaveToken = true;
+                            options.RequireHttpsMetadata = bool.Parse(Configuration["RequireHttpsMetadata"]);
+                            options.TokenValidationParameters = new TokenValidationParameters()
+                            {
+                                ValidateIssuer = true,
+                                ValidateAudience = true,
+                                ValidAudience = Configuration["JWT:ValidAudience"],
+                                ValidIssuer = Configuration["JWT:ValidIssuer"],
+                                IssuerSigningKey = new SymmetricSecurityKey(WebEncoders.Base64UrlDecode(Configuration["JWT:Secret"])),
+                            };
+                        }); 
 
           
 

@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from 'app/core/auth/authentication.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 
 @Component({
     selector     : 'login',
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit
      * @param {FormBuilder} _formBuilder
      */
     constructor(
+        private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
         private _authService: AuthenticationService,
@@ -62,8 +64,8 @@ export class LoginComponent implements OnInit
     ngOnInit(): void
     {
         this.loginForm = this._formBuilder.group({
-            userName    : ['ericson', [Validators.required]],
-            password    : ['Terno)48', Validators.required]
+            userName    : ['', [Validators.required]],
+            password    : ['', Validators.required]
         });
     }
 
@@ -71,19 +73,21 @@ export class LoginComponent implements OnInit
         const data = this.loginForm.getRawValue();
         data.deviceId = "9267EDAE-2A8C-4EE2-AF49-84F57171F552";
         data.platform = "Web";
-        // const model: any =  {"userName": "ericson", "password": "Terno)48", "deviceId": "9267EDAE-2A8C-4EE2-AF49-84F57171F552", "platform" : "Web"};
-        // const model: any =  {"userName": data.userName, "password": data.password, "deviceId": "9267EDAE-2A8C-4EE2-AF49-84F57171F552", "platform" : "Web"};
+        
+        this._fuseSplashScreenService.show()
 
-        // this.model.email = this.loginForm.get('email')
         this._authService.login(data)
             .subscribe(response => {
+
+                this._fuseSplashScreenService.hide();
+
                 if (!response.errors.message) { 
                     this._router.navigate(['/']);
                 }
                 else {
                     console.log(response);
                     //show the success message
-                    this._snackBar.open('New room added.', 'OK', {
+                    this._snackBar.open(response.errors.message, 'OK', {
                         verticalPosition  : 'top',
                         duration          : 2000
                     });

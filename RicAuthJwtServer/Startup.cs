@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ using RicAuthJwtServer.Data;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
 using RicAuthJwtServer.Data.Persistence.Repositories;
 using RicMonitoringAPI.Common.Validators;
-using RicMonitoringAPI.RoomRent.Validators;
 
 namespace RicAuthJwtServer
 {
@@ -53,7 +51,7 @@ namespace RicAuthJwtServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //when reset password the token should only valid for 2 hours.
+            //when reset password the token should only valid for 1 hours.
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(1));
 
@@ -64,7 +62,6 @@ namespace RicAuthJwtServer
                 {
                     builder
                         .AllowAnyOrigin()
-                        //.WithOrigins(Configuration["clientUrl"]) //client url
                         .WithMethods("GET", "PUT", "POST", "DELETE")
                         .AllowAnyHeader();
                 });
@@ -75,10 +72,9 @@ namespace RicAuthJwtServer
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            //Adding Jwt Bearer
             .AddJwtBearer(options => {
                 options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = bool.Parse(Configuration["RequireHttpsMetadata"]);
                 options.TokenValidationParameters = new TokenValidationParameters() { 
                     ValidateIssuer = true,
                     ValidateAudience = true,

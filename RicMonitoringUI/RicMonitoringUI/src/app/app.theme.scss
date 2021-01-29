@@ -117,7 +117,7 @@ $typography: mat-typography-config(
     @include page-rent-transactions-theme($theme);
 
     //administrator
-    @include page-users-theme($theme);
+    // @include page-users-theme($theme);
     @include page-daily-batch-theme($theme);
     
     @include unauthorized-theme($theme);

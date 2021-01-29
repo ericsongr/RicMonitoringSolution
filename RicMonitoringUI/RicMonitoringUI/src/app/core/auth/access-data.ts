@@ -12,6 +12,7 @@ export interface AccessData {
     portalUserId: string;
     status: string;
     roles: any;
+    role: any;
     login_token: string;
     userName: string;
 }

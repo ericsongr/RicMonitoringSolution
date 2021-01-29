@@ -19,14 +19,13 @@ export function getBaseUrl() {
 
 const devProviders = [
       { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
-      { provide: 'AUTH_URL', useValue: 'https://localhost:5002' }, 
-    //   { provide: 'API_URL', useValue: 'http://127.0.0.1:5555/api/' }, 
+      { provide: 'AUTH_URL', useValue: 'http://localhost:2030/api' }, 
       { provide: 'API_URL', useValue: 'http://localhost:5001/api/' }, 
   ];
 
 const prodProviders = [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
-    { provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com' },
+    { provide: 'AUTH_URL', useValue: 'https://authserver.ericsonramos.com/api' },
     { provide: 'API_URL', useValue: 'https://tenantsapi.ericsonramos.com/api/' }
 ];
 
