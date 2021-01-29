@@ -14,10 +14,7 @@ import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.
 import { navigation } from 'app/navigation/navigation';
 import { locale as navigationEnglish } from 'app/navigation/i18n/en';
 import { locale as navigationTurkish } from 'app/navigation/i18n/tr';
-// import { AuthService } from './main/apps/common/core/auth/auth.service';
-import { UserDataService } from './main/apps/administrator/users/user-data.service';
-import { environment } from 'environments/environment';
-import { AuthenticationService } from './core/auth/authentication.service';
+
 
 @Component({
     selector   : 'app',
@@ -27,9 +24,6 @@ import { AuthenticationService } from './core/auth/authentication.service';
 export class AppComponent implements OnInit, OnDestroy
 {
     fuseConfig: any;
-    navigation: any;
-    isHidden  : boolean = true;
-    userDataService: UserDataService;
     
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -54,53 +48,10 @@ export class AppComponent implements OnInit, OnDestroy
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        private _platform: Platform,
-        private _authService: AuthenticationService 
+        private _platform: Platform
     )  {
 
         
-
-        // if  (environment.production) {
-        //     debugger;
-        //     this._authService.isAuthorized().subscribe((isAuthorized: any) => {
-        //         console.log('isAuthorized: ', isAuthorized);
-        //         if (isAuthorized) {
-
-        //             setTimeout(() => {
-
-        //                 this.userDataService = new UserDataService();
-                    
-        //                 var role = this.userDataService.getRole();
-
-        //                 this.initNavigation();
-        //                 this.updateNavigationItem('administrator', true);
-
-        //                 if (role == undefined) {
-
-        //                     setTimeout(() => {
-        //                         if  (role == 'Superuser') {
-        //                             this.isHidden = false;
-        //                         }
-        //                         this.updateNavigationItem('administrator', this.isHidden);
-        //                     }, 1000);
-                            
-        //                 }else {
-        //                     if  (role == 'Superuser') {
-        //                         this.isHidden = false;
-        //                     }
-        //                     this.updateNavigationItem('administrator', this.isHidden);
-        //                 }
-                    
-        //             }, 2000);
-
-        //         }
-                
-        //     });
-
-        // } else {
-             this.initNavigation();
-        // }
-
        // Add languages
        this._translateService.addLangs(['en', 'tr']);
  
@@ -156,28 +107,7 @@ export class AppComponent implements OnInit, OnDestroy
         this._unsubscribeAll = new Subject();
     }
 
-    private updateNavigationItem(menuId: string, isHidden: boolean) {
-        //hide audit administrator
-        this._fuseNavigationService.updateNavigationItem(menuId, {
-            hidden: isHidden
-        })
-    }
-
-    private initNavigation() {
-
-         // Get default navigation
-         this.navigation = navigation;
-
-         // Unregister
-         this._fuseNavigationService.unregister('main')
-
-         // Register the navigation to the service
-         this._fuseNavigationService.register('main', this.navigation);
- 
-         // Set the main navigation as our current navigation
-         this._fuseNavigationService.setCurrentNavigation('main');
- 
-    }
+    
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------

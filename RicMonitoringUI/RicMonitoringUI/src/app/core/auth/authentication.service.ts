@@ -1,6 +1,6 @@
 
 import { AuthService } from 'ngx-auth';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { from, Observable, of, Subject, Subscription, throwError } from 'rxjs';
 import { TokenStorage } from './token-storage.service';
@@ -12,7 +12,6 @@ import { Credential } from './credential';
 import { AccessData } from './access-data';
 import { IPayload, Payload } from '../models/payload.model';
 import { ApiPortalRoutes } from 'environments/app.constants';
-import { environment } from 'environments/environment.prod';
 
 @Injectable()
 export class AuthenticationService implements AuthService, OnDestroy {
@@ -26,7 +25,7 @@ export class AuthenticationService implements AuthService, OnDestroy {
 		private http: HttpClient,
 		private tokenStorage: TokenStorage,
 		private permissionsService: NgxPermissionsService,
-		private router: Router
+		@Inject('AUTH_URL') private _authUrl: string,
 	) {
 		this.onCredentialUpdated$ = new Subject();
     }
@@ -43,7 +42,7 @@ export class AuthenticationService implements AuthService, OnDestroy {
 	 * @memberOf AuthService
 	 */
 	public isAuthorized(): Observable<boolean> {
-		return this.tokenStorage.getAccessData().pipe(map((token: AccessData) => !!token.accessToken));
+		return this.tokenStorage.getAccessData().pipe(map((token: AccessData) => token && !!token.accessToken));
     }
     
   	/**
@@ -64,7 +63,7 @@ export class AuthenticationService implements AuthService, OnDestroy {
 	public refreshToken(): Observable<Payload<AccessData>> {
 		return this.tokenStorage.getAccessData().pipe(
 			switchMap((refreshToken: AccessData) => {
-				return this.http.post<Payload<AccessData>>(environment.portalUrl + ApiPortalRoutes.validateToken, { xoken: refreshToken.refreshToken });
+				return this.http.post<Payload<AccessData>>(this._authUrl + ApiPortalRoutes.validateToken, { xoken: refreshToken.refreshToken });
 			}),
 			tap(this.saveAccessData.bind(this)),
 			catchError(err => {
@@ -101,7 +100,7 @@ export class AuthenticationService implements AuthService, OnDestroy {
 	 * @returns {Observable<any>}
 	 */
 	public login(credential: Credential): Observable<IPayload<AccessData>> {
-		return this.http.post<any>(environment.portalUrl + ApiPortalRoutes.login, credential).pipe(
+		return this.http.post<any>(this._authUrl + ApiPortalRoutes.login, credential).pipe(
 			map((result: any) => {
 				if (result instanceof Array) {
 					return result.pop();

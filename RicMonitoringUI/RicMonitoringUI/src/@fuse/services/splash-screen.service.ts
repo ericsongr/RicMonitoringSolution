@@ -64,9 +64,8 @@ export class FuseSplashScreenService
                     )
                     .subscribe(() => {
                         
-                        setTimeout(() => {
-                            
-                            if (localStorage.getItem('isCallback') == 'true' && this._authService.isAuthorized) {
+                        this._authService.isAuthorized().subscribe(isAuthorized => {
+                            if (isAuthorized) {
                                 //execute daily batch apartment transaction process
                                 this.execStoreProc();
                                 
@@ -75,22 +74,19 @@ export class FuseSplashScreenService
                                 this.hide();
                                 console.log('no autho')
                             }
-                           
-                        }, 3000);
+                        });
 
                     });
         }
     }
 
     execStoreProc() {
-        localStorage.setItem('isCallback', 'false');
         console.log('start batch')
         var url = `${this._apiUrl}${ApiControllers.ExecStoreProc}`;
         this._http.post(url,{})
             .subscribe((dailyBatch: any) => { 
                 if (dailyBatch.status == "Processing" || dailyBatch.status == "Processed"){
                 this.hide();
-                localStorage.setItem('isCallback', 'false');
                 console.log('end batch')
                 }
             });

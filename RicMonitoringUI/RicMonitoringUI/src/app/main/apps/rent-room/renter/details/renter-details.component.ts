@@ -24,7 +24,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   renter = new RenterDetail();
   pageType: string;
   renterForm: FormGroup;
-  onRenterChanged: Subscription;
+  onRenterSubscription: Subscription;
   onRentTransactionHistorySubscription: Subscription;
 
   rooms: any;
@@ -54,7 +54,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     
     ngOnInit() {
             
-      this.onRenterChanged =
+      this.onRenterSubscription =
       this._renterService.onRenterChanged
           .subscribe(renter => {
 
@@ -274,6 +274,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.onRenterChanged.unsubscribe();
+    this.onRenterSubscription.unsubscribe();
+    this.onRentTransactionHistorySubscription.unsubscribe();
   }
 }
