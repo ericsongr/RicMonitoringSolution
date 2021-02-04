@@ -16,6 +16,7 @@ using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
+using RicMonitoringAPI.Common.Constants;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -128,7 +129,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 return NotFound();
             }
-            
+
+            var roomIsOccupied = CheckRoomIsOccupied(0, renter.RoomId);
+            if (roomIsOccupied)
+            {
+                return Ok(HandleApiException(MessageConstant.OccupiedRoom, HttpStatusCode.Found));
+            }
+
             try
             {
                 renter.StartDate = renter.StartDate;
@@ -182,6 +189,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             //return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
         }
 
+        private bool CheckRoomIsOccupied(int id, int roomId)
+        {
+            return _renterRepository.FindBy(o => o.Id != id && o.RoomId == roomId && !o.IsEndRent).Any();
+        }
+
         [HttpPut("{id}", Name = "UpdateRenter")]
         public async Task<IActionResult> UpdateRenter(int id, [FromBody] RenterForUpdateDto renter)
         {
@@ -198,6 +210,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 if (renterEntity == null)
                 {
                     return NotFound();
+                }
+
+                var roomIsOccupied = CheckRoomIsOccupied(id, renter.RoomId);
+                if (roomIsOccupied)
+                {
+                    return Ok(HandleApiException(MessageConstant.OccupiedRoom, HttpStatusCode.Found));
                 }
 
                 //DateTime.TryParse(renter.StartDateInput,out DateTime startDateInput);
