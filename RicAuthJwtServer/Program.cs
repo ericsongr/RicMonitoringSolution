@@ -2,7 +2,10 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using RicAuthJwtServer.Data;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -24,6 +27,21 @@ namespace RicAuthJwtServer
                     .CreateLogger();
 
                 var host = CreateWebHostBuilder(args).Build();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+                    try
+                    {
+                        SeedData.UserData(scope);
+                    }
+                    catch (Exception ex)
+                    {
+                        var logger = services.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(ex, "An error occurred while migrating and seeding the database.");
+                    }
+                }
+
                 host.Run();
                 return 0;
             }

@@ -74,7 +74,7 @@ namespace RicEntityFramework.RoomRent.Repositories
         public IQueryable<RentTransaction2> GetAllTransactions()
         {
             var transactions = _context.RentTransactions
-                                    .Where(o => !o.IsProcessed)
+                                    .Where(o => !o.IsProcessed && !o.Renter.IsEndRent)
                                     .Include(o => o.Renter)
                                     .Include(o => o.Room)
                                     .Include(o => o.RentTransactionPayments)

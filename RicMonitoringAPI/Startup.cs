@@ -167,13 +167,13 @@ namespace RicMonitoringAPI
             services.AddAuthorization(config =>
             {
                 config.AddPolicy("SuperAndAdmin", policy => policy.RequireRole("Superuser", "Administrator"));
-                config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
+                config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff", "RunDailyBatch"));
                 config.AddPolicy("Admin", policy => policy.RequireRole("Administrator"));
             });
 
             services.AddMvc(setupAction =>
                 {
-                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.ReturnHttpNotAcceptable = bool.Parse(Configuration["RequireHttpsMetadata"]); ;
                     setupAction.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
                     setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                     setupAction.Filters.Add(typeof(ValidatorActionFilter));

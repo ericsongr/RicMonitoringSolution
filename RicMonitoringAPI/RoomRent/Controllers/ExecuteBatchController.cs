@@ -97,11 +97,36 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         public async Task<IActionResult> ExecRentTransactionBatchFile()
         {
             var currentDateTimeUtc = DateTime.UtcNow;
+
+            var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
+            //var status = DailyBatchStatusConstant.Processed;
+            return Ok(new { status });
+        }
+
+        //[HttpPost()]
+        //public async Task<IActionResult> ExecRentTransactionBatchFileMultipeDates()
+        //{
+        //    var currentDateTimeUtc = DateTime.UtcNow;
+        //    var startDate = new DateTime(2020, 11, 1);
+        //    var endDate = new DateTime(2021, 2, 9);
+
+        //    for (var day = startDate.Date; day <= endDate; day = day.AddDays(1))
+        //    {
+        //        ProcessRentTransactionBatchFile(day);
+        //    }
+
+        //    return Ok("Completed");
+        //}
+
+
+        private string ProcessRentTransactionBatchFile(DateTime currentDateTimeUtc)
+        {
             var status = DailyBatchStatusConstant.Processing;
 
             try
             {
-                var dailyBatchStatus = _monthlyRentBatchRepository.FindBy(o => o.ProcessStartDateTime.Date == currentDateTimeUtc.Date).ToList();
+                var dailyBatchStatus = _monthlyRentBatchRepository
+                    .FindBy(o => o.ProcessStartDateTime.Date == currentDateTimeUtc.Date).ToList();
                 if (dailyBatchStatus.Any())
                 {
                     var item = dailyBatchStatus.FirstOrDefault();
@@ -115,17 +140,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     int monthlyRentBatchId = InsertRentBatch(currentDateTimeUtc);
                     int tenantGracePeriod = GetTenantGracePeriod();
                     DateTime systemDateTimeProcessed = currentDateTimeUtc;
-                    DateTime dateIncludedGracePeriod = currentDateTimeUtc.AddDays(-tenantGracePeriod).Date; //minus days of grace period to current date
-                    
+                    DateTime dateIncludedGracePeriod =
+                        currentDateTimeUtc.AddDays(-tenantGracePeriod).Date; //minus days of grace period to current date
+
                     string note = "PROCESSED BY THE SYSTEM";
 
                     var transactions = _rentTransactionRepository
-                        .FindBy(o => !o.IsProcessed && !o.Renter.IsEndRent && o.DueDate <= dateIncludedGracePeriod && o.RenterId == 59,
+                        .FindBy(
+                            o => !o.IsProcessed && !o.Renter.IsEndRent &&
+                                 o.DueDate <= dateIncludedGracePeriod, //&& o.RenterId == 59,
                             r => r.Renter,
                             rm => rm.Renter.Room,
                             ar => ar.Renter.RentArrears,
                             paid => paid.RentTransactionPayments)
-
                         .Select(o => new BatchRentTransactionDto
                         {
                             Id = o.Id,
@@ -138,11 +165,14 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                             DueDate = o.Renter.NextDueDate,
                             HasMonthDeposit = o.Renter.MonthsUsed < o.Renter.AdvanceMonths,
 
-                            IsUsedDeposit = o.RentTransactionPayments == null ? false :
-                                o.RentTransactionPayments.Any(o => o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
+                            IsUsedDeposit = o.RentTransactionPayments == null
+                                ? false
+                                : o.RentTransactionPayments.Any(o =>
+                                    o.PaymentTransactionType == PaymentTransactionType.DepositUsed),
 
-                            IsPaidTotalDueAmount = o.RentTransactionPayments == null ? false :
-                                o.RentTransactionPayments.Sum(o => o.Amount) >= o.TotalAmountDue,
+                            IsPaidTotalDueAmount = o.RentTransactionPayments == null
+                                ? false
+                                : o.RentTransactionPayments.Sum(o => o.Amount) >= o.TotalAmountDue,
 
                             Arrear = Mapper.Map<RentArrearDto>(o.Renter.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
                         });
@@ -215,7 +245,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         }
                         else if (transaction.Balance > 0)
                         {
-
                             MarkAsProcessedPreviousTotalBalance(transaction.RenterId, systemDateTimeProcessed);
 
                             MarkTransactionAsProcessed(transaction.Id);
@@ -247,11 +276,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                             //create next billing cycle
                             CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
-
                         }
                         else if (transaction.IsPaidTotalDueAmount)
                         {
-
                             MarkAsProcessedAndFullyPaidArrear(transaction.Id, systemDateTimeProcessed);
 
                             MarkTransactionAsProcessed(transaction.Id);
@@ -263,7 +290,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                             //create next billing cycle
                             CreateNewRenterBillingCycle(transaction, systemDateTimeProcessed);
-
                         }
                     }
 
@@ -293,8 +319,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             //}
 
             //var status = "ok";
-
-            return Ok(new { status });
+            return status;
         }
 
         /// <summary>
@@ -332,11 +357,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     Period = period,
                     TransactionType = TransactionTypeEnum.MonthlyRent,
                     IsProcessed = false,
-                    TotalAmountDue = updateRenter.Room.Price + (transaction.Balance ?? 0) //compute already unpaid balance and 
+                    TotalAmountDue = updateRenter.Room.Price + (transaction.Balance ?? 0), //compute already unpaid balance and 
+                    ExcessPaidAmount = 0
                 };
 
                 //set paid amount to value of excess paid amount from previous transaction
                 newTransaction.PaidAmount = transaction.ExcessPaidAmount;
+                if (transaction.ExcessPaidAmount > 0)
+                {
+                    newTransaction.ExcessPaidAmount =
+                        transaction.ExcessPaidAmount > newTransaction.TotalAmountDue
+                            ? transaction.ExcessPaidAmount - newTransaction.TotalAmountDue
+                            : 0;
+                }
 
                 _rentTransactionRepository.Add(newTransaction);
                 _rentTransactionRepository.Commit();
