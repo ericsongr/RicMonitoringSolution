@@ -20,7 +20,7 @@ namespace RicAuthJwtServer.ViewModels
         [Required]
         public string Platform { get; set; }
 
-        public bool RememberLogin { get; set; }
+        //public bool RememberLogin { get; set; }
         public string ReturnUrl { get; set; }
     }
 }

@@ -93,7 +93,7 @@ namespace RicAuthJwtServer
 
             services.AddMvc(setupAction =>
                 {
-                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.ReturnHttpNotAcceptable = bool.Parse(Configuration["RequireHttpsMetadata"]); ;
                     setupAction.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
                     setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                     setupAction.Filters.Add(typeof(ValidatorActionFilter));
