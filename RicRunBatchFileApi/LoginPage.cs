@@ -38,17 +38,6 @@ namespace RicRunBatchFileApi
         {
             SetSettings();
 
-            var path = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-            var key = "RicRunBatchFileApi";
-            RegistryKey reg = Registry.CurrentUser.OpenSubKey(path, false);
-            if (reg.GetValue(key) == null)
-            {
-                reg = Registry.CurrentUser.OpenSubKey(path, true);
-                reg.SetValue(key, Application.ExecutablePath.ToString());
-
-                MessageBox.Show("RicRunBatchFileApi application has been registered.", "Notification",
-                    MessageBoxButtons.OK);
-            }
             
             Form form = (Form)sender;
             form.Location = new Point(-10000, -10000);
@@ -64,7 +53,7 @@ namespace RicRunBatchFileApi
             {
                 var minutes = startRunInMinutes;
 
-                NotifyUser.Icon = new System.Drawing.Icon(Path.GetFullPath(@"images\gear.ico"));
+                //NotifyUser.Icon = new System.Drawing.Icon(Path.GetFullPath(@"images\gear.ico"));
                 NotifyUser.Text = "Run Daily Batch File";
                 NotifyUser.Visible = true;
                 NotifyUser.BalloonTipTitle = $"Run Daily Batch file in {minutes} minutes";
