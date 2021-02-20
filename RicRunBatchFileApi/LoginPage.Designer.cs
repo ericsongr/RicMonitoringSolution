@@ -30,12 +30,14 @@ namespace RicRunBatchFileApi
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginPage));
             this.NotifyUser = new System.Windows.Forms.NotifyIcon(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // NotifyUser
             // 
+            this.NotifyUser.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyUser.Icon")));
             this.NotifyUser.Text = "NotifyUser";
             this.NotifyUser.Visible = true;
             // 

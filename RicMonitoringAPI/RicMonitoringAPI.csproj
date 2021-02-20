@@ -77,6 +77,8 @@
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
 		<Folder Include="Infrastructure\" />
+		<Folder Include="Resources\Images\Rooms\" />
+		<Folder Include="Resources\Images\Profile\" />
 	</ItemGroup>
 
 	<ItemGroup>
