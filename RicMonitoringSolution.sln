@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicCommon", "RicCommon\RicC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RicRunBatchFileApi", "RicRunBatchFileApi\RicRunBatchFileApi.csproj", "{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicAmazonS3", "RicAmazonS3\RicAmazonS3.csproj", "{B440F512-0915-49A0-A45D-1F79381B7DC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,7 @@ Global
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
+		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Debug|ApiBuild.Build.0 = Debug|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Debug|WebOnlyBuild.ActiveCfg = Debug|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Release|Any CPU.Build.0 = Release|Any CPU
@@ -138,6 +141,17 @@ Global
 		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|ApiBuild.Build.0 = Release|Any CPU
 		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
 		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Debug|ApiBuild.Build.0 = Debug|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Debug|WebOnlyBuild.ActiveCfg = Debug|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|ApiBuild.ActiveCfg = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|ApiBuild.Build.0 = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
+		{B440F512-0915-49A0-A45D-1F79381B7DC3}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

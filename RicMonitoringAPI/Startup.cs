@@ -104,8 +104,9 @@ namespace RicMonitoringAPI
             services.AddTransient<IAuditRentTransactionPaymentPropertyMappingService, AuditRentTransactionPaymentPropertyMappingService>();
 
 
+            services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
-
+            
             services.AddHealthChecks();
 
             // Add the HttpContextAccessor if needed.
