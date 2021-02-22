@@ -32,6 +32,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRenterPropertyMappingService _renterPropertyMappingService;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IImageService _imageService;
 
         public RentersController(
             IRenterRepository renterRepository,
@@ -39,7 +40,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IRenterPropertyMappingService renterPropertyMappingService,
             IUrlHelper urlHelper,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IImageService imageService)
         {
             _renterRepository = renterRepository ?? throw new ArgumentNullException(nameof(renterRepository));
             _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
@@ -47,6 +49,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _renterPropertyMappingService = renterPropertyMappingService ?? throw new ArgumentNullException(nameof(renterPropertyMappingService));
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         }
 
         [HttpGet("{id}", Name = "GetRenter")]
@@ -64,11 +67,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var Renter = Mapper.Map<RenterDto>(renterFromRepo);
+            var renter = Mapper.Map<RenterDto>(renterFromRepo);
+
+            renter.Base64 = _imageService.GetImageInBase64(id);
 
             return Ok(new BaseRestApiModel
             {
-                Payload = Renter.ShapeData(fields)
+                Payload = renter.ShapeData(fields)
             });
 
         }

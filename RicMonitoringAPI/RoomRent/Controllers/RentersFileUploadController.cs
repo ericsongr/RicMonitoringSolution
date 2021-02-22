@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RicEntityFramework.Interfaces;
+using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.RoomRent.ViewModels;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -18,21 +22,30 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     [ApiController]
     public class RentersFileUploadController : ApiBaseController
     {
+        private readonly IImageService _imageService;
 
-        [HttpPost()]
-        public Task<IActionResult> ProfileImageUpload([FromBody] UploadImageBase64 model)
+        public RentersFileUploadController(IImageService imageService)
         {
-            var folderName = Path.Combine("Resources", "Images", "Profile");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-            var fileName = $"{model.RenterId}.png";
-            var imageBytes = Convert.FromBase64String(model.Base64);
-            var fullPath = Path.Combine(pathToSave, fileName);
-
-            using (var stream = new FileStream(fullPath, FileMode.Create)) 
-            using (var ms = new MemoryStream(imageBytes))
+            _imageService = imageService ?? throw new Exception(nameof(imageService));
+        }
+        [HttpPost()]
+        public IActionResult ProfileImageUpload([FromBody] UploadImageBase64 model)
+        {
+            try
             {
-                ms.CopyTo(stream);
+                _imageService.Upload(model.RenterId, model.Base64);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "UPLOAD_COMPLETED",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
             return null;

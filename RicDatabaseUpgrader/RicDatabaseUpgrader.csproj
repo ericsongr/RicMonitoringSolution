@@ -26,6 +26,7 @@
     <None Remove="Scripts\Update\v1.0001\0017-drop-column-adjustmentBalancePaymentDueAmount.sql" />
     <None Remove="Scripts\Update\v1.0001\0018-drop-column-year-month-from-batch.sql" />
     <None Remove="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <None Remove="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-DbErrorLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
   </ItemGroup>
 
