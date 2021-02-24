@@ -153,6 +153,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 _renterRepository.Add(renterEntity);
                 _renterRepository.Commit();
 
+                //upload image
+                if (!string.IsNullOrEmpty(renter.Base64))
+                {
+                    _imageService.Upload(renterEntity.Id, renter.Base64);
+                }
+
                 //add data to rent transaction table
                 var dueDate = new DateTime(renter.StartDate.Year, renter.StartDate.Month, renter.DueDay);
                 var startDate = dueDate.AddDays(1);
