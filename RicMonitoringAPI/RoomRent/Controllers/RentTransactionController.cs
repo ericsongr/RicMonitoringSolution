@@ -32,6 +32,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRentTransactionPaymentRepository _rentTransactionPaymentRepository;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IImageService _imageService;
 
         public RentTransactionsController(
             IRentTransactionRepository rentTransactionRepository,
@@ -41,7 +42,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentArrearRepository rentArrearRepository,
             IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IUrlHelper urlHelper,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IImageService imageService)
         {
             _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
             _rentDetailTransactionRepository = rentDetailTransactionRepository ?? throw new ArgumentNullException(nameof(rentDetailTransactionRepository));
@@ -51,6 +53,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionPaymentRepository = rentTransactionPaymentRepository ?? throw new ArgumentNullException(nameof(rentTransactionPaymentRepository));
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         }
 
         [HttpGet("{id}", Name = "Get")]
@@ -69,6 +72,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             var rentTransaction = Mapper.Map<RentTransaction2Dto>(rentTransactionFromRepo);
+            rentTransaction.Base64 = _imageService.GetImageInBase64(rentTransaction.RenterId);
+
             rentTransaction.Payments =
                 Mapper.Map<IEnumerable<RentTransactionPaymentDto>>(rentTransactionFromRepo.RentTransactionPayments)
                     .OrderByDescending(o => o.DatePaid)
@@ -121,7 +126,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
             var rentTransactions = Mapper.Map<IEnumerable<RentTransaction2Dto>>(rentTransactionFromRepo);
-
+            
             return Ok(new BaseRestApiModel
             {
                 Payload = rentTransactions.ShapeData(rentTransactionResourceParameters.Fields)

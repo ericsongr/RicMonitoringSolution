@@ -1,6 +1,8 @@
 export const ApiControllers = {
     AppFunctions            : "app-functions",
     Rooms                   : "rooms",
+    RenterUploadPhotoBase64 : "renter-file-upload",
+    RenterUploadPhoto       : "renter-file-upload/web",
     Renters                 : "renters",
     RentTransactions        : "rent-transactions",
     RentTransactionPayments : "rent-transaction-payments",

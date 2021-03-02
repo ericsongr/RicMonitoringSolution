@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Interfaces;
 using RicMonitoringAPI.Common.Model;
@@ -33,6 +29,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         {
             try
             {
+                if (model.Base64.Contains("base64,"))
+                {
+                    var arr = model.Base64.Split(",");
+                    model.Base64 = arr[1];
+                }
+
                 _imageService.Upload(model.RenterId, model.Base64);
 
                 return Ok(new BaseRestApiModel
@@ -51,8 +53,41 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             return null;
         }
 
-        //[HttpPost, DisableRequestSizeLimit]
-        //public async Task<IActionResult> ProfileImageUpload()
+
+        ////still have error so i use base64
+        //[HttpPost("web"), RequestFormLimits(KeyLengthLimit = int.MaxValue)]
+        //public IActionResult WebProfileImageUpload(List<IFormFile> file)
+        //{
+
+        //    try
+        //    {
+        //        var file1 = file[0];
+        //        var folderName = Path.Combine("Resources", "Images", "Profile");
+        //        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+        //        if (file1.Length > 0)
+        //        {
+        //            var fileName = ContentDispositionHeaderValue.Parse(file1.ContentDisposition).FileName.Trim('"');
+        //            var fullPath = Path.Combine(pathToSave, fileName);
+        //            var dbPath = Path.Combine(folderName, fileName);
+        //            using (var stream = new FileStream(fullPath, FileMode.Create))
+        //            {
+        //                file1.CopyTo(stream);
+        //            }
+        //            return Ok(new { dbPath });
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex}");
+        //    }
+        //}
+
+        //[HttpPost("web"), DisableRequestSizeLimit]
+        //public async Task<IActionResult> WebProfileImageUpload()
         //{
 
         //    try

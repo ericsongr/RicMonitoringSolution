@@ -17,7 +17,8 @@
         </button>
 
         <div class="renter-image mr-8 mr-sm-16" [@animate]="{value:'*', params:{delay:'50ms', scale:'0.2'}}">
-          <img [src]="'assets/images/avatars/profile.jpg'">
+          <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
+          <img [src]="profileImage" (click)="file.click()">
         </div>
 
         <div fxLayout="column" fxLayoutAlign="start start"
@@ -29,7 +30,7 @@
             New tenant
           </div>
           <div class="subtitle secondary-text">
-            <span>Details</span>
+            <span>Details</span><br/>
           </div>
         </div>
       </div>

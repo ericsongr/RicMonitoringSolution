@@ -33,6 +33,7 @@ export class RentTransaction {
     isAddingPayment             : boolean;
     isEditingPayment            : boolean;
     rentTransactionPaymentId    : number;
+    base64                      : string;
     handle                      : string;
     
 
@@ -59,6 +60,7 @@ export class RentTransaction {
         this.isProcessed = transaction.isProcessed;
         this.billingStatement = transaction.billingStatement;
         this.payments = transaction.payments;
+        this.base64 = transaction.base64;
         this.handle = transaction.handle || FuseUtils.handleize(this.renterName);
         
     }

@@ -12,6 +12,7 @@ namespace RicModel.RoomRent
         public string RenterName { get; set; }
         public int RoomId { get; set; }
         public string RoomName { get; set; }
+        public string Base64 { get; set; }
         public decimal MonthlyRent { get; set; }
         public int DueDay { get; set; }
         public DateTime? PaidDate { get; set; }

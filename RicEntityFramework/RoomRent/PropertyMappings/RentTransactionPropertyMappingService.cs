@@ -37,6 +37,7 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"IsProcessed", new PropertyMappingValue(new List<string>() {"IsProcessed"}) },
                 {"IsBalanceEditable", new PropertyMappingValue(new List<string>() {"IsBalanceEditable"}) },
                 {"BillingStatement", new PropertyMappingValue(new List<string>() {"BillingStatement"}) },
+                {"Base64", new PropertyMappingValue(new List<string>() {"Base64"}) },
             };
 
         public RentTransactionPropertyMappingService()

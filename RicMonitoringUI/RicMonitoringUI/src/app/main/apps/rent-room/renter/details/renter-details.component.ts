@@ -61,6 +61,9 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
               this.renter = new RenterDetail(renter);
               this.pageType = 'edit';
               
+              //store to sessionStorage
+              localStorage.setItem("base64", this.renter.base64);
+              
               //fetch rooms
               this.fetchRooms(this.renter.roomId);
 
