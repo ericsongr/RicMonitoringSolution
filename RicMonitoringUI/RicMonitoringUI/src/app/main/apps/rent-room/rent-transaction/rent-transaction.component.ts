@@ -20,6 +20,7 @@ import * as moment from 'moment';
 })
 export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewInit {
   
+  profileImage: string = 'assets/images/avatars/profile.jpg';
   rentTransaction = new RentTransaction();
   pageType: string;
   rentTransactionForm: FormGroup;
@@ -60,6 +61,7 @@ export class RentTransactionComponent implements OnInit, OnDestroy, AfterViewIni
               
               this.rentTransaction = new RentTransaction(transaction);
               this.payments = this.rentTransaction.payments;
+              this.profileImage = this.rentTransaction.base64;
               
               if (this.rentTransaction.paidDate != "")
               {

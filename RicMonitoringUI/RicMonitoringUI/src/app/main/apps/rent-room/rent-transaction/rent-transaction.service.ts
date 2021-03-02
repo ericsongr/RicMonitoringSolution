@@ -12,7 +12,7 @@ const fields = "id,renterName,renterId,roomName,roomId," +
                "paidAmount,balance,balanceDateToBePaid,previousUnpaidAmount," + 
                "rentArrearId,totalAmountDue,note,transactionType," + 
                "isNoAdvanceDepositLeft,isProcessed," +
-               "billingStatement,payments";
+               "billingStatement,payments, base64";
 
 @Injectable()
 export class RentTransactionService implements Resolve<any> 

@@ -71,4 +71,8 @@ export class RenterDetailService implements Resolve<any>
     });
   }
 
+  upload(data: any) {
+    return this._http.post(this._apiUrl + ApiControllers.RenterUploadPhotoBase64, data)
+  }
+
 }

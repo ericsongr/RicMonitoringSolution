@@ -67,7 +67,7 @@ export class FuseSplashScreenService
                         this._authService.isAuthorized().subscribe(isAuthorized => {
                             if (isAuthorized) {
                                 //execute daily batch apartment transaction process
-                                this.execStoreProc();
+                                // this.execStoreProc();
                                 
                             } else {
                                 // Hide it on the first NavigationEnd event
@@ -80,17 +80,17 @@ export class FuseSplashScreenService
         }
     }
 
-    execStoreProc() {
-        console.log('start batch')
-        var url = `${this._apiUrl}${ApiControllers.ExecStoreProc}`;
-        this._http.post(url,{})
-            .subscribe((dailyBatch: any) => { 
-                if (dailyBatch.status == "Processing" || dailyBatch.status == "Processed"){
-                this.hide();
-                console.log('end batch')
-                }
-            });
-      }
+    // execStoreProc() {
+    //     console.log('start batch')
+    //     var url = `${this._apiUrl}${ApiControllers.ExecStoreProc}`;
+    //     this._http.post(url,{})
+    //         .subscribe((dailyBatch: any) => { 
+    //             if (dailyBatch.status == "Processing" || dailyBatch.status == "Processed"){
+    //             this.hide();
+    //             console.log('end batch')
+    //             }
+    //         });
+    //   }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods

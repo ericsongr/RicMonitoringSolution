@@ -18,6 +18,7 @@ export class RenterDetail {
     totalPaidAmount       : number;
     balanceAmount         : number;
     balancePaidDate       : string;
+    base64                : string;
     handle                : string;
     
     constructor(renter?) {
@@ -38,6 +39,7 @@ export class RenterDetail {
         this.totalPaidAmount = renter.totalPaidAmount || 0;
         this.balanceAmount = renter.balanceAmount;
         this.balancePaidDate = renter.balancePaidDate;
+        this.base64 = renter.base64;
         this.handle = renter.handle || FuseUtils.handleize(this.name);
     }
 

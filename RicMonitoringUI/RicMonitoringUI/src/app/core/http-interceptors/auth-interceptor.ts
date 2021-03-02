@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         // Clone the request and replace the original headers with
         // cloned headers, updated with the authorization.
-        const authReq = req.clone({
+        let authReq = req.clone({
             setHeaders: {
                 'Authorization': 'bearer ' + authToken,
                 'Content-Type': 'application/json',
@@ -36,6 +36,16 @@ export class AuthInterceptor implements HttpInterceptor {
             }
         });
 
+        //change header when upload image
+        if (req.url.indexOf("renter-file-upload/web") > 0) {
+            authReq = req.clone({
+                setHeaders: {
+                    'Authorization': 'bearer ' + authToken,
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+        }
+        
         // send cloned request with header to the next handler.
         return next.handle(authReq).pipe(
             catchError(err => {
