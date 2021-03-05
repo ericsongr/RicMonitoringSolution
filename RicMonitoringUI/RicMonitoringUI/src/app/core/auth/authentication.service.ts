@@ -12,6 +12,7 @@ import { Credential } from './credential';
 import { AccessData } from './access-data';
 import { IPayload, Payload } from '../models/payload.model';
 import { ApiPortalRoutes } from 'environments/app.constants';
+import { ResetPasswordModel } from '../models/reset-password.model';
 
 @Injectable()
 export class AuthenticationService implements AuthService, OnDestroy {
@@ -112,6 +113,28 @@ export class AuthenticationService implements AuthService, OnDestroy {
 			catchError(this.handleError('login', []))
 		);
 	}
+
+
+	public forgotPassword(email) {
+		return new Promise((resolve, reject) => {
+			this.http.post<any>(this._authUrl + ApiPortalRoutes.forgotPassword, email)
+			.subscribe((response: any) => {
+				resolve(response);
+			}, reject)
+		});
+		
+	}
+
+	public resetPassword(data) {
+		return new Promise((resolve, reject) => {
+			this.http.post<any>(this._authUrl + ApiPortalRoutes.resetPassword, data)
+			.subscribe((response: any) => {
+				resolve(response);
+			}, reject)
+		});
+		
+	}
+
 
     /**
 	 * Handle Http operation that failed.

@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
+import { AuthenticationService } from 'app/core/auth/authentication.service';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
     selector     : 'forgot-password',
@@ -14,7 +17,7 @@ import { fuseAnimations } from '@fuse/animations';
 export class ForgotPasswordComponent implements OnInit
 {
     forgotPasswordForm: FormGroup;
-
+    isSending: boolean;
     /**
      * Constructor
      *
@@ -23,7 +26,10 @@ export class ForgotPasswordComponent implements OnInit
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _authService: AuthenticationService,
+        private _snackBar: MatSnackBar,
+        private _router: Router
     )
     {
         // Configure the layout
@@ -45,6 +51,33 @@ export class ForgotPasswordComponent implements OnInit
         };
     }
 
+    forgotPassword() {
+        this.isSending = true;
+
+        var message = ""
+        const email = this.forgotPasswordForm.getRawValue();
+        this._authService.forgotPassword(email)
+            .then((response: any) => {
+                if (response.errors.message) {
+                    
+                    message = response.errors.message;
+                    
+                } else  {
+                    message = response.payload;
+
+                    setTimeout(() => {
+                        this.isSending = false;
+                        this._router.navigate(['/'])
+                    }, 3000);
+                }
+
+                this._snackBar.open(message, 'OK', {
+                    verticalPosition  : 'top',
+                    duration          : 2000
+                });
+                
+            })
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------

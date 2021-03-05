@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
-using RicAuthJwtServer.Application;
 using RicAuthJwtServer.Application.Interfaces;
+using RicAuthJwtServer.Data.Extensions;
+using RicAuthJwtServer.Data.Services;
 using RicAuthJwtServer.Infrastructure;
 using RicCommon.Diagnostics;
 using RicMonitoringAPI.Common.Model;
@@ -26,12 +28,14 @@ namespace RicAuthJwtServer.Controllers
     [AllowAnonymous]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IRegisteredDeviceService _registeredDeviceService;
         private readonly IAspNetUserLoginTokenService _aspNetUserLoginTokenService;
+        private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _config;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -39,23 +43,27 @@ namespace RicAuthJwtServer.Controllers
             IConfiguration configuration,
             IRefreshTokenService refreshTokenService,
             IRegisteredDeviceService registeredDeviceService,
-            IAspNetUserLoginTokenService aspNetUserLoginTokenService
+            IAspNetUserLoginTokenService aspNetUserLoginTokenService,
+            IEmailSender emailSender,
+            IConfiguration config
             )
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _configuration = configuration;
 
             _refreshTokenService = refreshTokenService ?? throw new ArgumentNullException(nameof(refreshTokenService));
             _registeredDeviceService = registeredDeviceService ?? throw new ArgumentNullException(nameof(registeredDeviceService));
             _aspNetUserLoginTokenService = aspNetUserLoginTokenService ?? throw new ArgumentNullException(nameof(aspNetUserLoginTokenService));
+            _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExist = await userManager.FindByNameAsync(model.UserName);
+            var userExist = await _userManager.FindByNameAsync(model.UserName);
             if (userExist != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists" });
 
@@ -68,7 +76,7 @@ namespace RicAuthJwtServer.Controllers
                 LastName = model.LastName,
             };
 
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed." });
@@ -81,7 +89,7 @@ namespace RicAuthJwtServer.Controllers
         [Route("RegisterAdmin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            var userExist = await userManager.FindByNameAsync(model.UserName);
+            var userExist = await _userManager.FindByNameAsync(model.UserName);
             if (userExist != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists" });
 
@@ -94,23 +102,23 @@ namespace RicAuthJwtServer.Controllers
                 LastName = model.LastName,
             };
 
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed." });
             }
 
-            if (!await roleManager.RoleExistsAsync(UserRoles.Administrator))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.Administrator));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Administrator))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Administrator));
 
-            if (!await roleManager.RoleExistsAsync(UserRoles.Superuser))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.Superuser));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Superuser))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Superuser));
 
-            if (!await roleManager.RoleExistsAsync(UserRoles.Staff))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.Staff));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Staff))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Staff));
 
-            if (await roleManager.RoleExistsAsync(UserRoles.Administrator))
-                await userManager.AddToRoleAsync(user, UserRoles.Administrator);
+            if (await _roleManager.RoleExistsAsync(UserRoles.Administrator))
+                await _userManager.AddToRoleAsync(user, UserRoles.Administrator);
 
 
             return Ok(new Response { Status = "Success", Message = "User created successfully." });
@@ -120,14 +128,14 @@ namespace RicAuthJwtServer.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginInputModel loginUser)
         {
-            var loginUserResult = await userManager.FindByNameAsync(loginUser.Username);
+            var loginUserResult = await _userManager.FindByNameAsync(loginUser.Username);
             if (loginUserResult == null)
             {
                 string errorMessage = $"The user name is incorrect - {loginUser.Username}";
                 return Ok(HandleApiException(errorMessage, HttpStatusCode.BadRequest));
             }
 
-            if (loginUserResult != null && await userManager.CheckPasswordAsync(loginUserResult, loginUser.Password))
+            if (loginUserResult != null && await _userManager.CheckPasswordAsync(loginUserResult, loginUser.Password))
             {
                 if (!string.IsNullOrEmpty(loginUser.DeviceId))
                 {
@@ -144,7 +152,7 @@ namespace RicAuthJwtServer.Controllers
                 }
 
                 var role = "";
-                var userRoles = await userManager.GetRolesAsync(loginUserResult);
+                var userRoles = await _userManager.GetRolesAsync(loginUserResult);
                 foreach (var userRole in userRoles)
                     role = userRole;
                 
@@ -201,7 +209,7 @@ namespace RicAuthJwtServer.Controllers
                     return Ok(HandleApiException("Refresh token is invalid or had expired.", HttpStatusCode.BadRequest));
                 }
 
-                var user = userManager.FindByIdAsync(validatedToken.UserId).GetAwaiter().GetResult();
+                var user = _userManager.FindByIdAsync(validatedToken.UserId).GetAwaiter().GetResult();
                 if (user == null)
                 {
                     var message = $"User Id does not exists {validatedToken.UserId}";
@@ -221,7 +229,7 @@ namespace RicAuthJwtServer.Controllers
                 }
 
                 var role = "";
-                var userRoles = userManager.GetRolesAsync(user).GetAwaiter().GetResult();
+                var userRoles = _userManager.GetRolesAsync(user).GetAwaiter().GetResult();
                 foreach (var userRole in userRoles)
                     role = userRole;
 
@@ -261,6 +269,83 @@ namespace RicAuthJwtServer.Controllers
             }
         }
 
+        #region Forgot & Reset Password
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (model.Password != model.PasswordConfirm)
+            {
+                return Ok(HandleApiException("The password and confirm password do not match.", HttpStatusCode.BadRequest));
+            }
+
+            var user = _userManager.FindByEmailAsync(model.Email).GetAwaiter().GetResult();
+            if (user == null)
+            {
+                return Ok(HandleApiException("Please verify you email, it seems not exists.", HttpStatusCode.BadRequest));
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "Your password has been reset.",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+            }
+            else
+            {
+                var errors = new StringBuilder();
+                foreach (var error in result.Errors)
+                    errors.AppendLine(error.Description);
+
+                //something wrong if still continue to this line
+                return Ok(HandleApiException(errors.ToString(), HttpStatusCode.BadRequest)); 
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return Ok(HandleApiException("Email does not exists.", HttpStatusCode.BadRequest));
+                }
+
+                var host = _config.GetValue<string>("ClientUrl");
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Email, token, Request.Scheme, host);
+                await _emailSender.SendResetPasswordAsync(model.Email, callbackUrl);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "Password reset link has been sent to you email.",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
+            #endregion
+
         #region Helpers
 
         private BaseRestApiModel HandleApiException(string message, HttpStatusCode httpStatusCode)
@@ -288,7 +373,7 @@ namespace RicAuthJwtServer.Controllers
             _aspNetUserLoginTokenService.Delete(user.Id);
             if (user != null)
             {
-                var result = userManager.DeleteAsync(user).Result;
+                var result = _userManager.DeleteAsync(user).Result;
             }
             return true;
         }
