@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { AuthComponent } from './auth.component';
-import { AuthRoutingModule } from './auth-routing.module';
+import { AuthComponent } from './auth2.component';
+import { AuthRoutingModule } from './auth2-routing.module';
 
 @NgModule({
   declarations: [AuthComponent],
@@ -9,4 +9,4 @@ import { AuthRoutingModule } from './auth-routing.module';
   ],
   exports: [AuthComponent]
 })
-export class AuthModule { }
+export class Auth2Module { }

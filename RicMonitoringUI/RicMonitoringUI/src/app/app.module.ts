@@ -70,11 +70,11 @@ const appRoutes: Routes = [
 			}
         }
     },
-    // {
-    //   path          : 'auth',
-    //   outlet        : 'dialog',
-    //   loadChildren  : () => import('./main/apps/administrator/auth/auth.module').then(m => m.AuthModule) //'./main/apps/administrator/auth/change-password'
-    // },
+    {
+      path          : 'auth2',
+      outlet        : 'dialog',
+      loadChildren  : () => import('./main/apps/administrator/auth2/auth2.module').then(m => m.Auth2Module) //'./main/apps/administrator/auth/change-password'
+    },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'forbidden', component: UnauthorizedComponent },
 

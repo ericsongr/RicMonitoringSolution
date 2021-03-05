@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiPortalRoutes } from 'environments/app.constants';
 // import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable()
@@ -12,7 +13,6 @@ export class UsersService implements Resolve<any> {
   onUsersChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
-    // private _oidcSecurityService: OidcSecurityService, //TODO: _oidcSecurityService
     private _httpClient: HttpClient,
     @Inject('AUTH_URL') private authUrl: string)  
   { 
@@ -31,13 +31,9 @@ export class UsersService implements Resolve<any> {
 
   changePassword(formData) {
 
-    var url = `${this.authUrl}/api/${ApiControllers.Account}/change-password`;
-    var httpHeaders = this.getHeaders();
-    
-    this._httpClient.post(url, formData, {headers: httpHeaders} )
-
+    var url = `${this.authUrl}${ApiPortalRoutes.changePassword}`;
     return new Promise((resolve, reject) => {
-      this._httpClient.post(url, formData, {headers: httpHeaders} )
+      this._httpClient.post(url, formData)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

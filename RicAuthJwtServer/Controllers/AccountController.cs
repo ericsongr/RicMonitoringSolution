@@ -155,7 +155,7 @@ namespace RicAuthJwtServer.Controllers
                 var userRoles = await _userManager.GetRolesAsync(loginUserResult);
                 foreach (var userRole in userRoles)
                     role = userRole;
-                
+
                 var issuer = _configuration["JWT:ValidIssuer"];
                 var audienceId = _configuration["JWT:ValidAudience"];
                 var secret = _configuration["JWT:Secret"];
@@ -172,6 +172,7 @@ namespace RicAuthJwtServer.Controllers
                     Payload = new
                     {
                         userId = loginUserResult.Id,
+                        username = loginUser.Username,
                         name,
                         role,
                         accessToken,
@@ -179,7 +180,7 @@ namespace RicAuthJwtServer.Controllers
                         refreshToken = refreshToken.FirstOrDefault().Key,
                         refreshTokenExpiresIn = refreshToken.First().Value,
                         loginToken
-                        
+
                     },
                     Errors = new List<BaseErrorModel>(),
                     StatusCode = (int)HttpStatusCode.OK
@@ -299,14 +300,14 @@ namespace RicAuthJwtServer.Controllers
             }
             else
             {
-                var errors = new StringBuilder();
-                foreach (var error in result.Errors)
-                    errors.AppendLine(error.Description);
+                var errors = ShowErrors(result);
 
                 //something wrong if still continue to this line
-                return Ok(HandleApiException(errors.ToString(), HttpStatusCode.BadRequest)); 
+                return Ok(HandleApiException(errors, HttpStatusCode.BadRequest));
             }
         }
+
+        
 
         [HttpPost]
         [AllowAnonymous]
@@ -344,7 +345,36 @@ namespace RicAuthJwtServer.Controllers
 
         }
 
-            #endregion
+        [Authorize(Roles = "AllRoles")]
+        [HttpPost("change-password", Name = "ChangePassword")]
+        public IActionResult ChangePassword([FromBody] UserChangePasswordViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var userModel = _userManager.FindByNameAsync(user.Username).GetAwaiter().GetResult();
+                if (userModel != null)
+                {
+                    var result = _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.Password).GetAwaiter().GetResult();
+                    if (!result.Succeeded)
+                        return Ok(HandleApiException(ShowErrors(result), HttpStatusCode.BadRequest));
+                }
+                else
+                    return Ok(HandleApiException("Username does not exists.", HttpStatusCode.NotFound));
+            }
+            else
+            {
+                return Ok(HandleApiException("Invalid form values. Please verify.", HttpStatusCode.NotFound));
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = "Password has been changed.",
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        #endregion
 
         #region Helpers
 
@@ -365,6 +395,14 @@ namespace RicAuthJwtServer.Controllers
         #endregion
 
         #region Private Functions
+
+        private string ShowErrors(IdentityResult result)
+        {
+            var errors = new StringBuilder();
+            foreach (var error in result.Errors)
+                errors.AppendLine(error.Description);
+            return errors.ToString();
+        }
 
         private bool DeleteMember(ApplicationUser user)
         {

@@ -37,7 +37,8 @@ import { MatSnackBarModule } from '@angular/material';
     LoginComponent,
     RegisterComponent,
     ResetPasswordComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
   ],
   providers: [
     AuthenticationService
