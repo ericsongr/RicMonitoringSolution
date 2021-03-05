@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RicAuthServer.Extensions
+namespace RicAuthJwtServer.Data.Extensions
 {
     public static class UrlHelperExtensions
     {
@@ -27,11 +23,9 @@ namespace RicAuthServer.Extensions
                 protocol: scheme);
         }
 
-        public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string email, string code, string scheme)
+        public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string email, string code, string scheme, string host)
         {
-            
-            return urlHelper.ActionLink(
-                "ResetPassword", "Account", values: new {code, email}, protocol:scheme);
+            return urlHelper.ActionLink("ResetPassword", "Auth", values: new { code, email }, protocol: scheme, host: host);
         }
     }
 }

@@ -17,6 +17,7 @@ using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
 using RicAuthJwtServer.Data.Persistence.Repositories;
+using RicAuthJwtServer.Data.Services;
 using RicMonitoringAPI.Common.Validators;
 
 namespace RicAuthJwtServer
@@ -45,6 +46,8 @@ namespace RicAuthJwtServer
             services.AddTransient<IAspNetUserLoginTokenService, AspNetUserLoginTokenService>();
             services.AddTransient<IRefreshTokenService, RefreshTokenService>();
             services.AddTransient<IRegisteredDeviceService, RegisteredDeviceService>();
+            
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
