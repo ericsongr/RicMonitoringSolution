@@ -91,6 +91,7 @@ namespace RicAuthJwtServer
             {
                 config.AddPolicy("SuperAndAdmin", policy => policy.RequireRole("Superuser", "Administrator"));
                 config.AddPolicy("ProcessTenantsTransaction", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
+                config.AddPolicy("AllRoles", policy => policy.RequireRole("Superuser", "Administrator", "Staff"));
                 config.AddPolicy("Admin", policy => policy.RequireRole("Administrator"));
             });
 

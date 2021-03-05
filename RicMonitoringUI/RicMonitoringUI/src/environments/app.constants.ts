@@ -6,6 +6,7 @@ export const ApiPortalRoutes = {
     searchCompanyClub: '/account/get-clubs-by-company',
     forgotPassword: '/account/forgot-password', 
     resetPassword: '/account/reset-password',
+    changePassword: '/account/change-password',
     searchCompanyByCode: '/account/get-company',
     auth: '/account/auth-v2',
 };

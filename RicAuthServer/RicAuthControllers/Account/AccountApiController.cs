@@ -147,31 +147,6 @@ namespace RicAuthServer.RicAuthControllers.Account
                 return Ok(HandleApiException(result.ShowErrors(), HttpStatusCode.BadRequest));
         }
 
-        //[Authorize(Roles = "Staff,Administrator,Superuser")]
-        [HttpPost("change-password", Name = "ChangePassword")]
-        public IActionResult ChangePassword([FromBody]UserChangePasswordViewModel user)
-        {
-            if (ModelState.IsValid)
-            {
-                var userModel = _userManager.FindByNameAsync(user.Username).GetAwaiter().GetResult();
-                if (userModel != null)
-                {
-                    var result = _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.Password).GetAwaiter().GetResult();
-                    if (!result.Succeeded)
-                    {
-                        return Ok(HandleApiException(result.ShowErrors(), HttpStatusCode.BadRequest));
-                    }
-                       
-                }
-                else
-                    return Ok(HandleApiException("Username does not exists.", HttpStatusCode.NotFound));
-            }
-            else
-            {
-                //TODO: error trapping
-            }
-
-            return Ok(HandleApiSuccess("Password has been changed."));
-        }
+        
     }
 }
