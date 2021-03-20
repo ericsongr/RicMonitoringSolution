@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using RicCommon;
+using RicCommon.Enumeration;
+using RicCommon.Services;
 using RicEntityFramework;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.RoomRent.Interfaces;
@@ -16,6 +19,7 @@ using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.Common.Model;
+using RicMonitoringAPI.Infrastructure.Extensions;
 using Serilog;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -35,6 +39,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRentTransactionDetailRepository _rentTransactionDetailRepository;
         private readonly IRentArrearRepository _rentArrearRepository;
         private readonly ISettingRepository _settingRepository;
+        private readonly IEmailSender _emailSender;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -44,7 +49,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionRepository rentTransactionRepository,
             IRentTransactionDetailRepository rentTransactionDetailRepository,
             IRentArrearRepository rentArrearRepository,
-            ISettingRepository settingRepository
+            ISettingRepository settingRepository,
+            IEmailSender emailSender
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -55,6 +61,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionDetailRepository = rentTransactionDetailRepository ?? throw new ArgumentNullException(nameof(rentTransactionDetailRepository));
             _rentArrearRepository = rentArrearRepository ?? throw new ArgumentNullException(nameof(rentArrearRepository));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+            _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         [HttpGet]
@@ -82,9 +89,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         public IActionResult GetDailyBatch([FromQuery] string fields)
         {
             var dailyBatch = _monthlyRentBatchRepository.FindAll()
-                .OrderByDescending(o =>  o.ProcessStartDateTime);
+                .OrderByDescending(o => o.ProcessStartDateTime);
 
-            var dto = Mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch); 
+            var dto = Mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch);
 
             return Ok(new BaseRestApiModel
             {
@@ -100,6 +107,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
             //var status = DailyBatchStatusConstant.Processed;
+
+            SendEmailRentersBeforeDueDate(currentDateTimeUtc);
+
             return Ok(new { status });
         }
 
@@ -117,6 +127,55 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         //    return Ok("Completed");
         //}
+
+        #region MyRegion SendEmailRentersBeforeDueDate
+
+        private void SendEmailRentersBeforeDueDate(DateTime currentDateTimeUtc)
+        {
+            var appEmailRenterBeforeDueDateEnable = _settingRepository.GetBooleanValue(SettingNameEnum.AppEmailRenterBeforeDueDateEnable);
+            var appEmailRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppEmailRenterNoOfDaysBeforeDueDate);
+            var emailBody = _settingRepository.GetValue(SettingNameEnum.AppEmailMessageRenterBeforeDueDate);
+
+            var selectedDate = currentDateTimeUtc.Date.AddDays(appEmailRenterNoOfDaysBeforeDueDate);
+
+            if (appEmailRenterBeforeDueDateEnable)
+            {
+                var transactions = _rentTransactionRepository
+                    .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
+                                 o.DueDate == selectedDate &&
+                                 o.PaidAmount == 0 &&
+                                 !o.IsSystemProcessed, o => o.Renter)
+                    .ToList();
+
+                transactions.ForEach(transaction =>
+                {
+                    var email = transaction.Renter.Email;
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        var replacementObject = CreateReplacementObject(transaction);
+                        var replaceEmailBody = Templater.ReplaceText(emailBody, replacementObject);
+
+                        _emailSender.SendDueReminderEmailAsync(email, replaceEmailBody);
+                    }
+                });
+            }
+
+        }
+
+        private object CreateReplacementObject(RentTransaction transaction)
+        {
+            return new
+            {
+                transaction.Renter.Name,
+                DueDate = transaction.DueDate.ToString("dd-MMM-yyyy"),
+                transaction.Period
+            };
+        }
+
+        #endregion
+        /// <summary>
+        /// This api use to send email notification before renter due date
+        /// </summary>
 
 
         private string ProcessRentTransactionBatchFile(DateTime currentDateTimeUtc)
