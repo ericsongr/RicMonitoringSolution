@@ -135,6 +135,7 @@ GO
 CREATE TABLE [dbo].[Renters](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
+	[Email] NVARCHAR(50) NULL,
 	[AdvanceMonths] [int] NOT NULL,
 	[AdvancePaidDate] [datetime2](7) NOT NULL,
 	[StartDate] [datetime2](7) NOT NULL,
@@ -149,6 +150,7 @@ CREATE TABLE [dbo].[Renters](
 	[DueDay] [int] NOT NULL DEFAULT ((0)),
 	[NextDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[PreviousDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
+	[EmailRenterBeforeDueDateEnable] BIT NOT NULL DEFAULT(0),
  CONSTRAINT [PK_Renters] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -19,6 +19,10 @@ namespace RicModel.RoomRent
         public DateTime StartDate { get; set; }
         public int DueDay { get; set; }
         public bool IsEndRent { get; set; }
+
+        public string Email { get; set; }
+        public bool EmailRenterBeforeDueDateEnable { get; set; }
+        
         public DateTime? DateEndRent { get; set; }
         public int NoOfPersons { get; set; }
         public int RoomId { get; set; }

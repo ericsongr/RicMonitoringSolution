@@ -7,6 +7,9 @@
         AmazonS3BucketName,
         EnableAmazonS3,
         AmazonS3AccessKey,
-        AmazonS3SecretKey
+        AmazonS3SecretKey,
+        AppEmailRenterBeforeDueDateEnable,
+        AppEmailRenterNoOfDaysBeforeDueDate,
+        AppEmailMessageRenterBeforeDueDate,
     }
 }

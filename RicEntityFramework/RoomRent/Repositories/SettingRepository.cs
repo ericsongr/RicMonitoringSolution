@@ -25,5 +25,16 @@ namespace RicEntityFramework.RoomRent.Repositories
         {
             return Get(settingName).Value;
         }
+
+        public bool GetBooleanValue(SettingNameEnum settingName)
+        {
+            return bool.Parse(Get(settingName).Value);
+        }
+
+        public int GetIntValue(SettingNameEnum settingName)
+        {
+            return int.Parse(Get(settingName).Value);
+        }
+
     }
 }

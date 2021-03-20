@@ -9,6 +9,8 @@ namespace RicEntityFramework.RoomRent.Interfaces
 
         Setting Get(SettingNameEnum settingName);
         string GetValue(SettingNameEnum settingName);
+        bool GetBooleanValue(SettingNameEnum settingName);
+        int GetIntValue(SettingNameEnum settingName);
     }
 
 }

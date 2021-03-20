@@ -77,8 +77,11 @@
 
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
-		<Folder Include="Infrastructure\" />
 		<Folder Include="Resources\Images\Rooms\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RicCommon\RicCommon.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

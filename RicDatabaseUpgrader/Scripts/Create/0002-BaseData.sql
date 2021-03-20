@@ -21,3 +21,7 @@ INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AmazonS3B
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('EnableAmazonS3', 'True', 'Enable Amazon S3')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AmazonS3AccessKey', 'AKIAINLQSISTD3SORLVA', 'AmazonS3 Access Key')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AmazonS3SecretKey', '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', 'AmazonS3 Secret Key')
+
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailRenterBeforeDueDateEnable', 'True', 'Enable Email Renter before due date')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailRenterNoOfDaysBeforeDueDate', '2', 'Email Renter # of days before due date')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailMessageRenterBeforeDueDate', 'Hi {FirstName}', 'Email Body')

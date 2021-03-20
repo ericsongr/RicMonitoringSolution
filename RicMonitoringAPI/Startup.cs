@@ -23,6 +23,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using RicCommon.Services;
 using RicEntityFramework;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Interfaces.PropertyMappings;
@@ -89,6 +90,8 @@ namespace RicMonitoringAPI
 
                 return new UrlHelper(actionContext);
             });
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
             services.AddTransient<IRoomPropertyMappingService, RoomPropertyMappingService>();
