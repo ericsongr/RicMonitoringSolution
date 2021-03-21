@@ -92,6 +92,7 @@ $typography: mat-typography-config(
 @import "src/app/main/apps/auth/reset-password/reset-password.theme";
 
 //administrator
+@import "src/app/main/apps/administrator/accounts/accounts.theme";
 @import "src/app/main/apps/administrator/users/users.theme";
 @import "src/app/main/apps/administrator/daily-batch/daily-batch.theme";
 
@@ -119,7 +120,7 @@ $typography: mat-typography-config(
     //administrator
     // @include page-users-theme($theme);
     @include page-daily-batch-theme($theme);
-    
+    @include page-accounts-theme($theme);
     @include unauthorized-theme($theme);
 
 }

@@ -1,6 +1,6 @@
 export const environment = {
-    production: true,
+    production: false,
     hmr       : false,
-    // webApi    : "https://localhost:5001/api/"
-    webApi    : "https://tenants-api.ericsonramos.com/api/"
+    webApi    : "https://localhost:5001/api/"
+    // webApi    : "https://tenants-api.ericsonramos.com/api/"
 };

@@ -1,0 +1,167 @@
+<div id="account" class="page-layout carded fullwidth inner-scroll" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="row"  fxLayoutAlign="space-between center">
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/administrator/accounts'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="account-image mr-8 mr-sm-16" [@animate]="{value:'*', params:{delay:'50ms', scale:'0.2'}}">
+          <img [src]="'assets/images/avatars/profile.jpg'">
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start start"
+           [@animate]="{value:'*',params:{delay:'100ms', x:'-25px'}}">
+          <div class="h2" *ngIf="pageType === 'edit'">
+            {{account.name}}
+          </div>
+          <div class="h2" *ngIf="pageType === 'new'">
+            New Account
+          </div>
+          <div class="subtitle secondary-text">
+            <span>Account Detail</span>
+          </div>
+        </div>
+      </div>
+      <!-- /APP TITLE -->
+
+      <button mat-raised-button 
+              class="save-account-button mat-white-bg mt-16 mt-sm-0"
+              [disabled]="accountForm.invalid"
+              *ngIf="pageType === 'add'" (click)="add()">
+        <span>ADD</span>
+      </button>
+
+      <button mat-raised-button 
+              class="save-account mat-white-bg mt-16 mt-sm-0"
+              [disabled]="accountForm.invalid || accountForm.pristine"
+              *ngIf="pageType === 'edit'" (click)="save()">
+        <span>SAVE</span>
+      </button>
+    </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+
+        <!-- CONTENT -->
+        <div class="content">
+
+          <form name="accountForm" [formGroup]="accountForm" class="account w-100-p" fxLayout="column" fxFlex>
+            <div class="tab-content p-24" fusePerfectScrollbar>
+              <div>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Name</mat-label>
+                  <input matInput
+                        name="name"
+                        formControlName="name"
+                        required>
+                        <show-errors [control]="accountForm.controls.name"></show-errors>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Lookup</mat-label>
+                  <input matInput
+                        name="lookup"
+                        formControlName="lookup"
+                        required>
+                        <show-errors [control]="accountForm.controls.lookup"></show-errors>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Timezone</mat-label>
+                  <input matInput
+                        name="timezone"
+                        formControlName="timezone"
+                        required>
+                        <show-errors [control]="accountForm.controls.timezone"></show-errors>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Street</mat-label>
+                  <input matInput
+                        name="street"
+                        formControlName="street"
+                        required>
+                        <show-errors [control]="accountForm.controls.street"></show-errors>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <div class="pl-20" fxFlex="50" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h5 secondary-text">Is Active</div>
+                  <div class="h2 font-weight-300 py-8">
+                    <mat-radio-group formControlName="isActive">
+                      <mat-radio-button [checked]="account.isActive" value="true">Yes</mat-radio-button>
+                      <mat-radio-button [checked]="!account.isActive" value="false">No</mat-radio-button>
+                  </mat-radio-group>
+                  </div>
+              </div>
+               
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Suburb</mat-label>
+                  <input matInput
+                        name="subUrb"
+                        formControlName="subUrb"
+                        required>
+                        <show-errors [control]="accountForm.controls.subUrb"></show-errors>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Email</mat-label>
+                  <input matInput
+                        name="email"
+                        formControlName="email"
+                        required>
+                        <show-errors [control]="accountForm.controls.email"></show-errors>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>State</mat-label>
+                  <input matInput
+                        name="state"
+                        formControlName="state"
+                        required>
+                        <show-errors [control]="accountForm.controls.state"></show-errors>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput
+                        name="phoneNumber"
+                        formControlName="phoneNumber"
+                        required>
+                        <show-errors [control]="accountForm.controls.phoneNumber"></show-errors>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label>Postal Code</mat-label>
+                  <input matInput
+                        name="postalCode"
+                        formControlName="postalCode"
+                        required>
+                        <show-errors [control]="accountForm.controls.postalCode"></show-errors>
+                </mat-form-field>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+      </div>
+  </div>
+
+</div>

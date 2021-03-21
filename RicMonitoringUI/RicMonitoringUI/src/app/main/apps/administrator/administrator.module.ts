@@ -10,10 +10,35 @@ import { DailyBatchComponent } from './daily-batch/daily-batch.component';
 import { DailyBatchService } from './daily-batch/daily-batch.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/core/http-interceptors/auth-interceptor';
+import { AccountsComponent } from './accounts/accounts.component';
+import { AccountsService } from './accounts/accounts.service';
+import { AccountComponent } from './account/account.component';
+import { AccountService } from './account/account.service';
 
 const routes : Routes = [
   {
-    path          : 'daily-batch',
+    path      : 'accounts',
+    component : AccountsComponent,
+    resolve: {
+      data: AccountsService
+    }
+  },
+  {
+    path      : 'account/:id',
+    component : AccountComponent,
+    resolve: {
+      data: AccountService
+    }
+  },
+  {
+    path      : 'account/:id/:handle',
+    component : AccountComponent,
+    resolve: {
+      data: AccountService
+    }
+  },
+  {
+    path      : 'daily-batch',
     component : DailyBatchComponent,
     resolve: {
       data: DailyBatchService
@@ -32,10 +57,14 @@ const routes : Routes = [
   ],
   declarations: [
     AdministratorShowErrorsComponent,
+    AccountComponent,
+    AccountsComponent,
     DailyBatchComponent
   ],
   providers: [
     DailyBatchService,
+    AccountService,
+    AccountsService,
     {
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,
