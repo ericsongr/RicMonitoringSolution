@@ -65,6 +65,7 @@ namespace RicMonitoringAPI
             services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
 
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRenterRepository, RenterRepository>();
@@ -77,6 +78,8 @@ namespace RicMonitoringAPI
             services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
             services.AddScoped<IMobileAppLogRepository, MobileAppLogRepository>();
 
+
+            services.AddScoped<IAuditAccountRepository, AuditAccountRepository>();
             services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
             services.AddScoped<IAuditRoomRepository, AuditRoomRepository>();
             services.AddScoped<IAuditRentTransactionRepository, AuditRentTransactionRepository>();
@@ -100,7 +103,9 @@ namespace RicMonitoringAPI
             services.AddTransient<ILookupTypePropertyMappingService, LookupTypePropertyMappingService>();
             services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
             services.AddTransient<IRentTransactionHistoryPropertyMappingService, RentTransactionHistoryPropertyMappingService>();
-            
+
+            services.AddTransient<IAccountPropertyMappingService, AccountPropertyMappingService>();
+
             services.AddTransient<IAuditRenterPropertyMappingService, AuditRenterPropertyMappingService>();
             services.AddTransient<IAuditRoomPropertyMappingService, AuditRoomPropertyMappingService>();
             services.AddTransient<IAuditRentTransactionPropertyMappingService, AuditRentTransactionPropertyMappingService>();
@@ -121,6 +126,7 @@ namespace RicMonitoringAPI
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
+                        .Map<Account, AuditAccount>()
                         .Map<Room, AuditRoom>()
                         .Map<Renter, AuditRenter>()
                         .Map<RentTransaction, AuditRentTransaction>()

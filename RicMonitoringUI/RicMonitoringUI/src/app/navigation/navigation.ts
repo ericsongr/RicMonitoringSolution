@@ -59,6 +59,13 @@ var navigationContainer: FuseNavigation[] = [
                 icon        : 'person',
                 children    : [
                     {
+                        id        : 'ACCOUNTS',
+                        title     : 'Accounts',
+                        type      : 'item',
+                        url       : '/administrator/accounts',
+                        exactMatch: true
+                    },
+                    {
                         id        : 'RENTAUDITS',
                         title     : 'Audits',
                         type      : 'item',

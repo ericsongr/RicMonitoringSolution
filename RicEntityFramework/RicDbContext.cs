@@ -15,7 +15,7 @@ namespace RicEntityFramework
             base(options)
         { }
 
-
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Renter> Renters { get; set; }
         public DbSet<RentTransaction> RentTransactions { get; set; }
@@ -34,13 +34,16 @@ namespace RicEntityFramework
         public DbSet<Setting> Settings { get; set; }
         public DbSet<RentTransactionPayment> RentTransactionPayments { get; set; }
 
+        public DbSet<MobileAppLog> MobileAppLogs { get; set; }
+
+        //Audit Tables
+        public DbSet<AuditAccount> AuditAccounts { get; set; }
         public DbSet<AuditRenter> AuditRenters { get; set; }
         public DbSet<AuditRoom> AuditRooms { get; set; }
         public DbSet<AuditRentTransaction> AuditRentTransactions { get; set; }
         public DbSet<AuditRentTransactionPayment> AuditRentTransactionPayments { get; set; }
 
-        public DbSet<MobileAppLog> MobileAppLogs { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //register all fluent api entity type configuration or inherited by IEntityTypeConfiguration

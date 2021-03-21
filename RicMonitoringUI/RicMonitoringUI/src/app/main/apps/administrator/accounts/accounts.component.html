@@ -1,0 +1,100 @@
+<div id="accounts" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+      <!-- HEADER -->
+      <div class="header accent"
+           fxLayout="column" fxLayoutAlign="center center"
+           fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+          <!-- APP TITLE -->
+          <div class="logo mb-24 mb-md-0"
+               fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                  shopping_basket
+              </mat-icon>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Accounts</span>
+          </div>
+          <!-- / APP TITLE -->
+
+          <!-- SEARCH -->
+          <div class="search-wrapper ml-sm-32">
+              <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                  <mat-icon>search</mat-icon>
+                  <input #filter placeholder="Search for account(s)">
+              </div>
+          </div>
+          <!-- / SEARCH -->
+
+          <!-- add new account -->
+          <button mat-raised-button
+                [routerLink]="'/administrator/account/new'"
+                class="add-account-button mat-white-bg my-12 mt-sm-0">
+            <span>ADD NEW ACCOUNT</span>
+          </button>
+          <!-- / add new account -->
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+
+          <mat-table class="accounts-table"
+                     #table [dataSource]="dataSource"
+                     matSort
+                     [@animateStagger]="{value:'50'}"
+                     fusePerfectScrollbar>
+
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                  <mat-cell *matCellDef="let account">
+                      <p class="text-truncate">{{account.id}}</p>
+                  </mat-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                  <mat-cell *matCellDef="let account">
+                      <p class="text-truncate">{{account.name}}</p>
+                  </mat-cell>
+              </ng-container>
+
+              <!-- IsActive# Column -->
+              <ng-container matColumnDef="isActive">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Active</mat-header-cell>
+                <mat-cell *matCellDef="let account">
+                  <div class="pl-20">
+                    <mat-icon *ngIf="account.isActive" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                    <mat-icon *ngIf="!account.isActive" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+            <mat-row *matRowDef="let account; columns: displayedColumns;"
+                    class="account"
+                    matRipple
+                    [routerLink]="'/administrator/account/' + account.id + '/' + handleize(account.name)">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator #paginator
+                         [hidden]="dataSource.filteredData.length < 10"
+                         [length]="dataSource.filteredData.length"
+                         [pageIndex]="0"
+                         [pageSize]="10"
+                         [pageSizeOptions]="[5, 10, 25, 100]">
+          </mat-paginator>
+
+      </div>
+      <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>
