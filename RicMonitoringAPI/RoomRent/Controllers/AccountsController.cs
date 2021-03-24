@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
@@ -13,6 +14,7 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
+using TimeZone = RicModel.RoomRent.TimeZone;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -25,15 +27,34 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IAccountRepository _accountRepository;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IAccountService _accountService;
 
         public AccountsController(RicDbContext context,
             IAccountRepository accountRepository,
             IUrlHelper urlHelper,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IAccountService accountService)
         {
             _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+        }
+
+        [HttpGet("time-zones")]
+        public async Task<IActionResult> GetTimeZonesInJson()
+        {
+            var timeZones = (from TimeZoneInfo tz in _accountService.SetupTimeZones()
+                select new TimeZone
+                {
+                    DisplayName = tz.DisplayName,
+                    Id = tz.Id
+                }).OrderBy(o => o.DisplayName).ToList();
+            
+            return Ok(new BaseRestApiModel
+            {
+                Payload = timeZones
+            });
         }
 
         [HttpGet("{id}", Name = "GetAccount")]
@@ -55,7 +76,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             return Ok(new BaseRestApiModel
             {
-                Payload = account.ShapeData(fields)
+                Payload = account.ShapeData(fields) 
             });
         }
 

@@ -11,6 +11,7 @@ export const ApiControllers = {
     ExecStoreProc           : "exec-store-proc",
 
     Accounts                : "accounts", // company accounts
+    TimeZones               : "time-zones", // company accounts
 
     Audits                  : "audits",
 

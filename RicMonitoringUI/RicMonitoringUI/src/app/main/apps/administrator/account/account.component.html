@@ -81,13 +81,20 @@
               </div>
 
               <div>
-                <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Timezone</mat-label>
-                  <input matInput
-                        name="timezone"
-                        formControlName="timezone"
-                        required>
-                        <show-errors [control]="accountForm.controls.timezone"></show-errors>
+                <mat-form-field appearance="outline" floatLabel="always" fxFlex="50">
+                  <mat-label>
+                    Timezone
+                  </mat-label>
+                  <mat-select formControlName="timezone" placeholder="[select one]" style="width:100%" name="timezone"
+                      [(ngModel)]="account.timezone"
+                    required>
+                    <mat-option *ngFor="let timezone of timeZones" 
+                      [value]="timezone.id" 
+                      ng-value="timezone.id">
+                      {{timezone.displayName}}
+                    </mat-option>
+                  </mat-select>
+                  <show-errors [control]="accountForm.controls.timezone"></show-errors>
                 </mat-form-field>
                 <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
                   <mat-label>Street</mat-label>
@@ -97,7 +104,7 @@
                         [(ngModel)]="account.street"
                         required>
                         <show-errors [control]="accountForm.controls.street"></show-errors>
-                </mat-form-field>
+                </mat-form-field> 
               </div>
 
               <div>

@@ -11,15 +11,19 @@ export class AccountService implements Resolve<any>
 {
 
   apiUrl: string;
+  apiTimeZoneUrl: string;
   routeParams: any;
   account: any;
+  timezones: any;
   onAccountChanged: BehaviorSubject<any> = new BehaviorSubject({});
+  onTimeZonesChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
     private _httpClient: HttpClient,
     @Inject('API_URL') private _apiUrl: string
   ) {
     this.apiUrl = `${_apiUrl}${ApiControllers.Accounts}/`;
+    this.apiTimeZoneUrl = `${_apiUrl}${ApiControllers.Accounts}/${ApiControllers.TimeZones}`;
    }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -27,10 +31,24 @@ export class AccountService implements Resolve<any>
 
     return new Promise((resolve, reject) => {
       Promise.all([
+        this.getTimeZones(),
         this.getAccount()
       ]).then(() => {
-        resolve();
+        resolve("");
       }, reject)
+    });
+  }
+
+  getTimeZones(): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this._httpClient.get(this.apiTimeZoneUrl)
+            .subscribe((response: any) => {
+                this.timezones = response.payload;
+                this.onTimeZonesChanged.next(this.timezones);
+                resolve(response);
+            }, reject);
+
     });
   }
 

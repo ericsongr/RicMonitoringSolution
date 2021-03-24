@@ -15,9 +15,11 @@ import { Location } from '@angular/common';
 export class AccountComponent implements OnInit, OnDestroy {
   
   account = new Account();
+  timeZones: any[];
   pageType: string;
   accountForm: FormGroup;
   onAccountChanged: Subscription;
+  onTimeZonesChanged: Subscription;
   
   address: string;
   postCode: string;
@@ -34,6 +36,14 @@ export class AccountComponent implements OnInit, OnDestroy {
     ) { }
     
     ngOnInit() {
+
+      this.onTimeZonesChanged =
+        this._accountService.onTimeZonesChanged
+            .subscribe(timeZones => {
+              this.timeZones = timeZones;
+              console.log('this.timeZones: ', this.timeZones);
+            });
+
       this.onAccountChanged =
         this._accountService.onAccountChanged
             .subscribe(account => {
@@ -182,5 +192,6 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.onAccountChanged.unsubscribe();
+    this.onTimeZonesChanged.unsubscribe();
   }
 }
