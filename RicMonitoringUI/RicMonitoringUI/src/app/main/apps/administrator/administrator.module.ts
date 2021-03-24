@@ -14,6 +14,7 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { AccountsService } from './accounts/accounts.service';
 import { AccountComponent } from './account/account.component';
 import { AccountService } from './account/account.service';
+import { GooglePlacesDirective } from '../common/directives/google-places.directive';
 
 const routes : Routes = [
   {
@@ -59,7 +60,8 @@ const routes : Routes = [
     AdministratorShowErrorsComponent,
     AccountComponent,
     AccountsComponent,
-    DailyBatchComponent
+    DailyBatchComponent,
+    GooglePlacesDirective
   ],
   providers: [
     DailyBatchService,
