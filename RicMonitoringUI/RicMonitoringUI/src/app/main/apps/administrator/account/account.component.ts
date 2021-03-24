@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Account } from './account.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
@@ -19,7 +19,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   accountForm: FormGroup;
   onAccountChanged: Subscription;
   
+  address: string;
+  postCode: string;
+  state: string;
+  suburb: string;
+  street: string;
+
   constructor(
+    private _zone: NgZone,
     private _accountService: AccountService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
@@ -32,6 +39,7 @@ export class AccountComponent implements OnInit, OnDestroy {
             .subscribe(account => {
               if(account) {
                 this.account = new Account(account);
+                this.account.lookup = `${this.account.street} ${this.account.subUrb} ${this.account.state} ${this.account.postalCode}`;
                 this.pageType = 'edit';
               } 
               else 
@@ -43,6 +51,19 @@ export class AccountComponent implements OnInit, OnDestroy {
 
               this.accountForm = this.createAccountForm();
             });
+    }
+
+    setAddress(addrObj) {
+
+      this._zone.run(() => {
+  
+        this.account.postalCode = addrObj.postal_code;
+        this.account.state = addrObj.admin_area_l1;
+        this.account.subUrb = addrObj.locality;
+        this.account.street = addrObj.street_number + ' ' + addrObj.route
+  
+        this.account.lookup = `${this.account.street} ${this.account.subUrb} ${this.account.state} ${this.account.postalCode}`;
+      });
     }
 
   createAccountForm(): FormGroup {

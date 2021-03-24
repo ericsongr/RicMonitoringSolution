@@ -64,6 +64,7 @@ namespace RicModel.RoomRent.Audits
 
         public string AuditAction { get; set; }
 
+        public virtual Account Account { get; set; }
 
         #region functions
 

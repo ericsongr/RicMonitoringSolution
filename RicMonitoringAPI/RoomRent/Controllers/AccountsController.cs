@@ -167,7 +167,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
             catch (System.Exception ex)
             {
-                return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
+                return Ok(HandleApiException(ex.Message + " InnerException: " + ex.InnerException.Message, HttpStatusCode.BadRequest));
             }
         }
 
