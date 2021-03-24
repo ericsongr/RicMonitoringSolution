@@ -17,7 +17,7 @@ var southWest = new google.maps.LatLng(7.247399919700606, 117.67668359374997),
                 componentForm,
                 options,
                 autocomplete;
-    debugger;
+    
   componentForm = {
     street_number: "short_name",
     route: "long_name",
