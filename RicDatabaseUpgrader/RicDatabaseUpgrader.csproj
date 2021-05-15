@@ -30,6 +30,7 @@
     <None Remove="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <None Remove="Scripts\Update\v1.0002\0004-account-module.sql" />
     <None Remove="Scripts\Update\v1.0002\0005-account-autocomplete-address.sql" />
+    <None Remove="Scripts\Update\v1.0002\0006-link rooms and renter on account.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +51,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-DbErrorLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0006-link rooms and renter on account.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0005-account-autocomplete-address.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0004-account-module.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />

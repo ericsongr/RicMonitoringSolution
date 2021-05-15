@@ -229,11 +229,17 @@ CREATE TABLE [dbo].[Renters](
 	[NextDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[PreviousDueDate] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 	[EmailRenterBeforeDueDateEnable] BIT NOT NULL DEFAULT(0),
+	[AccountId] INT NOT NULL, 
  CONSTRAINT [PK_Renters] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Renters]  WITH CHECK ADD  CONSTRAINT [FK_Renters_Accounts_Id] FOREIGN KEY(AccountId)
+REFERENCES [dbo].[Accounts] ([Id])
+ON DELETE CASCADE
 
 GO
 /****** Object:  Table [dbo].[RentTransactionDetails]    Script Date: 17/05/2020 11:19:48 AM ******/
@@ -293,11 +299,17 @@ CREATE TABLE [dbo].[Rooms](
 	[Name] [nvarchar](max) NULL,
 	[Frequency] [nvarchar](max) NULL,
 	[Price] [decimal](18, 2) NOT NULL,
+	[AccountId] INT NOT NULL,
  CONSTRAINT [PK_Rooms] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Rooms]  WITH CHECK ADD  CONSTRAINT [FK_Rooms_Accounts_Id] FOREIGN KEY(AccountId)
+REFERENCES [dbo].[Accounts] ([Id])
+ON DELETE CASCADE
 
 GO
 /****** Object:  Table [dbo].[Settings]    Script Date: 17/05/2020 11:19:48 AM ******/

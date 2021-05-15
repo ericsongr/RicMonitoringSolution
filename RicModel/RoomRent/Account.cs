@@ -58,6 +58,8 @@ namespace RicModel.RoomRent
         
         public DateTime? PaymentIssueSuspensionDate { get; set; }
 
+        public virtual ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<Renter> Renters { get; set; }
         public virtual ICollection<AuditAccount> AuditAccounts { get; set; }
 
         #region functions

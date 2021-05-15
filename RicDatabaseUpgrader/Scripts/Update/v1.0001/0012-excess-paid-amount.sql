@@ -48,6 +48,7 @@ END
 GO
 
 --INSERT OLD PAYMENT TRANSACTION
+IF EXISTS(SELECT 1 FROM RentTransactionPayments)
 BEGIN
 	insert into RentTransactionPayments
 			(RentTransactionId, DatePaid, Amount, PaymentTransactionType)

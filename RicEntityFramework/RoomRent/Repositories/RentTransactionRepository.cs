@@ -71,10 +71,10 @@ namespace RicEntityFramework.RoomRent.Repositories
             return transactions;
         }
 
-        public IQueryable<RentTransaction2> GetAllTransactions()
+        public IQueryable<RentTransaction2> GetAllTransactions(int accountId)
         {
             var transactions = _context.RentTransactions
-                                    .Where(o => !o.IsProcessed && !o.Renter.IsEndRent)
+                                    .Where(o => !o.IsProcessed && !o.Renter.IsEndRent && o.Renter.AccountId == accountId)
                                     .Include(o => o.Renter)
                                     .Include(o => o.Room)
                                     .Include(o => o.RentTransactionPayments)
@@ -102,7 +102,8 @@ namespace RicEntityFramework.RoomRent.Repositories
                                         Year = t.DueDate.Year,
                                         TransactionType = t.TransactionType,
                                         IsNoAdvanceDepositLeft = t.Renter.MonthsUsed >= t.Renter.AdvanceMonths,
-                                        IsProcessed = t.IsProcessed
+                                        IsProcessed = t.IsProcessed,
+                                        AccountId = t.Renter.AccountId,
                                     });
 
             return transactions;
@@ -110,9 +111,10 @@ namespace RicEntityFramework.RoomRent.Repositories
 
         public PagedList<RentTransaction2> GetRentTransactions(RentTransactionResourceParameters rentTransactionResourceParameters)
         {
-            var transactions = GetAllTransactions();
+            var transactions = GetAllTransactions(rentTransactionResourceParameters.AccountId);
             var collectionBeforPaging =
-                transactions.ApplySort(rentTransactionResourceParameters.OrderBy,
+                transactions
+                    .ApplySort(rentTransactionResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RentTransaction2Dto, RentTransaction2>());
 
             if (!string.IsNullOrEmpty(rentTransactionResourceParameters.SearchQuery))

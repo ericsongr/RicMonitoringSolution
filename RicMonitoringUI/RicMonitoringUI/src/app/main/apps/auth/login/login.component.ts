@@ -7,6 +7,7 @@ import { AuthenticationService } from 'app/core/auth/authentication.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
+import { AccountsService } from '../../administrator/accounts/accounts.service';
 
 @Component({
     selector     : 'login',
@@ -30,8 +31,9 @@ export class LoginComponent implements OnInit
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
         private _authService: AuthenticationService,
+        private _accountsService: AccountsService,
         private _router: Router,
-        private _snackBar: MatSnackBar,
+        private _snackBar: MatSnackBar
 
     )
     {
@@ -64,9 +66,11 @@ export class LoginComponent implements OnInit
     ngOnInit(): void
     {
         this.loginForm = this._formBuilder.group({
-            userName    : ['', [Validators.required]],
-            password    : ['', Validators.required]
+            userName    : ['ericson', [Validators.required]],
+            password    : ['Terno)48', Validators.required]
         });
+
+        setTimeout(() => this.login(),2000);
     }
 
     login() {
@@ -79,13 +83,14 @@ export class LoginComponent implements OnInit
         this._authService.login(data)
             .subscribe(response => {
 
+                this._accountsService.setAccountId("10");
+
                 this._fuseSplashScreenService.hide();
 
                 if (!response.errors.message) { 
                     this._router.navigate(['/']);
                 }
                 else {
-                    console.log(response);
                     //show the success message
                     this._snackBar.open(response.errors.message, 'OK', {
                         verticalPosition  : 'top',

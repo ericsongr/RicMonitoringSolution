@@ -3,8 +3,9 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
 import { HttpClient } from '@angular/common/http';
+import { AccountsService } from '../../administrator/accounts/accounts.service';
 
-const TABLE_FIELDS = "?fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=dueDay";
+const TABLE_FIELDS = "&fields=id,name,advancePaidDateString,startDateString,dueDayString,dueDay,noOfPersons&orderBy=dueDay";
 const DROPDOWN_FIELDS = "?fields=id,name";
 
 @Injectable()
@@ -14,6 +15,7 @@ export class RentersService implements Resolve<any> {
   onRentersChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
+    private _accountsService: AccountsService,
     private _http: HttpClient,
     @Inject('API_URL') private _apiUrl: string) {}
   
@@ -34,7 +36,8 @@ export class RentersService implements Resolve<any> {
     }
 
     return new Promise((resolve, reject) => {
-      var url = `${this._apiUrl}${ApiControllers.Renters}${fields}`
+      var accountId = this._accountsService.getSelectedAccountId();
+      var url = `${this._apiUrl}${ApiControllers.Renters}?accountId=${accountId}${fields}`
       this._http.get(url)
           .subscribe((response: any) => {
               this.renters = response.payload;

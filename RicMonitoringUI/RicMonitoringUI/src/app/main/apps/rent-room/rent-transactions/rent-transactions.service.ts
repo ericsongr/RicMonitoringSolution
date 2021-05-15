@@ -3,8 +3,9 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
 import { HttpClient } from '@angular/common/http';
+import { AccountsService } from '../../administrator/accounts/accounts.service';
 
-const TABLE_FIELDS = "fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note,billingStatement&orderBy=dueDay";
+const TABLE_FIELDS = "&fields=id,renterName,renterId,roomName,roomId,monthlyRent,dueDateString,datePaidString,paidAmount,balance,balanceDateToBePaid,totalAmountDue,isDepositUsed,transactionType,note,billingStatement&orderBy=dueDay";
 
 @Injectable()
 export class RentTransactionsService implements Resolve<any> {
@@ -16,6 +17,7 @@ export class RentTransactionsService implements Resolve<any> {
   routeParams: any;
   
   constructor(
+    private _accountsService: AccountsService,
     private _http: HttpClient,
     @Inject('API_URL') private _apiUrl: string)  
   { 
@@ -36,7 +38,9 @@ export class RentTransactionsService implements Resolve<any> {
   getRentTransactions(): Promise<any> {
 
       return new Promise((resolve, reject) => {
-      var url = `${this.apiUrl}?${TABLE_FIELDS}`;
+
+      var accountId = this._accountsService.getSelectedAccountId();
+      var url = `${this.apiUrl}?accountId=${accountId}${TABLE_FIELDS}`;
       
       this._http.get(url)
           .subscribe((response: any) => {

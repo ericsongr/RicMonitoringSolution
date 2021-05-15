@@ -10,6 +10,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { AuthenticationService } from 'app/core/auth/authentication.service';
 import { TokenStorage } from 'app/core/auth/token-storage.service';
+import { AccountsService } from 'app/main/apps/administrator/accounts/accounts.service';
 
 @Component({
     selector     : 'toolbar',
@@ -28,9 +29,12 @@ export class ToolbarComponent implements OnInit, OnDestroy
     selectedLanguage: any;
     userStatusOptions: any[];
 
+    accounts: any[];
+
     isAuthorized: boolean;
     name: string;
-
+    selectedAccount: string = "Apartment";
+    
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -46,6 +50,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
         private _authService: AuthenticationService,
+        private _accountsService: AccountsService,
         private _tokenStorage: TokenStorage
     )
     {
@@ -102,7 +107,13 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         this._authService.isAuthorized()
          .subscribe((isAuthorized: boolean) => {
+            
             this.isAuthorized = isAuthorized;
+
+            this._accountsService.getAccounts('dropdown')
+                .then((response: any) => {
+                    this.accounts = response.payload;
+                });
          });
     }
 
@@ -167,6 +178,14 @@ export class ToolbarComponent implements OnInit, OnDestroy
         console.log(value);
     }
 
+    setAccount(accountId: string, account: string) {
+        this._accountsService.setAccountId(accountId);
+        this.selectedAccount = account;
+
+        //todo: make it work reload
+        // window.location.reload();
+    }
+
     /**
      * Set the language
      *
@@ -180,4 +199,5 @@ export class ToolbarComponent implements OnInit, OnDestroy
         // Use the selected language for translations
         this._translateService.use(lang.id);
     }
+    
 }

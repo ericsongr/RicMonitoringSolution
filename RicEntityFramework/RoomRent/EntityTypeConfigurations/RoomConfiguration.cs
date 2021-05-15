@@ -14,6 +14,12 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .Property(t => t.Price)
                 .HasColumnType("decimal(18,2)");
 
+            builder
+                .HasOne(t => t.Account)
+                .WithMany(p => p.Rooms)
+                .HasForeignKey(f => f.AccountId)
+                .HasConstraintName("FK_Rooms_Accounts_Id");
+
             builder.ToTable("Rooms");
         }
     }

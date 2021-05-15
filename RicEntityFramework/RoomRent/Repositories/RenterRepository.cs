@@ -32,7 +32,9 @@ namespace RicEntityFramework.RoomRent.Repositories
         public PagedList<Renter> GetRenters(RenterResourceParameters renterResourceParameters)
         {
             var collectionBeforPaging =
-                _context.Renters.ApplySort(renterResourceParameters.OrderBy,
+                _context.Renters
+                    .Where(o => o.AccountId == renterResourceParameters.AccountId)
+                    .ApplySort(renterResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
 
 

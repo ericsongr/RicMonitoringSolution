@@ -51,5 +51,14 @@ export class AccountsService implements Resolve<any> {
     
   }
 
+  setAccountId(accountId: string) {
+    localStorage.setItem('AccountId', accountId)
+  }
+
+  getSelectedAccountId() : string {
+    var accountId = localStorage.getItem('AccountId');
+    return accountId;
+  }
+
 
 }

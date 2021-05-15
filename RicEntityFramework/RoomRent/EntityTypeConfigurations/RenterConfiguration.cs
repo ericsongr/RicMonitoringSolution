@@ -49,6 +49,12 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasForeignKey(f => f.RoomId)
                 .HasConstraintName("ForeignKey_Renter_Room");
 
+            builder
+                .HasOne(t => t.Account)
+                .WithMany(p => p.Renters)
+                .HasForeignKey(f => f.AccountId)
+                .HasConstraintName("FK_Renters_Accounts_Id");
+
             builder.ToTable("Renters");
         }
     }
