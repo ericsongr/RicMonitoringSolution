@@ -30,6 +30,7 @@ import { AuditsModule } from './audits/audits-api';
 import { DailyBatchComponent } from '../administrator/daily-batch/daily-batch.component';
 import { DailyBatchService } from '../administrator/daily-batch/daily-batch.service';
 import { DialogPaymentsComponent } from './renter/rent-transaction-history/dialog-payments/dialog-payments.component';
+import { AccountsService } from '../administrator/accounts/accounts.service';
 
 const routes : Routes= [
   {
@@ -156,7 +157,8 @@ const routes : Routes= [
     RentTransactionsService,
     RentTransactionService,
     RentTransactionHistoryService,
-    AppFunctionsService
+    AppFunctionsService,
+    AccountsService
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: AuthInterceptor,

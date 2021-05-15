@@ -22,21 +22,23 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS(select 1 from RentArrears WHERE Note = 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30')
+IF EXISTS(SELECT 1 FROM Renters where Id = 59)
 BEGIN
-	INSERT INTO RentArrears(
-		RenterId,
-		RentTransactionId,
-		UnpaidAmount,
-		IsProcessed,
-		Note,
-		IsManualEntry)
-	VALUES(59, NULL, 9000, 0, 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30', 1)
-END
-GO
+	IF NOT EXISTS(select 1 from RentArrears WHERE Note = 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30')
+	BEGIN
+		INSERT INTO RentArrears(
+			RenterId,
+			RentTransactionId,
+			UnpaidAmount,
+			IsProcessed,
+			Note,
+			IsManualEntry)
+		VALUES(59, NULL, 9000, 0, 'Unpaid rent: (3,500) Mar 1 - Mar 30, (5,500) Apr 1 - Apr 30', 1)
+	END
 
-IF EXISTS(SELECT 1 FROM Renters WHERE Id = 59 AND NextDueDate = '2020-05-30 00:00:00.0000000')
-BEGIN
-	UPDATE Renters SET NextDueDate = '2020-05-31 00:00:00.0000000' WHERE Id = 59
+	IF EXISTS(SELECT 1 FROM Renters WHERE Id = 59 AND NextDueDate = '2020-05-30 00:00:00.0000000')
+	BEGIN
+		UPDATE Renters SET NextDueDate = '2020-05-31 00:00:00.0000000' WHERE Id = 59
+	END
 END
 GO

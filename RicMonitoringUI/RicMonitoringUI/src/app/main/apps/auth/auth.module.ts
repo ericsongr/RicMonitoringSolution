@@ -17,6 +17,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { AuthenticationService } from 'app/core/auth/authentication.service';
 import { MatSnackBarModule } from '@angular/material';
+import { AccountsService } from '../administrator/accounts/accounts.service';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material';
     ResetPasswordComponent,
   ],
   providers: [
-    AuthenticationService
+    AuthenticationService,
+    AccountsService
   ]
 })
 export class AuthModule { }

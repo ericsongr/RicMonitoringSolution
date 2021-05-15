@@ -31,6 +31,8 @@ namespace RicModel.RoomRent
         public bool IsNoAdvanceDepositLeft { get; set; }
         public bool IsProcessed { get; set; }
 
+        public int AccountId { get; set; }
+
         public ICollection<RentTransactionPayment> RentTransactionPayments { get; set; }
     }
 }

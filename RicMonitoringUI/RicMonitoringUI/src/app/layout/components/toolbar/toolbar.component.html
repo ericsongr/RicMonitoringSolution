@@ -30,6 +30,25 @@
                 <span>Log-In</span>
             </button>
 
+            <!-- apartment menu - start  -->
+            <button mat-button [matMenuTriggerFor]="apartmentMenu" *ngIf="isAuthorized"
+                    class="user-button">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <span class="username mr-12" fxHide fxShow.gt-sm>{{selectedAccount}}</span>
+                    <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
+                </div>
+            </button>
+            
+            <mat-menu #apartmentMenu="matMenu" [overlapTrigger]="false">
+
+                <button mat-menu-item *ngFor="let account of accounts" (click)="setAccount(account.id, account.name)">
+                    <span>{{account.name}}</span>
+                </button>
+
+            </mat-menu>
+            <!-- apartment menu - end  -->
+
+            <!-- user menu - start  -->
             <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="isAuthorized"
                     class="user-button">
                 <div fxLayout="row" fxLayoutAlign="center center">
@@ -38,7 +57,7 @@
                     <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
                 </div>
             </button>
-
+            
             <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
 
                 <button mat-menu-item>
@@ -62,6 +81,7 @@
                 </button>
 
             </mat-menu>
+            <!-- user menu - end  -->
 
             <div class="toolbar-separator"></div>
 

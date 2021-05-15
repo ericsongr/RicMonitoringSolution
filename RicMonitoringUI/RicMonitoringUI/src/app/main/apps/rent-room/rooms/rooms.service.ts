@@ -3,7 +3,8 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiControllers } from 'environments/api-controllers';
-const TABLE_FIELDS = "?fields=id,name,frequency,price&orderBy=name";
+import { AccountsService } from '../../administrator/accounts/accounts.service';
+const TABLE_FIELDS = "&fields=id,name,frequency,price&orderBy=name";
 const DROPDOWN_FIELDS = "?fields=id,name,isOccupied,price&orderBy=name";
 
 @Injectable()
@@ -13,6 +14,7 @@ export class RoomsService implements Resolve<any> {
   onRoomsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
   constructor(
+    private _accountsService: AccountsService,
     private _httpClient: HttpClient,
     @Inject('API_URL') private apiUrl: string)  
   { 
@@ -30,13 +32,15 @@ export class RoomsService implements Resolve<any> {
   }
 
   getRooms(htmlComponent, renterId = 0): Promise<any> {
+
     var fields = TABLE_FIELDS;
-    var url = `${this.apiUrl}${ApiControllers.Rooms}${fields}`;
+    var accountId = this._accountsService.getSelectedAccountId();
+    var url = `${this.apiUrl}${ApiControllers.Rooms}?accountId=${accountId}${fields}`;
     
     if (htmlComponent == "dropdown"){
       fields = DROPDOWN_FIELDS.replace('?', '');
       url = `${this.apiUrl}${ApiControllers.Rooms}?renterId=${renterId}&${fields}`;
-    }
+    } 
 
     return new Promise((resolve, reject) => {
       

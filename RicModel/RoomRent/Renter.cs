@@ -31,8 +31,10 @@ namespace RicModel.RoomRent
         public DateTime? BalancePaidDate { get; set; }
         public DateTime PreviousDueDate { get; set; }
         public DateTime NextDueDate { get; set; }
+        public int AccountId { get; set; }
 
         public virtual Room Room { get; set; }
+        public virtual Account Account { get; set; }
 
         public virtual ICollection<RentTransaction> RentTransactions { get; set; }
         public virtual ICollection<RentArrear> RentArrears { get; set; }

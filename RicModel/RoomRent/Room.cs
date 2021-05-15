@@ -10,9 +10,12 @@ namespace RicModel.RoomRent
         public string Name { get; set; }
         public string Frequency { get; set; }
         public decimal Price { get; set; }
+        public int AccountId { get; set; }
 
         [NotMapped]
         public bool IsOccupied { get; set; }
+
+        public virtual Account Account { get; set; }
 
         public virtual ICollection<Renter> Renters { get; set; }
         public virtual ICollection<RentTransaction> RentTransactions { get; set; }
