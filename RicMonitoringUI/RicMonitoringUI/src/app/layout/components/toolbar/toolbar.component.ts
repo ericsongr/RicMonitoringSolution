@@ -113,6 +113,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
             this._accountsService.getAccounts('dropdown')
                 .then((response: any) => {
                     this.accounts = response.payload;
+
+                    //set first account be the default selected account
+                    var account = this.accounts[0];
+                    this.setAccount(account.id, account.name);
                 });
          });
     }

@@ -39,7 +39,7 @@ export class RoomsService implements Resolve<any> {
     
     if (htmlComponent == "dropdown"){
       fields = DROPDOWN_FIELDS.replace('?', '');
-      url = `${this.apiUrl}${ApiControllers.Rooms}?renterId=${renterId}&${fields}`;
+      url = `${this.apiUrl}${ApiControllers.Rooms}?renterId=${renterId}&accountId=${accountId}&${fields}`;
     } 
 
     return new Promise((resolve, reject) => {
