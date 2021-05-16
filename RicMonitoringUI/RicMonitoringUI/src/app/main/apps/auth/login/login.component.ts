@@ -83,8 +83,6 @@ export class LoginComponent implements OnInit
         this._authService.login(data)
             .subscribe(response => {
 
-                this._accountsService.setAccountId("10");
-
                 this._fuseSplashScreenService.hide();
 
                 if (!response.errors.message) { 
