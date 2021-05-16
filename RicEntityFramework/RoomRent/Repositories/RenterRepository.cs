@@ -33,7 +33,7 @@ namespace RicEntityFramework.RoomRent.Repositories
         {
             var collectionBeforPaging =
                 _context.Renters
-                    .Where(o => o.AccountId == renterResourceParameters.AccountId)
+                    .Where(o => o.Room.AccountId == renterResourceParameters.AccountId)
                     .ApplySort(renterResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<RenterDto, Renter>());
 

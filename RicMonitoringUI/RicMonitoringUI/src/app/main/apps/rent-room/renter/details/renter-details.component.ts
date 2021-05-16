@@ -184,7 +184,6 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   add() {
     const data = this.renterForm.getRawValue();
-    data.accountId = this._accountsService.getSelectedAccountId();
     data.balanceAmount = this.renter.balanceAmount;
     data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
     data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;

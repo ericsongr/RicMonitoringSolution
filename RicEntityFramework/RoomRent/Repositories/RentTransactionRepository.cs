@@ -74,7 +74,7 @@ namespace RicEntityFramework.RoomRent.Repositories
         public IQueryable<RentTransaction2> GetAllTransactions(int accountId)
         {
             var transactions = _context.RentTransactions
-                                    .Where(o => !o.IsProcessed && !o.Renter.IsEndRent && o.Renter.AccountId == accountId)
+                                    .Where(o => !o.IsProcessed && !o.Renter.IsEndRent && o.Renter.Room.AccountId == accountId)
                                     .Include(o => o.Renter)
                                     .Include(o => o.Room)
                                     .Include(o => o.RentTransactionPayments)
@@ -103,7 +103,7 @@ namespace RicEntityFramework.RoomRent.Repositories
                                         TransactionType = t.TransactionType,
                                         IsNoAdvanceDepositLeft = t.Renter.MonthsUsed >= t.Renter.AdvanceMonths,
                                         IsProcessed = t.IsProcessed,
-                                        AccountId = t.Renter.AccountId,
+                                        AccountId = t.Renter.Room.AccountId,
                                     });
 
             return transactions;
