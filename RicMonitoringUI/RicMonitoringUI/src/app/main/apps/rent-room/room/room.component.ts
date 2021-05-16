@@ -6,11 +6,14 @@ import { RoomService } from './room.service';
 import { MatSnackBar } from '@angular/material';
 import { FuseUtils } from '@fuse/utils';
 import { Location } from '@angular/common';
+import { AccountsService } from '../../administrator/accounts/accounts.service';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss']
+  styleUrls: ['./room.component.scss'],
+  animations: fuseAnimations,
 })
 export class RoomComponent implements OnInit, OnDestroy {
   
@@ -20,6 +23,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   onRoomChanged: Subscription;
   
   constructor(
+    private _accountsService: AccountsService,
     private _roomService: RoomService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
@@ -68,7 +72,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
       const data = this.roomForm.getRawValue();
       data.handle = FuseUtils.handleize(data.name);
-
+      
       this._roomService.saveRoom(data)
           .then((response: any) => {
             if (!response.errors.message) {
@@ -109,7 +113,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
       const data = this.roomForm.getRawValue();
       data.handle = FuseUtils.handleize(data.name);
-  
+      data.accountId = this._accountsService.getSelectedAccountId();
       this._roomService.addRoom(data)
           .then((response: any) => {
             if (!response.errors.message) {

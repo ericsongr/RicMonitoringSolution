@@ -13,6 +13,7 @@ import { RentTransactionHistoryService } from '../rent-transaction-history/rent-
 import { RentTransactionHistory } from '../rent-transaction-history/rent-transaction-history.model';
 import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
 import { Router } from '@angular/router';
+import { AccountsService } from 'app/main/apps/administrator/accounts/accounts.service';
 
 @Component({
   selector: 'app-renter-detail',
@@ -41,6 +42,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     private _renterService: RenterDetailService,
     private _rentTransactionHistoryService: RentTransactionHistoryService,
     private _roomsService: RoomsService,
+    private _accountsService: AccountsService,
     private _fuseProgressBarService: FuseProgressBarService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
@@ -182,6 +184,7 @@ export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   add() {
     const data = this.renterForm.getRawValue();
+    data.accountId = this._accountsService.getSelectedAccountId();
     data.balanceAmount = this.renter.balanceAmount;
     data.monthsUsed = data.monthsUsed == null ? 0 : data.monthsUsed;
     data.balancePaidDate = data.balancePaidDate = undefined ? null : data.balancePaidDate;
