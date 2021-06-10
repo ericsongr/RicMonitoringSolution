@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { BillingStatement } from './billing-statement.model';
 import { MatSnackBar } from '@angular/material';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'button-billing-statement',
   templateUrl: './billing-statement.component.html',
-  styleUrls: ['./billing-statement.component.scss']
+  styleUrls: ['./billing-statement.component.scss'],
+  animations: fuseAnimations,
 })
 export class BillingStatementComponent implements OnInit {
   @Input()

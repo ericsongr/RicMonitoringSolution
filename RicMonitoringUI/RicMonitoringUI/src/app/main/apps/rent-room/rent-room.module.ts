@@ -27,8 +27,6 @@ import { RenterComponent } from './renter/renter.component';
 import { RenterTabsComponent } from './renter/renter-tabs/renter-tabs.component';
 import { RentTransactionPaymentComponent } from './rent-transaction/rent-transaction-payment/rent-transaction-payment.component';
 import { AuditsModule } from './audits/audits-api';
-import { DailyBatchComponent } from '../administrator/daily-batch/daily-batch.component';
-import { DailyBatchService } from '../administrator/daily-batch/daily-batch.service';
 import { DialogPaymentsComponent } from './renter/rent-transaction-history/dialog-payments/dialog-payments.component';
 import { AccountsService } from '../administrator/accounts/accounts.service';
 

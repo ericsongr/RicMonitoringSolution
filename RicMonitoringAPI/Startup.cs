@@ -147,7 +147,10 @@ namespace RicMonitoringAPI
 
             services.AddMvcCore()
                 .AddAuthorization()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(setupAction =>
+                {
+                    setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                }); //use for data shaping;
 
             //cors
             services.AddCors(options =>
@@ -233,13 +236,22 @@ namespace RicMonitoringAPI
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
+                //settings
+                cfg.CreateMap<Setting, SettingDto>()
+                    .ForMember(dest => dest.DataType,
+                                opt => opt.MapFrom(src => src.GetDataType()))
+                    .ForMember(dest => dest.RealValue,
+                        opt => opt.MapFrom(src => src.GetRealValue()));
 
+                //rooms
                 cfg.CreateMap<RoomForCreateDto, Room>();
                 cfg.CreateMap<Room, RoomDto>();
 
+                //renters
                 cfg.CreateMap<RenterForCreateDto, Renter>();
                 cfg.CreateMap<Renter, RenterDto>();
 
+                //transactions
                 cfg.CreateMap<RentTransactionForCreateDto, RentTransaction>();
                 cfg.CreateMap<RentTransaction, RentTransactionDto>();
 

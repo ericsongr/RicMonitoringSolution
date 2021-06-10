@@ -196,8 +196,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
             }
 
-            //var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
-            //return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
         }
 
         private bool CheckRoomIsOccupied(int id, int roomId)

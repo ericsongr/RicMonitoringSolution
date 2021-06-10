@@ -106,19 +106,23 @@ export class ToolbarComponent implements OnInit, OnDestroy
         })
 
         this._authService.isAuthorized()
-         .subscribe((isAuthorized: boolean) => {
-            
-            this.isAuthorized = isAuthorized;
+            .subscribe((isAuthorized: boolean) => {
+                
+                this.isAuthorized = isAuthorized;
 
-            this._accountsService.getAccounts('dropdown')
-                .then((response: any) => {
-                    this.accounts = response.payload;
+                if (isAuthorized) {
 
-                    //set first account be the default selected account
-                    var account = this.accounts[0];
-                    this.setAccount(account.id, account.name);
-                });
-         });
+                    this._accountsService.getAccounts('dropdown')
+                        .then((response: any) => {
+                            this.accounts = response.payload;
+
+                            //set first account be the default selected account
+                            var account = this.accounts[0];
+                            this.setAccount(account.id, account.name);
+                        });
+                }
+                
+            });
     }
 
     // -----------------------------------------------------------------------------------------------------

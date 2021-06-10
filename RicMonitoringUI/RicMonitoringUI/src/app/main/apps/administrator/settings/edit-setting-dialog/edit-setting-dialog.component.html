@@ -1,0 +1,21 @@
+<h4 mat-dialog-title>{{setting.friendlyName}}</h4>
+<div mat-dialog-content>
+  <mat-form-field style="width:100%">
+    <input matInput 
+      *ngIf="setting.dataType == 'numeric'"
+      [(ngModel)]="setting.realValue">
+
+    <input a matInput 
+      *ngIf="setting.dataType == 'varchar' && !useTextArea"
+      [(ngModel)]="setting.realValue">
+
+    <textarea matInput 
+      rows="5"
+      *ngIf="setting.dataType == 'varchar' && useTextArea"
+      [(ngModel)]="setting.realValue"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="setting" cdkFocusInitial>Save</button>
+</div>

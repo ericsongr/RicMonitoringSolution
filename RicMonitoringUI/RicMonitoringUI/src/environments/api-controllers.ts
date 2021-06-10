@@ -1,3 +1,5 @@
+import { SettingsComponent } from "app/main/apps/administrator/settings/settings.component";
+
 export const ApiControllers = {
     AppFunctions            : "app-functions",
     Rooms                   : "rooms",
@@ -16,6 +18,7 @@ export const ApiControllers = {
     Audits                  : "audits",
 
     Account                 : "account",
-    Role                    : "role"
+    Role                    : "role",
+    Settings                : "settings"
     
 }

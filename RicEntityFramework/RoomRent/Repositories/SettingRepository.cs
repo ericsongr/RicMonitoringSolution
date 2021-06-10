@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using RicCommon.Enumeration;
 using RicEntityFramework.BaseRepository;
 using RicEntityFramework.RoomRent.Interfaces;
@@ -8,8 +11,16 @@ namespace RicEntityFramework.RoomRent.Repositories
 {
     public class SettingRepository : EntityBaseRepository<Setting>, ISettingRepository
     {
+        private readonly RicDbContext _context;
+
         public SettingRepository(RicDbContext context) : base(context)
         {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public List<Setting> GetAll()
+        {
+            return _context.Settings.ToList();
         }
 
         public Setting Get(SettingNameEnum settingName)

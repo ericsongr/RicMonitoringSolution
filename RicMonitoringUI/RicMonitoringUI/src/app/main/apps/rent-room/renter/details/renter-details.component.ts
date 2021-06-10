@@ -14,11 +14,13 @@ import { RentTransactionHistory } from '../rent-transaction-history/rent-transac
 import { FuseProgressBarService } from '@fuse/components/progress-bar/progress-bar.service';
 import { Router } from '@angular/router';
 import { AccountsService } from 'app/main/apps/administrator/accounts/accounts.service';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'app-renter-detail',
   templateUrl: './renter-details.component.html', 
-  styleUrls: ['./renter-details.component.scss']
+  styleUrls: ['./renter-details.component.scss'],
+  animations: fuseAnimations,
 })
 export class RenterDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   
