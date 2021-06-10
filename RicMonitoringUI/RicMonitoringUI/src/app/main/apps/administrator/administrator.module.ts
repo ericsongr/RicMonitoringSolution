@@ -15,6 +15,9 @@ import { AccountsService } from './accounts/accounts.service';
 import { AccountComponent } from './account/account.component';
 import { AccountService } from './account/account.service';
 import { GooglePlacesDirective } from '../common/directives/google-places.directive';
+import { SettingsComponent } from './settings/settings.component';
+import { SettingsService } from './settings/settings.service';
+import { EditSettingDialogComponent } from './settings/edit-setting-dialog/edit-setting-dialog.component';
 
 const routes : Routes = [
   {
@@ -45,6 +48,13 @@ const routes : Routes = [
       data: DailyBatchService
     }
   },
+  {
+    path      : 'settings',
+    component : SettingsComponent,
+    resolve: {
+      data: SettingsService
+    }
+  },
 ]
 
 @NgModule({
@@ -61,12 +71,18 @@ const routes : Routes = [
     AccountComponent,
     AccountsComponent,
     DailyBatchComponent,
+    SettingsComponent,
+    EditSettingDialogComponent,
     GooglePlacesDirective
+  ],
+  entryComponents: [
+    EditSettingDialogComponent
   ],
   providers: [
     DailyBatchService,
     AccountService,
     AccountsService,
+    SettingsService,
     {
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,

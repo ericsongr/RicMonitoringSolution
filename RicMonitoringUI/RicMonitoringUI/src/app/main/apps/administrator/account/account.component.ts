@@ -6,11 +6,13 @@ import { AccountService } from './account.service';
 import { MatSnackBar } from '@angular/material';
 import { FuseUtils } from '@fuse/utils';
 import { Location } from '@angular/common';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss']
+  styleUrls: ['./account.component.scss'],
+  animations: fuseAnimations,
 })
 export class AccountComponent implements OnInit, OnDestroy {
   

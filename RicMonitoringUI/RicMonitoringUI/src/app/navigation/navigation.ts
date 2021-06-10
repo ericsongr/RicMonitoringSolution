@@ -79,13 +79,13 @@ var navigationContainer: FuseNavigation[] = [
                         url       : '/administrator/daily-batch',
                         exactMatch: true
                     },
-                    // {
-                    //     id: 'USERS',
-                    //     title: 'Users',
-                    //     type: 'item',
-                    //     url: '/administrator/users',
-                    //     exactMatch: true
-                    // }
+                    {
+                        id        : 'Settings',
+                        title     : 'Settings',
+                        type      : 'item',
+                        url       : '/administrator/settings',
+                        exactMatch: true
+                    },
                 ],
             }
         ]
