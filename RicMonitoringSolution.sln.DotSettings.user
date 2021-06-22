@@ -11,10 +11,17 @@
   &lt;Assembly Path="C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.1.3\ref\netcoreapp3.1\Microsoft.AspNetCore.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\Ericson Ramos\.nuget\packages\system.linq.dynamic.core\1.0.23\lib\netcoreapp2.1\System.Linq.Dynamic.Core.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dd322436_002D4fc8_002D4652_002D91ad_002D8f39f3c32957/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;RicMonitoringUI&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\Projects\RicMonitoringSolution\RicMonitoringUI" Presentation="&amp;lt;RicMonitoringUI&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/Coords/@EntryValue">(Doc Ln 36 Col 27)</s:String>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:SettingsController.cs</s:String>
 	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/Coords/@EntryValue">(Doc Ln 200 Col 34)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
 	
 	
 	

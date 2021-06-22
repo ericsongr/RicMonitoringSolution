@@ -12,6 +12,7 @@ using RicCommon.Enumeration;
 using RicCommon.Services;
 using RicEntityFramework;
 using RicEntityFramework.Helpers;
+using RicEntityFramework.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicModel.Enumeration;
 using RicModel.RoomRent;
@@ -39,7 +40,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRentTransactionDetailRepository _rentTransactionDetailRepository;
         private readonly IRentArrearRepository _rentArrearRepository;
         private readonly ISettingRepository _settingRepository;
+        private readonly IRenterCommunicationRepository _renterCommunicationRepository;
         private readonly IEmailSender _emailSender;
+        private readonly ISmsGatewayService _smsGatewayService;
+        private readonly ICommunicationService _communicationService;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -50,7 +54,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionDetailRepository rentTransactionDetailRepository,
             IRentArrearRepository rentArrearRepository,
             ISettingRepository settingRepository,
-            IEmailSender emailSender
+            IRenterCommunicationRepository renterCommunicationRepository,
+            IEmailSender emailSender,
+            ISmsGatewayService smsGatewayService,
+            ICommunicationService communicationService
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -61,7 +68,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _rentTransactionDetailRepository = rentTransactionDetailRepository ?? throw new ArgumentNullException(nameof(rentTransactionDetailRepository));
             _rentArrearRepository = rentArrearRepository ?? throw new ArgumentNullException(nameof(rentArrearRepository));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+            _renterCommunicationRepository = renterCommunicationRepository ?? throw new ArgumentNullException(nameof(renterCommunicationRepository));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            _smsGatewayService = smsGatewayService ?? throw new ArgumentNullException(nameof(smsGatewayService));
+            _communicationService = communicationService ?? throw new ArgumentNullException(nameof(communicationService));
         }
 
         [HttpGet]
@@ -108,7 +118,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
             //var status = DailyBatchStatusConstant.Processed;
 
+            //email
             SendEmailRentersBeforeDueDate(currentDateTimeUtc);
+            //sms
+            SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
             return Ok(new { status });
         }
@@ -128,7 +141,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         //    return Ok("Completed");
         //}
 
-        #region MyRegion SendEmailRentersBeforeDueDate
+        #region MyRegion Send SMS & Email Renters Before Due Date
 
         private void SendEmailRentersBeforeDueDate(DateTime currentDateTimeUtc)
         {
@@ -149,6 +162,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 transactions.ForEach(transaction =>
                 {
+                    var messageId = Guid.NewGuid().ToString();
+                    var renterId = transaction.Renter.Id;
                     var email = transaction.Renter.Email;
                     if (!string.IsNullOrEmpty(email))
                     {
@@ -156,10 +171,76 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         var replaceEmailBody = Templater.ReplaceText(emailBody, replacementObject);
 
                         _emailSender.SendDueReminderEmailAsync(email, replaceEmailBody);
+
+                        Save(renterId, DateTime.UtcNow, (int)CommunicationHistoryType.Email, email, replaceEmailBody, true, null, messageId, true);
+
                     }
                 });
             }
 
+        }
+
+        private void SendSmsRentersBeforeDueDate(DateTime currentDateTimeUtc)
+        {
+            var appSmsRenterBeforeDueDateEnable = _settingRepository.GetBooleanValue(SettingNameEnum.AppSMSRenterBeforeDueDateEnable);
+            var appSmsRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppSMSRenterNoOfDaysBeforeDueDate);
+            var smsBody = _settingRepository.GetValue(SettingNameEnum.AppSMSMessageRenterBeforeDueDate);
+            var fromNumber = _settingRepository.GetValue(SettingNameEnum.SMSGatewaySenderId);
+
+            var selectedDate = currentDateTimeUtc.Date.AddDays(appSmsRenterNoOfDaysBeforeDueDate);
+
+            if (appSmsRenterBeforeDueDateEnable)
+            {
+                var transactions = _rentTransactionRepository
+                    .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
+                                 o.DueDate == selectedDate &&
+                                 o.PaidAmount == 0 &&
+                                 !o.IsSystemProcessed, o => o.Renter)
+                    .ToList();
+
+                transactions.ForEach(transaction =>
+                {
+                    var toNumber = transaction.Renter.Mobile;
+                    var renterId = transaction.RenterId;
+                    if (!string.IsNullOrEmpty(toNumber))
+                    {
+                        var replacementObject = CreateReplacementObject(transaction);
+                        var replaceSmsBody = Templater.ReplaceText(smsBody, replacementObject);
+
+
+                        _communicationService.SendSmsToRenter(toNumber, replaceSmsBody, transaction.RenterId);
+
+                    }
+                });
+            }
+
+        }
+        #endregion
+
+        #region Shared Functions
+
+        public void Save(int renterId, DateTime communicationDate, int type, string destination,
+            string textContent, bool isSuccessful, string batchId = null,
+            string messageId = null, bool hasRead = true, string attachment = null, string contentType = null)
+        {
+            var comm = new RenterCommunicationHistory
+            {
+                CommunicationUtcdateTime = communicationDate,
+                CommunicationSentTo = destination,
+                RenterId = renterId,
+                RequestedBy = "BatchFile",
+                CommunicationText = textContent,
+                CommunicationType = type,
+                IsSuccessfullySent = isSuccessful,
+                BatchId = batchId,
+                MessageId = messageId,
+                HasRead = hasRead,
+                AttachmentFileName = attachment,
+                ContentType = contentType
+            };
+
+            _renterCommunicationRepository.Add(comm);
+            _renterCommunicationRepository.Commit();
         }
 
         private object CreateReplacementObject(RentTransaction transaction)

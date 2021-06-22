@@ -31,6 +31,9 @@
     <None Remove="Scripts\Update\v1.0002\0004-account-module.sql" />
     <None Remove="Scripts\Update\v1.0002\0005-account-autocomplete-address.sql" />
     <None Remove="Scripts\Update\v1.0002\0006-link rooms and renter on account.sql" />
+    <None Remove="Scripts\Update\v1.0002\0007-sms-gateway.sql" />
+    <None Remove="Scripts\Update\v1.0002\0008-send-sms-as-friendly.sql" />
+    <None Remove="Scripts\Update\v1.0002\0009-communication.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +54,9 @@
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-DbErrorLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0009-communication.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0008-send-sms-as-friendly.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0007-sms-gateway.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0006-link rooms and renter on account.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0005-account-autocomplete-address.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0004-account-module.sql" />

@@ -43,7 +43,6 @@ export class AccountComponent implements OnInit, OnDestroy {
         this._accountService.onTimeZonesChanged
             .subscribe(timeZones => {
               this.timeZones = timeZones;
-              console.log('this.timeZones: ', this.timeZones);
             });
 
       this.onAccountChanged =

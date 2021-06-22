@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RicCommon\RicCommon.csproj" />
+    <ProjectReference Include="..\RicCommunication\RicCommunication.csproj" />
   </ItemGroup>
 
 

@@ -36,6 +36,12 @@ namespace RicEntityFramework
 
         public DbSet<MobileAppLog> MobileAppLogs { get; set; }
 
+        public DbSet<SmsGateway> SmsGateway { get; set; }
+
+        public DbSet<RenterCommunicationHistory> RenterCommunicationHistory { get; set; }
+        
+        public DbSet<AccountBillingItem> AccountBillingItems { get; set; }
+        
         //Audit Tables
         public DbSet<AuditAccount> AuditAccounts { get; set; }
         public DbSet<AuditRenter> AuditRenters { get; set; }

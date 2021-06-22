@@ -24,6 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using RicCommon.Services;
+using RicCommunication.Interface;
+using RicCommunication.SmsGateway;
 using RicEntityFramework;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Interfaces.PropertyMappings;
@@ -77,7 +79,9 @@ namespace RicMonitoringAPI
             services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
             services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
             services.AddScoped<IMobileAppLogRepository, MobileAppLogRepository>();
-
+            services.AddScoped<ISmsGatewayRepository, SmsGatewayRepository>();
+            services.AddScoped<IRenterCommunicationRepository, RenterCommunicationRepository>();
+            services.AddScoped<IAccountBillingItemRepository, AccountBillingItemRepository>();
 
             services.AddScoped<IAuditAccountRepository, AuditAccountRepository>();
             services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
@@ -115,6 +119,9 @@ namespace RicMonitoringAPI
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
+            services.AddTransient<ISmsGatewayService, SmsGatewayService>();
+            services.AddTransient<ICommunicationService, CommunicationService>();
+            services.AddTransient<ISMSGateway, SMSGlobal>();
             
             services.AddHealthChecks();
 

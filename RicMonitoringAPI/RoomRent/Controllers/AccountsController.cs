@@ -14,6 +14,7 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
+using RicEntityFramework.Services;
 using TimeZone = RicModel.RoomRent.TimeZone;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -28,17 +29,20 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IAccountService _accountService;
+        private readonly ISmsGatewayService _smsGatewayService;
 
         public AccountsController(RicDbContext context,
             IAccountRepository accountRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService,
-            IAccountService accountService)
+            IAccountService accountService,
+            ISmsGatewayService smsGatewayService)
         {
             _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+            _smsGatewayService = smsGatewayService ?? throw new ArgumentNullException(nameof(smsGatewayService));
         }
 
         [HttpGet("time-zones")]
@@ -60,7 +64,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpGet("{id}", Name = "GetAccount")]
         public async Task<IActionResult> GetAccount(int id, [FromQuery] string fields)
         {
-
             if (!_typeHelperService.TypeHasProperties<AccountDto>(fields))
             {
                 return BadRequest();
