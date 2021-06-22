@@ -76,7 +76,6 @@ export class SettingsComponent implements OnInit {
   }
 
  getHeight(key: string) {
-   debugger;
   if(key == 'AppEmailMessageRenterBeforeDueDate') {
     return '300px';
   }else{
@@ -84,13 +83,4 @@ export class SettingsComponent implements OnInit {
   }
  }
  
- getWidth(key: string) {
-  debugger;
-  if(key == 'AppEmailMessageRenterBeforeDueDate') {
-    return '400px';
-  }else{
-    return '100px';
-  }
- }
-
 }

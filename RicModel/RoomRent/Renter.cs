@@ -22,7 +22,10 @@ namespace RicModel.RoomRent
 
         public string Email { get; set; }
         public bool EmailRenterBeforeDueDateEnable { get; set; }
-        
+
+        public string Mobile { get; set; }
+        public bool MobileRenterBeforeDueDateEnable { get; set; }
+
         public DateTime? DateEndRent { get; set; }
         public int NoOfPersons { get; set; }
         public int RoomId { get; set; }
@@ -40,6 +43,7 @@ namespace RicModel.RoomRent
         //audits
         public virtual ICollection<AuditRenter> AuditRenters { get; set; }
         public virtual ICollection<AuditRentTransaction> AuditRentTransactions { get; set; }
+        public virtual ICollection<RenterCommunicationHistory> RenterCommunicationHistories { get; set; }
 
     }
 }

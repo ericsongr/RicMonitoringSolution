@@ -3323,6 +3323,16 @@
           "bin/placeholder/RicCommon.dll": {}
         }
       },
+      "RicCommunication/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/RicCommunication.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RicCommunication.dll": {}
+        }
+      },
       "RicModel/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -10048,6 +10058,11 @@
       "path": "../RicCommon/RicCommon.csproj",
       "msbuildProject": "../RicCommon/RicCommon.csproj"
     },
+    "RicCommunication/1.0.0": {
+      "type": "project",
+      "path": "../RicCommunication/RicCommunication.csproj",
+      "msbuildProject": "../RicCommunication/RicCommunication.csproj"
+    },
     "RicModel/1.0.0": {
       "type": "project",
       "path": "../RicModel/RicModel.csproj",
@@ -10067,6 +10082,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.8",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.4",
       "RicCommon >= 1.0.0",
+      "RicCommunication >= 1.0.0",
       "Serilog >= 2.9.0",
       "Serilog.AspNetCore >= 3.2.0",
       "Serilog.Settings.Configuration >= 3.1.0",
@@ -10108,6 +10124,9 @@
           "projectReferences": {
             "D:\\Projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj": {
               "projectPath": "D:\\Projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj"
+            },
+            "D:\\Projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj": {
+              "projectPath": "D:\\Projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj"
             }
           }
         }

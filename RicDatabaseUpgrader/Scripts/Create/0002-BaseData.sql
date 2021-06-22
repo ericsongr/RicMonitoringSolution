@@ -23,5 +23,14 @@ INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AmazonS3A
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AmazonS3SecretKey', 'fwMn6nrXYCNfd5vETlyIwW4Q8/UFvScE4TNsq5qb', 'AmazonS3 Secret Key')
 
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailRenterBeforeDueDateEnable', 'True', 'Enable Email Renter before due date')
-INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailRenterNoOfDaysBeforeDueDate', '2', 'Email Renter # of days before due date')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailRenterNoOfDaysBeforeDueDate', '2', 'Renter # of days before due date')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppEmailMessageRenterBeforeDueDate', 'Hi {FirstName}', 'Email Body')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('UseSystemDedicatedNumber', 'false', 'Use dedicated number')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('SMSGatewaySenderId', '639297233031', 'SMS from number')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSRenterBeforeDueDateEnable', 'True', 'Enable SMS Renter before due date')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSRenterNoOfDaysBeforeDueDate', '2', 'SMS Renter # of days before due date')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSMessageRenterBeforeDueDate', 'Hi {{Name}}, Friendly reminder of your rent due on {{DueDate}} for the period of {{Period}}.', 'SMS Body')
+
+INSERT INTO [dbo].[SmsGateway]([Name],[UserName],[Password],[IsActive],[GatewayUrl]) VALUES('Sms Global HTTP','96ez1jde','dL3hk7Vc',1,'https://api.smsglobal.com/http-api.php?')
+
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'SMSFee', N'0.09', N'SMS fee')

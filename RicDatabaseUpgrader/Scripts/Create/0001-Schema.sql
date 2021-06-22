@@ -583,3 +583,83 @@ CREATE TABLE [dbo].[MobileAppLogs](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SmsGateway](
+	[SmsGatewayId] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[UserName] [nvarchar](500) NOT NULL,
+	[Password] [nvarchar](500) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[GatewayUrl] [nvarchar](1000) NULL,
+	[DedicatedNumber] [varchar](20) NULL,
+ CONSTRAINT [PK_SmsGateway] PRIMARY KEY CLUSTERED 
+(
+	[SmsGatewayId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MemberCommunicationHistory]    Script Date: 25/10/2017 1:03:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RenterCommunicationHistory](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[RenterId] [int] NOT NULL,
+	[CommunicationUtcDateTime] [datetime] NULL,
+	[CommunicationType] [int] NULL,
+	[CommunicationText] [nvarchar](max) NULL,
+	[CommunicationSentTo] [nvarchar](100) NULL,
+	[RequestedBy] [nvarchar](25) NULL,
+	[IsSuccessfullySent] [bit] NULL,
+	[BatchID] [nvarchar](100) NULL,
+	[MessageId] [nvarchar](500) NULL,
+	[HasRead] [bit] NOT NULL,
+	[AttachmentFileName] [nvarchar](500) NULL,
+	[ContentType] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[RenterCommunicationHistory]  WITH CHECK ADD  CONSTRAINT [FK_RenterCommunicationHistory_Accounts_RenterId] FOREIGN KEY(RenterId)
+	REFERENCES [dbo].[Renters] ([Id])
+	ON DELETE CASCADE
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AccountBillingItems](
+		[AccountBillingItemId] [bigint] IDENTITY(1,1) NOT NULL,
+		[AccountId] [int] NOT NULL,
+		[BillingReason] [int] NOT NULL,
+		[BillingAmount] [money] NOT NULL,
+		[BillingReference] [varchar](100) NULL,
+		[CreatedUtcDateTime] [datetime] NOT NULL,
+		[ProcessedUtcDateTime] [datetime] NULL,
+		[MessageId] [varchar](50) NULL,
+		[PaymentType] [int] NULL,
+	 CONSTRAINT [PK_AccountBillingItems] PRIMARY KEY CLUSTERED 
+	(
+		[AccountBillingItemId] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+ALTER TABLE [dbo].[AccountBillingItems]  WITH CHECK ADD  CONSTRAINT [FK_AccountBillingItems_Accounts] FOREIGN KEY([AccountId])
+REFERENCES [dbo].[Accounts] ([Id])
+
+ALTER TABLE [dbo].[AccountBillingItems] CHECK CONSTRAINT [FK_AccountBillingItems_Accounts]
