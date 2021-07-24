@@ -3,7 +3,7 @@
 namespace RicModel.Enumeration
 {
     [Serializable]
-    public enum CommunicationHistoryType
+    public enum CommunicationType
     {
         SMS = 1,
         Email = 2,

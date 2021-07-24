@@ -30,7 +30,9 @@ INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('SMSGatewa
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSRenterBeforeDueDateEnable', 'True', 'Enable SMS Renter before due date')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSRenterNoOfDaysBeforeDueDate', '2', 'SMS Renter # of days before due date')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSMessageRenterBeforeDueDate', 'Hi {{Name}}, Friendly reminder of your rent due on {{DueDate}} for the period of {{Period}}.', 'SMS Body')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'SMSFee', N'0.09', N'SMS fee')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'OneSignalAuthKey', N'YWEwNDNlOGQtZjVhMS00NGNhLWI5ZmEtOTI4ZDcxNjA5MDhj', N'One Signal Auth Key')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'OneSignalAppId', N'da240190-93b6-4c23-813e-637e472bca16', N'One Signal Application Id')
 
 INSERT INTO [dbo].[SmsGateway]([Name],[UserName],[Password],[IsActive],[GatewayUrl]) VALUES('Sms Global HTTP','96ez1jde','dL3hk7Vc',1,'https://api.smsglobal.com/http-api.php?')
 
-INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'SMSFee', N'0.09', N'SMS fee')

@@ -34,6 +34,7 @@
     <None Remove="Scripts\Update\v1.0002\0007-sms-gateway.sql" />
     <None Remove="Scripts\Update\v1.0002\0008-send-sms-as-friendly.sql" />
     <None Remove="Scripts\Update\v1.0002\0009-communication.sql" />
+    <None Remove="Scripts\Update\v1.0002\0010-send-push-notification.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +55,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0001\0007-inserting-total-earn.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0004-update-data-and-alter-renter.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-DbErrorLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0002\0010-send-push-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0009-communication.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0008-send-sms-as-friendly.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0007-sms-gateway.sql" />

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using Mustache;
 using RicCommon.Diagnostics;
 using RicCommon.Enumeration;
 using RicCommunication.Interface;
@@ -32,6 +36,22 @@ namespace RicEntityFramework.Services
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
             _renterCommunicationRepository = renterCommunicationRepository ?? throw new ArgumentNullException(nameof(renterCommunicationRepository));
             _accountBillingItemRepository = accountBillingItemRepository ?? throw new ArgumentNullException(nameof(accountBillingItemRepository));
+        }
+
+        public List<RenterCommunicationHistory> GetRenter(int renterId, CommunicationType communicationType)
+        {
+            return _renterCommunicationRepository
+                .FindAll()
+                .Where(o => o.RenterId == renterId && o.CommunicationType == (int) communicationType)
+                .AsNoTracking()
+                .ToList();
+        }
+
+        public RenterCommunicationHistory GetById(int id)
+        {
+            return _renterCommunicationRepository
+                .FindAll()
+                .FirstOrDefault(o => o.Id == id);
         }
 
         public bool SendSmsToRenter(string toNumber, string replacedText, int renterId, string batchId = null, bool throwException = false)
@@ -70,17 +90,17 @@ namespace RicEntityFramework.Services
                 {
                     toNumber = EnsureNumberHasDialingCode(toNumber, renterId, GetDialCodeFromMember);
 
-                    //var messageId = _smsGateway.SendSMSv2(from, toNumber, replacedText);
-                    var messageId = Guid.NewGuid().ToString();
+                    var messageId = _smsGateway.SendSMSv2(from, toNumber, replacedText);
+                    //var messageId = Guid.NewGuid().ToString();
                     if (messageId.Contains("ERROR:"))
                     {
-                        //_memberCommunicationService.LogFailedSending(renterId, CommunicationHistoryType.SMS);
+                        //_memberCommunicationService.LogFailedSending(renterId, CommunicationType.SMS);
                     }
                     else if (!string.IsNullOrWhiteSpace(messageId))
                     {
                         BillSmsFees(replacedText, renterId);
 
-                        Save(renterId, DateTime.UtcNow, (int)CommunicationHistoryType.SMS, toNumber, replacedText, true, batchId, messageId, true);
+                        Save(renterId, DateTime.UtcNow, (int)CommunicationType.SMS, toNumber, replacedText, true, batchId, messageId, true);
 
                         smsSentSuccessfully = true;
 
