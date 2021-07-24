@@ -21,5 +21,8 @@
         SMSGatewaySenderId,
 
         SMSFee,
+
+        OneSignalAuthKey,
+        OneSignalAppId
     }
 }

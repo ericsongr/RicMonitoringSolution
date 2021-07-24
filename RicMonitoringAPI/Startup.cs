@@ -23,8 +23,10 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using RicCommon.Enumeration;
 using RicCommon.Services;
 using RicCommunication.Interface;
+using RicCommunication.PushNotification;
 using RicCommunication.SmsGateway;
 using RicEntityFramework;
 using RicEntityFramework.Interfaces;
@@ -122,15 +124,21 @@ namespace RicMonitoringAPI
             services.AddTransient<ISmsGatewayService, SmsGatewayService>();
             services.AddTransient<ICommunicationService, CommunicationService>();
             services.AddTransient<ISMSGateway, SMSGlobal>();
+
+            // Get the service provider to access the http context
+            var svrProvider = services.BuildServiceProvider();
+            var settingRepository = svrProvider.GetService<ISettingRepository>();
+
+            //DI with passing of constructor parameter
+            services.AddTransient<IPushNotificationGateway>(p => 
+                new OneSignalGateway(settingRepository.GetValue(SettingNameEnum.OneSignalAuthKey), 
+                                     settingRepository.GetValue(SettingNameEnum.OneSignalAppId)));
             
             services.AddHealthChecks();
 
             // Add the HttpContextAccessor if needed.
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            // Get the service provider to access the http context
-            var svrProvider = services.BuildServiceProvider();
-
+            
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
