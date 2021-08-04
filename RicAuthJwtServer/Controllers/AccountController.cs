@@ -171,7 +171,7 @@ namespace RicAuthJwtServer.Controllers
                 {
                     Payload = new
                     {
-                        userId = loginUserResult.Id,
+                        portalUserId = loginUserResult.Id,
                         username = loginUser.Username,
                         name,
                         role,

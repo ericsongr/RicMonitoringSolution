@@ -17,7 +17,7 @@ import { DataSource } from '@angular/cdk/collections';
 export class AccountsComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id','name','isActive'];
+  displayedColumns = ['id','name','isActive', 'isSelected'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;

@@ -3,8 +3,8 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiControllers } from 'environments/api-controllers';
-const TABLE_FIELDS = "?fields=id,name,isActive&orderBy=name";
-const DROPDOWN_FIELDS = "?fields=id,name&orderBy=name";
+const TABLE_FIELDS = "?fields=id,name,isActive,isSelected&orderBy=name";
+const DROPDOWN_FIELDS = "?fields=id,name,isSelected&orderBy=name";
 
 @Injectable()
 export class AccountsService implements Resolve<any> {

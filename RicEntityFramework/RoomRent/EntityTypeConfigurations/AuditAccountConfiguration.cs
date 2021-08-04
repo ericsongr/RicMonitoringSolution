@@ -14,7 +14,8 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasOne(t => t.Account)
                 .WithMany(p => p.AuditAccounts)
                 .HasForeignKey(f => f.Id)
-                .HasConstraintName("FK_AuditAccounts_Accounts_Id");
+                .HasConstraintName("FK_AuditAccounts_Accounts_Id")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("AuditAccounts");
         }

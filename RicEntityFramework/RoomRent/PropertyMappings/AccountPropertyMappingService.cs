@@ -33,6 +33,7 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
                 {"GeoCoordinates", new PropertyMappingValue(new List<string>() {"GeoCoordinates"}) },
                 {"CompanyFeeFailedPaymentCount", new PropertyMappingValue(new List<string>() {"CompanyFeeFailedPaymentCount"}) },
                 {"PaymentIssueSuspensionDate", new PropertyMappingValue(new List<string>() {"PaymentIssueSuspensionDate"}) },
+                {"IsSelected", new PropertyMappingValue(new List<string>() {"IsSelected"}) },
             };
 
         public AccountPropertyMappingService()

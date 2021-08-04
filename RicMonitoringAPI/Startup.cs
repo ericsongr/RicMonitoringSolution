@@ -142,7 +142,7 @@ namespace RicMonitoringAPI
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
-                        .Map<Account, AuditAccount>()
+                        //.Map<Account, AuditAccount>()
                         .Map<Room, AuditRoom>()
                         .Map<Renter, AuditRenter>()
                         .Map<RentTransaction, AuditRentTransaction>()
