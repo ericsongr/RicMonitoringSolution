@@ -6,14 +6,12 @@ namespace RicModel.RoomRent.Audits
 {
     public class AuditAccount : IAudit
     {
-        [Key]
         public int AuditAccountId { get; set; }
 
         public int Id { get; set; }
         
         public string Name { get; set; }
 
-        [RegularExpression("^[^0]+", ErrorMessage = @"Please select a valid timezone")]
         public string TimeZone { get; set; }
 
         public bool IsActive { get; set; }
@@ -24,13 +22,8 @@ namespace RicModel.RoomRent.Audits
 
         public string State { get; set; }
 
-        [StringLength(100)]
         public string PostalCode { get; set; }
 
-        [StringLength(500)]
-        [RegularExpression(
-            @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$",
-            ErrorMessage = "Please enter a valid e-mail address")]
         public string Email { get; set; }
         
         [StringLength(100)]
@@ -54,7 +47,7 @@ namespace RicModel.RoomRent.Audits
 
         public string GeoCoordinates { get; set; }
         
-        public int CompanyFeeFailedPaymentCount { get; set; }
+        public int? CompanyFeeFailedPaymentCount { get; set; }
         
         public DateTime? PaymentIssueSuspensionDate { get; set; }
 
@@ -63,6 +56,8 @@ namespace RicModel.RoomRent.Audits
         public string Username { get; set; }
 
         public string AuditAction { get; set; }
+
+        public bool IsSelected { get; set; }
 
         public virtual Account Account { get; set; }
 

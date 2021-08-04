@@ -49,12 +49,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         public async Task<IActionResult> GetTimeZonesInJson()
         {
             var timeZones = (from TimeZoneInfo tz in _accountService.SetupTimeZones()
-                select new TimeZone
-                {
-                    DisplayName = tz.DisplayName,
-                    Id = tz.Id
-                }).OrderBy(o => o.DisplayName).ToList();
-            
+                             select new TimeZone
+                             {
+                                 DisplayName = tz.DisplayName,
+                                 Id = tz.Id
+                             }).OrderBy(o => o.DisplayName).ToList();
+
             return Ok(new BaseRestApiModel
             {
                 Payload = timeZones
@@ -79,7 +79,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             return Ok(new BaseRestApiModel
             {
-                Payload = account.ShapeData(fields) 
+                Payload = account.ShapeData(fields)
             });
         }
 
@@ -117,6 +117,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             try
             {
+                if (account.IsSelected)
+                    UpdateToUnSelectedAccount();
+
                 var roomEntity = Mapper.Map<Account>(account);
 
                 _accountRepository.Add(roomEntity);
@@ -155,6 +158,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     return NotFound();
                 }
 
+                if (!accountEntity.IsSelected && account.IsSelected)
+                    UpdateToUnSelectedAccount();
+
                 accountEntity.Name = account.Name;
                 accountEntity.Timezone = account.Timezone;
                 accountEntity.IsActive = account.IsActive;
@@ -175,6 +181,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 accountEntity.GeoCoordinates = account.GeoCoordinates;
                 accountEntity.CompanyFeeFailedPaymentCount = account.CompanyFeeFailedPaymentCount;
                 accountEntity.PaymentIssueSuspensionDate = account.PaymentIssueSuspensionDate;
+                accountEntity.IsSelected = account.IsSelected;
 
                 _accountRepository.Update(accountEntity);
                 _accountRepository.Commit();
@@ -192,6 +199,17 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             catch (System.Exception ex)
             {
                 return Ok(HandleApiException(ex.Message + " InnerException: " + ex.InnerException.Message, HttpStatusCode.BadRequest));
+            }
+        }
+
+        private void UpdateToUnSelectedAccount()
+        {
+            var account = _accountRepository.GetSingleAsync(o => o.IsSelected).GetAwaiter().GetResult();
+            if (account != null)
+            {
+                account.IsSelected = false;
+                _accountRepository.Update(account);
+                _accountRepository.Commit();
             }
         }
 

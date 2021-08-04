@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using RicCommon;
 using RicCommon.Enumeration;
 using RicCommon.Services;
+using RicCommunication.Interface;
 using RicEntityFramework;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
@@ -44,6 +45,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsGatewayService _smsGatewayService;
         private readonly ICommunicationService _communicationService;
+        private readonly IPushNotificationGateway _pushNotificationGateway;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -57,7 +59,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRenterCommunicationRepository renterCommunicationRepository,
             IEmailSender emailSender,
             ISmsGatewayService smsGatewayService,
-            ICommunicationService communicationService
+            ICommunicationService communicationService,
+            IPushNotificationGateway pushNotificationGateway
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -72,6 +75,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             _smsGatewayService = smsGatewayService ?? throw new ArgumentNullException(nameof(smsGatewayService));
             _communicationService = communicationService ?? throw new ArgumentNullException(nameof(communicationService));
+            _pushNotificationGateway = pushNotificationGateway ?? throw new ArgumentNullException(nameof(pushNotificationGateway));
         }
 
         [HttpGet]
@@ -115,13 +119,15 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         {
             var currentDateTimeUtc = DateTime.UtcNow;
 
-            var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
-            //var status = DailyBatchStatusConstant.Processed;
+            //var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
+            var status = DailyBatchStatusConstant.Processed;
 
-            //email
-            SendEmailRentersBeforeDueDate(currentDateTimeUtc);
-            //sms
-            SendSmsRentersBeforeDueDate(currentDateTimeUtc);
+            ////email
+            //SendEmailRentersBeforeDueDate(currentDateTimeUtc);
+            ////sms
+            //SendSmsRentersBeforeDueDate(currentDateTimeUtc);
+
+            _pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
             return Ok(new { status });
         }
@@ -172,7 +178,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                         _emailSender.SendDueReminderEmailAsync(email, replaceEmailBody);
 
-                        Save(renterId, DateTime.UtcNow, (int)CommunicationHistoryType.Email, email, replaceEmailBody, true, null, messageId, true);
+                        Save(renterId, DateTime.UtcNow, (int)CommunicationType.Email, email, replaceEmailBody, true, null, messageId, true);
 
                     }
                 });

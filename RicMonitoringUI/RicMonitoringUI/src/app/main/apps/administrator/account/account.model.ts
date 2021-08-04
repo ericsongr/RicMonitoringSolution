@@ -5,6 +5,7 @@ export class Account {
     name : string
     timezone : string
     isActive : boolean
+    isSelected : boolean
     lookup : string
     street : string
     subUrb : string
@@ -31,6 +32,7 @@ export class Account {
         this.name = account.name || ''
         this.timezone = account.timezone
         this.isActive = account.isActive
+        this.isSelected = account.isSelected
         this.street = account.street
         this.subUrb = account.subUrb
         this.state = account.state

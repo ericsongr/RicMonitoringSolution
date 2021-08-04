@@ -117,8 +117,14 @@ export class ToolbarComponent implements OnInit, OnDestroy
                             this.accounts = response.payload;
 
                             //set first account be the default selected account
-                            var account = this.accounts[0];
-                            this.setAccount(account.id, account.name);
+                            var defaultSelectedAccount = this.accounts.find(o => o.isSelected);
+                            if (defaultSelectedAccount) {
+                                this.setAccount(defaultSelectedAccount.id, defaultSelectedAccount.name);
+                            } else {
+                                var account = this.accounts[0];
+                                this.setAccount(account.id, account.name);
+                            }
+                            
                         });
                 }
                 

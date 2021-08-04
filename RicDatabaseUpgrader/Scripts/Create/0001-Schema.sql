@@ -26,6 +26,7 @@ CREATE TABLE [dbo].[Accounts](
 		[GeoCoordinates] [varchar](75) NULL,
 		[CompanyFeeFailedPaymentCount] [int] NULL,
 		[PaymentIssueSuspensionDate] [datetime] NULL,
+		[IsSelected] BIT NOT NULL DEFAULT(0),
 	 CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -65,6 +66,7 @@ CREATE TABLE [dbo].[AuditAccounts](
 		[AuditDateTime] [datetime2](7) NOT NULL DEFAULT (GETDATE()),
 		[Username] [nvarchar](50) NOT NULL,
 		[AuditAction] [nvarchar](20) NOT NULL,
+		[IsSelected] BIT NOT NULL DEFAULT(0),
 	 CONSTRAINT [PK_AuditAccounts] PRIMARY KEY CLUSTERED 
 	(
 		[AuditAccountId] ASC

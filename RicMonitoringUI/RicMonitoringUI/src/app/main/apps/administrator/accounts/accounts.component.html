@@ -77,6 +77,17 @@
                 </mat-cell>
               </ng-container>
 
+              <!-- IsActive# Column -->
+              <ng-container matColumnDef="isSelected">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Selected Default</mat-header-cell>
+                <mat-cell *matCellDef="let account">
+                  <div class="pl-20">
+                    <mat-icon *ngIf="account.isSelected" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                    <mat-icon *ngIf="!account.isSelected" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                  </div>
+                </mat-cell>
+              </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
             <mat-row *matRowDef="let account; columns: displayedColumns;"
                     class="account"

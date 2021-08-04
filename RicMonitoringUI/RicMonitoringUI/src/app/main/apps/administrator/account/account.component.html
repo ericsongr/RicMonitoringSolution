@@ -108,7 +108,7 @@
               </div>
 
               <div>
-                <div class="pl-20" fxFlex="50" fxLayout="column" fxLayoutAlign="start left">
+                <div class="pl-20" fxFlex="20" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h5 secondary-text">Is Active</div>
                   <div class="h2 font-weight-300 py-8">
                     <mat-radio-group formControlName="isActive">
@@ -116,8 +116,17 @@
                       <mat-radio-button [checked]="!account.isActive" value="false">No</mat-radio-button>
                   </mat-radio-group>
                   </div>
-              </div>
-               
+                </div>
+                  <div class="pl-20" fxFlex="30" fxLayout="column" fxLayoutAlign="start left">
+                    <div class="h5 secondary-text">Set As Selected Default</div>
+                    <div class="h2 font-weight-300 py-8">
+                      <mat-radio-group formControlName="isSelected">
+                        <mat-radio-button [checked]="account.isSelected" value="true">Yes</mat-radio-button>
+                        <mat-radio-button [checked]="!account.isSelected" value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                    </div>
+                  </div>
+              
                 <mat-form-field fxFlex="50" appearance="outline" floatLabel="always" class="w-100-p">
                   <mat-label>Suburb</mat-label>
                   <input matInput

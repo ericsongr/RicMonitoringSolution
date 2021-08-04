@@ -83,6 +83,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       name : [this.account.name, Validators.required],
       timezone : [this.account.timezone, Validators.required],
       isActive : [this.account.isActive],
+      isSelected : [this.account.isSelected],
       lookup : [this.account.lookup, Validators.required],
       street : [this.account.street, Validators.required],
       subUrb : [this.account.subUrb, Validators.required],
