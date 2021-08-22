@@ -142,7 +142,7 @@ namespace RicMonitoringAPI
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
-                        //.Map<Account, AuditAccount>()
+                        .Map<Account, AuditAccount>()
                         .Map<Room, AuditRoom>()
                         .Map<Renter, AuditRenter>()
                         .Map<RentTransaction, AuditRentTransaction>()
@@ -150,8 +150,8 @@ namespace RicMonitoringAPI
                         .AuditEntityAction<IAudit>((evt, entry, auditEntity) =>
                         {
                             // Get the current HttpContext 
-                            var httpContext = svrProvider.GetService<IHttpContextAccessor>().HttpContext;
-                            var userName = httpContext.User?.Claims.FirstOrDefault(o => o.Type == "UserName")?.Value;
+                            //var httpContext = svrProvider.GetService<IHttpContextAccessor>().HttpContext;
+                            var userName = "TODO_USERNAME"; //httpContext.User?.Claims.FirstOrDefault(o => o.Type == "UserName")?.Value;
 
                             auditEntity.AuditDateTime = DateTime.UtcNow;
                             auditEntity.Username = string.IsNullOrEmpty(userName) ? "MANUAL_CALL" : userName;

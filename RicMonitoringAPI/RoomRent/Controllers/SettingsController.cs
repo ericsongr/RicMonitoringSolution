@@ -10,8 +10,10 @@ using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
 using System.Threading.Tasks;
+using RicCommon.Enumeration;
 using RicEntityFramework.Interfaces;
 using RicMonitoringAPI.RoomRent.ViewModels;
+using RicMonitoringAPI.RoomRent.ViewModels.ApiModels;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -84,5 +86,79 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return Ok(HandleApiException(ex.Message, HttpStatusCode.BadRequest));
             }
         }
+
+        #region IActionResult
+
+        [AllowAnonymous]
+        [Route("theme")]
+        public IActionResult PostClubTheme(LogoSizeApiModel model)
+        {
+            string primaryBgColorForApp = _settingRepository.GetValue(SettingNameEnum.PrimaryColorForApp);
+            string primaryTextColorForApp = _settingRepository.GetValue(SettingNameEnum.PrimaryTextColorForApp);
+            string primaryBgColorForMyAccount = _settingRepository.GetValue(SettingNameEnum.PrimaryColorForMyAccount);
+            string primaryTextColorForMyAccount =
+                _settingRepository.GetValue(SettingNameEnum.PrimaryTextColorForMyAccount);
+            if (string.IsNullOrEmpty(primaryBgColorForMyAccount))
+                primaryBgColorForMyAccount = primaryBgColorForApp;
+            if (string.IsNullOrEmpty(primaryTextColorForMyAccount))
+                primaryBgColorForMyAccount = primaryTextColorForApp;
+
+            string secondaryBgColorForApp = GetSecondaryBackgroundColor();
+            string secondaryTextColorForApp = _settingRepository.GetValue(SettingNameEnum.SecondaryTextColorForApp);
+            string secondaryBgColorForMyAccount =
+                _settingRepository.GetValue(SettingNameEnum.SecondaryColorForMyAccount);
+            string secondaryTextColorForMyAccount =
+                _settingRepository.GetValue(SettingNameEnum.SecondaryTextColorForMyAccount);
+            if (string.IsNullOrEmpty(secondaryBgColorForMyAccount))
+                secondaryBgColorForMyAccount = secondaryBgColorForApp;
+            if (string.IsNullOrEmpty(secondaryTextColorForMyAccount))
+                secondaryTextColorForMyAccount = secondaryTextColorForApp;
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new
+                {
+                    PrimaryColor = new
+                    {
+                        BackGround = primaryBgColorForApp,
+                        Text = primaryTextColorForApp,
+                    },
+                    SecondaryColor = new
+                    {
+                        BackGround = secondaryBgColorForApp,
+                        Text = secondaryTextColorForApp,
+                    },
+                    FourthColor = new
+                    {
+                        BackGround = _settingRepository.GetValue(SettingNameEnum.FourthColorForApp),
+                        Text = "",
+                    },
+                    FifthColor = new
+                    {
+                        BackGround = _settingRepository.GetValue(SettingNameEnum.FifthColorForApp),
+                        Text = "",
+                        Logo = ""
+                    },
+                }
+            });
+
+        }
+
+        #endregion
+
+        
+        #region Private Functions
+
+        private string GetSecondaryBackgroundColor()
+        {
+            var secondaryBackgroundColor = _settingRepository.GetValue(SettingNameEnum.SecondaryColorForApp);
+            if (string.IsNullOrEmpty(secondaryBackgroundColor.Trim()) || secondaryBackgroundColor.Trim() == "#")
+            {
+                return null;
+            }
+            return secondaryBackgroundColor;
+        }
+
+        #endregion
     }
 }

@@ -23,6 +23,18 @@
         SMSFee,
 
         OneSignalAuthKey,
-        OneSignalAppId
+        OneSignalAppId,
+
+        PrimaryColorForApp,
+        SecondaryColorForApp,
+        PrimaryTextColorForApp,
+        SecondaryTextColorForApp,
+        ThirdColorForApp,
+        FourthColorForApp,
+        FifthColorForApp,
+        PrimaryColorForMyAccount,
+        PrimaryTextColorForMyAccount,
+        SecondaryColorForMyAccount,
+        SecondaryTextColorForMyAccount
     }
 }
