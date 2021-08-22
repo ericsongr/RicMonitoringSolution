@@ -179,7 +179,8 @@ namespace RicAuthJwtServer.Controllers
                         accessTokenExpiresIn = timeoutInMinutes,
                         refreshToken = refreshToken.FirstOrDefault().Key,
                         refreshTokenExpiresIn = refreshToken.First().Value,
-                        loginToken
+                        loginToken,
+                        userType = 1 //TODO fetch value from db
 
                     },
                     Errors = new List<BaseErrorModel>(),
