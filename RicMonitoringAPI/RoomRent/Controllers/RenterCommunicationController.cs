@@ -133,11 +133,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         }
 
         [Route("user/sample")]
-        public IActionResult SendSample()
+        public IActionResult SendSample(string message)
         {
-            var portalUserId = "3e06ceef-7383-4db5-ad62-59188276ea29";
-            var devicesIds = new List<string> { "3e06ceef-7383-4db5-ad62-59188276ea29" };
-            _pushNotificationGateway.SendNotification(portalUserId, devicesIds, "first title", "and the message");
+            var portalUserId = "735b94e5-19f4-454e-9e58-00fd463484ec";
+            var devicesIds = new List<string> { "735b94e5-19f4-454e-9e58-00fd463484ec" };
+            _pushNotificationGateway.SendNotification(portalUserId, devicesIds, "first title", message);
             return Ok("sent");
         }
 
