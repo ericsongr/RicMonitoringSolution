@@ -119,13 +119,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         {
             var currentDateTimeUtc = DateTime.UtcNow;
 
-            //var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
-            var status = DailyBatchStatusConstant.Processed;
+            var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
+            //var status = DailyBatchStatusConstant.Processed;
 
             ////email
-            //SendEmailRentersBeforeDueDate(currentDateTimeUtc);
+            SendEmailRentersBeforeDueDate(currentDateTimeUtc);
             ////sms
-            //SendSmsRentersBeforeDueDate(currentDateTimeUtc);
+            SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
             _pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
@@ -152,13 +152,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private void SendEmailRentersBeforeDueDate(DateTime currentDateTimeUtc)
         {
             var appEmailRenterBeforeDueDateEnable = _settingRepository.GetBooleanValue(SettingNameEnum.AppEmailRenterBeforeDueDateEnable);
-            var appEmailRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppEmailRenterNoOfDaysBeforeDueDate);
-            var emailBody = _settingRepository.GetValue(SettingNameEnum.AppEmailMessageRenterBeforeDueDate);
-
-            var selectedDate = currentDateTimeUtc.Date.AddDays(appEmailRenterNoOfDaysBeforeDueDate);
-
+            
             if (appEmailRenterBeforeDueDateEnable)
             {
+                var appEmailRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppEmailRenterNoOfDaysBeforeDueDate);
+                var emailBody = _settingRepository.GetValue(SettingNameEnum.AppEmailMessageRenterBeforeDueDate);
+                var selectedDate = currentDateTimeUtc.Date.AddDays(appEmailRenterNoOfDaysBeforeDueDate);
+                
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
                                  o.DueDate == selectedDate &&
@@ -189,14 +189,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private void SendSmsRentersBeforeDueDate(DateTime currentDateTimeUtc)
         {
             var appSmsRenterBeforeDueDateEnable = _settingRepository.GetBooleanValue(SettingNameEnum.AppSMSRenterBeforeDueDateEnable);
-            var appSmsRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppSMSRenterNoOfDaysBeforeDueDate);
-            var smsBody = _settingRepository.GetValue(SettingNameEnum.AppSMSMessageRenterBeforeDueDate);
-            var fromNumber = _settingRepository.GetValue(SettingNameEnum.SMSGatewaySenderId);
-
-            var selectedDate = currentDateTimeUtc.Date.AddDays(appSmsRenterNoOfDaysBeforeDueDate);
-
             if (appSmsRenterBeforeDueDateEnable)
             {
+                var appSmsRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppSMSRenterNoOfDaysBeforeDueDate);
+                var smsBody = _settingRepository.GetValue(SettingNameEnum.AppSMSMessageRenterBeforeDueDate);
+                var fromNumber = _settingRepository.GetValue(SettingNameEnum.SMSGatewaySenderId);
+                var selectedDate = currentDateTimeUtc.Date.AddDays(appSmsRenterNoOfDaysBeforeDueDate);
+
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
                                  o.DueDate == selectedDate &&
