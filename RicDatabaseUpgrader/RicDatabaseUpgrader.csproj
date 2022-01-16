@@ -37,6 +37,7 @@
     <None Remove="Scripts\Update\v1.0002\0010-send-push-notification.sql" />
     <None Remove="Scripts\Update\v1.0002\0011-add-is-selected-to-account.sql" />
     <None Remove="Scripts\Update\v1.0003\0001-added-custom-color.sql" />
+    <None Remove="Scripts\Update\v1.0003\0002-EnableDueDateAlertPushNotification.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +69,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0002-EnableDueDateAlertPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0001-added-custom-color.sql" />
   </ItemGroup>
 

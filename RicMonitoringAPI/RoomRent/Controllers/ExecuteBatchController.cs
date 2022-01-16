@@ -127,7 +127,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ////sms
             SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
-            _pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
+            SendDueDateAlertPushNotification(currentDateTimeUtc);
+
+            //_pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
             return Ok(new { status });
         }
@@ -220,6 +222,37 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
         }
+        #endregion
+
+        #region Push Notifications
+
+        private void SendDueDateAlertPushNotification(DateTime currentDateTimeUtc)
+        {
+            var enableDueDateAlertPushNotification = _settingRepository.GetBooleanValue(SettingNameEnum.EnableDueDateAlertPushNotification);
+            if (enableDueDateAlertPushNotification)
+            {
+                string message = ""; //todo
+                string portalUserId = "735b94e5-19f4-454e-9e58-00fd463484ec";
+                var devicesIds = new List<string> { "735b94e5-19f4-454e-9e58-00fd463484ec" };
+
+                //TODO: is enable push notification
+                var transactions = _rentTransactionRepository
+                    .FindBy(o => o.DueDate < currentDateTimeUtc &&
+                            o.PaidDate == null &&
+                            o.PaidAmount == 0 &&
+                            !o.IsSystemProcessed, o => o.Renter)
+                    .ToList();
+
+                transactions.ForEach(transaction =>
+                {
+                    message += transaction.Renter.Name + " " + transaction.TotalAmountDue.ToString("#,##0.00") + "pesos | ";
+                });
+
+                _pushNotificationGateway.SendNotification(portalUserId, devicesIds, "Overdue Alert", message);
+            }
+
+        }
+
         #endregion
 
         #region Shared Functions
