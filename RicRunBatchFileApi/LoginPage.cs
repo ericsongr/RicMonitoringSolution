@@ -146,7 +146,7 @@ namespace RicRunBatchFileApi
         {
             int seconds = startRunInMinutes * 60;
             count++;
-            if (count == seconds)
+            if (count == seconds || startRunInMinutes == 0)
             {
                 timer1.Enabled = false;
                 count = 0;
