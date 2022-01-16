@@ -33,6 +33,7 @@ INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('AppSMSMes
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'SMSFee', N'0.09', N'SMS fee')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'OneSignalAuthKey', N'YWEwNDNlOGQtZjVhMS00NGNhLWI5ZmEtOTI4ZDcxNjA5MDhj', N'One Signal Auth Key')
 INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ( N'OneSignalAppId', N'da240190-93b6-4c23-813e-637e472bca16', N'One Signal Application Id')
+INSERT INTO [dbo].[Settings] ([Key], [Value], [FriendlyName]) VALUES ('EnableDueDateAlertPushNotification', 'False', 'Enable Due Date Alert Push Notification')
 
 INSERT INTO [dbo].[SmsGateway]([Name],[UserName],[Password],[IsActive],[GatewayUrl]) VALUES('Sms Global HTTP','96ez1jde','dL3hk7Vc',1,'https://api.smsglobal.com/http-api.php?')
 
