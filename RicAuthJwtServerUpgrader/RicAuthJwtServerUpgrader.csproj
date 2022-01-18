@@ -10,17 +10,23 @@
     <None Remove="Scripts\Create\0001-Schema.sql" />
     <None Remove="Scripts\Create\0002-BaseData.sql" />
     <None Remove="Scripts\Update\v1.0001\0001-add-3-tables.sql" />
+    <None Remove="Scripts\Update\v1.0001\0002-IsReceiveDueDateAlertPushNotification.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create\0001-Schema.sql" />
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0002-IsReceiveDueDateAlertPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-add-3-tables.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="dbup" Version="4.3.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RicAuthJwtServer\RicAuthJwtServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using RicAuthJwtServer.Models;
+﻿using System.Collections.Generic;
+using RicAuthJwtServer.Models;
 
 namespace RicAuthJwtServer.Application.Interfaces
 {
@@ -6,6 +7,7 @@ namespace RicAuthJwtServer.Application.Interfaces
     {
         void Delete(string userId);
         RegisteredDevice Find(string userId, string deviceId);
+        List<RegisteredDevice> FindReceiveDueDateAlert();
         void Save(RegisteredDevice item);
         void Save(int id, string userId, string deviceId, string platform);
     }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data.Extensions;
@@ -74,6 +75,7 @@ namespace RicAuthJwtServer.Controllers
                 UserName = model.UserName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                IsReceiveDueDateAlertPushNotification = model.IsReceiveDueDateAlertPushNotification,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -100,6 +102,7 @@ namespace RicAuthJwtServer.Controllers
                 UserName = model.UserName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                IsReceiveDueDateAlertPushNotification = model.IsReceiveDueDateAlertPushNotification,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -167,6 +170,15 @@ namespace RicAuthJwtServer.Controllers
                 var refreshToken = _refreshTokenService.GenerateRefreshToken(loginUserResult.Id, loginUser.DeviceId);
                 string loginToken = _aspNetUserLoginTokenService.GenerateLoginToken(loginUserResult.Id);
 
+                //get registered devices for
+                string registeredDevicesJsonString = "";
+                if (loginUserResult.UserName == "RunDailyBatch")
+                {
+                    var registeredDevices = GetRegisteredDevices();
+                    registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
+                }
+                   
+
                 return Ok(new BaseRestApiModel
                 {
                     Payload = new
@@ -180,8 +192,8 @@ namespace RicAuthJwtServer.Controllers
                         refreshToken = refreshToken.FirstOrDefault().Key,
                         refreshTokenExpiresIn = refreshToken.First().Value,
                         loginToken,
-                        userType = 1 //TODO fetch value from db
-
+                        userType = 1, //TODO fetch value from db
+                        registeredDevicesJsonString
                     },
                     Errors = new List<BaseErrorModel>(),
                     StatusCode = (int)HttpStatusCode.OK
@@ -193,6 +205,16 @@ namespace RicAuthJwtServer.Controllers
                 return Ok(HandleApiException(errorMessage, HttpStatusCode.BadRequest));
             }
 
+        }
+
+        private List<RegisteredDeviceApiModel> GetRegisteredDevices()
+        {
+            return _registeredDeviceService.FindReceiveDueDateAlert()
+                .Select(o => new RegisteredDeviceApiModel
+                {
+                    DeviceId = o.DeviceId,
+                    AspNetUsersId = o.AspNetUsersId
+                }).ToList();
         }
 
         [Route("validate")]

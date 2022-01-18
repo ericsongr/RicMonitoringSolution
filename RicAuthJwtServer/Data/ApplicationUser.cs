@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
+using RicAuthJwtServer.Models;
 using RicAuthJwtServer.ViewModels;
 
 namespace RicAuthJwtServer.Data
@@ -20,6 +22,7 @@ namespace RicAuthJwtServer.Data
             Email = userEntry.Email;
             MobileNumber = userEntry.MobileNumber;
             PhoneNumber = userEntry.PhoneNumber;
+            IsReceiveDueDateAlertPushNotification = userEntry.IsReceiveDueDateAlertPushNotification;
         }
 
         [Required]
@@ -33,7 +36,11 @@ namespace RicAuthJwtServer.Data
         [StringLength(20)]
         public string MobileNumber { get; set; }
 
+        public bool IsReceiveDueDateAlertPushNotification { get; set; }
+
+        public virtual ICollection<RegisteredDevice> RegisteredDevices { get; set; }
         //for multiple result
+        
         public static Expression<Func<ApplicationUser, UserViewModel>> Projection
         {
             get
@@ -47,6 +54,7 @@ namespace RicAuthJwtServer.Data
                     Email = u.Email,
                     MobileNumber = u.MobileNumber,
                     PhoneNumber = u.PhoneNumber,
+                    IsReceiveDueDateAlertPushNotification = u.IsReceiveDueDateAlertPushNotification,
                 };
             }
         }
