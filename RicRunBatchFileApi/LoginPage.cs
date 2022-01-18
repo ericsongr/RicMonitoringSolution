@@ -119,7 +119,14 @@ namespace RicRunBatchFileApi
                         baseClient.DefaultRequestHeaders.Accept.Clear();
                         baseClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage responseBatch = baseClient.PostAsync("api/exec-store-proc", null).Result;
+                        //pass the registeredDevicesJsonString to api/exec-store-proc use for push notifications
+                        data = JsonConvert.SerializeObject(new 
+                        {
+                            registeredDevicesJsonString = payload["registeredDevicesJsonString"]
+                        });
+                        content = new StringContent(data, Encoding.UTF8, "application/json");
+                        
+                        HttpResponseMessage responseBatch = baseClient.PostAsync("api/exec-store-proc", content).Result;
                         if (responseBatch.StatusCode == HttpStatusCode.OK)
                         {
                             DisplayNotification("Daily batch has been completed.");

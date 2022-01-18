@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data.Exception;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
@@ -30,6 +32,21 @@ namespace RicAuthJwtServer.Application
                     .GetSingleAsync(f => f.AspNetUsersId == userId && f.DeviceId == deviceId)
                     .GetAwaiter().GetResult();
                 return registeredDevice;
+            }
+            catch (DataException de)
+            {
+                throw new RepositoryException(de).ErrorUnableToFetchRecord();
+            }
+        }
+
+        public List<RegisteredDevice> FindReceiveDueDateAlert()
+        {
+            try
+            {
+                var registeredDevices = _registeredDeviceRepository                    
+                    .FindBy(f => f.User.IsReceiveDueDateAlertPushNotification)
+                    .ToList();
+                return registeredDevices;
             }
             catch (DataException de)
             {

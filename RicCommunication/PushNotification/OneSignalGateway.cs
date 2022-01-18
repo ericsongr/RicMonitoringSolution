@@ -23,7 +23,7 @@ namespace RicCommunication.PushNotification
             _oneSignalAuthKey = oneSignalAuthKey;
         }
 
-        public bool SendNotification(string portalUserId, IEnumerable<string> devicesIds, string title, string message)
+        public bool SendNotification(string portalUserId, List<string> devicesIds, string title, string message)
         {
             bool success = false;
             if (!string.IsNullOrEmpty(portalUserId))
@@ -33,7 +33,7 @@ namespace RicCommunication.PushNotification
             return success;
         }
 
-        public bool SendNotification(IList<string> portalUserIds, IEnumerable<string> devicesIds, string title, string message)
+        public bool SendNotification(IList<string> portalUserIds, List<string> devicesIds, string title, string message)
         {
             bool success = SendNotificationToExternalIds(portalUserIds, title, message);
             if (!success)

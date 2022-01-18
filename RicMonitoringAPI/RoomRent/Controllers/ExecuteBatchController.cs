@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RicCommon;
 using RicCommon.Enumeration;
 using RicCommon.Services;
@@ -15,6 +20,7 @@ using RicEntityFramework;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces;
+using RicModel;
 using RicModel.Enumeration;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
@@ -22,7 +28,9 @@ using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Extensions;
+using RicMonitoringAPI.RoomRent.ViewModels;
 using Serilog;
+using System.Text.Json;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -46,6 +54,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly ISmsGatewayService _smsGatewayService;
         private readonly ICommunicationService _communicationService;
         private readonly IPushNotificationGateway _pushNotificationGateway;
+        private readonly IConfiguration _configuration;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -60,7 +69,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IEmailSender emailSender,
             ISmsGatewayService smsGatewayService,
             ICommunicationService communicationService,
-            IPushNotificationGateway pushNotificationGateway
+            IPushNotificationGateway pushNotificationGateway,
+            IConfiguration configuration
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -76,6 +86,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _smsGatewayService = smsGatewayService ?? throw new ArgumentNullException(nameof(smsGatewayService));
             _communicationService = communicationService ?? throw new ArgumentNullException(nameof(communicationService));
             _pushNotificationGateway = pushNotificationGateway ?? throw new ArgumentNullException(nameof(pushNotificationGateway));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [HttpGet]
@@ -115,7 +126,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> ExecRentTransactionBatchFile()
+        public async Task<IActionResult> ExecRentTransactionBatchFile([FromBody] BatchParametersModel batchParameters)
         {
             var currentDateTimeUtc = DateTime.UtcNow;
 
@@ -127,7 +138,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ////sms
             SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
-            SendDueDateAlertPushNotification(currentDateTimeUtc);
+            SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
 
             //_pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
@@ -154,13 +165,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private void SendEmailRentersBeforeDueDate(DateTime currentDateTimeUtc)
         {
             var appEmailRenterBeforeDueDateEnable = _settingRepository.GetBooleanValue(SettingNameEnum.AppEmailRenterBeforeDueDateEnable);
-            
+
             if (appEmailRenterBeforeDueDateEnable)
             {
                 var appEmailRenterNoOfDaysBeforeDueDate = _settingRepository.GetIntValue(SettingNameEnum.AppEmailRenterNoOfDaysBeforeDueDate);
                 var emailBody = _settingRepository.GetValue(SettingNameEnum.AppEmailMessageRenterBeforeDueDate);
                 var selectedDate = currentDateTimeUtc.Date.AddDays(appEmailRenterNoOfDaysBeforeDueDate);
-                
+
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
                                  o.DueDate == selectedDate &&
@@ -226,16 +237,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         #region Push Notifications
 
-        private void SendDueDateAlertPushNotification(DateTime currentDateTimeUtc)
+        private void SendDueDateAlertPushNotification(DateTime currentDateTimeUtc, string registeredDevicesJsonString)
         {
             var enableDueDateAlertPushNotification = _settingRepository.GetBooleanValue(SettingNameEnum.EnableDueDateAlertPushNotification);
             if (enableDueDateAlertPushNotification)
             {
                 string message = ""; //todo
-                string portalUserId = "735b94e5-19f4-454e-9e58-00fd463484ec";
-                var devicesIds = new List<string> { "735b94e5-19f4-454e-9e58-00fd463484ec" };
-
-                //TODO: is enable push notification
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.DueDate < currentDateTimeUtc &&
                             o.PaidDate == null &&
@@ -248,9 +255,30 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     message += transaction.Renter.Name + " " + transaction.TotalAmountDue.ToString("#,##0.00") + "pesos | ";
                 });
 
-                _pushNotificationGateway.SendNotification(portalUserId, devicesIds, "Overdue Alert", message);
+                var userRegisteredDevices = GetUserRegisteredDevices(registeredDevicesJsonString);
+                userRegisteredDevices.ForEach(user =>
+                {
+                    _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Overdue Alert", message);
+                });
+                
             }
+        }
 
+        private List<UserRegisteredDeviceApiModel> GetUserRegisteredDevices(string registeredDevicesJsonString)
+        {
+            var userRegisteredDeviceDeserializeObject =
+                JsonSerializer.Deserialize(registeredDevicesJsonString,
+                    typeof(List<UserRegisteredDeviceDeserializeObject>)) as List<UserRegisteredDeviceDeserializeObject>;
+
+            var userRegisteredDevices = (from d in userRegisteredDeviceDeserializeObject
+                group d by d.AspNetUsersId
+                into g
+                select new UserRegisteredDeviceApiModel
+                {
+                    PortalUserId = g.Key,
+                    DeviceIds = g.Select(o => o.DeviceId).ToList()
+                }).ToList();
+            return userRegisteredDevices;
         }
 
         #endregion

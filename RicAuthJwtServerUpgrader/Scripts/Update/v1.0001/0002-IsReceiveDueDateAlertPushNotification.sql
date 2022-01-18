@@ -1,0 +1,6 @@
+﻿
+IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'AspNetUsers' AND COLUMN_NAME = 'IsReceiveDueDateAlertPushNotification')
+BEGIN
+	ALTER TABLE AspNetUsers ADD IsReceiveDueDateAlertPushNotification BIT NOT NULL DEFAULT(0)
+END
+GO

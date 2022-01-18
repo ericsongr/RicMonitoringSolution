@@ -19,5 +19,7 @@ namespace RicAuthJwtServer.ViewModels
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; }
 
+        public bool IsReceiveDueDateAlertPushNotification { get; set; }
+
     }
 }

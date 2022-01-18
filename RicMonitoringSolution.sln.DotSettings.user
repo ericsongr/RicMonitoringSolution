@@ -14,26 +14,58 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dd322436_002D4fc8_002D4652_002D91ad_002D8f39f3c32957/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;RicMonitoringUI&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\Projects\RicMonitoringSolution\RicMonitoringUI" Presentation="&amp;lt;RicMonitoringUI&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=11828ed9_002D1b7a_002D4018_002D9d12_002D6eed0075ff89/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=11828ed9_002D1b7a_002D4018_002D9d12_002D6eed0075ff89/Coords/@EntryValue">(Doc Ln 226 Col 46)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=11828ed9_002D1b7a_002D4018_002D9d12_002D6eed0075ff89/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=11828ed9_002D1b7a_002D4018_002D9d12_002D6eed0075ff89/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=2e2b99c0_002D6526_002D4ecf_002Db4e8_002Dfebd8f1d4322/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=2e2b99c0_002D6526_002D4ecf_002Db4e8_002Dfebd8f1d4322/Coords/@EntryValue">(Doc Ln 135 Col 49)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=2e2b99c0_002D6526_002D4ecf_002Db4e8_002Dfebd8f1d4322/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:RenterCommunicationController.cs</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=2e2b99c0_002D6526_002D4ecf_002Db4e8_002Dfebd8f1d4322/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/Coords/@EntryValue">(Doc Ln 38 Col 27)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:SettingsController.cs</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=40b09d2d_002D109c_002D46ac_002Db190_002Ddf4c1b1e5abf/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=913cbeeb_002Dde6c_002D42c7_002Dbf2a_002D223cbd7a7312/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=913cbeeb_002Dde6c_002D42c7_002Dbf2a_002D223cbd7a7312/Coords/@EntryValue">(Doc Ln 89 Col 30)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=913cbeeb_002Dde6c_002D42c7_002Dbf2a_002D223cbd7a7312/FileId/@EntryValue">D715D488-0F46-4C9E-BF8F-BC2C64A85F2F/f:LoginPage.cs</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=913cbeeb_002Dde6c_002D42c7_002Dbf2a_002D223cbd7a7312/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/Coords/@EntryValue">(Doc Ln 207 Col 34)</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
-	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f82d2538_002D6540_002D43c0_002Dabe0_002D8c4fda20b02f/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=28864aca_002D8e1c_002D40df_002Db14e_002D74737355f9e5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=28864aca_002D8e1c_002D40df_002Db14e_002D74737355f9e5/Coords/@EntryValue">(Doc Ln 89 Col 23)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=28864aca_002D8e1c_002D40df_002Db14e_002D74737355f9e5/FileId/@EntryValue">D715D488-0F46-4C9E-BF8F-BC2C64A85F2F/f:LoginPage.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=28864aca_002D8e1c_002D40df_002Db14e_002D74737355f9e5/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=84043a84_002D1791_002D4e02_002Da835_002D025e3d16e165/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=84043a84_002D1791_002D4e02_002Da835_002D025e3d16e165/Coords/@EntryValue">(Doc Ln 128 Col 28)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=84043a84_002D1791_002D4e02_002Da835_002D025e3d16e165/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=84043a84_002D1791_002D4e02_002Da835_002D025e3d16e165/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=9771f5fe_002D03e0_002D424d_002Db579_002D9cd81f8bd8f7/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=9771f5fe_002D03e0_002D424d_002Db579_002D9cd81f8bd8f7/Coords/@EntryValue">(Doc Ln 3 Col 26)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=9771f5fe_002D03e0_002D424d_002Db579_002D9cd81f8bd8f7/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:ViewModels/f:UserRegisteredDeviceApiModel.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=9771f5fe_002D03e0_002D424d_002Db579_002D9cd81f8bd8f7/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	
+	
+	
+	
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=c6494373_002D01e1_002D4e92_002Db34c_002D8a377c553f83/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=c6494373_002D01e1_002D4e92_002Db34c_002D8a377c553f83/Coords/@EntryValue">(Doc Ln 29 Col 26)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=c6494373_002D01e1_002D4e92_002Db34c_002D8a377c553f83/FileId/@EntryValue">A3BD266A-F1AD-41F0-9589-773F84BFC801/d:Controllers/f:AccountController.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=c6494373_002D01e1_002D4e92_002Db34c_002D8a377c553f83/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f67a07b1_002Dbb82_002D4122_002Da113_002D7424cfc68e92/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f67a07b1_002Dbb82_002D4122_002Da113_002D7424cfc68e92/Coords/@EntryValue">(Doc Ln 239 Col 38)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f67a07b1_002Dbb82_002D4122_002Da113_002D7424cfc68e92/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=f67a07b1_002Dbb82_002D4122_002Da113_002D7424cfc68e92/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=fb866bed_002D22be_002D458e_002Dadb3_002D02d41ad5e753/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=fb866bed_002D22be_002D458e_002Dadb3_002D02d41ad5e753/Coords/@EntryValue">(Doc Ln 39 Col 27)</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=fb866bed_002D22be_002D458e_002Dadb3_002D02d41ad5e753/FileId/@EntryValue">CE3299E2-A324-4641-B4B1-6FA1E6DFED75/d:RoomRent/d:Controllers/f:ExecuteBatchController.cs</s:String>
+	<s:String x:Key="/Default/Housekeeping/Bookmarks/NumberedBookmarks/=fb866bed_002D22be_002D458e_002Dadb3_002D02d41ad5e753/Owner/@EntryValue">AnonymousBookmarkManager</s:String>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
