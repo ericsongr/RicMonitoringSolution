@@ -135,9 +135,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             ////email
             SendEmailRentersBeforeDueDate(currentDateTimeUtc);
+
             ////sms
             SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
+            //push notification overdue alert
             SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
 
             //_pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());

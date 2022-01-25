@@ -94,8 +94,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             var accountFromRepo = _accountRepository.GetAccounts(accountResourceParameters);
-            var accounts = Mapper.Map<IEnumerable<AccountDto>>(accountFromRepo);
-            var result = accounts.ShapeData(accountResourceParameters.Fields);
+            var accounts = Mapper.Map<IEnumerable<AccountDto>>(accountFromRepo).ToList();
+            
+            //if there's no selected default account, then set the first account as default selected account avoid error in RicMoniApp
+            if (!accounts.Any(o => o.IsSelected))
+                accounts.First().IsSelected = true;
+
+            var result = accounts.AsEnumerable().ShapeData(accountResourceParameters.Fields);
 
             return Ok(new BaseRestApiModel
             {
