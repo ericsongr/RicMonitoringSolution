@@ -162,7 +162,34 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         //    return Ok("Completed");
         //}
 
-        #region MyRegion Send SMS & Email Renters Before Due Date
+        #region Test Apis
+
+        [AllowAnonymous]
+        [HttpPost()]
+        [Route("TestSendDueDateAlertPushNotification")]
+        public async Task<IActionResult> TestSendDueDateAlertPushNotification()
+        {
+            //replace values of AspNetUsersId and DeviceId when test
+            var currentDateTimeUtc = DateTime.UtcNow;
+            var registeredDevices = new List<RegisteredDeviceModel>
+            {
+                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "b5ccdf82-7d28-11ec-937e-d61d837d48eb"},
+                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "16539ffe-7d7d-11ec-a328-1ed87c0af646"},
+                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "1e6c32d4-7dbc-11ec-ad3c-ce4acaaaf75e"},
+                new RegisteredDeviceModel { AspNetUsersId = "38f50976-d617-4f5b-bbf4-a8b6a5a9d70f", DeviceId = "9e80144e-7dcc-11ec-92fa-2aa7497429e8"},
+            };
+
+            var registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
+
+            //push notification overdue alert
+            SendDueDateAlertPushNotification(currentDateTimeUtc, registeredDevicesJsonString);
+
+            return Ok("success");
+        }
+
+        #endregion
+
+        #region Send SMS & Email Renters Before Due Date
 
         private void SendEmailRentersBeforeDueDate(DateTime currentDateTimeUtc)
         {
