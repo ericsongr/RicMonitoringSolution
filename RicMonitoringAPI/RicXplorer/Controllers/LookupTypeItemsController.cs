@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
@@ -47,16 +48,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             var lookupTypeItems = Mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems);
 
-            //fetch adule as default value from ages options
-            var agesDefaultValue = lookupTypeItems.SingleOrDefault(o => o.Description == LookupTypeItemConstant.Adult);
-            if (agesDefaultValue == null)
-                return BadRequest("Adult default value from Ages list does not exists.");
-
-            return Ok(new
-            {
-                ages = lookupTypeItems.ShapeData(fields),
-                defaultValue = agesDefaultValue.Id
-            });
+            return Ok(new{ lookupTypeItems = lookupTypeItems.ShapeData(fields) });
         }
     }
 }
