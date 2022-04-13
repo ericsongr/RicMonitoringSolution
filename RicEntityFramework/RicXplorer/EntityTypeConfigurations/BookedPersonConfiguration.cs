@@ -19,7 +19,7 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .HasMaxLength(50);
 
             builder
-                .HasOne(t => t.LookupTypeItems)
+                .HasOne(t => t.LookupTypeItem)
                 .WithMany(p => p.BookedPersons)
                 .HasForeignKey(f => f.Ages)
                 .HasConstraintName("ForeignKey_LookupTypeItems_BookedPersons");

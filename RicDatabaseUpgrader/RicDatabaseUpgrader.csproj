@@ -25,6 +25,7 @@
     <None Remove="Scripts\Update\v1.0001\0016-drop-audit-renter-rent-transaction-id.sql" />
     <None Remove="Scripts\Update\v1.0001\0017-drop-column-adjustmentBalancePaymentDueAmount.sql" />
     <None Remove="Scripts\Update\v1.0001\0018-drop-column-year-month-from-batch.sql" />
+    <None Remove="Scripts\Update\v1.0001\0019-3-tables-related-to-booking.sql" />
     <None Remove="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
     <None Remove="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <None Remove="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
@@ -46,6 +47,7 @@
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0005-ReturnPosTransactionId.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0014-balance-is-manual-entry.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0019-3-tables-related-to-booking.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0018-drop-column-year-month-from-batch.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0017-drop-column-adjustmentBalancePaymentDueAmount.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0016-drop-audit-renter-rent-transaction-id.sql" />

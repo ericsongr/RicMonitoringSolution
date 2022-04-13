@@ -4,9 +4,9 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
 {
-    public class LookupTypeItemsConfiguration : IEntityTypeConfiguration<LookupTypeItems>
+    public class LookupTypeItemsConfiguration : IEntityTypeConfiguration<LookupTypeItem>
     {
-        public void Configure(EntityTypeBuilder<LookupTypeItems> builder)
+        public void Configure(EntityTypeBuilder<LookupTypeItem> builder)
         {
             builder.HasKey(t => t.Id);
 
@@ -20,7 +20,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasForeignKey(f => f.LookupTypeId)
                 .HasConstraintName("ForeignKey_LookupTypeItems_LookupTypes");
 
-            builder.ToTable("LookupTypeItems");
+            builder.ToTable("LookupTypeItem");
         }
     }
 }

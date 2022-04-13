@@ -21,12 +21,10 @@ namespace RicEntityFramework
         public DbSet<RentTransaction> RentTransactions { get; set; }
         public DbSet<RentTransactionDetail> RentTransactionDetails { get; set; }
 
-        public DbSet<BookedPerson> BookedPersons { get; set; }
-        public DbSet<BookedDetail> BookedDetails { get; set; }
 
         //maintenance
         public DbSet<LookupType> LookupTypes { get; set; }
-        public DbSet<LookupTypeItems> LookupTypeItems { get; set; }
+        public DbSet<LookupTypeItem> LookupTypeItems { get; set; }
 
         public DbSet<MonthlyRentBatch> MonthlyRentBatch { get; set; }
 
@@ -49,7 +47,16 @@ namespace RicEntityFramework
         public DbSet<AuditRentTransaction> AuditRentTransactions { get; set; }
         public DbSet<AuditRentTransactionPayment> AuditRentTransactionPayments { get; set; }
 
+        //ricxplorer - start
         
+        public DbSet<BookedPerson> BookedPersons { get; set; }
+        public DbSet<BookedDetail> BookedDetails { get; set; }
+        public DbSet<BookingType> BookingTypes { get; set; }
+        public DbSet<BookingTypeDetail> BookingTypeDetails { get; set; }
+        public DbSet<BookingTypeImage> BookingTypeImages { get; set; }
+
+        //ricxplorer - end
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //register all fluent api entity type configuration or inherited by IEntityTypeConfiguration

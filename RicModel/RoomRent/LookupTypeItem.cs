@@ -3,7 +3,7 @@ using RicModel.RicXplorer;
 
 namespace RicModel.RoomRent
 {
-    public class LookupTypeItems
+    public class LookupTypeItem
     {
         public int Id { get; set; }
         public string Description { get; set; }
@@ -12,6 +12,7 @@ namespace RicModel.RoomRent
 
         public virtual LookupType LookupTypes { get; set; }
         public virtual ICollection<BookedPerson> BookedPersons { get; set; }
+        public ICollection<BookingTypeDetail> BookingTypeDetails { get; set; }
 
     }
 }

@@ -20,7 +20,7 @@ namespace RicEntityFramework.RoomRent.PropertyMappings
 
         public LookupTypeItemPropertyMappingService()
         {
-            base.Add(new PropertyMapping<LookupTypeItemDto, LookupTypeItems>(_lookupTypeItemPropertyMapping));
+            base.Add(new PropertyMapping<LookupTypeItemDto, LookupTypeItem>(_lookupTypeItemPropertyMapping));
         }
 
     }

@@ -294,7 +294,7 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.GetPayments()));
 
                 cfg.CreateMap<LookupType, LookupTypeDto>();
-                cfg.CreateMap<LookupTypeItems, LookupTypeItemDto>();
+                cfg.CreateMap<LookupTypeItem, LookupTypeItemDto>();
                 cfg.CreateMap<RentTransactionPayment, RentTransactionPaymentDto>()
                     .ForMember(dest => dest.DatePaidString, 
                                 opt => opt.MapFrom(src => src.DatePaid.ToShortDateString()))
