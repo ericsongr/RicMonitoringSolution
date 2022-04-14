@@ -1,9 +1,8 @@
-﻿using RicEntityFramework;
-using RicEntityFramework.BaseRepository;
+﻿using RicEntityFramework.BaseRepository;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RoomRent;
 
-namespace RicMonitoringAPI.RicXplorer.Repository
+namespace RicEntityFramework.RicXplorer.Repositories
 {
     public class LookupTypeItemRepository : EntityBaseRepository<LookupType>, ILookupTypeItemRepository
     {

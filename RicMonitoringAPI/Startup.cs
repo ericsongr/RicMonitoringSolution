@@ -32,6 +32,10 @@ using RicEntityFramework;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Interfaces.PropertyMappings;
 using RicEntityFramework.PropertyMappings;
+using RicEntityFramework.RicXplorer.Interfaces;
+using RicEntityFramework.RicXplorer.Interfaces.IPropertyMappings;
+using RicEntityFramework.RicXplorer.PropertyMappings;
+using RicEntityFramework.RicXplorer.Repositories;
 using RicEntityFramework.RoomRent.Interfaces;
 using RicEntityFramework.RoomRent.Interfaces.IAudits;
 using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
@@ -46,8 +50,6 @@ using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
-using RicMonitoringAPI.RicXplorer.Services;
-using RicMonitoringAPI.RicXplorer.Services.Interfaces;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 
@@ -68,7 +70,8 @@ namespace RicMonitoringAPI
             //mapped database connection string
             services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
-
+            
+            //rent
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
@@ -91,6 +94,9 @@ namespace RicMonitoringAPI
             services.AddScoped<IAuditRentTransactionRepository, AuditRentTransactionRepository>();
             services.AddScoped<IAuditRentTransactionPaymentRepository, AuditRentTransactionPaymentRepository>();
 
+            //ricxplorer
+            services.AddScoped<IBookingTypeRepository, BookingTypeRepository>();
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddScoped<IUrlHelper, UrlHelper>(implementationFactory =>
@@ -100,6 +106,7 @@ namespace RicMonitoringAPI
                 return new UrlHelper(actionContext);
             });
 
+            //rent
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
@@ -117,13 +124,15 @@ namespace RicMonitoringAPI
             services.AddTransient<IAuditRentTransactionPropertyMappingService, AuditRentTransactionPropertyMappingService>();
             services.AddTransient<IAuditRentTransactionPaymentPropertyMappingService, AuditRentTransactionPaymentPropertyMappingService>();
 
-
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
             services.AddTransient<ISmsGatewayService, SmsGatewayService>();
             services.AddTransient<ICommunicationService, CommunicationService>();
             services.AddTransient<ISMSGateway, SMSGlobal>();
+
+            //RicXplorer
+            services.AddTransient<IBookingTypePropertyMappingService, BookingTypePropertyMappingService>();
 
             // Get the service provider to access the http context
             var svrProvider = services.BuildServiceProvider();

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
+using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Constants;
-using RicMonitoringAPI.RicXplorer.Services.Interfaces;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
 {
