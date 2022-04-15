@@ -20,7 +20,7 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .HasForeignKey(f => f.LookupTypeId)
                 .HasConstraintName("ForeignKey_LookupTypeItems_LookupTypes");
 
-            builder.ToTable("LookupTypeItem");
+            builder.ToTable("LookupTypeItems");
         }
     }
 }

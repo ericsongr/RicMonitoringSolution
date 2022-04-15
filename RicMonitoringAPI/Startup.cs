@@ -45,11 +45,13 @@ using RicEntityFramework.RoomRent.PropertyMappings.Audits;
 using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
+using RicModel.RicXplorer;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
+using RicMonitoringAPI.RicXplorer.MapCustomResolver;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 
@@ -309,6 +311,21 @@ namespace RicMonitoringAPI
                                 opt => opt.MapFrom(src => src.DatePaid.ToShortDateString()))
                     .ForMember(dest => dest.PaymentTransactionType,
                         opt => opt.MapFrom(src => src.GetTransactionPaymentType()));
+
+                cfg.CreateMap<BookingType, BookingTypeDto>()
+                    .ForMember(dest => dest.Price,
+                        opt => opt.MapFrom(src => src.Price.ToString("#,###.00")))
+                    .ForMember(dest => dest.BookingTypeDetails,
+                                opt => opt.MapFrom(src => src.BookingTypeDetails.Where(o => o.IsActive).ToList()))
+                    .ForMember(dest => dest.BookingTypeImages,
+                        opt => opt.MapFrom(src => src.BookingTypeImages.Where(o => o.IsShow).ToList()));
+
+                cfg.CreateMap<BookingTypeDetail, BookingTypeDetailDto>()
+                    .ForMember(dest => dest.LookupTypeItemName,
+                        opt => opt.MapFrom(src => src.LookupTypeItem.Description));
+
+                cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();
+
             });
 
             //Enable CORS policy "AllowCors"
