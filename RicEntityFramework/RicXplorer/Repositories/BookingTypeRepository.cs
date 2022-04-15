@@ -1,4 +1,5 @@
-﻿using RicEntityFramework.BaseRepository;
+﻿using System.Linq;
+using RicEntityFramework.BaseRepository;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 
@@ -8,6 +9,11 @@ namespace RicEntityFramework.RicXplorer.Repositories
     {
         public BookingTypeRepository(RicDbContext context) : base(context)
         {
+        }
+
+        public IQueryable<BookingType> FindAll()
+        {
+            return Context.BookingTypes;
         }
     }
 }

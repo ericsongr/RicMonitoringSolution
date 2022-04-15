@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
@@ -38,15 +39,21 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return BadRequest();
             }
 
-            var bookingTypes = _bookingTypeRepository.FindBy(o => o.IsActive).ToList();
+            var bookingTypes = _bookingTypeRepository
+                .FindAll().Where(o => o.IsActive)
+                .Include(o => o.BookingTypeDetails)
+                .ThenInclude(o => o.LookupTypeItem)
+                .Include(o => o.BookingTypeImages)
+                .ToList();
+            
             if (!bookingTypes.Any())
             {
                 return NotFound();
             }
 
-            var bookingTypeDtos = Mapper.Map<IEnumerable<BookingTypeDto>>(bookingTypes);
+            var bookingTypeDtos = Mapper.Map<IEnumerable<BookingTypeDto>>(bookingTypes).ToList();
 
-            return Ok(new{ bookingTypes = bookingTypeDtos.ShapeData(fields) });
+            return Ok(new{ bookingTypes = bookingTypeDtos });
         }
     }
 }
