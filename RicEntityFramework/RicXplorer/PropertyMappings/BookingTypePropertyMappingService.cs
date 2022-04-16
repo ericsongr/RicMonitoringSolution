@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using RicEntityFramework.PropertyMappings;
 using RicEntityFramework.RicXplorer.Interfaces.IPropertyMappings;
 using RicModel.RicXplorer;
-using RicModel.RoomRent.Dtos;
+using RicModel.RicXplorer.Dtos;
 
 namespace RicEntityFramework.RicXplorer.PropertyMappings
 {

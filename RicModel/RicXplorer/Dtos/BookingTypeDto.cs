@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace RicModel.RoomRent.Dtos
+namespace RicModel.RicXplorer.Dtos
 {
     public class BookingTypeDto
     {
@@ -9,7 +9,7 @@ namespace RicModel.RoomRent.Dtos
         public string Name { get; set; }
         public string Price { get; set; }
 
-        public List<BookingTypeDetailDto> BookingTypeDetails { get; set; }
+        public List<BookingTypeInclusionDto> BookingTypeInclusions { get; set; }
         public List<BookingTypeImageDto> BookingTypeImages { get; set; }
     }
 }

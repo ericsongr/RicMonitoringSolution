@@ -12,7 +12,7 @@ namespace RicModel.RoomRent
 
         public virtual LookupType LookupTypes { get; set; }
         public virtual ICollection<BookedPerson> BookedPersons { get; set; }
-        public ICollection<BookingTypeDetail> BookingTypeDetails { get; set; }
+        public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
 
     }
 }
