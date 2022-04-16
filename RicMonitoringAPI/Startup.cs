@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Audit.Core;
 using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
@@ -46,12 +45,12 @@ using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
 using RicModel.RicXplorer;
+using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
-using RicMonitoringAPI.RicXplorer.MapCustomResolver;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 
@@ -315,13 +314,13 @@ namespace RicMonitoringAPI
                 cfg.CreateMap<BookingType, BookingTypeDto>()
                     .ForMember(dest => dest.Price,
                         opt => opt.MapFrom(src => src.Price.ToString("#,###.00")))
-                    .ForMember(dest => dest.BookingTypeDetails,
-                                opt => opt.MapFrom(src => src.BookingTypeDetails.Where(o => o.IsActive).ToList()))
+                    .ForMember(dest => dest.BookingTypeInclusions,
+                                opt => opt.MapFrom(src => src.BookingTypeInclusions.Where(o => o.IsActive).ToList()))
                     .ForMember(dest => dest.BookingTypeImages,
                         opt => opt.MapFrom(src => src.BookingTypeImages.Where(o => o.IsShow).ToList()));
 
-                cfg.CreateMap<BookingTypeDetail, BookingTypeDetailDto>()
-                    .ForMember(dest => dest.LookupTypeItemName,
+                cfg.CreateMap<BookingTypeInclusion, BookingTypeInclusionDto>()
+                    .ForMember(dest => dest.InclusionName,
                         opt => opt.MapFrom(src => src.LookupTypeItem.Description));
 
                 cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();

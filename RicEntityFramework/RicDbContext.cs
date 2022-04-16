@@ -52,7 +52,7 @@ namespace RicEntityFramework
         public DbSet<BookedPerson> BookedPersons { get; set; }
         public DbSet<BookedDetail> BookedDetails { get; set; }
         public DbSet<BookingType> BookingTypes { get; set; }
-        public DbSet<BookingTypeDetail> BookingTypeDetails { get; set; }
+        public DbSet<BookingTypeInclusion> BookingTypeInclusions { get; set; }
         public DbSet<BookingTypeImage> BookingTypeImages { get; set; }
 
         //ricxplorer - end

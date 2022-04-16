@@ -78,6 +78,7 @@
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
 		<Folder Include="Resources\Images\Rooms\" />
+		<Folder Include="RicXplorer\MapCustomResolver\" />
 	</ItemGroup>
 
 	<ItemGroup>

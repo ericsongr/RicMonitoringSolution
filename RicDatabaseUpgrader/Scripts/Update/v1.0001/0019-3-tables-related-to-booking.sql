@@ -16,30 +16,30 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BookingTypeDetails')
+IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BookingTypeInclusions')
 BEGIN
-	CREATE TABLE [dbo].[BookingTypeDetails](
+	CREATE TABLE [dbo].[BookingTypeInclusions](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[BookingTypeId] [int] NOT NULL,
 		[InclusionId] [int] NOT NULL,
 		[IsActive] [bit] NOT NULL,
 		[UtcDateTimeCreated] [DateTime] NOT NULL,
 		[UtcDateTimeUpdated] [DateTime] NULL,
-	 CONSTRAINT [PK_BookingTypeDetails] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_BookingTypeInclusions] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
-	ALTER TABLE [dbo].[BookingTypeDetails]  WITH CHECK ADD  CONSTRAINT [ForeignKey_BookingType_BookingTypeDetails_BookingTypeId] FOREIGN KEY([BookingTypeId])
+	ALTER TABLE [dbo].[BookingTypeInclusions]  WITH CHECK ADD  CONSTRAINT [ForeignKey_BookingType_BookingTypeInclusions_BookingTypeId] FOREIGN KEY([BookingTypeId])
 	REFERENCES [dbo].[BookingTypes] ([Id])
 	
-	ALTER TABLE [dbo].[BookingTypeDetails] CHECK CONSTRAINT [ForeignKey_BookingType_BookingTypeDetails_BookingTypeId]
+	ALTER TABLE [dbo].[BookingTypeInclusions] CHECK CONSTRAINT [ForeignKey_BookingType_BookingTypeInclusions_BookingTypeId]
 	
-	ALTER TABLE [dbo].[BookingTypeDetails]  WITH CHECK ADD  CONSTRAINT [ForeignKey_LookupTypeItem_BookingTypeDetails_InclusionId] FOREIGN KEY([BookingTypeId])
+	ALTER TABLE [dbo].[BookingTypeInclusions]  WITH CHECK ADD  CONSTRAINT [ForeignKey_LookupTypeItem_BookingTypeInclusions_InclusionId] FOREIGN KEY([BookingTypeId])
 	REFERENCES [dbo].[LookupTypeItemS] ([Id])
 	
-	ALTER TABLE [dbo].[BookingTypeDetails] CHECK CONSTRAINT [ForeignKey_LookupTypeItem_BookingTypeDetails_InclusionId]
+	ALTER TABLE [dbo].[BookingTypeInclusions] CHECK CONSTRAINT [ForeignKey_LookupTypeItem_BookingTypeInclusions_InclusionId]
 	
 END
 GO

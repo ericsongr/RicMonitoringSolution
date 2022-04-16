@@ -4,25 +4,25 @@ using RicModel.RicXplorer;
 
 namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
 {
-    public class BookingTypeDetailConfiguration : IEntityTypeConfiguration<BookingTypeDetail>
+    public class BookingTypeInclusionConfiguration : IEntityTypeConfiguration<BookingTypeInclusion>
     {
-        public void Configure(EntityTypeBuilder<BookingTypeDetail> builder)
+        public void Configure(EntityTypeBuilder<BookingTypeInclusion> builder)
         {
             builder.HasKey(t => t.Id);
 
             builder
                 .HasOne(t => t.BookingType)
-                .WithMany(p => p.BookingTypeDetails)
+                .WithMany(p => p.BookingTypeInclusions)
                 .HasForeignKey(f => f.BookingTypeId)
-                .HasConstraintName("ForeignKey_BookingType_BookingTypeDetails_BookingTypeId");
+                .HasConstraintName("ForeignKey_BookingType_BookingTypeInclusions_BookingTypeId");
 
             builder
                 .HasOne(t => t.LookupTypeItem)
-                .WithMany(p => p.BookingTypeDetails)
+                .WithMany(p => p.BookingTypeInclusions)
                 .HasForeignKey(f => f.InclusionId)
-                .HasConstraintName("ForeignKey_LookupTypeItem_BookingTypeDetails_InclusionId");
+                .HasConstraintName("ForeignKey_LookupTypeItem_BookingTypeInclusions_InclusionId");
 
-            builder.ToTable("BookingTypeDetails");
+            builder.ToTable("BookingTypeInclusions");
         }
     }
 }

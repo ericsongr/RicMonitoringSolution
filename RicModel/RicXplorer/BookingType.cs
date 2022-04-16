@@ -16,7 +16,7 @@ namespace RicModel.RicXplorer
         public DateTime? UtcDateTimeUpdated { get; set; }
 
         public ICollection<BookingTypeImage> BookingTypeImages { get; set; }
-        public ICollection<BookingTypeDetail> BookingTypeDetails { get; set; }
+        public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
 
     }
 }

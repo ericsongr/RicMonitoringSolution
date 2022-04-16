@@ -5,7 +5,7 @@ using RicModel.RoomRent;
 
 namespace RicModel.RicXplorer
 {
-    public class BookingTypeDetail
+    public class BookingTypeInclusion
     {
         public int Id { get; set; }
         public int BookingTypeId { get; set; }

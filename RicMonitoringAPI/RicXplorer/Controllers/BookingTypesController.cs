@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
-using RicModel.RoomRent.Dtos;
+using RicModel.RicXplorer.Dtos;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
 {
@@ -41,7 +39,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             var bookingTypes = _bookingTypeRepository
                 .FindAll().Where(o => o.IsActive)
-                .Include(o => o.BookingTypeDetails)
+                .Include(o => o.BookingTypeInclusions)
                 .ThenInclude(o => o.LookupTypeItem)
                 .Include(o => o.BookingTypeImages)
                 .ToList();
