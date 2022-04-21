@@ -51,7 +51,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             var bookingTypeDtos = Mapper.Map<IEnumerable<BookingTypeDto>>(bookingTypes).ToList();
 
-            return Ok(new{ bookingTypes = bookingTypeDtos });
+            return Ok(new{payload = bookingTypeDtos });
         }
     }
 }
