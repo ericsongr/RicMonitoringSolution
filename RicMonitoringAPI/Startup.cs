@@ -180,11 +180,12 @@ namespace RicMonitoringAPI
             //cors
             services.AddCors(options =>
             {
+                var clientUrls = Configuration["ClientUrl"].Split(',');
                 options.AddPolicy("AllowCors", builder =>
                 {
                     builder
                         .AllowAnyHeader()
-                        .WithOrigins(Configuration["ClientUrl"]) 
+                        .WithOrigins(clientUrls) 
                         .WithMethods("GET", "PUT", "POST", "DELETE");
                 });
             });

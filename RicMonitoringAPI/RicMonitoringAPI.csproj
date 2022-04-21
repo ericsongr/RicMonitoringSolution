@@ -8,6 +8,10 @@
 		<UserSecretsId>6c8f6828-28ca-4293-8e57-07dbaa81927f</UserSecretsId>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Remove="Common\Helpers\**" />
 		<Compile Remove="Common\Services\**" />
