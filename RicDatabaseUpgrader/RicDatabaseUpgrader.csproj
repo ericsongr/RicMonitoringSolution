@@ -40,6 +40,7 @@
     <None Remove="Scripts\Update\v1.0003\0001-added-custom-color.sql" />
     <None Remove="Scripts\Update\v1.0003\0002-EnableDueDateAlertPushNotification.sql" />
     <None Remove="Scripts\Update\v1.0003\0003-booking-type-inclusions.sql" />
+    <None Remove="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,6 +73,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0003-booking-type-inclusions.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0002-EnableDueDateAlertPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0001-added-custom-color.sql" />

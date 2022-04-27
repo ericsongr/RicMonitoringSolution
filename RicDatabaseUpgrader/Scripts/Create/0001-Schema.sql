@@ -680,6 +680,9 @@ CREATE TABLE [dbo].[BookingTypes](
 	[IsActive] [bit] NOT NULL,
 	[UtcDateTimeCreated] [DateTime] NOT NULL,
 	[UtcDateTimeUpdated] [DateTime] NULL,
+	NoOfPersons INT NOT NULL DEFAULT(0),
+	NoOfPersonsMax INT NOT NULL DEFAULT(0),
+	BookingUrl NVARCHAR(100) NULL,
  CONSTRAINT [PK_BookingTypes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
