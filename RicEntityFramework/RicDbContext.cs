@@ -49,8 +49,8 @@ namespace RicEntityFramework
 
         //ricxplorer - start
         
-        public DbSet<BookedPerson> BookedPersons { get; set; }
-        public DbSet<BookedDetail> BookedDetails { get; set; }
+        public DbSet<GuestBooking> GuestBookings { get; set; }
+        public DbSet<GuestBookingDetail> GuestBookingDetails { get; set; }
         public DbSet<BookingType> BookingTypes { get; set; }
         public DbSet<BookingTypeInclusion> BookingTypeInclusions { get; set; }
         public DbSet<BookingTypeImage> BookingTypeImages { get; set; }
