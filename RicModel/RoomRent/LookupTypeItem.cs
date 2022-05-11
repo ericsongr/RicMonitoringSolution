@@ -11,7 +11,7 @@ namespace RicModel.RoomRent
         public int LookupTypeId { get; set; }
 
         public virtual LookupType LookupTypes { get; set; }
-        public virtual ICollection<BookedPerson> BookedPersons { get; set; }
+        public virtual ICollection<GuestBooking> GuestBookings { get; set; }
         public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
 
     }

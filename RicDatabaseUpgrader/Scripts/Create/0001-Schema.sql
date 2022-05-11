@@ -78,43 +78,6 @@ CREATE TABLE [dbo].[AuditAccounts](
 	ON DELETE CASCADE
 GO
 
-/****** Object:  Table [dbo].[BookedDetails]    Script Date: 17/05/2020 11:19:48 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[BookedDetails](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Country] [nvarchar](100) NULL,
-	[LanguagesSpoken] [nvarchar](100) NULL,
-	[Email] [nvarchar](50) NULL,
-	[Contact] [nvarchar](15) NULL,
-	[LeaveMessage] [nvarchar](1000) NULL,
- CONSTRAINT [PK_BookedDetails] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[BookedPersons]    Script Date: 17/05/2020 11:19:48 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[BookedPersons](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[FirstName] [nvarchar](50) NULL,
-	[LastName] [nvarchar](50) NULL,
-	[Ages] [int] NOT NULL,
-	[BookedDetailId] [int] NOT NULL,
- CONSTRAINT [PK_BookedPersons] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[DbErrorLogs]    Script Date: 17/05/2020 11:19:48 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -356,18 +319,6 @@ REFERENCES [dbo].[Rooms] ([Id])
 ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].[BookedPersons]  WITH CHECK ADD  CONSTRAINT [FK_BookedPersons_BookedDetails_BookedDetailId] FOREIGN KEY([BookedDetailId])
-REFERENCES [dbo].[BookedDetails] ([Id])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[BookedPersons] CHECK CONSTRAINT [FK_BookedPersons_BookedDetails_BookedDetailId]
-GO
-ALTER TABLE [dbo].[BookedPersons]  WITH CHECK ADD  CONSTRAINT [ForeignKey_LookupTypeItems_BookedPersons] FOREIGN KEY([Ages])
-REFERENCES [dbo].[LookupTypeItems] ([Id])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[BookedPersons] CHECK CONSTRAINT [ForeignKey_LookupTypeItems_BookedPersons]
-GO
 ALTER TABLE [dbo].[LookupTypeItems]  WITH CHECK ADD  CONSTRAINT [ForeignKey_LookupTypeItems_LookupTypes] FOREIGN KEY([LookupTypeId])
 REFERENCES [dbo].[LookupTypes] ([Id])
 ON DELETE CASCADE
@@ -744,4 +695,53 @@ ALTER TABLE [dbo].[BookingTypeImages]  WITH CHECK ADD  CONSTRAINT [ForeignKey_Bo
 REFERENCES [dbo].[BookingTypes] ([Id])
 GO
 ALTER TABLE [dbo].[BookingTypeImages] CHECK CONSTRAINT [ForeignKey_BookingType_BookingTypeImages_BookingTypeId]
+GO
+
+CREATE TABLE [dbo].[GuestBookingDetails](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[ArrivalDateLocal] DateTime,
+		[DepartureDateLocal] Datetime,
+		[Country] [nvarchar](100) NOT NULL,
+		[LanguagesSpoken] [nvarchar](100) NOT NULL,
+		[Email] [nvarchar](50) NOT NULL,
+		[Contact] [nvarchar](15) NOT NULL,
+		[ContactPerson] [nvarchar](100) NULL,
+		[LeaveMessage] [nvarchar](1000) NULL,
+	 CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[GuestBookings](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Gender] [varchar](10) NOT NULL,
+	[Birthday] Datetime,
+	[Ages] [int] NOT NULL,
+	[GuestBookingDetailId] [int] NOT NULL,
+	CONSTRAINT [PK_GuestBookings] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+ALTER TABLE [dbo].[GuestBookings]  WITH CHECK ADD  CONSTRAINT [FK_GuestBookings_GuestBookingDetails_GuestBookingDetailId] FOREIGN KEY([GuestBookingDetailId])
+REFERENCES [dbo].[GuestBookingDetails] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[GuestBookings] CHECK CONSTRAINT [FK_GuestBookings_GuestBookingDetails_GuestBookingDetailId]
+GO
+
+ALTER TABLE [dbo].[GuestBookings]  WITH CHECK ADD  CONSTRAINT [ForeignKey_LookupTypeItems_GuestBookings] FOREIGN KEY([Ages])
+REFERENCES [dbo].[LookupTypeItems] ([Id])
+ON DELETE CASCADE
+GO
+	
+ALTER TABLE [dbo].[GuestBookings] CHECK CONSTRAINT [ForeignKey_LookupTypeItems_GuestBookings]
 GO
