@@ -81,6 +81,7 @@ Global
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Debug|ApiBuild.Build.0 = Debug|Any CPU
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Debug|WebOnlyBuild.ActiveCfg = Debug|Any CPU
+		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Debug|WebOnlyBuild.Build.0 = Debug|Any CPU
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2ED39617-E702-48D5-A475-2FAC0AEE7BAA}.Release|ApiBuild.ActiveCfg = Release|Any CPU

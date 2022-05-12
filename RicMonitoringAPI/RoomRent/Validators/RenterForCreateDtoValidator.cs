@@ -3,9 +3,9 @@ using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RoomRent.Validators
 {
-    public class RenterForCreateDtoValidator : AbstractValidator<RenterForCreateDto>
+    public class GuestBookingDetailDtoValidator : AbstractValidator<RenterForCreateDto>
     {
-        public RenterForCreateDtoValidator()
+        public GuestBookingDetailDtoValidator()
         {
             RuleFor(m => m.Name).NotEmpty().WithMessage("Renter name must not be empty.");
             RuleFor(m => m.AdvanceMonths).NotEmpty().WithMessage("Advance months is required.");

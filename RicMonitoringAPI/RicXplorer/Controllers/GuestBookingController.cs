@@ -8,6 +8,7 @@ using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicMonitoringAPI.Common.Model;
+using RicMonitoringAPI.RicXplorer.ViewModels;
 using RicMonitoringAPI.RoomRent.Controllers;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
@@ -24,7 +25,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         }
         [AllowAnonymous]
         [HttpPost("book", Name = "book")]
-        public IActionResult Book(GuestBookingDetail model)
+        public IActionResult Book(GuestBookingDetailDto model)
         {
             try
             {
@@ -35,7 +36,9 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 else
                 {
                     //save both parent and children guests details
-                    _guestBookingDetailRepository.Add(model);
+                    var guestBookingDetail = Mapper.Map<GuestBookingDetail>(model);
+
+                    _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
 
                     return Ok(new { success = true, message = "Booking has been successful" });

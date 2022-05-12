@@ -12,18 +12,22 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
 
             builder
                 .Property(t => t.FirstName)
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder
                 .Property(t => t.LastName)
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder
                 .Property(t => t.Gender)
+                .IsRequired()
                 .HasMaxLength(10);
 
             builder
                 .Property(t => t.Birthday)
+                .IsRequired()
                 .HasColumnType("date");
 
             builder
