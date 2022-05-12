@@ -97,6 +97,8 @@ namespace RicMonitoringAPI
 
             //ricxplorer
             services.AddScoped<IBookingTypeRepository, BookingTypeRepository>();
+            services.AddScoped<IGuestBookingDetailRepository, GuestBookingDetailRepository>();
+            services.AddScoped<IGuestBookingRepository, GuestBookingRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -325,6 +327,12 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.LookupTypeItem.Description));
 
                 cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();
+
+                //cfg.CreateMap<GuestBookingDetailViewModel, GuestBookingDetail> ()
+                //    .ForMember(dest => dest.GuestBookings,
+                //                opt => opt.MapFrom(src  => src.GuestBookings));
+
+                //cfg.CreateMap<GuestBookingViewModel, GuestBooking>();
 
             });
 

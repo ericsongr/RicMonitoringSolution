@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using RicModel.RoomRent;
 
 namespace RicModel.RicXplorer
@@ -10,10 +11,11 @@ namespace RicModel.RicXplorer
         public string LastName { get; set; }
         public string Gender { get; set; }
         public DateTime Birthday { get; set; }
+
         public int Ages { get; set; }
         public virtual LookupTypeItem LookupTypeItem { get; set; }
 
-        public int BookedDetailId { get; set; }
-        public GuestBookingDetail GuestBookingDetail { get; set; }
+        public int GuestBookingDetailId { get; set; }
+        public virtual GuestBookingDetail GuestBookingDetail { get; set; }
     }
 }

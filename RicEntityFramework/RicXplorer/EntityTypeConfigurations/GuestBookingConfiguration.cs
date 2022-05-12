@@ -30,7 +30,15 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .HasOne(t => t.LookupTypeItem)
                 .WithMany(p => p.GuestBookings)
                 .HasForeignKey(f => f.Ages)
-                .HasConstraintName("ForeignKey_LookupTypeItems_GuestBookings");
+                .HasConstraintName("ForeignKey_LookupTypeItems_GuestBookings")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasOne(t => t.GuestBookingDetail)
+                .WithMany(p => p.GuestBookings)
+                .HasForeignKey(f => f.GuestBookingDetailId)
+                .HasConstraintName("FK_GuestBookings_GuestBookingDetails_GuestBookingDetailId")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("GuestBookings");
         }
