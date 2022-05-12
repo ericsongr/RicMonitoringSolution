@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RicModel.RicXplorer
+namespace RicMonitoringAPI.RicXplorer.ViewModels
 {
-    public class GuestBookingDetail
+    public class GuestBookingDetailDto
     {
         public int Id { get; set; }
-        public DateTime ArrivalDate { get; set; }
-        public DateTime DepartureDate { get; set; }
+        public DateTime? ArrivalDate { get; set; }
+        public DateTime? DepartureDate { get; set; }
         public string Country { get; set; }
         public string LanguagesSpoken { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }
         public string ContactPerson { get; set; }
         public string LeaveMessage { get; set; }
-        public DateTime CreatedDateTimeUtc { get; set; }
-        public virtual ICollection<GuestBooking> GuestBookings { get; set; }
+
+        public ICollection<GuestBookingDto> GuestBookings { get; set; }
+
     }
 }

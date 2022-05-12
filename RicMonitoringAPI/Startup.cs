@@ -51,6 +51,7 @@ using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
 using RicMonitoringAPI.Common.Validators;
+using RicMonitoringAPI.RicXplorer.ViewModels;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 
@@ -328,11 +329,13 @@ namespace RicMonitoringAPI
 
                 cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();
 
-                //cfg.CreateMap<GuestBookingDetailViewModel, GuestBookingDetail> ()
-                //    .ForMember(dest => dest.GuestBookings,
-                //                opt => opt.MapFrom(src  => src.GuestBookings));
+                cfg.CreateMap<GuestBookingDetailDto, GuestBookingDetail>()
+                    .ForMember(dest => dest.CreatedDateTimeUtc,
+                        opt => opt.MapFrom(src => DateTime.UtcNow))
+                    .ForMember(dest => dest.GuestBookings,
+                                opt => opt.MapFrom(src => src.GuestBookings));
 
-                //cfg.CreateMap<GuestBookingViewModel, GuestBooking>();
+                cfg.CreateMap<GuestBookingDto, GuestBooking>();
 
             });
 

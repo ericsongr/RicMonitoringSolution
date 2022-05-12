@@ -707,6 +707,7 @@ CREATE TABLE [dbo].[GuestBookingDetails](
 		[Contact] [nvarchar](15) NOT NULL,
 		[ContactPerson] [nvarchar](100) NULL,
 		[LeaveMessage] [nvarchar](1000) NULL,
+		[CreatedDateTimeUtc] DateTime,
 	 CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

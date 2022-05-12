@@ -12,34 +12,40 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
 
             builder
                 .Property(t => t.ArrivalDate)
+                .IsRequired()
                 .HasColumnName("ArrivalDateLocal");
 
             builder
                 .Property(t => t.DepartureDate)
+                .IsRequired()
                 .HasColumnName("DepartureDateLocal");
 
             builder
                 .Property(t => t.Country)
+                .IsRequired()
                 .HasMaxLength(100);
 
             builder
                 .Property(t => t.LanguagesSpoken)
+                .IsRequired()
                 .HasMaxLength(100);
 
             builder
                 .Property(t => t.Email)
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder
                 .Property(t => t.Contact)
+                .IsRequired()
                 .HasMaxLength(15);
 
             builder
                 .Property(t => t.ContactPerson)
-                .HasMaxLength(100);
+                .HasMaxLength(100); //optional
 
             builder
-                .Property(t => t.LeaveMessage)
+                .Property(t => t.LeaveMessage) //optional
                 .HasMaxLength(1000);
 
             builder.ToTable("GuestBookingDetails");
