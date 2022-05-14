@@ -10,7 +10,7 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string Gender { get; set; }
         public DateTime? Birthday { get; set; }
 
-        public int Ages { get; set; }
+        public int Ages { get; set; } = 1; //1 - adult TODO: adjustment
         public int GuestBookingDetailId { get; set; }
     }
 }

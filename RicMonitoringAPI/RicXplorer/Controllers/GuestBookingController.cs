@@ -41,7 +41,12 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
 
-                    return Ok(new { success = true, message = "Booking has been successful" });
+                    return Ok(new BaseRestApiModel
+                    {
+                        Payload = "Booking has been successful",
+                        Errors = new List<BaseError>(),
+                        StatusCode = (int)HttpStatusCode.OK
+                    });
                 }
 
             }
