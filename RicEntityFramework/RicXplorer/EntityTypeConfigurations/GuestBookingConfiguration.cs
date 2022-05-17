@@ -31,6 +31,10 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .HasColumnType("date");
 
             builder
+                .Property(t => t.Age)
+                .IsRequired();
+
+            builder
                 .HasOne(t => t.LookupTypeItem)
                 .WithMany(p => p.GuestBookings)
                 .HasForeignKey(f => f.Ages)
