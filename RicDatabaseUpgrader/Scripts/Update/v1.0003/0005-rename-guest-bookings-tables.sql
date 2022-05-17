@@ -43,6 +43,7 @@ BEGIN
 		[LastName] [nvarchar](50) NOT NULL,
 		[Gender] [varchar](10) NOT NULL,
 		[Birthday] Datetime,
+		[Age] [int] NOT NULL DEFAULT(0),
 		[Ages] [int] NOT NULL,
 		[GuestBookingDetailId] [int] NOT NULL,
 	 CONSTRAINT [PK_GuestBookings] PRIMARY KEY CLUSTERED 

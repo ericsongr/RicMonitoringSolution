@@ -12,6 +12,7 @@ namespace RicModel.RicXplorer
         public string Gender { get; set; }
         public DateTime Birthday { get; set; }
 
+        public int Age { get; set; }
         public int Ages { get; set; }
         public virtual LookupTypeItem LookupTypeItem { get; set; }
 
