@@ -42,6 +42,7 @@
     <None Remove="Scripts\Update\v1.0003\0003-booking-type-inclusions.sql" />
     <None Remove="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
     <None Remove="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
+    <None Remove="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +75,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0003-booking-type-inclusions.sql" />

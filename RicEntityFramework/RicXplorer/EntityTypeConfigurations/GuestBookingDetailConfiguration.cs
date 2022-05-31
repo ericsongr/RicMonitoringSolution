@@ -48,6 +48,13 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .Property(t => t.LeaveMessage) //optional
                 .HasMaxLength(1000);
 
+            builder
+                .HasOne(t => t.Account)
+                .WithMany(p => p.GuestBookingDetails)
+                .HasForeignKey(f => f.AccountId)
+                .HasConstraintName("FK_GuestBookingDetail_Account_AccountId")
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.ToTable("GuestBookingDetails");
         }
     }
