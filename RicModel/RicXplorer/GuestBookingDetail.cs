@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RicModel.RoomRent;
 
 namespace RicModel.RicXplorer
 {
@@ -15,6 +16,11 @@ namespace RicModel.RicXplorer
         public string ContactPerson { get; set; }
         public string LeaveMessage { get; set; }
         public DateTime CreatedDateTimeUtc { get; set; }
+        public int BookingType { get; set; }
+
+        public int AccountId { get; set; }
+        public virtual Account Account { get; set; }
+
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
     }
 }

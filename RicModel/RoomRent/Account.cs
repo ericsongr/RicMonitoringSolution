@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RicModel.RicXplorer;
 using RicModel.RoomRent.Audits;
 
 namespace RicModel.RoomRent
@@ -62,6 +63,7 @@ namespace RicModel.RoomRent
 
         public virtual ICollection<Room> Rooms { get; set; }
         public virtual ICollection<AuditAccount> AuditAccounts { get; set; }
+        public virtual ICollection<GuestBookingDetail> GuestBookingDetails { get; set; }
 
         #region functions
 

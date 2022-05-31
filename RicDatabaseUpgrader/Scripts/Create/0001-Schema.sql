@@ -708,6 +708,8 @@ CREATE TABLE [dbo].[GuestBookingDetails](
 		[ContactPerson] [nvarchar](100) NULL,
 		[LeaveMessage] [nvarchar](1000) NULL,
 		[CreatedDateTimeUtc] DateTime,
+		[BookingType] INT NOT NULL DEFAULT(0),
+		[AccountId] INT NOT NULL,
 	 CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -746,4 +748,12 @@ ON DELETE CASCADE
 GO
 	
 ALTER TABLE [dbo].[GuestBookings] CHECK CONSTRAINT [ForeignKey_LookupTypeItems_GuestBookings]
+GO
+
+ALTER TABLE [dbo].[GuestBookingDetails]  WITH CHECK ADD  CONSTRAINT [FK_GuestBookingDetail_Account_AccountId] FOREIGN KEY([AccountId])
+REFERENCES [dbo].[Accounts] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[GuestBookingDetails] CHECK CONSTRAINT [FK_GuestBookingDetail_Account_AccountId]
 GO
