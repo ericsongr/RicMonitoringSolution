@@ -757,3 +757,35 @@ GO
 
 ALTER TABLE [dbo].[GuestBookingDetails] CHECK CONSTRAINT [FK_GuestBookingDetail_Account_AccountId]
 GO
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AccountProducts] (
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[Price] [Money] NOT NULL,
+	[OnlinePrice] [Money] NOT NULL,
+	[IsWebPurchasable] [bit] NOT NULL DEFAULT(0),
+	[AccountId] [INT] NOT NULL
+ CONSTRAINT [PK_AccountProducts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[AccountProducts]  WITH CHECK ADD  CONSTRAINT [FK_AccountProducts_Accounts] FOREIGN KEY([AccountId])
+REFERENCES [dbo].[Accounts] ([Id])
+GO
+
+ALTER TABLE [dbo].[AccountProducts] CHECK CONSTRAINT [FK_AccountProducts_Accounts]
+GO
+
