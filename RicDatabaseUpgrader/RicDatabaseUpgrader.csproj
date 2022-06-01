@@ -43,6 +43,7 @@
     <None Remove="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
     <None Remove="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
     <None Remove="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
+    <None Remove="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +76,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0004-added-field-person-booking-url.sql" />
