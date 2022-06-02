@@ -7,7 +7,7 @@ BEGIN
 		[Price] [Money] NOT NULL,
 		[OnlinePrice] [Money] NOT NULL,
 		[IsWebPurchasable] [bit] NOT NULL DEFAULT(0),
-		[AccountId] [INT] NOT NULL
+		[AccountProductCategoryId] [INT] NOT NULL
 	 CONSTRAINT [PK_AccountProducts] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -15,10 +15,10 @@ BEGIN
 	) ON [PRIMARY]
 
 
-	ALTER TABLE [dbo].[AccountProducts]  WITH CHECK ADD  CONSTRAINT [FK_AccountProducts_Accounts] FOREIGN KEY([AccountId])
-	REFERENCES [dbo].[Accounts] ([Id])
+	ALTER TABLE [dbo].[AccountProducts]  WITH CHECK ADD  CONSTRAINT [FK_AccountProducts_AccountProductCategory] FOREIGN KEY([AccountProductCategoryId])
+	REFERENCES [dbo].[AccountProductCategory] ([Id])
 
-	ALTER TABLE [dbo].[AccountProducts] CHECK CONSTRAINT [FK_AccountProducts_Accounts]
+	ALTER TABLE [dbo].[AccountProducts] CHECK CONSTRAINT [FK_AccountProducts_AccountProductCategory]
 END
 GO
 
