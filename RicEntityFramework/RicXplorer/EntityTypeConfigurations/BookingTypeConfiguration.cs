@@ -18,6 +18,12 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .Property(t => t.Image)
                 .HasMaxLength(100);
 
+            builder.HasOne(o => o.AccountProduct)
+                .WithMany(o => o.BookingTypes)
+                .HasForeignKey(o => o.AccountProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_AccountProduct_BookingTypes_AccountProductId");
+
             builder.ToTable("BookingTypes");
         }
     }

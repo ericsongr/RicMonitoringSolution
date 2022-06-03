@@ -634,6 +634,7 @@ CREATE TABLE [dbo].[BookingTypes](
 	NoOfPersons INT NOT NULL DEFAULT(0),
 	NoOfPersonsMax INT NOT NULL DEFAULT(0),
 	BookingUrl NVARCHAR(100) NULL,
+	AccountProductId INT NOT NULL,
  CONSTRAINT [PK_BookingTypes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -641,6 +642,13 @@ CREATE TABLE [dbo].[BookingTypes](
 ) ON [PRIMARY]
 
 GO
+ALTER TABLE [dbo].[BookingTypes]  WITH CHECK ADD  CONSTRAINT [FK_AccountProduct_BookingTypes_AccountProductId] FOREIGN KEY([AccountProductId])
+REFERENCES [dbo].[AccountProducts] ([Id])
+GO
+
+ALTER TABLE [dbo].[BookingTypes] CHECK CONSTRAINT [FK_AccountProduct_BookingTypes_AccountProductId]
+GO
+
 
 SET ANSI_NULLS ON
 GO

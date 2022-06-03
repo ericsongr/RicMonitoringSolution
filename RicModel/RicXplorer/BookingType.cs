@@ -8,6 +8,7 @@ namespace RicModel.RicXplorer
     public class BookingType
     {
         public int Id { get; set; }
+        public int AccountProductId { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
@@ -19,6 +20,7 @@ namespace RicModel.RicXplorer
         public DateTime? UtcDateTimeUpdated { get; set; }
 
 
+        public virtual AccountProduct AccountProduct { get; set; }
         public ICollection<BookingTypeImage> BookingTypeImages { get; set; }
         public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
 

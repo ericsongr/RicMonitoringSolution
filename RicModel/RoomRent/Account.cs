@@ -64,6 +64,7 @@ namespace RicModel.RoomRent
         public virtual ICollection<Room> Rooms { get; set; }
         public virtual ICollection<AuditAccount> AuditAccounts { get; set; }
         public virtual ICollection<GuestBookingDetail> GuestBookingDetails { get; set; }
+        public virtual ICollection<AccountProductCategory> AccountProductCategories { get; set; }
 
         #region functions
 

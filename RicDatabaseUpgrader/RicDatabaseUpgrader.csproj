@@ -47,6 +47,7 @@
     <None Remove="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
     <None Remove="Scripts\Update\v1.0003\0008.0-166-add-pos-accountproductcategory-table.sql" />
     <None Remove="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
+    <None Remove="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,6 +80,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0008.0-166-add-pos-accountproductcategory-table.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
