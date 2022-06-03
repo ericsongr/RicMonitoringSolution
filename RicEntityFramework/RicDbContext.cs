@@ -54,6 +54,8 @@ namespace RicEntityFramework
         public DbSet<BookingType> BookingTypes { get; set; }
         public DbSet<BookingTypeInclusion> BookingTypeInclusions { get; set; }
         public DbSet<BookingTypeImage> BookingTypeImages { get; set; }
+        public DbSet<AccountProduct> AccountProducts { get; set; }
+        public DbSet<AccountProductCategory> AccountProductCategories { get; set; }
 
         //ricxplorer - end
 
