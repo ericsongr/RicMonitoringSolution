@@ -39,6 +39,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             var bookingTypes = _bookingTypeRepository
                 .FindAll().Where(o => o.IsActive)
+                .Include(o => o.AccountProduct)
                 .Include(o => o.BookingTypeInclusions)
                 .ThenInclude(o => o.LookupTypeItem)
                 .Include(o => o.BookingTypeImages)

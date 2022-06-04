@@ -625,9 +625,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BookingTypes](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](100) NULL,
 	[Image] [nvarchar](100) NULL,
-	[Price] [money] NOT NULL,
 	[IsActive] [bit] NOT NULL,
 	[UtcDateTimeCreated] [DateTime] NOT NULL,
 	[UtcDateTimeUpdated] [DateTime] NULL,

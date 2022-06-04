@@ -9,9 +9,7 @@ namespace RicModel.RicXplorer
     {
         public int Id { get; set; }
         public int AccountProductId { get; set; }
-        public string Name { get; set; }
         public string Image { get; set; }
-        public decimal Price { get; set; }
         public bool IsActive { get; set; }
         public int NoOfPersons { get; set; }
         public int NoOfPersonsMax { get; set; }

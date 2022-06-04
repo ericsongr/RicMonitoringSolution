@@ -316,8 +316,10 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.GetTransactionPaymentType()));
 
                 cfg.CreateMap<BookingType, BookingTypeDto>()
+                    .ForMember(dest => dest.Name,
+                        opt => opt.MapFrom(src => src.AccountProduct.Name))
                     .ForMember(dest => dest.Price,
-                        opt => opt.MapFrom(src => src.Price.ToString("#,###.00")))
+                        opt => opt.MapFrom(src => src.AccountProduct.Price.ToString("#,###.00")))
                     .ForMember(dest => dest.BookingTypeInclusions,
                                 opt => opt.MapFrom(src => src.BookingTypeInclusions.Where(o => o.IsActive).ToList()))
                     .ForMember(dest => dest.BookingTypeImages,
