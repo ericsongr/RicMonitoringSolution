@@ -4,12 +4,11 @@ using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicMonitoringAPI.Common.Model;
+using RicMonitoringAPI.Infrastructure.Helpers;
 using RicMonitoringAPI.RicXplorer.ViewModels;
-using RicMonitoringAPI.RoomRent.Controllers;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
 {
@@ -23,6 +22,24 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
         }
+
+        [AllowAnonymous]
+        [HttpGet("booked-guests")]
+        public IActionResult BookedGuests(string startDate, string endDate)
+        {
+            DateTime.TryParse(startDate, out DateTime arrivalDate);
+            DateTime.TryParse(endDate, out DateTime departureDate);
+
+            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate);
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = guests,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
         [AllowAnonymous]
         [HttpPost("book", Name = "book")]
         public IActionResult Book(GuestBookingDetailDto model)
@@ -31,7 +48,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return Ok(HandleApiException("Error when booking.", HttpStatusCode.NotFound));
+                    return Ok(HandleApi.Exception("Error when booking.", HttpStatusCode.NotFound));
                 }
                 else
                 {
@@ -48,26 +65,13 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                         StatusCode = (int)HttpStatusCode.OK
                     });
                 }
-
+                
             }
             catch (Exception ex)
             {
-                return Ok(HandleApiException(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
             }
         }
 
-        private BaseRestApiModel HandleApiException(string message, HttpStatusCode httpStatusCode)
-        {
-            return new BaseRestApiModel
-            {
-                Payload = new List<object>(),
-                Errors = new BaseErrorModel
-                {
-                    Message = message,
-                    MessageFields = ""
-                },
-                StatusCode = (int)httpStatusCode
-            };
-        }
     }
 }

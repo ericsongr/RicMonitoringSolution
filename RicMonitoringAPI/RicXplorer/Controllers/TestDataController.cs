@@ -30,16 +30,15 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         [HttpPost(Name = "PostBooking")]
         public async Task<IActionResult> PostBooking()
         {
-            var startDate = new DateTime(2022, 06, 1);
-
+            var startDate = new DateTime(2022, 07, 10);
 
             //CreateGuest(startDate, startDate.AddDays(3), "Glaiza");
             //CreateGuest(startDate, startDate.AddDays(3), "Homer");
             //CreateGuest(startDate, startDate.AddDays(3), "David");
 
-            CreateGuest(startDate, startDate.AddDays(7), "Sherine", 2, BookingTypeEnum.CoupleBackpackers);
-            CreateGuest(startDate, startDate.AddDays(7), "Charmaine", 2, BookingTypeEnum.CoupleBackpackers);
-            CreateGuest(startDate, startDate.AddDays(7), "Aia", 2, BookingTypeEnum.CoupleBackpackers);
+            CreateGuest(startDate, startDate.AddDays(5), "Sherine", 2, BookingTypeEnum.CoupleBackpackers);
+            CreateGuest(startDate, startDate.AddDays(5), "Charmaine", 2, BookingTypeEnum.CoupleBackpackers);
+            CreateGuest(startDate, startDate.AddDays(5), "Aia", 2, BookingTypeEnum.CoupleBackpackers);
 
             return Ok("added guests");
         }
