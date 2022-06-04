@@ -9,6 +9,7 @@ namespace RicModel.RicXplorer.Dtos
         public string Name { get; set; }
         public string Image { get; set; }
         public string Price { get; set; }
+        public string OnlinePrice { get; set; }
         public int NoOfPersons { get; set; }
         public int NoOfPersonsMax { get; set; }
         public string BookingUrl { get; set; }
