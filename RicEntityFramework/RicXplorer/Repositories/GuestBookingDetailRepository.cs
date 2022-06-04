@@ -15,7 +15,8 @@ namespace RicEntityFramework.RicXplorer.Repositories
         public IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate)
         {
             return Context.GuestBookingDetails.Where(o => o.ArrivalDate >= startDate && o.ArrivalDate <= endDate ||
-                                                          o.DepartureDate >= startDate && o.DepartureDate <= endDate);
+                                                          o.DepartureDate >= startDate && o.DepartureDate <= endDate ||
+                                                          startDate >= o.ArrivalDate && endDate <= o.DepartureDate);
         }
     }
 }
