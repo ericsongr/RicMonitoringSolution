@@ -7,6 +7,6 @@ namespace RicEntityFramework.RicXplorer.Interfaces
 {
     public interface IGuestBookingDetailRepository : IEntityBaseRepository<GuestBookingDetail>
     {
-        IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate);
+        IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate, int bookingType);
     }
 }

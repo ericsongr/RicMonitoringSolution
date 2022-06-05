@@ -25,12 +25,12 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         [AllowAnonymous]
         [HttpGet("booked-guests")]
-        public IActionResult BookedGuests(string startDate, string endDate)
+        public IActionResult BookedGuests(string startDate, string endDate, int bookingType)
         {
             DateTime.TryParse(startDate, out DateTime arrivalDate);
             DateTime.TryParse(endDate, out DateTime departureDate);
 
-            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate);
+            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType);
 
             return Ok(new BaseRestApiModel
             {
@@ -54,6 +54,15 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 {
                     //save both parent and children guests details
                     var guestBookingDetail = Mapper.Map<GuestBookingDetail>(model);
+                    guestBookingDetail.GuestBookingDates = new List<GuestBookingDate>();
+                    for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate.AddDays(1))
+                    {
+                        guestBookingDetail.GuestBookingDates.Add(new GuestBookingDate
+                        {
+                            DateBooked = startDate
+                        });
+                    }
+                    
 
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();

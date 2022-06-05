@@ -12,11 +12,13 @@ namespace RicEntityFramework.RicXplorer.Repositories
         {
         }
 
-        public IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate)
+        public IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate, int bookingType)
         {
-            return Context.GuestBookingDetails.Where(o => o.ArrivalDate >= startDate && o.ArrivalDate <= endDate ||
-                                                          o.DepartureDate >= startDate && o.DepartureDate <= endDate ||
-                                                          startDate >= o.ArrivalDate && endDate <= o.DepartureDate);
+
+            return Context.GuestBookingDates
+                .Where(o => o.DateBooked >= startDate && o.DateBooked <= endDate 
+                                                      && o.GuestBookingDetail.BookingType == bookingType)
+                .Select(o => o.GuestBookingDetail);
         }
     }
 }

@@ -22,5 +22,6 @@ namespace RicModel.RicXplorer
         public virtual Account Account { get; set; }
 
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
+        public virtual ICollection<GuestBookingDate> GuestBookingDates { get; set; }
     }
 }

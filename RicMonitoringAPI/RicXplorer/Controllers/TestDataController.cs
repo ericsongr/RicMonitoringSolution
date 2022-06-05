@@ -83,6 +83,15 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         public void AddGuest(GuestBookingDetail model)
         {
+            model.GuestBookingDates = new List<GuestBookingDate>();
+            for (DateTime startDate = model.ArrivalDate; startDate <= model.DepartureDate; startDate = startDate.AddDays(1))
+            {
+                model.GuestBookingDates.Add(new GuestBookingDate
+                {
+                    DateBooked = startDate
+                });
+            }
+
             _guestBookingDetailRepository.Add(model);
             _guestBookingDetailRepository.Commit();
         }
