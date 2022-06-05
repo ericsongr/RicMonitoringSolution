@@ -51,6 +51,7 @@ namespace RicEntityFramework
         
         public DbSet<GuestBooking> GuestBookings { get; set; }
         public DbSet<GuestBookingDetail> GuestBookingDetails { get; set; }
+        public DbSet<GuestBookingDate> GuestBookingDates { get; set; }
         public DbSet<BookingType> BookingTypes { get; set; }
         public DbSet<BookingTypeInclusion> BookingTypeInclusions { get; set; }
         public DbSet<BookingTypeImage> BookingTypeImages { get; set; }
