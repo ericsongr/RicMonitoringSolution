@@ -14,6 +14,7 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string Contact { get; set; }
         public string ContactPerson { get; set; }
         public string LeaveMessage { get; set; }
+        public int BookingType { get; set; }
 
         public ICollection<GuestBookingDto> GuestBookings { get; set; }
 

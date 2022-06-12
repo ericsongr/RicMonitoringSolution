@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
+using RicModel.RicXplorer.Dtos;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Helpers;
 using RicMonitoringAPI.RicXplorer.ViewModels;
@@ -21,6 +23,30 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         public GuestBookingController(IGuestBookingDetailRepository guestBookingDetailRepository)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
+        }
+
+        [AllowAnonymous]
+        [HttpGet("guests-booked-schedules")]
+        public IActionResult GuestsBookedSchedules(string startDate, string endDate, int bookingType)
+        {
+            DateTime.TryParse(startDate, out DateTime arrivalDate);
+            DateTime.TryParse(endDate, out DateTime departureDate);
+
+            var guests = _guestBookingDetailRepository.Find(arrivalDate, departureDate, bookingType)
+                .GroupBy(o => o.DateBooked, (dateBooked, guests) =>
+                    new GuestBookedSchedule
+                    {
+                        BookedDate = dateBooked,
+                        TotalGuestsBooked = guests.Count()
+                    });
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = guests,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
         }
 
         [AllowAnonymous]
@@ -55,14 +81,14 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                     //save both parent and children guests details
                     var guestBookingDetail = Mapper.Map<GuestBookingDetail>(model);
                     guestBookingDetail.GuestBookingDates = new List<GuestBookingDate>();
-                    for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate.AddDays(1))
+                    for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate = startDate.AddDays(1))
                     {
                         guestBookingDetail.GuestBookingDates.Add(new GuestBookingDate
                         {
                             DateBooked = startDate
                         });
                     }
-                    
+
 
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
@@ -74,7 +100,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                         StatusCode = (int)HttpStatusCode.OK
                     });
                 }
-                
+
             }
             catch (Exception ex)
             {
