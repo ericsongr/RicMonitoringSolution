@@ -20,7 +20,8 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     {
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
 
-        public GuestBookingController(IGuestBookingDetailRepository guestBookingDetailRepository)
+        public GuestBookingController(
+            IGuestBookingDetailRepository guestBookingDetailRepository)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
         }
@@ -32,13 +33,19 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             DateTime.TryParse(startDate, out DateTime arrivalDate);
             DateTime.TryParse(endDate, out DateTime departureDate);
 
+
             var guests = _guestBookingDetailRepository.Find(arrivalDate, departureDate, bookingType)
-                .GroupBy(o => o.DateBooked, (dateBooked, guests) =>
-                    new GuestBookedSchedule
-                    {
-                        BookedDate = dateBooked,
-                        TotalGuestsBooked = guests.Count()
-                    });
+                .GroupBy(g => new
+                {
+                    g.DateBooked, 
+                    g.GuestBookingDetail.BookingTypeModel.AccountProduct.MaximumLevelQuantity
+                })
+                .Select(p => new GuestBookedSchedule
+                {
+                    BookedDate = p.Key.DateBooked,
+                    TotalGuestsBooked = p.Count(),
+                    IsFullyBooked = p.Count() >= p.Key.MaximumLevelQuantity
+                });
 
             return Ok(new BaseRestApiModel
             {

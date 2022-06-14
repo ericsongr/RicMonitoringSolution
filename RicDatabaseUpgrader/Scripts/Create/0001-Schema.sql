@@ -801,7 +801,10 @@ CREATE TABLE [dbo].[AccountProducts] (
 	[Price] [Money] NOT NULL,
 	[OnlinePrice] [Money] NOT NULL,
 	[IsWebPurchasable] [bit] NOT NULL DEFAULT(0),
-	[AccountProductCategoryId] [INT] NOT NULL
+	[AccountProductCategoryId] [INT] NOT NULL,
+	[MaximumLevelQuantity] INT NOT NULL DEFAULT(0),
+	[MinimumLevelQuantity] INT NOT NULL DEFAULT(0),
+	[WarnLevelQuantity] INT NOT NULL DEFAULT(0),
 	CONSTRAINT [PK_AccountProducts] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -832,4 +835,12 @@ ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[GuestBookingDates] CHECK CONSTRAINT [FK_GuestBookings_GuestBookingDates_GuestBookingDetailId]
+GO
+
+ALTER TABLE [dbo].[GuestBookingDetails]  WITH CHECK ADD  CONSTRAINT FK_GuestBookingDetail_BookingType_Id FOREIGN KEY(BookingType)
+REFERENCES [dbo].[BookingTypes] (Id)
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[GuestBookingDetails] CHECK CONSTRAINT FK_GuestBookingDetail_BookingType_Id
 GO

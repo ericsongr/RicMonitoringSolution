@@ -21,6 +21,7 @@ namespace RicModel.RicXplorer
         public virtual AccountProduct AccountProduct { get; set; }
         public ICollection<BookingTypeImage> BookingTypeImages { get; set; }
         public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
+        public ICollection<GuestBookingDetail> GuestBookingDetails { get; set; }
 
     }
 }
