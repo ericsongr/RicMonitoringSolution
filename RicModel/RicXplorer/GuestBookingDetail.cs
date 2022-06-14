@@ -17,7 +17,7 @@ namespace RicModel.RicXplorer
         public string LeaveMessage { get; set; }
         public DateTime CreatedDateTimeUtc { get; set; }
         public int BookingType { get; set; }
-
+        public virtual BookingType BookingTypeModel { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
 
