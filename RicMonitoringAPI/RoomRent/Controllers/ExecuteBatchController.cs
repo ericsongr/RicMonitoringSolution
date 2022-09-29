@@ -142,6 +142,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             //push notification overdue alert
             SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
 
+            //push notification for completed processing of the Tenant batch file
+            SendTenantBatchFileCompletedPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
+
             //_pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
             return Ok(new { status });
@@ -290,6 +293,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Overdue Alert", message);
                 });
                 
+            }
+        }
+
+        private void SendTenantBatchFileCompletedPushNotification(DateTime currentDateTimeUtc, string registeredDevicesJsonString)
+        {
+            var enableDueDateAlertPushNotification = _settingRepository.GetBooleanValue(SettingNameEnum.EnableDueDateAlertPushNotification);
+            if (enableDueDateAlertPushNotification)
+            {
+                var userRegisteredDevices = GetUserRegisteredDevices(registeredDevicesJsonString);
+                userRegisteredDevices.ForEach(user =>
+                {
+                    _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Rent Batch File", $"Rent Batch File Processing has been completed @ {currentDateTimeUtc.Date.ToShortDateString()} {currentDateTimeUtc.Date.ToShortTimeString()}");
+                });
             }
         }
 
