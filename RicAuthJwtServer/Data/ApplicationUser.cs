@@ -23,6 +23,7 @@ namespace RicAuthJwtServer.Data
             MobileNumber = userEntry.MobileNumber;
             PhoneNumber = userEntry.PhoneNumber;
             IsReceiveDueDateAlertPushNotification = userEntry.IsReceiveDueDateAlertPushNotification;
+            IsPaidPushNotification = userEntry.IsPaidPushNotification;
         }
 
         [Required]
@@ -37,6 +38,7 @@ namespace RicAuthJwtServer.Data
         public string MobileNumber { get; set; }
 
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
+        public bool IsPaidPushNotification { get; set; }
 
         public virtual ICollection<RegisteredDevice> RegisteredDevices { get; set; }
         //for multiple result
@@ -55,6 +57,7 @@ namespace RicAuthJwtServer.Data
                     MobileNumber = u.MobileNumber,
                     PhoneNumber = u.PhoneNumber,
                     IsReceiveDueDateAlertPushNotification = u.IsReceiveDueDateAlertPushNotification,
+                    IsPaidPushNotification = u.IsPaidPushNotification,
                 };
             }
         }

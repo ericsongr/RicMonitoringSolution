@@ -22,5 +22,7 @@ namespace RicModel.RoomRent.Dtos
         
         public string BalanceDateToBePaidInput { get; set; }
         public bool IsNoAdvanceDepositLeft { get; set; }
+
+        public string RegisteredDevicesJsonString { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace RicAuthJwtServer.ViewModels
         public string Name => $"{FirstName} {LastName}";
 
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
+        public bool IsPaidPushNotification { get; set; }
     }
 }

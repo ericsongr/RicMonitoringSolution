@@ -135,8 +135,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [Route("user/sample")]
         public IActionResult SendSample(string message)
         {
-            var portalUserId = "735b94e5-19f4-454e-9e58-00fd463484ec";
-            var devicesIds = new List<string> { "735b94e5-19f4-454e-9e58-00fd463484ec" };
+            var portalUserId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892";
+            var devicesIds = new List<string> { "33fa525a-93ed-4201-9bd6-f28db0eb448e" };
             _pushNotificationGateway.SendNotification(portalUserId, devicesIds, "first title", message);
             return Ok("sent");
         }
@@ -144,9 +144,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [Route("user/update")]
         public IActionResult Update()
         {
-            var portalUserId = Guid.NewGuid().ToString();
+            var portalUserId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892"; //Guid.NewGuid().ToString();
          
-            var devicesId = "ade3a421-2848-4648-98d2-2e055a45e6b7";
+            var devicesId = "edbe35fd-9a23-4507-a59f-e3d898680998";
             
             var success = _pushNotificationGateway.UpdateDeviceExternalUserId(portalUserId, devicesId);
 

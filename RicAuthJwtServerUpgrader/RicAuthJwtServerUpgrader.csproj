@@ -11,11 +11,13 @@
     <None Remove="Scripts\Create\0002-BaseData.sql" />
     <None Remove="Scripts\Update\v1.0001\0001-add-3-tables.sql" />
     <None Remove="Scripts\Update\v1.0001\0002-IsReceiveDueDateAlertPushNotification.sql" />
+    <None Remove="Scripts\Update\v1.0001\0003-IsPaidPushNotification.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create\0001-Schema.sql" />
     <EmbeddedResource Include="Scripts\Create\0002-BaseData.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0001\0003-IsPaidPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0002-IsReceiveDueDateAlertPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0001\0001-add-3-tables.sql" />
   </ItemGroup>

@@ -31,6 +31,7 @@ using RicMonitoringAPI.Infrastructure.Extensions;
 using RicMonitoringAPI.RoomRent.ViewModels;
 using Serilog;
 using System.Text.Json;
+using RicMonitoringAPI.Services.Interfaces;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -55,6 +56,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly ICommunicationService _communicationService;
         private readonly IPushNotificationGateway _pushNotificationGateway;
         private readonly IConfiguration _configuration;
+        private readonly IOneSignalService _oneSignalService;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -70,7 +72,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ISmsGatewayService smsGatewayService,
             ICommunicationService communicationService,
             IPushNotificationGateway pushNotificationGateway,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IOneSignalService oneSignalService
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -87,6 +90,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _communicationService = communicationService ?? throw new ArgumentNullException(nameof(communicationService));
             _pushNotificationGateway = pushNotificationGateway ?? throw new ArgumentNullException(nameof(pushNotificationGateway));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _oneSignalService = oneSignalService ?? throw new ArgumentNullException(nameof(oneSignalService));
         }
 
         [HttpGet]
@@ -176,10 +180,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var currentDateTimeUtc = DateTime.UtcNow;
             var registeredDevices = new List<RegisteredDeviceModel>
             {
-                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "b5ccdf82-7d28-11ec-937e-d61d837d48eb"},
-                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "16539ffe-7d7d-11ec-a328-1ed87c0af646"},
-                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "1e6c32d4-7dbc-11ec-ad3c-ce4acaaaf75e"},
-                new RegisteredDeviceModel { AspNetUsersId = "38f50976-d617-4f5b-bbf4-a8b6a5a9d70f", DeviceId = "9e80144e-7dcc-11ec-92fa-2aa7497429e8"},
+                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "33fa525a-93ed-4201-9bd6-f28db0eb448e"},
             };
 
             var registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
@@ -287,7 +288,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     message += transaction.Renter.Name + " " + transaction.TotalAmountDue.ToString("#,##0.00") + "pesos | ";
                 });
 
-                var userRegisteredDevices = GetUserRegisteredDevices(registeredDevicesJsonString);
+                var userRegisteredDevices = _oneSignalService.GetUserRegisteredDevices(registeredDevicesJsonString);
                 userRegisteredDevices.ForEach(user =>
                 {
                     _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Overdue Alert", message);
@@ -301,29 +302,12 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var enableDueDateAlertPushNotification = _settingRepository.GetBooleanValue(SettingNameEnum.EnableDueDateAlertPushNotification);
             if (enableDueDateAlertPushNotification)
             {
-                var userRegisteredDevices = GetUserRegisteredDevices(registeredDevicesJsonString);
+                var userRegisteredDevices = _oneSignalService.GetUserRegisteredDevices(registeredDevicesJsonString);
                 userRegisteredDevices.ForEach(user =>
                 {
                     _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Rent Batch File", $"Rent Batch File Processing has been completed @ {currentDateTimeUtc.Date.ToShortDateString()} {currentDateTimeUtc.Date.ToShortTimeString()}");
                 });
             }
-        }
-
-        private List<UserRegisteredDeviceApiModel> GetUserRegisteredDevices(string registeredDevicesJsonString)
-        {
-            var userRegisteredDeviceDeserializeObject =
-                JsonSerializer.Deserialize(registeredDevicesJsonString,
-                    typeof(List<UserRegisteredDeviceDeserializeObject>)) as List<UserRegisteredDeviceDeserializeObject>;
-
-            var userRegisteredDevices = (from d in userRegisteredDeviceDeserializeObject
-                group d by d.AspNetUsersId
-                into g
-                select new UserRegisteredDeviceApiModel
-                {
-                    PortalUserId = g.Key,
-                    DeviceIds = g.Select(o => o.DeviceId).ToList()
-                }).ToList();
-            return userRegisteredDevices;
         }
 
         #endregion
