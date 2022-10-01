@@ -6,6 +6,7 @@ using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data.Exception;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
 using RicAuthJwtServer.Models;
+using RicAuthJwtServer.Models.Constants;
 
 namespace RicAuthJwtServer.Application
 {
@@ -39,12 +40,27 @@ namespace RicAuthJwtServer.Application
             }
         }
 
-        public List<RegisteredDevice> FindReceiveDueDateAlert()
+        public List<RegisteredDevice> FindReceiveDueDatePushNotifications()
         {
             try
             {
                 var registeredDevices = _registeredDeviceRepository                    
                     .FindBy(f => f.User.IsReceiveDueDateAlertPushNotification)
+                    .ToList();
+                return registeredDevices;
+            }
+            catch (DataException de)
+            {
+                throw new RepositoryException(de).ErrorUnableToFetchRecord();
+            }
+        }
+
+        public List<RegisteredDevice> FindIsPaidPushNotifications()
+        {
+            try
+            {
+                var registeredDevices = _registeredDeviceRepository
+                    .FindBy(f => f.User.IsPaidPushNotification && f.Platform == PlatformConstant.Android)
                     .ToList();
                 return registeredDevices;
             }

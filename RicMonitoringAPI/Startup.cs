@@ -54,6 +54,8 @@ using RicMonitoringAPI.Common.Validators;
 using RicMonitoringAPI.RicXplorer.ViewModels;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
+using RicMonitoringAPI.Services;
+using RicMonitoringAPI.Services.Interfaces;
 
 namespace RicMonitoringAPI
 {
@@ -128,6 +130,7 @@ namespace RicMonitoringAPI
             services.AddTransient<IAuditRentTransactionPropertyMappingService, AuditRentTransactionPropertyMappingService>();
             services.AddTransient<IAuditRentTransactionPaymentPropertyMappingService, AuditRentTransactionPaymentPropertyMappingService>();
 
+            services.AddTransient<IOneSignalService, OneSignalService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();

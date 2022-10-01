@@ -19,6 +19,7 @@ using RicAuthJwtServer.Data.Services;
 using RicAuthJwtServer.Infrastructure;
 using RicCommon.Diagnostics;
 using RicMonitoringAPI.Common.Model;
+using RicMonitoringAPI.Services.Interfaces;
 using BaseRestApiModel = RicAuthJwtServer.ViewModels.BaseRestApiModel;
 
 namespace RicAuthJwtServer.Controllers
@@ -177,6 +178,10 @@ namespace RicAuthJwtServer.Controllers
                     var registeredDevices = GetRegisteredDevices();
                     registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
                 }
+                else
+                {
+                    registeredDevicesJsonString = JsonSerializer.Serialize(GetPaidPushNotifications());//TODO: store in app state
+                }
                    
 
                 return Ok(new BaseRestApiModel
@@ -209,7 +214,17 @@ namespace RicAuthJwtServer.Controllers
 
         private List<RegisteredDeviceApiModel> GetRegisteredDevices()
         {
-            return _registeredDeviceService.FindReceiveDueDateAlert()
+            return _registeredDeviceService.FindReceiveDueDatePushNotifications()
+                .Select(o => new RegisteredDeviceApiModel
+                {
+                    DeviceId = o.DeviceId,
+                    AspNetUsersId = o.AspNetUsersId
+                }).ToList();
+        }
+
+        private List<RegisteredDeviceApiModel> GetPaidPushNotifications()
+        {
+            return _registeredDeviceService.FindIsPaidPushNotifications()
                 .Select(o => new RegisteredDeviceApiModel
                 {
                     DeviceId = o.DeviceId,

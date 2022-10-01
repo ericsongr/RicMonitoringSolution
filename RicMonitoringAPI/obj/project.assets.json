@@ -6791,11 +6791,12 @@
       ]
     },
     "System.Dynamic.Runtime/4.0.11": {
-      "sha512": "/1BIVVjDzizGGiI0nj2iy7VYBszplClU+H7015pZepX5lSlJaVUNFQaun69LHqkNLgavGEKJzaW5rh9hDy2d5w==",
+      "sha512": "db34f6LHYM0U0JpE+sOmjar27BnqTVkbLJhgfwMpTdgTigG/Hna3m2MYVwnFzGGKnEJk2UXFuoVTr8WUbU91/A==",
       "type": "package",
       "path": "system.dynamic.runtime/4.0.11",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -10165,23 +10166,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ericson Ramos\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Ericson\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ricman\\projects\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
+      "projectUniqueName": "D:\\Projects\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
       "projectName": "RicMonitoringAPI",
-      "projectPath": "C:\\ricman\\projects\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
-      "packagesPath": "C:\\Users\\Ericson Ramos\\.nuget\\packages\\",
-      "outputPath": "C:\\ricman\\projects\\RicMonitoringSolution\\RicMonitoringAPI\\obj\\",
+      "projectPath": "D:\\Projects\\RicMonitoringSolution\\RicMonitoringAPI\\RicMonitoringAPI.csproj",
+      "packagesPath": "C:\\Users\\Ericson\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\RicMonitoringSolution\\RicMonitoringAPI\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Ericson Ramos\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ericson\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10195,11 +10192,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\ricman\\projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj": {
-              "projectPath": "C:\\ricman\\projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj"
+            "D:\\Projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj": {
+              "projectPath": "D:\\Projects\\RicMonitoringSolution\\RicCommon\\RicCommon.csproj"
             },
-            "C:\\ricman\\projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj": {
-              "projectPath": "C:\\ricman\\projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj"
+            "D:\\Projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj": {
+              "projectPath": "D:\\Projects\\RicMonitoringSolution\\RicCommunication\\RicCommunication.csproj"
             }
           }
         }
@@ -10299,7 +10296,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

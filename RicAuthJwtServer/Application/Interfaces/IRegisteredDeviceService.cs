@@ -7,7 +7,8 @@ namespace RicAuthJwtServer.Application.Interfaces
     {
         void Delete(string userId);
         RegisteredDevice Find(string userId, string deviceId);
-        List<RegisteredDevice> FindReceiveDueDateAlert();
+        List<RegisteredDevice> FindReceiveDueDatePushNotifications();
+        List<RegisteredDevice> FindIsPaidPushNotifications();
         void Save(RegisteredDevice item);
         void Save(int id, string userId, string deviceId, string platform);
     }

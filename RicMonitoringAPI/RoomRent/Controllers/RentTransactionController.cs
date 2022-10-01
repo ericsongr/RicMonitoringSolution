@@ -15,6 +15,7 @@ using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
+using RicMonitoringAPI.Services.Interfaces;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
 {
@@ -33,6 +34,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IImageService _imageService;
+        private readonly IOneSignalService _oneSignalService;
 
         public RentTransactionsController(
             IRentTransactionRepository rentTransactionRepository,
@@ -43,7 +45,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRentTransactionPaymentRepository rentTransactionPaymentRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService,
-            IImageService imageService)
+            IImageService imageService,
+            IOneSignalService oneSignalService)
         {
             _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
             _rentDetailTransactionRepository = rentDetailTransactionRepository ?? throw new ArgumentNullException(nameof(rentDetailTransactionRepository));
@@ -54,6 +57,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            _oneSignalService = oneSignalService ?? throw new ArgumentNullException(nameof(oneSignalService));
         }
 
         [HttpGet("{id}", Name = "Get")]
@@ -152,7 +156,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 var rentTransactionEntity = await _rentTransactionRepository
                     .GetSingleIncludesAsync(o => o.Id == id,
-                                o => o.RentTransactionPayments);
+                                o => o.RentTransactionPayments, o => o.Renter);
                 if (rentTransactionEntity == null)
                 {
                     return NotFound();
@@ -251,6 +255,11 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     paymentTransactionType = payment.PaymentTransactionType.ToString(),
                     IsNoAdvanceDepositLeft = rentTransaction.IsNoAdvanceDepositLeft
                 };
+
+                //send push notification
+                _oneSignalService.SendPushNotification(DateTime.Now, rentTransaction.RegisteredDevicesJsonString,
+                    $"Payment received from {rentTransactionEntity.Renter.Name} amounting {rentTransaction.PaidAmount} on {rentTransaction.PaidDate.Value}", 
+                    "Payment Due Date");
 
                 return Ok(new BaseRestApiModel
                 {
