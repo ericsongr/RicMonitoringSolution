@@ -18,6 +18,10 @@ import { GooglePlacesDirective } from '../common/directives/google-places.direct
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsService } from './settings/settings.service';
 import { EditSettingDialogComponent } from './settings/edit-setting-dialog/edit-setting-dialog.component';
+import { UsersService } from './users/users.service';
+import { UsersComponent } from './users/users.component';
+import { UserComponent } from './user/user.component';
+import { UserService } from './user/user.service';
 
 const routes : Routes = [
   {
@@ -39,6 +43,20 @@ const routes : Routes = [
     component : AccountComponent,
     resolve: {
       data: AccountService
+    }
+  },
+  {
+    path      : 'users',
+    component : UsersComponent,
+    resolve: {
+      data: UsersService
+    }
+  },
+  {
+    path      : 'users/:id/:handle',
+    component : UserComponent,
+    resolve: {
+      data: UserService
     }
   },
   {
@@ -73,7 +91,9 @@ const routes : Routes = [
     DailyBatchComponent,
     SettingsComponent,
     EditSettingDialogComponent,
-    GooglePlacesDirective
+    GooglePlacesDirective,
+    UsersComponent,
+    UserComponent,
   ],
   entryComponents: [
     EditSettingDialogComponent
@@ -83,6 +103,8 @@ const routes : Routes = [
     AccountService,
     AccountsService,
     SettingsService,
+    UsersService,
+    UserService,
     {
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,

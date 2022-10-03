@@ -66,6 +66,13 @@ var navigationContainer: FuseNavigation[] = [
                         exactMatch: true
                     },
                     {
+                        id        : 'USERS',
+                        title     : 'Users',
+                        type      : 'item',
+                        url       : '/administrator/users',
+                        exactMatch: true
+                    },
+                    {
                         id        : 'RENTAUDITS',
                         title     : 'Audits',
                         type      : 'item',

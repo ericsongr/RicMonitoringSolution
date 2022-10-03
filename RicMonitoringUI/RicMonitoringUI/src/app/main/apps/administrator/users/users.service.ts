@@ -2,9 +2,8 @@ import { Injectable, Inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiControllers } from 'environments/api-controllers';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ApiPortalRoutes } from 'environments/app.constants';
-// import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable()
 export class UsersService implements Resolve<any> {
@@ -43,13 +42,11 @@ export class UsersService implements Resolve<any> {
 
   getUsers(): Promise<any> {
 
-    var url = `${this.authUrl}/api/${ApiControllers.Account}`;
+    var url = `${this.authUrl}/${ApiControllers.UserProfile}`;
 
     return new Promise((resolve, reject) => {
       
-      var httpHeaders = this.getHeaders();
-      
-      this._httpClient.get(url, {headers: httpHeaders} )
+      this._httpClient.get(url)
           .subscribe((response: any) => {
              
             this.users = response.payload;
@@ -62,27 +59,6 @@ export class UsersService implements Resolve<any> {
     })
 
     
-  }
-
-  public getHeaders() {
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json');
-    headers = headers.set('Accept', 'application/json');
-    return this.appendAuthHeader(headers);
-  }
-
-  public getToken() {
-      const token = ''; // this._oidcSecurityService.getToken();
-      return token;
-  }
-
-  private appendAuthHeader(headers: HttpHeaders) {
-      // const token = this._oidcSecurityService.getToken();
-      const token = '';
-      if (token === '') { return headers; }
-      const tokenValue = 'Bearer ' + token;
-      
-      return headers.set('Authorization', tokenValue);
   }
 
 }
