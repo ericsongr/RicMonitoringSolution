@@ -54,14 +54,14 @@
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-header-cell class="pl-20" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
                     <mat-cell *matCellDef="let user">
-                        <p class="text-truncate">{{user.name}}</p>
+                        <p class="text-truncate pl-20">{{user.name}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="userName">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>userName</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
                     <mat-cell *matCellDef="let user">
                         <p class="text-truncate">{{user.userName}}</p>
                     </mat-cell>
@@ -90,9 +90,25 @@
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="isReceiveDueDateAlertPushNotification">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date Alert</mat-header-cell>
+                    <mat-cell class="center" *matCellDef="let user">
+                        <mat-icon *ngIf="user.isReceiveDueDateAlertPushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                        <mat-icon *ngIf="!user.isReceiveDueDateAlertPushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="isPaidPushNotification">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Settled Payment Alert</mat-header-cell>
+                    <mat-cell class="center" *matCellDef="let user">
+                        <mat-icon *ngIf="user.isPaidPushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                        <mat-icon *ngIf="!user.isPaidPushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
                 <mat-row *matRowDef="let user; columns: displayedColumns;" class="users" matRipple
-                    [routerLink]="'/administrator/users/' + user.userName + '/' + handleize(user.lastName)">
+                    [routerLink]="'/administrator/users/' + user.id + '/' + handleize(user.lastName)">
                 </mat-row>
             </mat-table>
 

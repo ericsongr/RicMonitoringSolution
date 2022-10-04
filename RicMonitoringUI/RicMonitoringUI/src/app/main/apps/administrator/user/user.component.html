@@ -27,7 +27,7 @@
             New User
           </div>
           <div class="subtitle secondary-text">
-            <span>User Detail</span>
+            <span>User detail</span>
           </div>
         </div>
       </div>
@@ -86,6 +86,37 @@
                 <show-errors [control]="userEntryForm.controls.mobileNumber"></show-errors>
               </mat-form-field>
             </div>
+
+            <div>
+              <div class="push-notifications">
+                <strong>
+                  Push Notifications
+                </strong>
+              </div>
+              <div>
+
+                <div class="pl-20" fxFlex="20" fxLayout="column" fxLayoutAlign="start left">
+                  <div class="h5 secondary-text">Due Date Alert</div>
+                  <div class="h2 font-weight-300 py-8">
+                    <mat-radio-group formControlName="isReceiveDueDateAlertPushNotification">
+                      <mat-radio-button [checked]="user.isReceiveDueDateAlertPushNotification" value="true">Yes</mat-radio-button>
+                      <mat-radio-button [checked]="!user.isReceiveDueDateAlertPushNotification" value="false">No</mat-radio-button>
+                  </mat-radio-group>
+                  </div>
+                </div>
+                  <div class="pl-20" fxFlex="30" fxLayout="column" fxLayoutAlign="start left">
+                    <div class="h5 secondary-text">Settled Payment Alert</div>
+                    <div class="h2 font-weight-300 py-8">
+                      <mat-radio-group formControlName="isPaidPushNotification">
+                        <mat-radio-button [checked]="user.isPaidPushNotification" value="true">Yes</mat-radio-button>
+                        <mat-radio-button [checked]="!user.isPaidPushNotification" value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+
             <div>
               <div class="user-credential">
                 <strong>
@@ -96,7 +127,8 @@
 
                 <mat-form-field fxFlex="33" appearance="outline" floatLabel="always" class="w-100-p">
                   <mat-label>Username</mat-label>
-                  <input matInput name="userName" formControlName="userName" [readonly]="pageType == 'edit'">
+                  <!--[readonly]="pageType == 'edit'"-->
+                  <input matInput name="userName" formControlName="userName">
                   <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
                   <show-errors [control]="userEntryForm.controls.userName"></show-errors>
                 </mat-form-field>
@@ -105,7 +137,7 @@
                   <mat-label>
                       Role
                   </mat-label>
-                  <mat-select formControlName="role" placeholder="[select one]" style="width:100%" name="role" required>
+                  <mat-select formControlName="role" placeholder="[select one]" style="width:100%" name="role">
                     <mat-option *ngFor="let role of roles"
                       [value]="role.roleName" ng-value="role.roleName">
                         {{role.roleName}}
