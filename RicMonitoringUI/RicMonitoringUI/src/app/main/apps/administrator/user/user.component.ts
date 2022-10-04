@@ -88,7 +88,9 @@ export class UserComponent implements OnInit, OnDestroy {
       mobileNumber  : [this.user.mobileNumber, Validators.required],
       phoneNumber   : [this.user.phoneNumber],
       userName      : [this.user.userName, Validators.required],
-      role          : [this.user.role]
+      role          : [this.user.role],
+      isReceiveDueDateAlertPushNotification   : [this.user.isReceiveDueDateAlertPushNotification],
+      isPaidPushNotification                  : [this.user.isPaidPushNotification],
     });
   }
   

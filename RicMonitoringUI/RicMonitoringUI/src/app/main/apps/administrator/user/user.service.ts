@@ -21,7 +21,7 @@ export class UserService implements Resolve<any>
     private _http : HttpClient, 
     @Inject('AUTH_URL') private _authUrl: string
   ) {
-    this.userUrl = `${_authUrl}/${ApiControllers.UserProfile}/profile`;
+    this.userUrl = `${_authUrl}/${ApiControllers.UserProfile}`;
     this.roleUrl = `${_authUrl}/${ApiControllers.Role}`;
    }
 
@@ -57,7 +57,7 @@ export class UserService implements Resolve<any>
       }
       else 
       {
-        var url = `${this.userUrl}?id=${this.routeParams.id}`;
+        var url = `${this.userUrl}/profile?id=${this.routeParams.id}`;
         
         this._http.get(url)
             .subscribe((response: any) => {
@@ -76,7 +76,7 @@ export class UserService implements Resolve<any>
 
   saveUser(user){
     return new Promise((resolve, reject) => {
-      this._http.put(this.userUrl, user)
+      this._http.put(this.userUrl + '/update-profile', user)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

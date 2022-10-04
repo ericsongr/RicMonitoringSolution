@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
@@ -17,7 +19,7 @@ namespace RicAuthJwtServer.Controllers
     [EnableCors("AllowCors")]
     [Route("api/user-profile")]
     [ApiController]
-    public class UserProfileController : ControllerBase
+    public class UserProfileController : ApiJwtBaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRegisteredDeviceService _registeredDeviceService;
@@ -55,6 +57,41 @@ namespace RicAuthJwtServer.Controllers
             {
                 Payload = user
             });
+        }
+
+        [Authorize(Policy = "AllRoles")]
+        [HttpPut]
+        [Route("update-profile")]
+        public async Task<IActionResult> UpdateUser([FromBody] ApplicationUser model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user != null)
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.MobileNumber = model.MobileNumber;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
+
+                user.IsReceiveDueDateAlertPushNotification = model.IsReceiveDueDateAlertPushNotification;
+                user.IsPaidPushNotification = model.IsPaidPushNotification;
+
+                user.UserName = model.UserName;
+
+                await _userManager.UpdateAsync(user);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+            }
+            else
+            {
+                return Ok(HandleApiException("User does not exists", HttpStatusCode.NotFound));
+            }
+            
         }
     }
 }
