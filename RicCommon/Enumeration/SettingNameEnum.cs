@@ -17,6 +17,7 @@
         AppSMSRenterNoOfDaysBeforeDueDate,
         AppSMSMessageRenterBeforeDueDate,
         EnableDueDateAlertPushNotification,
+        EnableIncomingDueDateAlertPushNotification,
 
         UseSystemDedicatedNumber,
         SMSGatewaySenderId,

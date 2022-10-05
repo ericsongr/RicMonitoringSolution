@@ -115,6 +115,7 @@ namespace RicAuthJwtServer.Controllers
 
                 user.IsReceiveDueDateAlertPushNotification = model.IsReceiveDueDateAlertPushNotification;
                 user.IsPaidPushNotification = model.IsPaidPushNotification;
+                user.IsIncomingDueDatePushNotification = model.IsIncomingDueDatePushNotification;
 
                 user.UserName = model.UserName;
 

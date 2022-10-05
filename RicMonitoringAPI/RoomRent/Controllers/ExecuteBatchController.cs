@@ -143,6 +143,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ////sms
             SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
+            //push notification incoming due date alert
+            SendIncomingDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
+
             //push notification overdue alert
             SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
 
@@ -173,6 +176,26 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
         [AllowAnonymous]
         [HttpPost()]
+        [Route("TestSendIncomingDueDateAlertPushNotification")]
+        public async Task<IActionResult> TestSendIncomingDueDateAlertPushNotification()
+        {
+            //replace values of AspNetUsersId and DeviceId when test
+            var currentDateTimeUtc = DateTime.UtcNow;
+            var registeredDevices = new List<RegisteredDeviceModel>
+            {
+                new RegisteredDeviceModel { AspNetUsersId = "05b6e3bd-c9aa-4ce8-9912-3ccaa0abf892", DeviceId = "33fa525a-93ed-4201-9bd6-f28db0eb448e"},
+            };
+
+            var registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
+
+            //push notification overdue alert
+            await Task.Run(() => SendIncomingDueDateAlertPushNotification(currentDateTimeUtc, registeredDevicesJsonString));
+
+            return Ok("success");
+        }
+
+        [AllowAnonymous]
+        [HttpPost()]
         [Route("TestSendDueDateAlertPushNotification")]
         public async Task<IActionResult> TestSendDueDateAlertPushNotification()
         {
@@ -186,7 +209,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
 
             //push notification overdue alert
-            SendDueDateAlertPushNotification(currentDateTimeUtc, registeredDevicesJsonString);
+            await Task.Run(() => SendDueDateAlertPushNotification(currentDateTimeUtc, registeredDevicesJsonString));
 
             return Ok("success");
         }
@@ -269,6 +292,33 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         #endregion
 
         #region Push Notifications
+
+        private void SendIncomingDueDateAlertPushNotification(DateTime currentDateTimeUtc, string registeredDevicesJsonString)
+        {
+            var enableDueDateAlertPushNotification = _settingRepository.GetBooleanValue(SettingNameEnum.EnableIncomingDueDateAlertPushNotification);
+            if (enableDueDateAlertPushNotification)
+            {
+                string message = ""; //todo
+                var transactions = _rentTransactionRepository
+                    .FindBy(o => o.DueDate == currentDateTimeUtc.AddDays(3) &&
+                                 o.PaidDate == null &&
+                                 o.PaidAmount == 0 &&
+                                 !o.IsSystemProcessed, o => o.Renter)
+                    .ToList();
+
+                transactions.ForEach(transaction =>
+                {
+                    message += transaction.Renter.Name + " " + transaction.TotalAmountDue.ToString("#,##0.00") + "pesos | ";
+                });
+
+                var userRegisteredDevices = _oneSignalService.GetUserRegisteredDevices(registeredDevicesJsonString);
+                userRegisteredDevices.ForEach(user =>
+                {
+                    _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Incoming Due Date Alert", message);
+                });
+
+            }
+        }
 
         private void SendDueDateAlertPushNotification(DateTime currentDateTimeUtc, string registeredDevicesJsonString)
         {
