@@ -18,6 +18,7 @@ namespace RicAuthJwtServer.Controllers
 {
     [EnableCors("AllowCors")]
     [Route("api/user-profile")]
+    [Authorize(Policy = "AllRoles")]
     [ApiController]
     public class UserProfileController : ApiJwtBaseController
     {
@@ -32,7 +33,6 @@ namespace RicAuthJwtServer.Controllers
             _registeredDeviceService = registeredDeviceService ?? throw new ArgumentNullException(nameof(registeredDeviceService));
         }
 
-        [Authorize(Policy = "AllRoles")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -45,7 +45,6 @@ namespace RicAuthJwtServer.Controllers
             });
         }
 
-        [Authorize(Policy = "AllRoles")]
         [HttpGet]
         [Route("profile")]
         public async Task<IActionResult> Profile(string id)
@@ -59,7 +58,34 @@ namespace RicAuthJwtServer.Controllers
             });
         }
 
-        [Authorize(Policy = "AllRoles")]
+        [HttpPost]
+        [Route("create-user")]
+        public async Task<IActionResult> CreateUser([FromBody] ApplicationUser model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                return Ok(HandleApiException("Username already exists", HttpStatusCode.NotFound));
+            }
+            else
+            {
+                model.Id = Guid.NewGuid().ToString(); // for new user
+                var result = await _userManager.CreateAsync(model, "Pa$$w0rd");
+                if (!result.Succeeded)
+                {
+                    return Ok(HandleApiException("User creation failed.", HttpStatusCode.NotFound));
+                }
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "success",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+            }
+
+        }
+
         [HttpPut]
         [Route("update-profile")]
         public async Task<IActionResult> UpdateUser([FromBody] ApplicationUser model)
