@@ -61,6 +61,8 @@ namespace RicAuthJwtServer.Controllers
 
             user.Role = role.FirstOrDefault();
 
+            user.RegisteredDevices = _registeredDeviceService.FindAll(id);
+
             return Ok(new BaseRestApiModel
             {
                 Payload = user

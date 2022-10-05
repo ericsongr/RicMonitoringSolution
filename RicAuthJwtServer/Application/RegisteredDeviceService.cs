@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data.Exception;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
@@ -23,6 +24,28 @@ namespace RicAuthJwtServer.Application
         {
             _registeredDeviceRepository.DeleteWhere(o => o.AspNetUsersId == userId);
             _registeredDeviceRepository.Commit();
+        }
+
+        public List<RegisteredDevice> FindAll(string userId)
+        {
+            try
+            {
+                var registeredDevices = _registeredDeviceRepository
+                    .FindBy(f => f.AspNetUsersId == userId)
+                    .GroupBy(g => new { g.DeviceId, g.Platform})
+                    .Select(o => new RegisteredDevice
+                    {
+                        DeviceId = o.Key.DeviceId,
+                        Platform = o.Key.Platform,
+                        LastAccessOnUtc = o.Max(o => o.LastAccessOnUtc)
+                    }).ToList();
+
+                return registeredDevices;
+            }
+            catch (DataException de)
+            {
+                throw new RepositoryException(de).ErrorUnableToFetchRecord();
+            }
         }
 
         public RegisteredDevice Find(string userId, string deviceId)

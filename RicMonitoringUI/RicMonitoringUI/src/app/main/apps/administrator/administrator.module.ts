@@ -22,6 +22,8 @@ import { UsersService } from './users/users.service';
 import { UsersComponent } from './users/users.component';
 import { UserComponent } from './user/user.component';
 import { UserService } from './user/user.service';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserProfileService } from './user-profile/user-profile.service';
 
 const routes : Routes = [
   {
@@ -61,9 +63,9 @@ const routes : Routes = [
   },
   {
     path      : 'users/:id/:handle',
-    component : UserComponent,
+    component : UserProfileComponent,
     resolve: {
-      data: UserService
+      data: UserProfileService
     }
   },
   {
@@ -101,6 +103,7 @@ const routes : Routes = [
     GooglePlacesDirective,
     UsersComponent,
     UserComponent,
+    UserProfileComponent,
   ],
   entryComponents: [
     EditSettingDialogComponent
@@ -112,6 +115,7 @@ const routes : Routes = [
     SettingsService,
     UsersService,
     UserService,
+    UserProfileService,
     {
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,
