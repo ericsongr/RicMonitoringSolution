@@ -23,8 +23,8 @@ export class User {
         this.phoneNumber = user.phoneNumber;
         this.userName = user.userName;
         this.role = user.role;
-        this.isReceiveDueDateAlertPushNotification = user.isReceiveDueDateAlertPushNotification;
-        this.isPaidPushNotification = user.isPaidPushNotification;
+        this.isReceiveDueDateAlertPushNotification = user.isReceiveDueDateAlertPushNotification || false;
+        this.isPaidPushNotification = user.isPaidPushNotification || false;
         this.handle = user.handle || FuseUtils.handleize(this.lastName);
     }
 

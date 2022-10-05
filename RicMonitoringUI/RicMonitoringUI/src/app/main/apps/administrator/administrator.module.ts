@@ -53,6 +53,13 @@ const routes : Routes = [
     }
   },
   {
+    path      : 'users/:id',
+    component : UserComponent,
+    resolve: {
+      data: UserService
+    }
+  },
+  {
     path      : 'users/:id/:handle',
     component : UserComponent,
     resolve: {

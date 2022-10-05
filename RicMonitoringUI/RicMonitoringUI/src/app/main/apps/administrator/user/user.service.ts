@@ -85,7 +85,7 @@ export class UserService implements Resolve<any>
 
   addUser(user){
     return new Promise((resolve, reject) => {
-      this._http.post(this.userUrl, user)
+      this._http.post(this.userUrl + '/create-user', user)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);
