@@ -11,7 +11,7 @@ export class User {
     role        : string;
     handle      : string;
     isReceiveDueDateAlertPushNotification   : boolean;
-    isPaidPushNotification   : boolean;
+    isPaidPushNotification                  : boolean;
 
     constructor(user?) {
         user = user || {};

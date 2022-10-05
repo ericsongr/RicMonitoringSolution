@@ -12,7 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data;
 using RicAuthJwtServer.Data.Extensions;
+using RicAuthJwtServer.ViewModels;
 using RicMonitoringAPI.Common.Model;
+using BaseRestApiModel = RicMonitoringAPI.Common.Model.BaseRestApiModel;
 
 namespace RicAuthJwtServer.Controllers
 {
@@ -23,13 +25,16 @@ namespace RicAuthJwtServer.Controllers
     public class UserProfileController : ApiJwtBaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IRegisteredDeviceService _registeredDeviceService;
 
         public UserProfileController(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IRegisteredDeviceService registeredDeviceService)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager)); 
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _registeredDeviceService = registeredDeviceService ?? throw new ArgumentNullException(nameof(registeredDeviceService));
         }
 
@@ -52,6 +57,10 @@ namespace RicAuthJwtServer.Controllers
 
             var user = await _userManager.FindByIdAsync(id);
 
+            var role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult();
+
+            user.Role = role.FirstOrDefault();
+
             return Ok(new BaseRestApiModel
             {
                 Payload = user
@@ -71,7 +80,12 @@ namespace RicAuthJwtServer.Controllers
             {
                 model.Id = Guid.NewGuid().ToString(); // for new user
                 var result = await _userManager.CreateAsync(model, "Pa$$w0rd");
-                if (!result.Succeeded)
+                if (result.Succeeded)
+                {
+                    if (await _roleManager.RoleExistsAsync(model.Role))
+                        await _userManager.AddToRoleAsync(model, model.Role);
+                }
+                else
                 {
                     return Ok(HandleApiException("User creation failed.", HttpStatusCode.NotFound));
                 }
@@ -104,7 +118,19 @@ namespace RicAuthJwtServer.Controllers
 
                 user.UserName = model.UserName;
 
-                await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    var currentRole = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+                    if (model.Role != currentRole)
+                    {
+                        if (!string.IsNullOrEmpty(currentRole) && await _roleManager.RoleExistsAsync(currentRole))
+                            await _userManager.RemoveFromRoleAsync(user, currentRole);
+
+                        if (await _roleManager.RoleExistsAsync(model.Role))
+                            await _userManager.AddToRoleAsync(user, model.Role);
+                    }
+                }
 
                 return Ok(new BaseRestApiModel
                 {
