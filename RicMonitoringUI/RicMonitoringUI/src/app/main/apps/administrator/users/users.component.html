@@ -90,8 +90,16 @@
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="isIncomingDueDatePushNotification">
+                    <mat-header-cell class="center" *matHeaderCellDef mat-sort-header>Incoming Due Date Alert</mat-header-cell>
+                    <mat-cell class="center" *matCellDef="let user">
+                        <mat-icon *ngIf="user.isIncomingDueDatePushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                        <mat-icon *ngIf="!user.isIncomingDueDatePushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="isReceiveDueDateAlertPushNotification">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date Alert</mat-header-cell>
+                    <mat-header-cell class="center" *matHeaderCellDef mat-sort-header>Due Date Alert</mat-header-cell>
                     <mat-cell class="center" *matCellDef="let user">
                         <mat-icon *ngIf="user.isReceiveDueDateAlertPushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
                         <mat-icon *ngIf="!user.isReceiveDueDateAlertPushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
@@ -99,7 +107,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="isPaidPushNotification">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Settled Payment Alert</mat-header-cell>
+                    <mat-header-cell class="center" *matHeaderCellDef mat-sort-header>Settled Payment Alert</mat-header-cell>
                     <mat-cell class="center" *matCellDef="let user">
                         <mat-icon *ngIf="user.isPaidPushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
                         <mat-icon *ngIf="!user.isPaidPushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>

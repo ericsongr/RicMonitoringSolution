@@ -40,6 +40,7 @@ namespace RicAuthJwtServer.Data
 
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
         public bool IsPaidPushNotification { get; set; }
+        public bool IsIncomingDueDatePushNotification { get; set; }
 
         [NotMapped]
         public string Role { get; set; }
@@ -62,6 +63,7 @@ namespace RicAuthJwtServer.Data
                     PhoneNumber = u.PhoneNumber,
                     IsReceiveDueDateAlertPushNotification = u.IsReceiveDueDateAlertPushNotification,
                     IsPaidPushNotification = u.IsPaidPushNotification,
+                    IsIncomingDueDatePushNotification = u.IsIncomingDueDatePushNotification,
                     Role = u.Role,
                 };
             }

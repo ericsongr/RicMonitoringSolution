@@ -12,6 +12,7 @@ export class User {
     handle      : string;
     isReceiveDueDateAlertPushNotification   : boolean;
     isPaidPushNotification                  : boolean;
+    isIncomingDueDatePushNotification                  : boolean;
 
     constructor(user?) {
         user = user || {};
@@ -25,6 +26,7 @@ export class User {
         this.role = user.role;
         this.isReceiveDueDateAlertPushNotification = user.isReceiveDueDateAlertPushNotification || false;
         this.isPaidPushNotification = user.isPaidPushNotification || false;
+        this.isIncomingDueDatePushNotification = user.isIncomingDueDatePushNotification || false;
         this.handle = user.handle || FuseUtils.handleize(this.lastName);
     }
 
