@@ -19,7 +19,7 @@ export const ApiControllers = {
 
     Account                 : "account",
     UserProfile             : "user-profile",
-    Role                    : "role",
+    Role                    : "user-role",
     Settings                : "settings"
     
 }

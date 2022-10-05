@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
 using RicAuthJwtServer.Models;
@@ -40,6 +41,9 @@ namespace RicAuthJwtServer.Data
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
         public bool IsPaidPushNotification { get; set; }
 
+        [NotMapped]
+        public string Role { get; set; }
+
         public virtual ICollection<RegisteredDevice> RegisteredDevices { get; set; }
         //for multiple result
         
@@ -58,6 +62,7 @@ namespace RicAuthJwtServer.Data
                     PhoneNumber = u.PhoneNumber,
                     IsReceiveDueDateAlertPushNotification = u.IsReceiveDueDateAlertPushNotification,
                     IsPaidPushNotification = u.IsPaidPushNotification,
+                    Role = u.Role,
                 };
             }
         }

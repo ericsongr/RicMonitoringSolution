@@ -6,5 +6,6 @@ namespace RicAuthJwtServer.ViewModels
         public const string Superuser = "Superuser";
         public const string Administrator = "Administrator";
         public const string Staff = "Staff";
+        public const string RunDailyBatch = "RUNDAILYBATCH";
     }
 }
