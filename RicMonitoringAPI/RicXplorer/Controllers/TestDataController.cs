@@ -28,7 +28,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
 
         [HttpPost(Name = "PostBooking")]
-        public async Task<IActionResult> PostBooking()
+        public IActionResult PostBooking()
         {
             var startDate = new DateTime(2022, 07, 10);
 

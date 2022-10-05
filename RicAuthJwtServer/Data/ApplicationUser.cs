@@ -46,8 +46,8 @@ namespace RicAuthJwtServer.Data
         public string Role { get; set; }
 
         public virtual ICollection<RegisteredDevice> RegisteredDevices { get; set; }
-        //for multiple result
         
+        //for multiple result
         public static Expression<Func<ApplicationUser, UserViewModel>> Projection
         {
             get

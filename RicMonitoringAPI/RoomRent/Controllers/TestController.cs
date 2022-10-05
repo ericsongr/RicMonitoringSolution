@@ -25,7 +25,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         /// only for test purposes running transaction for 4 months before the page for transaction history created.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> TestSpRentTransactionBatchFile()
+        public IActionResult TestSpRentTransactionBatchFile()
         {
             return null;
             //var startDate = new DateTime(2020, 1, 1);// january 1, 2020

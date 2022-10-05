@@ -11,6 +11,7 @@ import { UserProfileService } from './user-profile.service';
 import { UserProfile } from './user-profile.model';
 import { Router } from '@angular/router';
 import { Role } from '../user/role.model';
+import { UserPushNotification } from './user-push-notification.model';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { Role } from '../user/role.model';
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
   
+  userPushNotification: UserPushNotification;
   user = new UserProfile();
   roles: Role[];
   pageType: string;
@@ -29,7 +31,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   onUserChangedSubscription: Subscription;
   
-  displayedColumns = ['deviceId', 'platform', 'lastAccessOnUtc'];
+  displayedColumns = ['deviceId', 'platform', 'lastAccessOnUtc','isReceiveDueDateAlertPushNotification','isPaidPushNotification','isIncomingDueDatePushNotification'];
 
   constructor(
     private _userService: UserProfileService,
@@ -110,6 +112,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           // this._location.go(`/administrator/users`);
         });
     } 
+  }
+
+  pushNotification(deviceId, source) {
+    
+    let userPushNotification = new UserPushNotification(this.user.id, deviceId, source)
+    console.log(userPushNotification)
+
+    // this._userService.pushNotification(this.userPushNotification);
+
+    this._snackBar.open("Push Notification Test has been sent.", 'OK', {
+      verticalPosition: 'top',
+      duration: 2000
+    });
+
   }
 
   ngOnDestroy(): void {

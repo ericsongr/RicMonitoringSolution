@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { ApiControllers } from 'environments/api-controllers';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient } from '@angular/common/http';
+import { UserPushNotification } from './user-push-notification.model';
 
 
 @Injectable()
@@ -82,4 +83,15 @@ export class UserProfileService implements Resolve<any>
           }, reject);
     });
   }
+
+  pushNotification(userPushNotification: UserPushNotification) {
+
+    return new Promise((resolve, reject) => {
+      this._http.post(this.userUrl + '/push-notification', userPushNotification)
+          .subscribe((response: any) => {
+            resolve(response);
+          }, reject);
+    });
+  }
+
 }

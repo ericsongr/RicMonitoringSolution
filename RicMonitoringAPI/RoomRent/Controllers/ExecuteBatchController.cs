@@ -134,7 +134,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         {
             var currentDateTimeUtc = DateTime.UtcNow;
 
-            var status = ProcessRentTransactionBatchFile(currentDateTimeUtc);
+            var status = await Task.Run(() => ProcessRentTransactionBatchFile(currentDateTimeUtc));
+
             //var status = DailyBatchStatusConstant.Processed;
 
             ////email

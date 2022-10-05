@@ -47,10 +47,9 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                throw e;
             }
-
-            return null;
+            
         }
 
 
