@@ -12,6 +12,7 @@ export class UserProfileService implements Resolve<any>
 {
 
   userUrl: string;
+  apiPushNotification: string;
   roleUrl: string;
   routeParams: any;
   user: any;
@@ -20,10 +21,13 @@ export class UserProfileService implements Resolve<any>
 
   constructor(
     private _http : HttpClient, 
-    @Inject('AUTH_URL') private _authUrl: string
+    @Inject('AUTH_URL') private _authUrl: string,
+    @Inject('API_URL') private _API_URL: string,
   ) {
     this.userUrl = `${_authUrl}/${ApiControllers.UserProfile}`;
     this.roleUrl = `${_authUrl}/${ApiControllers.Role}`;
+
+    this.apiPushNotification = `${_API_URL}${ApiControllers.PushNotification}`;
    }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -87,7 +91,8 @@ export class UserProfileService implements Resolve<any>
   pushNotification(userPushNotification: UserPushNotification) {
 
     return new Promise((resolve, reject) => {
-      this._http.post(this.userUrl + '/push-notification', userPushNotification)
+      debugger;
+      this._http.post(this.apiPushNotification, userPushNotification)
           .subscribe((response: any) => {
             resolve(response);
           }, reject);

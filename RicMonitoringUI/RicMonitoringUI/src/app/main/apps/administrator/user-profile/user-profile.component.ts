@@ -106,7 +106,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             verticalPosition: 'top',
             duration: 2000
           });
-          debugger;
+          
           //change the location with new one
           this._router.navigate([`/administrator/users`]);
           // this._location.go(`/administrator/users`);
@@ -117,9 +117,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   pushNotification(deviceId, source) {
     
     let userPushNotification = new UserPushNotification(this.user.id, deviceId, source)
-    console.log(userPushNotification)
-
-    // this._userService.pushNotification(this.userPushNotification);
+    this._userService.pushNotification(userPushNotification);
 
     this._snackBar.open("Push Notification Test has been sent.", 'OK', {
       verticalPosition: 'top',

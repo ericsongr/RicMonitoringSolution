@@ -10,7 +10,7 @@ namespace RicAuthJwtServer.ViewModels
         public long Id { get; set; }
         public string DeviceId { get; set; }
         public string Platform { get; set; }
-        public DateTime LastAccessOnUtc { get; set; }
+        public string LastAccessOnUtc { get; set; }
 
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
         public bool IsPaidPushNotification { get; set; }

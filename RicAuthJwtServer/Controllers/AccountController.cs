@@ -172,15 +172,20 @@ namespace RicAuthJwtServer.Controllers
                 string loginToken = _aspNetUserLoginTokenService.GenerateLoginToken(loginUserResult.Id);
 
                 //get registered devices for
-                string registeredDevicesJsonString = "";
+                string incomingDueDateRegisteredDevicesJsonString = "";
+                string dueDateRegisteredDevicesJsonString = "";
+                string settledPaymentRegisteredDevicesJsonString = "";
+                string tenantBatchFileCompletedRegisteredDevicesJsonString = "";
+
                 if (loginUserResult.UserName == "RunDailyBatch")
                 {
-                    var registeredDevices = GetRegisteredDevices();
-                    registeredDevicesJsonString = JsonSerializer.Serialize(registeredDevices);
+                    incomingDueDateRegisteredDevicesJsonString = JsonSerializer.Serialize(GetIncomingDueDateRegisteredDevices());
+                    dueDateRegisteredDevicesJsonString = JsonSerializer.Serialize(GetDueDateRegisteredDevices());
+                    tenantBatchFileCompletedRegisteredDevicesJsonString = JsonSerializer.Serialize(GetDueDateRegisteredDevices()); //TODO: create function to get user to have completed batch file notification
                 }
                 else
                 {
-                    registeredDevicesJsonString = JsonSerializer.Serialize(GetPaidPushNotifications());//TODO: store in app state
+                    settledPaymentRegisteredDevicesJsonString = JsonSerializer.Serialize(GetPaidPushNotifications());//TODO: store in app state
                 }
                    
 
@@ -198,7 +203,10 @@ namespace RicAuthJwtServer.Controllers
                         refreshTokenExpiresIn = refreshToken.First().Value,
                         loginToken,
                         userType = 1, //TODO fetch value from db
-                        registeredDevicesJsonString
+                        incomingDueDateRegisteredDevicesJsonString,
+                        dueDateRegisteredDevicesJsonString,
+                        tenantBatchFileCompletedRegisteredDevicesJsonString,
+                        settledPaymentRegisteredDevicesJsonString
                     },
                     Errors = new List<BaseErrorModel>(),
                     StatusCode = (int)HttpStatusCode.OK
@@ -211,8 +219,18 @@ namespace RicAuthJwtServer.Controllers
             }
 
         }
+        
+        private List<RegisteredDeviceApiModel> GetIncomingDueDateRegisteredDevices()
+        {
+            return _registeredDeviceService.FindIncomingDueDatePushNotifications()
+                .Select(o => new RegisteredDeviceApiModel
+                {
+                    DeviceId = o.DeviceId,
+                    AspNetUsersId = o.AspNetUsersId
+                }).ToList();
+        }
 
-        private List<RegisteredDeviceApiModel> GetRegisteredDevices()
+        private List<RegisteredDeviceApiModel> GetDueDateRegisteredDevices()
         {
             return _registeredDeviceService.FindReceiveDueDatePushNotifications()
                 .Select(o => new RegisteredDeviceApiModel

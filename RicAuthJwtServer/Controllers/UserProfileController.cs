@@ -72,6 +72,7 @@ namespace RicAuthJwtServer.Controllers
                     dest.IsIncomingDueDatePushNotification = user.IsIncomingDueDatePushNotification && source.Platform == PlatformConstant.Android;
                     dest.IsReceiveDueDateAlertPushNotification = user.IsReceiveDueDateAlertPushNotification && source.Platform == PlatformConstant.Android;
                     dest.IsPaidPushNotification = user.IsPaidPushNotification && source.Platform == PlatformConstant.Android;
+                    dest.LastAccessOnUtc = source.LastAccessOnUtc.ToString("dd-MMM-yyyy hh:mm tt");
                 })).ToList();
 
             return Ok(new BaseRestApiModel

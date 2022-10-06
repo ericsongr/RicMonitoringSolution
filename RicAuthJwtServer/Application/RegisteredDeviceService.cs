@@ -63,12 +63,27 @@ namespace RicAuthJwtServer.Application
             }
         }
 
+        public List<RegisteredDevice> FindIncomingDueDatePushNotifications()
+        {
+            try
+            {
+                var registeredDevices = _registeredDeviceRepository                    
+                    .FindBy(f => f.User.IsIncomingDueDatePushNotification && f.Platform == PlatformConstant.Android)
+                    .ToList();
+                return registeredDevices;
+            }
+            catch (DataException de)
+            {
+                throw new RepositoryException(de).ErrorUnableToFetchRecord();
+            }
+        }
+        
         public List<RegisteredDevice> FindReceiveDueDatePushNotifications()
         {
             try
             {
                 var registeredDevices = _registeredDeviceRepository                    
-                    .FindBy(f => f.User.IsReceiveDueDateAlertPushNotification)
+                    .FindBy(f => f.User.IsReceiveDueDateAlertPushNotification && f.Platform == PlatformConstant.Android)
                     .ToList();
                 return registeredDevices;
             }

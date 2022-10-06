@@ -11,6 +11,7 @@ export const ApiControllers = {
     RentTransactionHistory  : "rent-transaction-history",
     LookupTypeItems         : "lookup-type-items",
     ExecStoreProc           : "exec-store-proc",
+    PushNotification        : "push-notification",
 
     Accounts                : "accounts", // company accounts
     TimeZones               : "time-zones", // company accounts

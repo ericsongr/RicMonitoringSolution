@@ -145,13 +145,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             SendSmsRentersBeforeDueDate(currentDateTimeUtc);
 
             //push notification incoming due date alert
-            SendIncomingDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
+            SendIncomingDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.IncomingDueDateRegisteredDevicesJsonString);
 
             //push notification overdue alert
-            SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
+            SendDueDateAlertPushNotification(currentDateTimeUtc, batchParameters.DueDateRegisteredDevicesJsonString);
 
             //push notification for completed processing of the Tenant batch file
-            SendTenantBatchFileCompletedPushNotification(currentDateTimeUtc, batchParameters.RegisteredDevicesJsonString);
+            SendTenantBatchFileCompletedPushNotification(currentDateTimeUtc, batchParameters.TenantBatchFileCompletedRegisteredDevicesJsonString);
 
             //_pushNotificationGateway.IsDeviceIdValid(Guid.NewGuid().ToString());
 
