@@ -35,10 +35,6 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, int renterId)
         {
-            string message = "";
-
-            bool status = true;
-
             try
             {
                 int rentTransactionId = 0;

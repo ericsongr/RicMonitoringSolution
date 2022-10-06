@@ -12,7 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data;
 using RicAuthJwtServer.Data.Extensions;
+using RicAuthJwtServer.Models;
+using RicAuthJwtServer.Models.Constants;
 using RicAuthJwtServer.ViewModels;
+using RicCommon.Infrastructure.Extensions;
 using RicMonitoringAPI.Common.Model;
 using BaseRestApiModel = RicMonitoringAPI.Common.Model.BaseRestApiModel;
 
@@ -55,11 +58,22 @@ namespace RicAuthJwtServer.Controllers
         public async Task<IActionResult> Profile(string id)
         {
 
-            var user = await _userManager.FindByIdAsync(id);
+            var userResult = await _userManager.FindByIdAsync(id);
+            var user = userResult.Convert<ApplicationUser, ApplicationUserViewModel>();
 
-            var role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult();
+
+            var role = _userManager.GetRolesAsync(userResult).GetAwaiter().GetResult();
 
             user.Role = role.FirstOrDefault();
+
+            user.RegisteredDevices = _registeredDeviceService.FindAll(id)
+                .Select(o => o.Convert<RegisteredDevice, RegisteredDeviceViewModel>((source, dest) =>
+                {
+                    dest.IsIncomingDueDatePushNotification = user.IsIncomingDueDatePushNotification && source.Platform == PlatformConstant.Android;
+                    dest.IsReceiveDueDateAlertPushNotification = user.IsReceiveDueDateAlertPushNotification && source.Platform == PlatformConstant.Android;
+                    dest.IsPaidPushNotification = user.IsPaidPushNotification && source.Platform == PlatformConstant.Android;
+                    dest.LastAccessOnUtc = source.LastAccessOnUtc.ToString("dd-MMM-yyyy hh:mm tt");
+                })).ToList();
 
             return Ok(new BaseRestApiModel
             {

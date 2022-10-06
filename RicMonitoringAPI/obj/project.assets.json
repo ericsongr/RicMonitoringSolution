@@ -3312,6 +3312,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
+          "AutoMapper": "8.0.0",
           "RicModel": "1.0.0",
           "log4net": "2.0.12",
           "mustache-sharp": "1.0.0"
@@ -10146,7 +10147,6 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Audit.EntityFramework.Core >= 15.2.2",
-      "AutoMapper >= 8.0.0",
       "FluentValidation.AspNetCore >= 8.6.2",
       "IdentityServer4.AccessTokenValidation >= 3.0.1",
       "Microsoft.AspNetCore.Mvc.Formatters.Json >= 2.2.0",
@@ -10214,10 +10214,6 @@
           "Audit.EntityFramework.Core": {
             "target": "Package",
             "version": "[15.2.2, )"
-          },
-          "AutoMapper": {
-            "target": "Package",
-            "version": "[8.0.0, )"
           },
           "FluentValidation.AspNetCore": {
             "target": "Package",

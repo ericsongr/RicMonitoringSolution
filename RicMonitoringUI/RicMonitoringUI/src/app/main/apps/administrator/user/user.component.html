@@ -32,14 +32,11 @@
       </div>
       <!-- /APP TITLE -->
 
-      <button mat-raised-button class="save-user-button mat-white-bg mt-16 mt-sm-0" [disabled]="userEntryForm.invalid"
-        *ngIf="pageType === 'add'" (click)="add()">
+      <button mat-raised-button 
+        class="save-user-button mat-white-bg mt-16 mt-sm-0" 
+        [disabled]="userEntryForm.invalid"
+        (click)="add()">
         <span>ADD</span>
-      </button>
-
-      <button mat-raised-button class="save-user mat-white-bg mt-16 mt-sm-0"
-        [disabled]="userEntryForm.invalid || userEntryForm.pristine" *ngIf="pageType === 'edit'" (click)="save()">
-        <span>SAVE</span>
       </button>
     </div>
     <!-- / HEADER -->
@@ -111,7 +108,7 @@
                       <mat-radio-button [checked]="!user.isReceiveDueDateAlertPushNotification" value="false">No</mat-radio-button>
                   </mat-radio-group>
                   </div>
-                  
+
                 </div>
                   <div class="pl-20" fxFlex="30" fxLayout="column" fxLayoutAlign="start left">
                     <div class="h5 secondary-text">Settled Payment Alert</div>
@@ -155,7 +152,7 @@
                   <show-errors [control]="userEntryForm.controls.role"></show-errors>
                 </mat-form-field>
               </div>
-              <div *ngIf="pageType === 'add'">
+              <div>
                 <small>Note: new user always have default password of <strong>Pa$$w0rd</strong> and they can change it on their account.</small>
               </div>
             </div>

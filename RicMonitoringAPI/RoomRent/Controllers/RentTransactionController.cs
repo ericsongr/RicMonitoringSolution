@@ -257,7 +257,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 };
 
                 //send push notification
-                _oneSignalService.SendPushNotification(DateTime.Now, rentTransaction.RegisteredDevicesJsonString,
+                _oneSignalService.SendPushNotification(DateTime.Now, rentTransaction.SettledPaymentRegisteredDevicesJsonString,
                     $"Payment received from {rentTransactionEntity.Renter.Name} amounting {rentTransaction.PaidAmount} on {rentTransaction.PaidDate.Value}", 
                     "Payment Due Date");
 

@@ -6,22 +6,24 @@ import { FuseUtils } from '@fuse/utils';
 import { Location } from '@angular/common';
 import { fuseAnimations } from '@fuse/animations';
 
-import { UserService } from './user.service';
+import { UserProfileService } from './user-profile.service';
 
-import { User } from './user.model';
-import { Role } from './role.model';
+import { UserProfile } from './user-profile.model';
 import { Router } from '@angular/router';
+import { Role } from '../user/role.model';
+import { UserPushNotification } from './user-push-notification.model';
 
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  selector: 'app-user-profile',
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.scss'],
   animations: [fuseAnimations]
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit, OnDestroy {
   
-  user = new User();
+  userPushNotification: UserPushNotification;
+  user = new UserProfile();
   roles: Role[];
   pageType: string;
   
@@ -29,8 +31,10 @@ export class UserComponent implements OnInit, OnDestroy {
 
   onUserChangedSubscription: Subscription;
   
+  displayedColumns = ['deviceId', 'platform', 'lastAccessOnUtc','isReceiveDueDateAlertPushNotification','isPaidPushNotification','isIncomingDueDatePushNotification'];
+
   constructor(
-    private _userService: UserService,
+    private _userService: UserProfileService,
     private _formBuilder: FormBuilder,
     private _snackBar : MatSnackBar,
     private _location : Location,
@@ -42,20 +46,15 @@ export class UserComponent implements OnInit, OnDestroy {
       this.onUserChangedSubscription =
         this._userService.onUserChanged
             .subscribe(response => {
-      
-              this.pageType = 'add';
-              this.user = new User();
+              
+              this.user = new UserProfile(response.payload);
               
               //get all roles
               this.getRoles();
               
-              this.userEntryForm = this.createUserForm();
+              this.userEntryForm = this.updateUserForm();
               
             });
-
-            
-       
-           
     }
 
   getRoles() {
@@ -65,7 +64,7 @@ export class UserComponent implements OnInit, OnDestroy {
         })
   }
 
-  createUserForm(): FormGroup {
+  updateUserForm(): FormGroup {
     return this._formBuilder.group({
       id            : [this.user.id],
       firstName     : [this.user.firstName, Validators.required],
@@ -81,41 +80,51 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
   
-  add() {
+  save() {
+
     if (this.userEntryForm.invalid) {
+
       //show the success message
       this._snackBar.open('Invalid data. Please verify.', 'OK', {
-        verticalPosition  : 'top',
-        duration          : 2000,
-        panelClass        : ['mat-warn']
+        verticalPosition: 'top',
+        panelClass: ['mat-warn']
       });
 
     } else {
-
+      
       var formData = this.userEntryForm.getRawValue();
-
       formData.handle = FuseUtils.handleize(formData.lastName);
-  
-      this._userService.addUser(formData)
-          .then(() => {
-  
-            //Trigger the subscription with new data
-            this._userService.onUserChanged.next(formData);
-  
-            //show the success message
-            this._snackBar.open('New user added.', 'OK', {
-              verticalPosition  : 'top',
-              duration          : 2000
-            });
-  
-            //change the location with new one
-            this._location.go(`/administrator/users/${this.user.userName}/${this.user.handle}`);
+
+      this._userService.saveUser(formData)
+        .then(() => {
+
+          //Trigger the subscription with new data
+          this._userService.onUserChanged.next(formData);
+
+          //show the success message
+          this._snackBar.open('User detail saved.', 'OK', {
+            verticalPosition: 'top',
+            duration: 2000
           });
-    }
-    
+          
+          //change the location with new one
+          this._router.navigate([`/administrator/users`]);
+          // this._location.go(`/administrator/users`);
+        });
+    } 
   }
 
-  
+  pushNotification(deviceId, source) {
+    
+    let userPushNotification = new UserPushNotification(this.user.id, deviceId, source)
+    this._userService.pushNotification(userPushNotification);
+
+    this._snackBar.open("Push Notification Test has been sent.", 'OK', {
+      verticalPosition: 'top',
+      duration: 2000
+    });
+
+  }
 
   ngOnDestroy(): void {
     this.onUserChangedSubscription.unsubscribe();

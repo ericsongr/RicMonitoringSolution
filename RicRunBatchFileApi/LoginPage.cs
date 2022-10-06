@@ -122,7 +122,9 @@ namespace RicRunBatchFileApi
                         //pass the registeredDevicesJsonString to api/exec-store-proc use for push notifications
                         data = JsonConvert.SerializeObject(new 
                         {
-                            registeredDevicesJsonString = payload["registeredDevicesJsonString"]
+                            incomingDueDateRegisteredDevicesJsonString = payload["incomingDueDateRegisteredDevicesJsonString"],
+                            dueDateRegisteredDevicesJsonString = payload["dueDateRegisteredDevicesJsonString"],
+                            tenantBatchFileCompletedRegisteredDevicesJsonString = payload["tenantBatchFileCompletedRegisteredDevicesJsonString"],
                         });
                         content = new StringContent(data, Encoding.UTF8, "application/json");
                         

@@ -16,6 +16,7 @@ using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Enumerations;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
+using RicCommon.Diagnostics;
 using RicMonitoringAPI.Common.Constants;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -287,6 +288,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
             catch (Exception ex)
             {
+                Logger.HandleException(ex);
                 return Ok(new { message = "Error occurred when updating renter detail." });
             }
 

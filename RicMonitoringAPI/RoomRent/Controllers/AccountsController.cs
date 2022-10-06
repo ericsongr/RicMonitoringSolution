@@ -48,13 +48,13 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         [HttpGet("time-zones")]
         public async Task<IActionResult> GetTimeZonesInJson()
         {
-            var timeZones = (from TimeZoneInfo tz in _accountService.SetupTimeZones()
-                             select new TimeZone
-                             {
-                                 DisplayName = tz.DisplayName,
-                                 Id = tz.Id
-                             }).OrderBy(o => o.DisplayName).ToList();
-
+            var timeZones = await Task.Run(() =>
+                (from TimeZoneInfo tz in _accountService.SetupTimeZones()
+                    select new TimeZone
+                    {
+                        DisplayName = tz.DisplayName,
+                        Id = tz.Id
+                    }).OrderBy(o => o.DisplayName).ToList()); 
             return Ok(new BaseRestApiModel
             {
                 Payload = timeZones
