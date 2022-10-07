@@ -100,7 +100,7 @@
                   </div>
                 </div>
 
-                <div class="pl-20" fxFlex="20" fxLayout="column" fxLayoutAlign="start left">
+                <div class="pl-20" fxFlex="30" fxLayout="column" fxLayoutAlign="start left">
                   <div class="h5 secondary-text">Due Date Alert</div>
                   <div class="h2 font-weight-300 py-8">
                     <mat-radio-group formControlName="isReceiveDueDateAlertPushNotification">
@@ -119,7 +119,15 @@
                     </mat-radio-group>
                     </div>
                   </div>
-                  
+                  <div class="pl-20" fxFlex="30" fxLayout="column" fxLayoutAlign="start left">
+                    <div class="h5 secondary-text">Batch Process Completed Alert</div>
+                    <div class="h2 font-weight-300 py-8">
+                      <mat-radio-group formControlName="isBatchProcessCompletedPushNotification">
+                        <mat-radio-button [checked]="user.isBatchProcessCompletedPushNotification" value="true">Yes</mat-radio-button>
+                        <mat-radio-button [checked]="!user.isBatchProcessCompletedPushNotification" value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                    </div>
+                  </div>
               </div>
             </div>
 

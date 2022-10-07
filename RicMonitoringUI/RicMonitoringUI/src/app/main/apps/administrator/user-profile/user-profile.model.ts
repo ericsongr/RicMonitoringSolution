@@ -13,7 +13,8 @@ export class UserProfile {
     handle      : string;
     isReceiveDueDateAlertPushNotification   : boolean;
     isPaidPushNotification                  : boolean;
-    isIncomingDueDatePushNotification                  : boolean;
+    isIncomingDueDatePushNotification       : boolean;
+    isBatchProcessCompletedPushNotification : boolean;
     registeredDevices: UserRegistedDevice[]
 
     constructor(user?) {
@@ -29,6 +30,7 @@ export class UserProfile {
         this.isReceiveDueDateAlertPushNotification = user.isReceiveDueDateAlertPushNotification || false;
         this.isPaidPushNotification = user.isPaidPushNotification || false;
         this.isIncomingDueDatePushNotification = user.isIncomingDueDatePushNotification || false;
+        this.isBatchProcessCompletedPushNotification = user.isBatchProcessCompletedPushNotification || false;
         this.registeredDevices = user.registeredDevices;
         this.handle = user.handle || FuseUtils.handleize(this.lastName);
     }

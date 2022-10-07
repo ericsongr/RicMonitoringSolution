@@ -17,7 +17,8 @@ namespace RicAuthJwtServer.Data.Extensions
                 PhoneNumber = user.PhoneNumber,
                 IsPaidPushNotification = user.IsPaidPushNotification,
                 IsReceiveDueDateAlertPushNotification = user.IsReceiveDueDateAlertPushNotification,
-                IsIncomingDueDatePushNotification = user.IsIncomingDueDatePushNotification
+                IsIncomingDueDatePushNotification = user.IsIncomingDueDatePushNotification,
+                IsBatchProcessCompletedPushNotification = user.IsBatchProcessCompletedPushNotification,
             };
         }
     }

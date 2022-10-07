@@ -16,7 +16,7 @@ import { DataSource } from '@angular/cdk/collections';
 export class UsersComponent implements OnInit {
 
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'userName', 'mobileNumber', 'phoneNumber', 'email', 'isIncomingDueDatePushNotification','isReceiveDueDateAlertPushNotification', 'isPaidPushNotification'];
+  displayedColumns = ['id', 'name', 'userName', 'mobileNumber', 'phoneNumber', 'email', 'isIncomingDueDatePushNotification','isReceiveDueDateAlertPushNotification', 'isPaidPushNotification','isBatchProcessCompletedPushNotification'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;

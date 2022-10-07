@@ -15,6 +15,7 @@ namespace RicAuthJwtServer.ViewModels
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
         public bool IsPaidPushNotification { get; set; }
         public bool IsIncomingDueDatePushNotification { get; set; }
+        public bool IsBatchProcessCompletedPushNotification { get; set; }
 
     }
 }

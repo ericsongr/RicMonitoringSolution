@@ -181,7 +181,7 @@ namespace RicAuthJwtServer.Controllers
                 {
                     incomingDueDateRegisteredDevicesJsonString = JsonSerializer.Serialize(GetIncomingDueDateRegisteredDevices());
                     dueDateRegisteredDevicesJsonString = JsonSerializer.Serialize(GetDueDateRegisteredDevices());
-                    tenantBatchFileCompletedRegisteredDevicesJsonString = JsonSerializer.Serialize(GetDueDateRegisteredDevices()); //TODO: create function to get user to have completed batch file notification
+                    tenantBatchFileCompletedRegisteredDevicesJsonString = JsonSerializer.Serialize(GetIsBatchProcessCompletedPushNotification());
                 }
                 else
                 {
@@ -243,6 +243,15 @@ namespace RicAuthJwtServer.Controllers
         private List<RegisteredDeviceApiModel> GetPaidPushNotifications()
         {
             return _registeredDeviceService.FindIsPaidPushNotifications()
+                .Select(o => new RegisteredDeviceApiModel
+                {
+                    DeviceId = o.DeviceId,
+                    AspNetUsersId = o.AspNetUsersId
+                }).ToList();
+        }
+        private List<RegisteredDeviceApiModel> GetIsBatchProcessCompletedPushNotification()
+        {
+            return _registeredDeviceService.FindIsBatchProcessCompletedPushNotification()
                 .Select(o => new RegisteredDeviceApiModel
                 {
                     DeviceId = o.DeviceId,

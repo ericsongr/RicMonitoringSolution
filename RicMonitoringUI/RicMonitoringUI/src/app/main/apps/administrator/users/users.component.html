@@ -114,6 +114,14 @@
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="isBatchProcessCompletedPushNotification">
+                    <mat-header-cell class="center" *matHeaderCellDef mat-sort-header>Batch Process Completed Alert</mat-header-cell>
+                    <mat-cell class="center" *matCellDef="let user">
+                        <mat-icon *ngIf="user.isBatchProcessCompletedPushNotification" class="active-icon mat-green-600-bg s-16" style="color: green">check</mat-icon>
+                        <mat-icon *ngIf="!user.isBatchProcessCompletedPushNotification" class="active-icon mat-red-500-bg s-16" style="color: red">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
                 <mat-row *matRowDef="let user; columns: displayedColumns;" class="users" matRipple
                     [routerLink]="'/administrator/users/' + user.id + '/' + handleize(user.lastName)">

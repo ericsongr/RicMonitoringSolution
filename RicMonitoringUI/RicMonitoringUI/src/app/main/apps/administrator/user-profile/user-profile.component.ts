@@ -31,7 +31,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   onUserChangedSubscription: Subscription;
   
-  displayedColumns = ['deviceId', 'platform', 'lastAccessOnUtc','isReceiveDueDateAlertPushNotification','isPaidPushNotification','isIncomingDueDatePushNotification'];
+  displayedColumns = ['deviceId', 'platform', 'lastAccessOnUtc','isReceiveDueDateAlertPushNotification','isPaidPushNotification','isIncomingDueDatePushNotification','isBatchProcessCompletedPushNotification'];
 
   constructor(
     private _userService: UserProfileService,
@@ -77,6 +77,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       isIncomingDueDatePushNotification       : [this.user.isIncomingDueDatePushNotification],
       isReceiveDueDateAlertPushNotification   : [this.user.isReceiveDueDateAlertPushNotification],
       isPaidPushNotification                  : [this.user.isPaidPushNotification],
+      isBatchProcessCompletedPushNotification : [this.user.isBatchProcessCompletedPushNotification],
     });
   }
   

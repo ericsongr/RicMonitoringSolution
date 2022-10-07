@@ -47,6 +47,10 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         title = "Settled Payment Alert";
                         message = "Test push notification message of Settled Payment Due Date for renter";
                         break;
+                     case SourcePushNotificationConstant.BatchProcessCompletedPushNotification:
+                        title = "Batch Process Completed Alert";
+                        message = "Test push notification message for Completed Batch Process";
+                        break;
                         
                 }
                 var deviceIds = new List<string>() { userPushNotification.DeviceId };
