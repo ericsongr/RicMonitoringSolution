@@ -25,6 +25,8 @@ namespace RicAuthJwtServer.Data
             PhoneNumber = userEntry.PhoneNumber;
             IsReceiveDueDateAlertPushNotification = userEntry.IsReceiveDueDateAlertPushNotification;
             IsPaidPushNotification = userEntry.IsPaidPushNotification;
+            IsIncomingDueDatePushNotification = userEntry.IsIncomingDueDatePushNotification;
+            IsBatchProcessCompletedPushNotification = userEntry.IsBatchProcessCompletedPushNotification;
         }
 
         [Required]
@@ -41,6 +43,7 @@ namespace RicAuthJwtServer.Data
         public bool IsReceiveDueDateAlertPushNotification { get; set; }
         public bool IsPaidPushNotification { get; set; }
         public bool IsIncomingDueDatePushNotification { get; set; }
+        public bool IsBatchProcessCompletedPushNotification { get; set; }
 
         [NotMapped]
         public string Role { get; set; }
@@ -64,6 +67,7 @@ namespace RicAuthJwtServer.Data
                     IsReceiveDueDateAlertPushNotification = u.IsReceiveDueDateAlertPushNotification,
                     IsPaidPushNotification = u.IsPaidPushNotification,
                     IsIncomingDueDatePushNotification = u.IsIncomingDueDatePushNotification,
+                    IsBatchProcessCompletedPushNotification = u.IsBatchProcessCompletedPushNotification,
                     Role = u.Role,
                 };
             }

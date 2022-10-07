@@ -78,6 +78,7 @@ export class UserComponent implements OnInit, OnDestroy {
       isIncomingDueDatePushNotification       : [this.user.isIncomingDueDatePushNotification],
       isReceiveDueDateAlertPushNotification   : [this.user.isReceiveDueDateAlertPushNotification],
       isPaidPushNotification                  : [this.user.isPaidPushNotification],
+      isBatchProcessCompletedPushNotification : [this.user.isBatchProcessCompletedPushNotification],
     });
   }
   

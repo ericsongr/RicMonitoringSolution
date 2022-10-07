@@ -12,7 +12,8 @@ export class User {
     handle      : string;
     isReceiveDueDateAlertPushNotification   : boolean;
     isPaidPushNotification                  : boolean;
-    isIncomingDueDatePushNotification                  : boolean;
+    isIncomingDueDatePushNotification       : boolean;
+    isBatchProcessCompletedPushNotification       : boolean;
 
     constructor(user?) {
         user = user || {};
@@ -27,6 +28,7 @@ export class User {
         this.isReceiveDueDateAlertPushNotification = user.isReceiveDueDateAlertPushNotification || false;
         this.isPaidPushNotification = user.isPaidPushNotification || false;
         this.isIncomingDueDatePushNotification = user.isIncomingDueDatePushNotification || false;
+        this.isBatchProcessCompletedPushNotification = user.isBatchProcessCompletedPushNotification || false;
         this.handle = user.handle || FuseUtils.handleize(this.lastName);
     }
 

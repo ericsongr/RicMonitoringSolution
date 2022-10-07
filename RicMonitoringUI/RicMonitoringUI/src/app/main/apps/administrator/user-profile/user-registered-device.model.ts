@@ -6,4 +6,5 @@ export class UserRegistedDevice {
     isReceiveDueDateAlertPushNotification   : boolean
     isPaidPushNotification                  : boolean
     isIncomingDueDatePushNotification       : boolean
+    isBatchProcessCompletedPushNotification : boolean
 }

@@ -11,6 +11,7 @@ namespace RicAuthJwtServer.Application.Interfaces
         List<RegisteredDevice> FindIncomingDueDatePushNotifications();
         List<RegisteredDevice> FindReceiveDueDatePushNotifications();
         List<RegisteredDevice> FindIsPaidPushNotifications();
+        List<RegisteredDevice> FindIsBatchProcessCompletedPushNotification();
         void Save(RegisteredDevice item);
         void Save(int id, string userId, string deviceId, string platform);
     }

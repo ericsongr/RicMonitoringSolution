@@ -107,6 +107,21 @@ namespace RicAuthJwtServer.Application
                 throw new RepositoryException(de).ErrorUnableToFetchRecord();
             }
         }
+        
+        public List<RegisteredDevice> FindIsBatchProcessCompletedPushNotification()
+        {
+            try
+            {
+                var registeredDevices = _registeredDeviceRepository
+                    .FindBy(f => f.User.IsBatchProcessCompletedPushNotification && f.Platform == PlatformConstant.Android)
+                    .ToList();
+                return registeredDevices;
+            }
+            catch (DataException de)
+            {
+                throw new RepositoryException(de).ErrorUnableToFetchRecord();
+            }
+        }
 
         public void Save(RegisteredDevice item)
         {
