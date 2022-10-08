@@ -45,7 +45,7 @@
     <None Remove="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
     <None Remove="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
     <None Remove="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
-    <None Remove="Scripts\Update\v1.0003\0008.0-166-add-pos-accountproductcategory-table.sql" />
+    <None Remove="Scripts\Update\v1.0003\00080-166-add-pos-accountproductcategory-table.sql" />
     <None Remove="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
     <None Remove="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
     <None Remove="Scripts\Update\v1.0003\0011-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
@@ -90,7 +90,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0003\0011-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0008.0-166-add-pos-accountproductcategory-table.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\00080-166-add-pos-accountproductcategory-table.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
