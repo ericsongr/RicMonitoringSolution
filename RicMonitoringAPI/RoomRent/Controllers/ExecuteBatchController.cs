@@ -356,7 +356,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 var userRegisteredDevices = _oneSignalService.GetUserRegisteredDevices(registeredDevicesJsonString);
                 userRegisteredDevices.ForEach(user =>
                 {
-                    _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Rent Batch File", $"Rent Batch File Processing has been completed @ {currentDateTimeUtc.Date.ToShortDateString()} {currentDateTimeUtc.Date.ToShortTimeString()}");
+                    _pushNotificationGateway.SendNotification(user.PortalUserId, user.DeviceIds, "Rent Batch File", $"Rent Batch File Processing has been completed @ {currentDateTimeUtc.ToString("yy-MMM-dd HH:mm tt")}");
                 });
             }
         }
