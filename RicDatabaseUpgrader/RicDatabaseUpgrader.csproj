@@ -44,14 +44,15 @@
     <None Remove="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
     <None Remove="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
     <None Remove="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
-    <None Remove="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
-    <None Remove="Scripts\Update\v1.0003\00080-166-add-pos-accountproductcategory-table.sql" />
-    <None Remove="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
-    <None Remove="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
-    <None Remove="Scripts\Update\v1.0003\0011-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
-    <None Remove="Scripts\Update\v1.0003\0012-176-create-new-table-to-store-each-date-of-booking-use-for-count-and-validation.sql" />
-    <None Remove="Scripts\Update\v1.0003\0013-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
-    <None Remove="Scripts\Update\v1.0003\0014-196-IsBatchProcessCompletedPushNotification.sql" />
+    <None Remove="Scripts\Update\v1.0003\0008-166-add-pos-accountproductcategory-table.sql" />
+    <None Remove="Scripts\Update\v1.0003\0009-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
+    <None Remove="Scripts\Update\v1.0003\0010-165-create-booking-options-data-to-account-pr.sql" />
+    <None Remove="Scripts\Update\v1.0003\0011-169-account-and-category-model-and-api-controller.sql" />
+    <None Remove="Scripts\Update\v1.0003\0012-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
+    <None Remove="Scripts\Update\v1.0003\0013-176-create-new-table-to-store-each-date-of-booking-use-for-count-and-validation.sql" />
+    <None Remove="Scripts\Update\v1.0003\0014-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
+    <None Remove="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
+    <None Remove="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,14 +85,15 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0014-196-IsBatchProcessCompletedPushNotification.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0013-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0012-176-create-new-table-to-store-each-date-of-booking-use-for-count-and-validation.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0011-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0010-169-account-and-category-model-and-api-controller.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0009-165-create-booking-options-data-to-account-pr.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\00080-166-add-pos-accountproductcategory-table.sql" />
-    <EmbeddedResource Include="Scripts\Update\v1.0003\0008-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0014-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0013-176-create-new-table-to-store-each-date-of-booking-use-for-count-and-validation.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0012-171-in-booking-type-drop-name-and-price-of-the-booking-but-fetch-data-from-account-products.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0011-169-account-and-category-model-and-api-controller.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0010-165-create-booking-options-data-to-account-pr.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0008-166-add-pos-accountproductcategory-table.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0009-161-create-pos-product-table-use-for-booking-either-pos-or-online.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0007-160-add-new-account-for-test-data-account-and-ricxplorer.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0006-158-add-booking-type.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0005-rename-guest-bookings-tables.sql" />
