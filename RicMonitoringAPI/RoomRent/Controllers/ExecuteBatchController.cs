@@ -231,6 +231,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
+                                 !o.Renter.IsEndRent &&
                                  o.DueDate == selectedDate &&
                                  o.PaidAmount == 0 &&
                                  !o.IsSystemProcessed, o => o.Renter)
@@ -268,6 +269,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
                 var transactions = _rentTransactionRepository
                     .FindBy(o => o.Renter.EmailRenterBeforeDueDateEnable &&
+                                !o.Renter.IsEndRent &&
                                  o.DueDate == selectedDate &&
                                  o.PaidAmount == 0 &&
                                  !o.IsSystemProcessed, o => o.Renter)
@@ -301,7 +303,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 string message = ""; //todo
                 var transactions = _rentTransactionRepository
-                    .FindBy(o => o.DueDate == currentDateTimeUtc.AddDays(3) &&
+                    .FindBy(o => !o.Renter.IsEndRent && 
+                                 o.DueDate == currentDateTimeUtc.AddDays(3) &&
                                  o.PaidDate == null &&
                                  o.PaidAmount == 0 &&
                                  !o.IsSystemProcessed, o => o.Renter)
@@ -328,7 +331,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             {
                 string message = ""; //todo
                 var transactions = _rentTransactionRepository
-                    .FindBy(o => o.DueDate < currentDateTimeUtc &&
+                    .FindBy(o => !o.Renter.IsEndRent && 
+                            o.DueDate < currentDateTimeUtc &&
                             o.PaidDate == null &&
                             o.PaidAmount == 0 &&
                             !o.IsSystemProcessed, o => o.Renter)
