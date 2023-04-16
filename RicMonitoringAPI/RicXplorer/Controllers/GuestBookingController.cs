@@ -5,6 +5,7 @@ using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RicCommon.Infrastructure.Extensions;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
@@ -56,14 +57,17 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
+       
         [AllowAnonymous]
-        [HttpGet("booked-guests")]
+        [HttpGet("confirm-booked-guests")]
         public IActionResult BookedGuests(string startDate, string endDate, int bookingType)
         {
             DateTime.TryParse(startDate, out DateTime arrivalDate);
             DateTime.TryParse(endDate, out DateTime departureDate);
 
-            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType);
+            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType)
+                .Select(o => o.Convert<GuestBookingDetail, GuestBookingDetailDto>())
+                .ToList();
 
             return Ok(new BaseRestApiModel
             {
@@ -87,6 +91,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 {
                     //save both parent and children guests details
                     var guestBookingDetail = Mapper.Map<GuestBookingDetail>(model);
+                    guestBookingDetail.AccountId = 1; //TODO: create account
                     guestBookingDetail.GuestBookingDates = new List<GuestBookingDate>();
                     for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate = startDate.AddDays(1))
                     {
