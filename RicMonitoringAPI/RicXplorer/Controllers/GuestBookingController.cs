@@ -59,15 +59,14 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
        
         [AllowAnonymous]
-        [HttpGet("confirm-booked-guests")]
-        public IActionResult BookedGuests(string startDate, string endDate, int bookingType)
+        [HttpGet("guests-confirmed-bookings")]
+        public IActionResult GuestsConfirmedBookings(string startDate, string endDate, int bookingType)
         {
             DateTime.TryParse(startDate, out DateTime arrivalDate);
             DateTime.TryParse(endDate, out DateTime departureDate);
 
-            var guests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType)
-                .Select(o => o.Convert<GuestBookingDetail, GuestBookingDetailDto>())
-                .ToList();
+            var dataGuests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType);
+            var guests = Mapper.Map<IEnumerable<GuestBookingDetailDto>>(dataGuests).ToList();
 
             return Ok(new BaseRestApiModel
             {
@@ -100,7 +99,6 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                             DateBooked = startDate
                         });
                     }
-
 
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
