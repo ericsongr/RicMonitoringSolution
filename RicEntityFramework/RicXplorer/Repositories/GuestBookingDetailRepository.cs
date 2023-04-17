@@ -24,7 +24,9 @@ namespace RicEntityFramework.RicXplorer.Repositories
         public IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate, int bookingType = 0)
         {
 
-            var guests =  Context.GuestBookingDates.Include(o => o.GuestBookingDetail).ThenInclude(o => o.GuestBookings)
+            var guests =  Context.GuestBookingDates
+                .Include(o => o.GuestBookingDetail).ThenInclude(o => o.GuestBookings)
+                .Include(o => o.GuestBookingDetail).ThenInclude(o => o.BookingTypeModel.AccountProduct)
                 .Where(o => o.DateBooked >= startDate && o.DateBooked <= endDate);
 
             if (bookingType != 0)

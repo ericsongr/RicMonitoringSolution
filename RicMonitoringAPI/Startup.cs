@@ -268,6 +268,7 @@ namespace RicMonitoringAPI
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
+                
                 //settings
                 cfg.CreateMap<Setting, SettingDto>()
                     .ForMember(dest => dest.DataType,
@@ -335,7 +336,8 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.LookupTypeItem.Description));
 
                 cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();
-
+                
+                //ricxplorer
                 cfg.CreateMap<GuestBookingDetailDto, GuestBookingDetail>()
                     .ForMember(dest => dest.CreatedDateTimeUtc,
                         opt => opt.MapFrom(src => DateTime.UtcNow))
@@ -343,6 +345,11 @@ namespace RicMonitoringAPI
                                 opt => opt.MapFrom(src => src.GuestBookings));
 
                 cfg.CreateMap<GuestBookingDto, GuestBooking>();
+                
+                cfg.CreateMap<GuestBookingDetail, GuestBookingDetailDto>()
+                    .ForMember(dest => dest.BookingTypeName,
+                        opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name));
+
 
             });
 

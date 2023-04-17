@@ -14,9 +14,15 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string Contact { get; set; }
         public string ContactPerson { get; set; }
         public string LeaveMessage { get; set; }
-        public int BookingType { get; set; }
-
+        public string BookingTypeName { get; set; }
+        public DateTime CreatedDateTimeUtc { get; set; }
         public ICollection<GuestBookingDto> GuestBookings { get; set; }
+
+
+        public string ArrivalDepartureDate
+        {
+            get { return ArrivalDate?.ToString("dd-MMM-yyyy") + " to " + DepartureDate?.ToString("dd-MMM-yyyy"); }
+        }
 
     }
 }
