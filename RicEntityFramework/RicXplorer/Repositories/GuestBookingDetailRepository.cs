@@ -34,7 +34,7 @@ namespace RicEntityFramework.RicXplorer.Repositories
                 guests = guests.Where(o => o.GuestBookingDetail.BookingType == bookingType);
             }
 
-            return guests.Select(o => o.GuestBookingDetail).AsNoTracking();
+            return guests.Select(o => o.GuestBookingDetail).Distinct().AsNoTracking();
         }
         
     }
