@@ -6,6 +6,7 @@ namespace RicModel.RicXplorer
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public decimal Price { get; set; }
         public decimal OnlinePrice { get; set; }
         public bool IsWebPurchasable { get; set; }

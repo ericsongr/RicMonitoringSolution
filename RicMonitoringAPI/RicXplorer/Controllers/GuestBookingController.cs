@@ -77,6 +77,22 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("detail/{id:int}")]
+        public IActionResult GuestsBookingDetail(int id)
+        {
+            
+            var data = _guestBookingDetailRepository.FindBookingById(id);
+            var guests = Mapper.Map<GuestBookingDetailDto>(data);
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = guests,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [AllowAnonymous]
         [HttpPost("book", Name = "book")]
         public IActionResult Book(GuestBookingDetailDto model)
         {

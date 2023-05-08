@@ -322,6 +322,8 @@ namespace RicMonitoringAPI
                 cfg.CreateMap<BookingType, BookingTypeDto>()
                     .ForMember(dest => dest.Name,
                         opt => opt.MapFrom(src => src.AccountProduct.Name))
+                    .ForMember(dest => dest.Description,
+                        opt => opt.MapFrom(src => src.AccountProduct.Description))
                     .ForMember(dest => dest.Price,
                         opt => opt.MapFrom(src => src.AccountProduct.Price.ToString("#,#00")))
                     .ForMember(dest => dest.OnlinePrice,

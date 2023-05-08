@@ -805,6 +805,7 @@ CREATE TABLE [dbo].[AccountProducts] (
 	[MaximumLevelQuantity] INT NOT NULL DEFAULT(0),
 	[MinimumLevelQuantity] INT NOT NULL DEFAULT(0),
 	[WarnLevelQuantity] INT NOT NULL DEFAULT(0),
+	[Description] VARCHAR(100),
 	CONSTRAINT [PK_AccountProducts] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
