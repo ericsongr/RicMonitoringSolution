@@ -21,6 +21,16 @@ namespace RicEntityFramework.RicXplorer.Repositories
                                                       && o.GuestBookingDetail.BookingType == bookingType);
         }
 
+        public GuestBookingDetail FindBookingById(int id)
+        {
+            var guest = Context.GuestBookingDetails
+                .Include(o => o.BookingTypeModel.AccountProduct)
+                .Include(o => o.GuestBookings)
+                .AsNoTracking()
+                .FirstOrDefault(o => o.Id == id);
+            return guest;
+        }
+
         public IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate, int bookingType = 0)
         {
 

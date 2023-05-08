@@ -53,6 +53,7 @@
     <None Remove="Scripts\Update\v1.0003\0014-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
     <None Remove="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
     <None Remove="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
+    <None Remove="Scripts\Update\v1.0003\0017-add-description.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +86,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0002\0003-email-due-notification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0002-Amazon-field.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0002\0001-MobileAppLogs.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0003\0017-add-description.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0014-180-isfullybooked-should-return-true-if-already-fulll-otherwise-false.sql" />
