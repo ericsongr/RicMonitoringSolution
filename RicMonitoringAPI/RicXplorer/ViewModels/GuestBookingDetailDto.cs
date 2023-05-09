@@ -7,7 +7,9 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
     {
         public int Id { get; set; }
         public DateTime? ArrivalDate { get; set; }
+        public string ArrivalDateString { get; set; }
         public DateTime? DepartureDate { get; set; }
+        public string DepartureDateString { get; set; }
         public string Country { get; set; }
         public string LanguagesSpoken { get; set; }
         public string Email { get; set; }
@@ -16,6 +18,7 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string LeaveMessage { get; set; }
         public string BookingTypeName { get; set; }
         public DateTime CreatedDateTimeUtc { get; set; }
+        public string CreatedDateTimeUtcString { get; set; }
         public ICollection<GuestBookingDto> GuestBookings { get; set; }
 
 
