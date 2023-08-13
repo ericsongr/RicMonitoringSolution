@@ -3,7 +3,7 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RicXplorer.Interfaces 
 {
-    public interface ILookupTypeItemRepository : IEntityBaseRepository<LookupTypeItem>
+    public interface ILookupTypeRepository : IEntityBaseRepository<LookupType>
     {
     }
 }

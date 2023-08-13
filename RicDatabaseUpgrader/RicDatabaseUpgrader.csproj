@@ -54,6 +54,7 @@
     <None Remove="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
     <None Remove="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
     <None Remove="Scripts\Update\v1.0003\0017-add-description.sql" />
+    <None Remove="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -103,6 +104,7 @@
     <EmbeddedResource Include="Scripts\Update\v1.0003\0003-booking-type-inclusions.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0002-EnableDueDateAlertPushNotification.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0003\0001-added-custom-color.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
   </ItemGroup>
 
   <ItemGroup>
