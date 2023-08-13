@@ -4,9 +4,9 @@ using RicModel.RoomRent;
 
 namespace RicEntityFramework.RicXplorer.Repositories
 {
-    public class LookupTypeItemRepository : EntityBaseRepository<LookupTypeItem>, ILookupTypeItemRepository
+    public class LookupTypeRepository : EntityBaseRepository<LookupType>, ILookupTypeRepository
     {
-        public LookupTypeItemRepository(RicDbContext context) : base(context)
+        public LookupTypeRepository(RicDbContext context) : base(context)
         {
         }
     }

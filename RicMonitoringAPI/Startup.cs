@@ -82,6 +82,7 @@ namespace RicMonitoringAPI
             services.AddScoped<IRenterRepository, RenterRepository>();
             services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();
             services.AddScoped<IRentTransactionDetailRepository, RentTransactionDetailRepository>();
+            services.AddScoped<ILookupTypeRepository, LookupTypeRepository>();
             services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
             services.AddScoped<IRentArrearRepository, RentArrearRepository>();
             services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
@@ -102,6 +103,8 @@ namespace RicMonitoringAPI
             services.AddScoped<IBookingTypeRepository, BookingTypeRepository>();
             services.AddScoped<IGuestBookingDetailRepository, GuestBookingDetailRepository>();
             services.AddScoped<IGuestBookingRepository, GuestBookingRepository>();
+
+            //cost monitoring
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
