@@ -53,10 +53,15 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
-            var lookupTypeItems = Mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems);
+            var lookupTypeItems = Mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.OrderBy(o => o.Description));
 
-            return Ok(new { lookupTypeItems = lookupTypeItems.ShapeData(fields) });
-            
+            return Ok(new BaseRestApiModel
+            {
+                Payload = lookupTypeItems.ShapeData(fields),
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
         }
 
         [HttpPost()]

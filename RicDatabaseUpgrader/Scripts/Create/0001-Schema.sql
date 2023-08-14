@@ -845,3 +845,43 @@ GO
 
 ALTER TABLE [dbo].[GuestBookingDetails] CHECK CONSTRAINT FK_GuestBookingDetail_BookingType_Id
 GO
+
+CREATE TABLE [dbo].[CostItems](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[IsDeleted] [bit] not null default(0),
+	CONSTRAINT [PK_CostItems] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[TransactionCost](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CostItemId] [int] NOT NULL,
+	[Note] [nvarchar](100) NOT NULL,
+	[CostCategoryId] [int] NOT NULL,
+	[IsDeleted] [bit] not null default(0),
+	CONSTRAINT [PK_TransactionCost] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[TransactionCost]  WITH CHECK ADD  CONSTRAINT [ForeignKey_TransactionCost_CostItems] FOREIGN KEY([CostItemId])
+REFERENCES [dbo].[CostItems] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[TransactionCost] CHECK CONSTRAINT [ForeignKey_TransactionCost_CostItems]
+GO
+
+ALTER TABLE [dbo].[TransactionCost]  WITH CHECK ADD  CONSTRAINT [ForeignKey_TransactionCost_LookupTypeItems] FOREIGN KEY([CostCategoryId])
+REFERENCES [dbo].[LookupTypeItems] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[TransactionCost] CHECK CONSTRAINT [ForeignKey_TransactionCost_LookupTypeItems]
+GO
