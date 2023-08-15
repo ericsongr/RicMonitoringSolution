@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RicModel.CostMonitoring;
 using RicModel.RicXplorer;
 
 namespace RicModel.RoomRent
@@ -14,5 +15,6 @@ namespace RicModel.RoomRent
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
         public ICollection<BookingTypeInclusion> BookingTypeInclusions { get; set; }
 
+        public virtual ICollection<TransactionCost> TransactionCosts { get; set; }
     }
 }

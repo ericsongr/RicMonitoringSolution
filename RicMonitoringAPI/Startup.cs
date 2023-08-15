@@ -108,6 +108,7 @@ namespace RicMonitoringAPI
 
             //cost monitoring
             services.AddScoped<ICostItemRepository, CostItemRepository>();
+            services.AddScoped<ITransactionCostRepository, TransactionCostRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 

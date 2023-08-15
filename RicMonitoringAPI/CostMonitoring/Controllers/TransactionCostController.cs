@@ -13,77 +13,82 @@ using RicMonitoringAPI.Common.Model;
 
 namespace RicMonitoringAPI.CostMonitoring.Controllers
 {
-    [Route("api/cost-monitoring-item")]
+    [Route("api/cost-monitoring-transaction")]
     [ApiController]
-    public class CostItemController : ControllerBase
+    public class TransactionCostController : ControllerBase
     {
         private readonly ICostItemRepository _costItemRepository;
+        private readonly ITransactionCostRepository _transactionCostRepository;
         private readonly ITypeHelperService _typeHelperService;
 
 
-        public CostItemController(
+        public TransactionCostController(
             ICostItemRepository costItemRepository,
+            ITransactionCostRepository transactionCostRepository,
             ITypeHelperService typeHelperService)
         {
             _costItemRepository = costItemRepository ?? throw new ArgumentNullException(nameof(costItemRepository));
+            _transactionCostRepository = transactionCostRepository ?? throw new ArgumentNullException(nameof(transactionCostRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
         }
 
-        [HttpGet(Name = "GetCostItems")]
-        public async Task<IActionResult> GetCostItems([FromQuery] string fields)
+        [HttpGet(Name = "TransactionCosts")]
+        public async Task<IActionResult> TransactionCosts([FromQuery] string fields)
         {
 
-            if (!_typeHelperService.TypeHasProperties<CostItemDto>(fields))
+            if (!_typeHelperService.TypeHasProperties<TransactionCostDto>(fields))
             {
                 return BadRequest();
             }
 
-            var costItems = _costItemRepository.FindAll();
-            if (costItems == null)
+            var transactionCosts = _transactionCostRepository.FindAll();
+            if (transactionCosts == null)
             {
                 return NotFound();
             }
 
-            var lookupTypeItems = Mapper.Map<IEnumerable<CostItemDto>>(costItems);
+            var data = Mapper.Map<IEnumerable<TransactionCostDto>>(transactionCosts);
 
             return Ok(new BaseRestApiModel
             {
-                Payload = lookupTypeItems.ShapeData(fields),
+                Payload = data.ShapeData(fields),
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
 
         }
 
-        [HttpPost(Name = "AddCostItem")]
-        public IActionResult AddCostItem(CostItemDto model)
+        [HttpPost(Name = "AddTransactionCost")]
+        public IActionResult AddTransactionCost(TransactionCostDto model)
         {
-            var entity = new CostItem
+            var entity = new TransactionCost
             {
-                Name = model.Name,
+                CostItemId = model.CostItemId,
+                CostCategoryId = model.CostCategoryId,
+                Note = model.Note
             };
 
-            _costItemRepository.Add(entity);
-            _costItemRepository.Commit();
+            _transactionCostRepository.Add(entity);
+            _transactionCostRepository.Commit();
 
             return Ok(new BaseRestApiModel
             {
-                Payload = "New cost item has been added",
+                Payload = "New cost transaction has been added",
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
         }
 
-        [HttpPost("delete", Name = "DeleteCostItem")]
-        public IActionResult DeleteCostItem(int id)
+        [HttpPost("delete", Name = "DeleteTransactionCost")]
+        public IActionResult DeleteTransactionCost(int id)
         {
-            var entity = _costItemRepository.GetSingleIncludesAsync(o => o.Id == id).GetAwaiter().GetResult();
+            var entity = _transactionCostRepository.GetSingleIncludesAsync(o => o.Id == id).GetAwaiter().GetResult();
             entity.IsDeleted = true;
-            _costItemRepository.Commit();
+            _transactionCostRepository.Commit();
 
             return Ok(new BaseRestApiModel
             {
-                Payload = "Cost item has been deleted",
+                Payload = "Cost Transaction has been deleted",
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
