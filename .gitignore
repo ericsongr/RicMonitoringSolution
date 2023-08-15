@@ -188,3 +188,11 @@ RicMonitoringSolution.sln.DotSettings.user
 *.1
 *.props
 RicMonitoringAPI/obj/project.assets.json
+/.vs/ProjectEvaluation/ricmonitoringsolution.projects.v5.2
+/.vs/ProjectEvaluation/ricmonitoringsolution.metadata.v5.2
+/.vs/ProjectEvaluation/ricmonitoringsolution.metadata.v5.1
+/.vs/ProjectEvaluation/ricmonitoringsolution.metadata.v5.1
+/RicMonitoringAPI/obj/RicMonitoringAPI.csproj.nuget.g.props
+/RicMonitoringAPI/obj/project.assets.json
+/RicMonitoringSolution.sln.DotSettings.user
+/RicMonitoringSolution.sln
