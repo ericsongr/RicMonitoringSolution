@@ -185,3 +185,6 @@ RicMonitoringAPI/logs/shared/key-cfcedc83-f457-414c-b90c-e2604c569bfe.xml
 RicMonitoringAPI/obj/project.assets.json
 RicMonitoringAPI/obj/RicMonitoringAPI.csproj.nuget.g.props
 RicMonitoringSolution.sln.DotSettings.user
+*.1
+*.props
+RicMonitoringAPI/obj/project.assets.json
