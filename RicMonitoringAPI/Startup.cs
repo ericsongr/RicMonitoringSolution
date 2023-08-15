@@ -28,6 +28,8 @@ using RicCommunication.Interface;
 using RicCommunication.PushNotification;
 using RicCommunication.SmsGateway;
 using RicEntityFramework;
+using RicEntityFramework.CostMonitoring.Interfaces;
+using RicEntityFramework.CostMonitoring.Repositories;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Interfaces.PropertyMappings;
 using RicEntityFramework.PropertyMappings;
@@ -105,6 +107,7 @@ namespace RicMonitoringAPI
             services.AddScoped<IGuestBookingRepository, GuestBookingRepository>();
 
             //cost monitoring
+            services.AddScoped<ICostItemRepository, CostItemRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
