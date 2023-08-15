@@ -13,15 +13,15 @@ using RicMonitoringAPI.Common.Model;
 
 namespace RicMonitoringAPI.CostMonitoring.Controllers
 {
-    [Route("api/cost-monitoring")]
+    [Route("api/cost-monitoring-item")]
     [ApiController]
-    public class CostItemController : ControllerBase
+    public class TransactionCostController : ControllerBase
     {
         private readonly ICostItemRepository _costItemRepository;
         private readonly ITypeHelperService _typeHelperService;
 
 
-        public CostItemController(
+        public TransactionCostController(
             ICostItemRepository costItemRepository,
             ITypeHelperService typeHelperService)
         {
