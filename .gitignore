@@ -179,3 +179,12 @@ $RECYCLE.BIN/
 RicMonitoringAPI/RicMonitoringUI/node_modules
 RicMonitoringAPI/RicMonitoringUI/dist
 RicMonitoringAPI/RicMonitoringUI/package-lock.json
+*.1
+RicMonitoringAPI/logs/shared/key-2f21e934-07b2-4928-b70e-a48f0c9daf93.xml
+RicMonitoringAPI/logs/shared/key-cfcedc83-f457-414c-b90c-e2604c569bfe.xml
+RicMonitoringAPI/obj/project.assets.json
+RicMonitoringAPI/obj/RicMonitoringAPI.csproj.nuget.g.props
+RicMonitoringSolution.sln.DotSettings.user
+*.1
+*.props
+RicMonitoringAPI/obj/project.assets.json

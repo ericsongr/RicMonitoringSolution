@@ -3,6 +3,7 @@ using System.Reflection;
 using Audit.Core;
 using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using RicModel.CostMonitoring;
 using RicModel.RicXplorer;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
@@ -59,6 +60,13 @@ namespace RicEntityFramework
         public DbSet<AccountProductCategory> AccountProductCategories { get; set; }
 
         //ricxplorer - end
+
+        //cost monitoring - start
+
+        public DbSet<CostItem> CostItems { get; set; }
+
+        //cost monitoring - end
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
