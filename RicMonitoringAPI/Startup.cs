@@ -46,6 +46,8 @@ using RicEntityFramework.RoomRent.PropertyMappings.Audits;
 using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
+using RicModel.CostMonitoring;
+using RicModel.CostMonitoring.Dtos;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
@@ -365,6 +367,12 @@ namespace RicMonitoringAPI
                     .ForMember(dest => dest.CreatedDateTimeUtcString,
                         opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")));
 
+                //cost monitoring
+                cfg.CreateMap<TransactionCost, TransactionCostDto>()
+                    .ForMember(dest => dest.CostItemName,
+                        opt => opt.MapFrom(src => src.CostItem.Name))
+                    .ForMember(dest => dest.CostCategoryName,
+                        opt => opt.MapFrom(src => src.CostCategory.Description));
 
             });
 

@@ -41,7 +41,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 return BadRequest();
             }
 
-            var transactionCosts = _transactionCostRepository.FindAll();
+            var transactionCosts = _transactionCostRepository.FindAll(o => o.CostItem, o => o.CostCategory);
             if (transactionCosts == null)
             {
                 return NotFound();
