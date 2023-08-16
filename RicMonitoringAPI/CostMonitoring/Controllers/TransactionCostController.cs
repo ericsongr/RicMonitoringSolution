@@ -73,7 +73,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
 
             return Ok(new BaseRestApiModel
             {
-                Payload = "New cost transaction has been added",
+                Payload = new { id= entity.Id, message = "New cost transaction has been added" },
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
