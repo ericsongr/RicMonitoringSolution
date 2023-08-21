@@ -863,6 +863,7 @@ CREATE TABLE [dbo].[TransactionCost](
 	[Note] [nvarchar](100) NOT NULL,
 	[CostCategoryId] [int] NOT NULL,
 	[IsDeleted] [bit] not null default(0),
+	[Cost] MONEY NOT NULL DEFAULT(0),
 	CONSTRAINT [PK_TransactionCost] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

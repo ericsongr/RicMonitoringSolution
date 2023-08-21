@@ -65,7 +65,8 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
             {
                 CostItemId = model.CostItemId,
                 CostCategoryId = model.CostCategoryId,
-                Note = model.Note
+                Note = model.Note,
+                Cost = model.Cost,
             };
 
             _transactionCostRepository.Add(entity);

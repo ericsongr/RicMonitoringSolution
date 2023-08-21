@@ -11,7 +11,7 @@ namespace RicModel.CostMonitoring.Dtos
 
         public int CostCategoryId { get; set; }
         public string CostCategoryName { get; set; }
-
+        public decimal Cost { get; set; }
 
         public string Note { get; set; }
     }

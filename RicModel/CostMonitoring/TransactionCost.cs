@@ -11,7 +11,8 @@ namespace RicModel.CostMonitoring
 
         public int CostCategoryId { get; set; }
         public virtual LookupTypeItem CostCategory { get; set; }
-        
+
+        public decimal Cost { get; set; }
         public string Note { get; set; }
         public bool IsDeleted { get; set; }
     }
