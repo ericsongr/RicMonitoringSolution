@@ -61,8 +61,10 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
         [HttpPost(Name = "AddTransactionCost")]
         public IActionResult AddTransactionCost(TransactionCostDto model)
         {
+            DateTime.TryParse(model.TransactionDate, out DateTime transDate);
             var entity = new TransactionCost
             {
+                TransactionDate = transDate,
                 CostItemId = model.CostItemId,
                 CostCategoryId = model.CostCategoryId,
                 Note = model.Note,

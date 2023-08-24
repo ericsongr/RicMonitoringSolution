@@ -5,10 +5,11 @@ namespace RicModel.CostMonitoring.Dtos
     public class TransactionCostDto
     {
         public int Id { get; set; }
+        public string TransactionDate { get; set; }
 
         public int CostItemId { get; set; }
         public string CostItemName { get; set; }
-
+        
         public int CostCategoryId { get; set; }
         public string CostCategoryName { get; set; }
         public decimal Cost { get; set; }
