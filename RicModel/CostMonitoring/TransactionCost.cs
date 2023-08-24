@@ -1,11 +1,12 @@
-﻿using RicModel.RoomRent;
+﻿using System;
+using RicModel.RoomRent;
 
 namespace RicModel.CostMonitoring
 {
     public class TransactionCost
     {
         public int Id { get; set; }
-
+        public DateTime TransactionDate { get; set; }
         public int CostItemId { get; set; }
         public virtual CostItem CostItem { get; set; }
 
