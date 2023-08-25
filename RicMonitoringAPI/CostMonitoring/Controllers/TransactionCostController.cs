@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,7 +34,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
         }
 
         [HttpGet(Name = "TransactionCosts")]
-        public async Task<IActionResult> TransactionCosts([FromQuery] string fields)
+        public async Task<IActionResult> TransactionCosts(bool isFilterByCurrentMonth, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<TransactionCostDto>(fields))
@@ -41,13 +42,18 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 return BadRequest();
             }
 
-            var transactionCosts = _transactionCostRepository.FindAll(o => o.CostItem, o => o.CostCategory);
+            var transactionCosts = _transactionCostRepository
+                .FindAll(o => o.CostItem, o => o.CostCategory);
+
+            if (isFilterByCurrentMonth)
+                transactionCosts = transactionCosts.Where(o => o.TransactionDate.Month == DateTime.Now.Month);
+
             if (transactionCosts == null)
             {
                 return NotFound();
             }
 
-            var data = Mapper.Map<IEnumerable<TransactionCostDto>>(transactionCosts);
+            var data = Mapper.Map<IEnumerable<TransactionCostDto>>(transactionCosts.OrderByDescending(o => o.TransactionDate));
 
             return Ok(new BaseRestApiModel
             {
