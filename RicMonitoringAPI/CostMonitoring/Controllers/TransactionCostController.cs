@@ -34,7 +34,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
         }
 
         [HttpGet(Name = "TransactionCosts")]
-        public async Task<IActionResult> TransactionCosts(bool isFilterByCurrentMonth, [FromQuery] string fields)
+        public async Task<IActionResult> TransactionCosts(bool isFilterByCurrentMonth, string startDate, string endDate, int costCategoryId, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<TransactionCostDto>(fields))
@@ -46,7 +46,24 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 .FindAll(o => o.CostItem, o => o.CostCategory);
 
             if (isFilterByCurrentMonth)
+            {
                 transactionCosts = transactionCosts.Where(o => o.TransactionDate.Month == DateTime.Now.Month);
+
+            }
+            else
+            {
+                var isStartDateValid = DateTime.TryParse(startDate, out DateTime startDateOut);
+                var isEndDateValid = DateTime.TryParse(endDate, out DateTime endDateOut);
+                if (!isStartDateValid)
+                    return BadRequest("Invalid start date");
+                if (!isEndDateValid)
+                    return BadRequest("Invalid end date");
+                
+                transactionCosts = transactionCosts.Where(o => o.TransactionDate.Date >= startDateOut && o.TransactionDate.Date <= endDateOut);
+
+                if (costCategoryId > 0)
+                    transactionCosts = transactionCosts.Where(o => o.CostCategoryId == costCategoryId);
+            }
 
             if (transactionCosts == null)
             {
