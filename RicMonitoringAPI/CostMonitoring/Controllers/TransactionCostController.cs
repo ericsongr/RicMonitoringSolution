@@ -49,7 +49,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
             {
                 transactionCosts = transactionCosts.Where(o => o.TransactionDate.Month == DateTime.Now.Month);
 
-            }
+            }   
             else
             {
                 var isStartDateValid = DateTime.TryParse(startDate, out DateTime startDateOut);
@@ -84,6 +84,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
         [HttpPost(Name = "AddTransactionCost")]
         public IActionResult AddTransactionCost(TransactionCostDto model)
         {
+            string message = "New cost transaction has been added";
             DateTime.TryParse(model.TransactionDate, out DateTime transDate);
             var entity = new TransactionCost
             {
@@ -94,12 +95,29 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 Cost = model.Cost,
             };
 
-            _transactionCostRepository.Add(entity);
+            if (model.Id > 0)
+            {
+                var modifiedEntity = _transactionCostRepository.GetSingleAsync(o => o.Id == model.Id).GetAwaiter().GetResult();
+                
+                modifiedEntity.TransactionDate = entity.TransactionDate;
+                modifiedEntity.CostItemId = entity.CostItemId;
+                modifiedEntity.CostCategoryId = entity.CostCategoryId;
+                modifiedEntity.Note = entity.Note;
+                modifiedEntity.Cost = entity.Cost;
+
+                _transactionCostRepository.Update(modifiedEntity);
+                message = "Cost transaction has been updated";
+            }
+            else
+            {
+                _transactionCostRepository.Add(entity);
+            }
+
             _transactionCostRepository.Commit();
 
             return Ok(new BaseRestApiModel
             {
-                Payload = new { id= entity.Id, message = "New cost transaction has been added" },
+                Payload = new { id= entity.Id, message = message },
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
