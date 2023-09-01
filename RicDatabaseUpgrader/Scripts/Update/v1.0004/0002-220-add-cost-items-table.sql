@@ -18,6 +18,7 @@ IF NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Transa
 BEGIN
 	CREATE TABLE [dbo].[TransactionCost](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[TransactionDate] DATETIME NOT NULL,
 		[CostItemId] [int] NOT NULL,
 		[Note] [nvarchar](100) NOT NULL,
 		[CostCategoryId] [int] NOT NULL,

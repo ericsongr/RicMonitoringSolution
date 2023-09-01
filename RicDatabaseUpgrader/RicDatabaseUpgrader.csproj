@@ -54,6 +54,13 @@
     <None Remove="Scripts\Update\v1.0003\0015-196-IsBatchProcessCompletedPushNotification.sql" />
     <None Remove="Scripts\Update\v1.0003\0016-203-insert-bookings.sql" />
     <None Remove="Scripts\Update\v1.0003\0017-add-description.sql" />
+    <None Remove="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <None Remove="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />
   </ItemGroup>
 
   <ItemGroup>

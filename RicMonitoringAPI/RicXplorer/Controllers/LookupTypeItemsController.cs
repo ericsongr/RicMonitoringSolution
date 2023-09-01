@@ -91,7 +91,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             return Ok(new BaseRestApiModel
             {
-                Payload = message,
+                Payload = new { id = entity.Id, message },
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
