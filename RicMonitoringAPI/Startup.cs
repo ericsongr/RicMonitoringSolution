@@ -369,6 +369,8 @@ namespace RicMonitoringAPI
 
                 //cost monitoring
                 cfg.CreateMap<TransactionCost, TransactionCostDto>()
+                    .ForMember(dest => dest.TransactionDate,
+                        opt => opt.MapFrom(src => src.TransactionDate.ToShortDateString()))
                     .ForMember(dest => dest.CostItemName,
                         opt => opt.MapFrom(src => src.CostItem.Name))
                     .ForMember(dest => dest.CostCategoryName,
