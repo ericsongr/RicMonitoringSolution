@@ -7,7 +7,7 @@ namespace RicModel.CostMonitoring
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
-
+        public string BackgroundColor { get; set; }
         public virtual ICollection<TransactionCost> TransactionCosts { get; set; }
     }
 }
