@@ -56,10 +56,12 @@
     <None Remove="Scripts\Update\v1.0003\0017-add-description.sql" />
     <None Remove="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
     <None Remove="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />
+    <None Remove="Scripts\Update\v1.0004\0003-239-add-background-color.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0003-239-add-background-color.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />
   </ItemGroup>
 

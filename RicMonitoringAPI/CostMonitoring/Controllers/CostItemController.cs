@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using RicCommon.Infrastructure;
 using RicEntityFramework.CostMonitoring.Interfaces;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
@@ -61,6 +62,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
             var entity = new CostItem
             {
                 Name = model.Name,
+                BackgroundColor = RandomHexColor.Generate()
             };
 
             _costItemRepository.Add(entity);
