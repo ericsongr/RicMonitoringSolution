@@ -6,6 +6,9 @@ namespace RicMonitoringAPI.Infrastructure.Helpers
     {
         public static int Age(DateTime dob)
         {
+            if (DateTime.Now.Year.Equals(dob.Year))
+                return 0;
+
             int age = 0;
             age = DateTime.Now.AddYears(-dob.Year).Year;
             return age;

@@ -1,4 +1,5 @@
 ﻿using System;
+using RicMonitoringAPI.Infrastructure.Helpers;
 
 namespace RicMonitoringAPI.RicXplorer.ViewModels
 {
@@ -9,8 +10,35 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string LastName { get; set; }
         public string Gender { get; set; }
         public DateTime? Birthday { get; set; }
-        public int Age { get; set; }
-        public int Ages { get; set; } = 1; //1 - adult TODO: adjustment
+
+        public int Age
+        {
+            get
+            {
+                return Birthday == null ? 0 : Calculate.Age(Birthday ?? new DateTime());
+            }
+        }
+
+        public int Ages { get; set; }
+
+        public string AgesName
+        {
+            get
+            {
+                switch (Ages)
+                {
+                    case 1:
+                        return "Adult";
+                    case 2:
+                        return "Child";
+                    case 3:
+                        return "Infant";
+                    default:
+                        return "Adult";
+                }
+            }
+        }
+
         public int GuestBookingDetailId { get; set; }
     }
 }

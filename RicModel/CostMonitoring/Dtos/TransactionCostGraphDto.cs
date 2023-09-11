@@ -40,7 +40,7 @@ namespace RicModel.CostMonitoring.Dtos
     {
         public string CategoryAndTotal
         {
-            get { return Category + " - " + Total.ToString("C"); }
+            get { return Category + " - " + Total.ToString("#,###.00"); }
         }
 
         public int CategoryId { get; set; }
