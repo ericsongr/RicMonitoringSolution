@@ -80,6 +80,7 @@
 
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
+		<Folder Include="Resources\Images\InventoryToolsImage\" />
 		<Folder Include="Resources\Images\Rooms\" />
 	</ItemGroup>
 

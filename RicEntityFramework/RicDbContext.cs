@@ -7,6 +7,7 @@ using RicModel.CostMonitoring;
 using RicModel.RicXplorer;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
+using RicModel.ToolsInventory;
 
 namespace RicEntityFramework
 {
@@ -66,7 +67,11 @@ namespace RicEntityFramework
         public DbSet<CostItem> CostItems { get; set; }
 
         //cost monitoring - end
-        
+
+        // tool inventory - start
+        public DbSet<Tool> Tools { get; set; }
+        public DbSet<ToolInventory> ToolsInventory { get; set; }
+        // tool inventory - end
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

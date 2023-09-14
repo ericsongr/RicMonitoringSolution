@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using RicCommon.Constants;
 using RicEntityFramework.Interfaces;
 
 namespace RicEntityFramework.Services
@@ -51,6 +52,32 @@ namespace RicEntityFramework.Services
                 throw ex;
             }
             
+        }
+
+        public string Upload(string base64, string location)
+        {
+            string filename = Guid.NewGuid().ToString();
+            try
+            { 
+                var folderName = Path.Combine("Resources", "Images", location);
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                filename = $"{filename}-inventory.png";
+                var imageBytes = Convert.FromBase64String(base64);
+                var fullPath = Path.Combine(pathToSave, filename);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                using (var ms = new MemoryStream(imageBytes))
+                {
+                    ms.CopyTo(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return filename;
         }
     }
 }

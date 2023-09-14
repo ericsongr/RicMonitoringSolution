@@ -46,6 +46,8 @@ using RicEntityFramework.RoomRent.PropertyMappings.Audits;
 using RicEntityFramework.RoomRent.Repositories;
 using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
+using RicEntityFramework.ToolsInventory.Interfaces;
+using RicEntityFramework.ToolsInventory.Repositories;
 using RicModel.CostMonitoring;
 using RicModel.CostMonitoring.Dtos;
 using RicModel.RicXplorer;
@@ -54,6 +56,8 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Extensions;
+using RicModel.ToolsInventory;
+using RicModel.ToolsInventory.Dtos;
 using RicMonitoringAPI.Common.Validators;
 using RicMonitoringAPI.RicXplorer.ViewModels;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
@@ -111,6 +115,10 @@ namespace RicMonitoringAPI
             //cost monitoring
             services.AddScoped<ICostItemRepository, CostItemRepository>();
             services.AddScoped<ITransactionCostRepository, TransactionCostRepository>();
+
+            //tool inventory
+            services.AddScoped<IToolRepository, ToolRepository>();
+            services.AddScoped<IToolInventoryRepository, ToolInventoryRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -375,6 +383,20 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.CostItem.Name))
                     .ForMember(dest => dest.CostCategoryName,
                         opt => opt.MapFrom(src => src.CostCategory.Description));
+
+                //tool inventory
+                //cfg.CreateMap<Tool, ToolDto>()
+                //    .ForMember(dest => dest.Images, opt => opt.Ignore()); //ignore
+
+                cfg.CreateMap<ToolInventory, ToolInventoryDto>()
+                    .ForMember(dest => dest.InventoryDateTime,
+                    opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));
+                //    .ForMember(dest => dest.CostItemName,
+                //        opt => opt.MapFrom(src => src.CostItem.Name))
+                //    .ForMember(dest => dest.CostCategoryName,
+                //        opt => opt.MapFrom(src => src.CostCategory.Description));
+
+
 
             });
 

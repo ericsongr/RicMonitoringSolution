@@ -6,5 +6,6 @@ namespace RicEntityFramework.Interfaces
         string GetImageInBase64(int renterId);
 
         void Upload(int renterId, string base64);
+        string Upload(string base64, string location);
     }
 }
