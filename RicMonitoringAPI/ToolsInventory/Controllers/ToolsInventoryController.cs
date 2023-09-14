@@ -74,6 +74,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             var tool = new ToolInventory()
             { 
                ToolId = model.ToolId,
+               Images = model.Images,
                InventoryDateTimeUtc = inventoryDateTimeOutput,
                Action = model.Action,// ToolActionConstant.RunTest,
                Status = model.Status // ToolStatusConstant.StillWorking
@@ -83,6 +84,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             {
                 var modifiedEntity = _toolInventoryRepository.GetSingleAsync(o => o.Id == model.Id).GetAwaiter().GetResult();
 
+                modifiedEntity.Images = model.Images;
                 modifiedEntity.InventoryDateTimeUtc = tool.InventoryDateTimeUtc;
                 modifiedEntity.Action = tool.Action;
                 modifiedEntity.Status = tool.Status;

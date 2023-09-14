@@ -7,7 +7,8 @@ namespace RicModel.ToolsInventory
         public int Id { get; set; }
         public int ToolId { get; set; }
         public Tool Tool { get; set; }
-        
+        public string Images { get; set; }
+
         public DateTime InventoryDateTimeUtc { get; set; }
         public string Status { get; set; }
         public string Action { get; set; }

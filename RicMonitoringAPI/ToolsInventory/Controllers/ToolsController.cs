@@ -74,7 +74,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         }
 
         [HttpPost(Name = "PostTool")]
-        public IActionResult PostTool(ToolDto model)
+        public IActionResult PostTool(CreateNewToolDto model)
         {
             string message = "New tool has been added";
 
@@ -82,7 +82,6 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             {
                 Name = model.Name,
                 Description = model.Description,
-                Images = model.Images,
                 PowerTool = model.PowerTool,
                 CreatedBy = "TODO"
             };
@@ -93,7 +92,6 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
 
                 modifiedEntity.Name = model.Name;
                 modifiedEntity.Description = model.Description;
-                modifiedEntity.Images = model.Images;
                 modifiedEntity.PowerTool = model.PowerTool;
 
                 _toolRepository.Update(modifiedEntity);
@@ -111,6 +109,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                 var toolInventory = new ToolInventory
                 {
                     ToolId = tool.Id,
+                    Images = model.Images,
                     Status = ToolStatusConstant.Working,
                     Action = ToolActionConstant.NewlyAdded,
                     InventoryDateTimeUtc = DateTime.UtcNow,

@@ -6,7 +6,8 @@ namespace RicModel.ToolsInventory.Dtos
     {
         public int Id { get; set; }
         public int ToolId { get; set; }
-        
+
+        public string Images { get; set; }
         public string InventoryDateTime { get; set; }
         public string Status { get; set; }
         public string Action { get; set; }

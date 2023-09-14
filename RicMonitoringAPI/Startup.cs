@@ -385,6 +385,9 @@ namespace RicMonitoringAPI
                         opt => opt.MapFrom(src => src.CostCategory.Description));
 
                 //tool inventory
+                //cfg.CreateMap<Tool, ToolDto>()
+                //    .ForMember(dest => dest.Images, opt => opt.Ignore()); //ignore
+
                 cfg.CreateMap<ToolInventory, ToolInventoryDto>()
                     .ForMember(dest => dest.InventoryDateTime,
                     opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));

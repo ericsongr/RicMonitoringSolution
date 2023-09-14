@@ -5,7 +5,6 @@ BEGIN
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[Name] [varchar](100) NOT NULL,
 		[Description] [varchar](500) NOT NULL,
-		[Images] [varchar](1000) NOT NULL,
 		[PowerTool] BIT NOT NULL DEFAULT(0),
 		[CreatedDateTimeUtc] datetime,
 		[CreatedBy] [varchar](50) NOT NULL,
@@ -25,6 +24,7 @@ BEGIN
 	CREATE TABLE [dbo].[ToolsInventory] (
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[ToolId] [int] NOT NULL,
+		[Images] [varchar](1000) NOT NULL,
 		[InventoryDateTimeUtc] datetime,
 		[Status] [varchar](20) NOT NULL,
 		[Action] [varchar](20) NOT NULL,
