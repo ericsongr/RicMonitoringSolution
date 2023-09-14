@@ -4,5 +4,6 @@
     {
         public const string NewlyAdded = "Newly Added";
         public const string Fix = "Fix";
+        public const string RunTest = "Run Testing";
     }
 }

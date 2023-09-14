@@ -12,6 +12,9 @@ namespace RicModel.ToolsInventory
         public string Status { get; set; }
         public string Action { get; set; }
 
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDateTimeUtc { get; set; }
+
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTimeUtc { get; set; }
         public string DeletedBy { get; set; }

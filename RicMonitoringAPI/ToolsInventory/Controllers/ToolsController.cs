@@ -80,11 +80,11 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
 
             var tool = new Tool
             {
-               Name = model.Name,
-               Description = model.Description,
-               Images = model.Images,
-               PowerTool = model.PowerTool,
-               CreatedBy = "TODO"
+                Name = model.Name,
+                Description = model.Description,
+                Images = model.Images,
+                PowerTool = model.PowerTool,
+                CreatedBy = "TODO"
             };
 
             if (model.Id > 0)
@@ -104,7 +104,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             else
             {
                 tool.CreatedDateTimeUtc = DateTime.UtcNow;
-                
+
                 _toolRepository.Add(tool);
                 _toolRepository.Commit();
 
@@ -113,14 +113,16 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                     ToolId = tool.Id,
                     Status = ToolStatusConstant.Working,
                     Action = ToolActionConstant.NewlyAdded,
-                    InventoryDateTimeUtc = DateTime.UtcNow
+                    InventoryDateTimeUtc = DateTime.UtcNow,
+                    CreatedDateTimeUtc = DateTime.UtcNow
                 };
+
                 _toolInventoryRepository.Add(toolInventory);
                 _toolInventoryRepository.Commit();
 
             }
 
-           
+
             return Ok(new BaseRestApiModel
             {
                 Payload = new { id = tool.Id, message = message },
@@ -128,6 +130,6 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                 StatusCode = (int)HttpStatusCode.OK
             });
         }
-        
+
     }
 }

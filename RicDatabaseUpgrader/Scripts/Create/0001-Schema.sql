@@ -925,6 +925,8 @@ CREATE TABLE [dbo].[ToolsInventory] (
 	[InventoryDateTimeUtc] datetime,
 	[Status] [varchar](20) NOT NULL,
 	[Action] [varchar](20) NOT NULL,
+	[CreatedBy] VARCHAR(100),
+	[CreatedDateTimeUtc] DATETIME NOT NULL DEFAULT(GETUTCDATE()),
 	[IsDeleted] [BIT] NOT NULL DEFAULT(0),
 	[DeletedDateTimeUtc] datetime NULL,
 	[DeletedBy] [varchar](50) NULL,
