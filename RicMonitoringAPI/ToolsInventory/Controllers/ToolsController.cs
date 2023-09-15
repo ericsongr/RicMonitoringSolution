@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using RicCommon.Constants;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
+using RicEntityFramework.Services;
 using RicEntityFramework.ToolsInventory.Interfaces;
 using RicModel.CostMonitoring.Dtos;
 using RicModel.ToolsInventory;
@@ -23,16 +24,19 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         private readonly IToolRepository _toolRepository;
         private readonly IToolInventoryRepository _toolInventoryRepository;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IImageService _imageService;
 
 
         public ToolsController(
             IToolRepository toolRepository,
             IToolInventoryRepository toolInventoryRepository,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IImageService imageService)
         {
             _toolRepository = toolRepository ?? throw new ArgumentNullException(nameof(toolRepository));
             _toolInventoryRepository = toolInventoryRepository ?? throw new ArgumentNullException(nameof(toolInventoryRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         }
 
 
@@ -78,6 +82,14 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         {
             string message = "New tool has been added";
 
+            var fileNames = new List<string>();
+            model.FilesInBase64.ForEach(base64 =>
+            {
+                var filename = _imageService.Upload(base64, FolderConstant.InventoryToolsImage);
+                fileNames.Add(filename);
+            });
+            var fileNamesInCommaDelimited = string.Join(",", fileNames);
+
             var tool = new Tool
             {
                 Name = model.Name,
@@ -109,7 +121,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                 var toolInventory = new ToolInventory
                 {
                     ToolId = tool.Id,
-                    Images = model.Images,
+                    Images = fileNamesInCommaDelimited,
                     Status = ToolStatusConstant.Working,
                     Action = ToolActionConstant.NewlyAdded,
                     InventoryDateTimeUtc = DateTime.UtcNow,

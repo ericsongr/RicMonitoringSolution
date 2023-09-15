@@ -1,11 +1,14 @@
-﻿namespace RicModel.ToolsInventory.Dtos
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+
+namespace RicModel.ToolsInventory.Dtos
 {
     public class CreateNewToolDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Images { get; set; }
+        public List<string> FilesInBase64 { get; set; }
         public bool PowerTool { get; set; }
         
      
