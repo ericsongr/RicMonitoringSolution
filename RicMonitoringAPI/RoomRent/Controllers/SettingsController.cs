@@ -25,13 +25,16 @@ namespace RicMonitoringAPI.RoomRent.Controllers
     {
         private readonly ITypeHelperService _typeHelperService;
         private readonly ISettingRepository _settingRepository;
+        private readonly IMapper _mapper;
 
         public SettingsController(
             ITypeHelperService typeHelperService,
-            ISettingRepository settingRepository)
+            ISettingRepository settingRepository,
+            IMapper mapper)
         {
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         // GET: api/Rooms
@@ -44,7 +47,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             var settings = _settingRepository.GetAll();
-            var accounts = Mapper.Map<IEnumerable<SettingDto>>(settings);
+            var accounts = _mapper.Map<IEnumerable<SettingDto>>(settings);
             var result = accounts.ShapeData(fields);
 
 

@@ -26,16 +26,19 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly RicDbContext _context;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IRentTransactionHistoryPropertyMappingService _rentTransactionHistoryPropertyMappingService;
+        private readonly IMapper _mapper;
 
         public RentTransactionHistoryController(
             RicDbContext context,
             ITypeHelperService typeHelperService,
             IRentTransactionHistoryPropertyMappingService rentTransactionHistoryPropertyMappingService,
-            IRentTransactionHistoryRepository rentTransactionHistoryRepository)
+            IRentTransactionHistoryRepository rentTransactionHistoryRepository,
+            IMapper mapper)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _rentTransactionHistoryPropertyMappingService = rentTransactionHistoryPropertyMappingService ?? throw new ArgumentNullException(nameof(rentTransactionHistoryPropertyMappingService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet(Name = "GetHistories")]
@@ -64,7 +67,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                         .GetPropertyMapping<RentTransactionHistoryDto, RentTransaction>());
 
 
-            var histories = Mapper.Map<IEnumerable<RentTransactionHistoryDto>>(rentTransactionHistories);
+            var histories = _mapper.Map<IEnumerable<RentTransactionHistoryDto>>(rentTransactionHistories);
 
             return Ok(new BaseRestApiModel
             {

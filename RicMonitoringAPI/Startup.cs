@@ -64,6 +64,7 @@ using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 using RicMonitoringAPI.Services;
 using RicMonitoringAPI.Services.Interfaces;
+using AutoMapper;
 
 namespace RicMonitoringAPI
 {
@@ -82,6 +83,9 @@ namespace RicMonitoringAPI
             //mapped database connection string
             services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
+
+            // Add AutoMapper configuration
+            services.AddAutoMapper(typeof(MappingProfile));
             
             //rent
             services.AddScoped<IAccountRepository, AccountRepository>();
@@ -283,122 +287,6 @@ namespace RicMonitoringAPI
                 app.UseHsts();
             }
 
-            AutoMapper.Mapper.Initialize(cfg =>
-            {
-                
-                //settings
-                cfg.CreateMap<Setting, SettingDto>()
-                    .ForMember(dest => dest.DataType,
-                                opt => opt.MapFrom(src => src.GetDataType()))
-                    .ForMember(dest => dest.RealValue,
-                        opt => opt.MapFrom(src => src.GetRealValue()));
-
-                //rooms
-                cfg.CreateMap<RoomForCreateDto, Room>();
-                cfg.CreateMap<Room, RoomDto>();
-
-                //renters
-                cfg.CreateMap<RenterForCreateDto, Renter>();
-                cfg.CreateMap<Renter, RenterDto>();
-
-                //transactions
-                cfg.CreateMap<RentTransactionForCreateDto, RentTransaction>();
-                cfg.CreateMap<RentTransaction, RentTransactionDto>();
-
-                cfg.CreateMap<RentTransaction2, RentTransaction2Dto>()
-                    .ForMember(dest => dest.DueDate,
-                                opt => opt.MapFrom(src => src.GetDueDate()))
-                    .ForMember(dest => dest.Period,
-                                            opt => opt.MapFrom(src => src.GetPeriod()));
-
-                //histories
-                cfg.CreateMap<RentTransaction, RentTransactionHistoryDto>()
-                    .ForMember(dest => dest.PreviousBalance,
-                                                opt => opt.MapFrom(src => src.GetPreviousBalance() + src.Renter.RentArrears.GetManualUnpaidAmountEntry()))
-                    .ForMember(dest => dest.PaidOrUsedDepositDateString,
-                        opt => opt.MapFrom(src => src.GetPaidOrUsedDepositDate()))
-                    .ForMember(dest => dest.MonthlyRent,
-                        opt => opt.MapFrom(src => src.GetMonthlyRent()))
-                    .ForMember(dest => dest.CurrentBalance,
-                        opt => opt.MapFrom(src => src.Balance))
-                    .ForMember(dest => dest.IsDepositUsed, 
-                        opt => opt.MapFrom(src => src.CheckIfUsedDeposit()))
-                    .ForMember(dest => dest.BalanceDateToBePaidString, 
-                        opt => opt.MapFrom(src => src.GetBalanceDateToBePaid()))
-                    .ForMember(dest => dest.Payments,
-                        opt => opt.MapFrom(src => src.GetPayments()));
-
-                cfg.CreateMap<LookupType, LookupTypeDto>();
-                cfg.CreateMap<LookupTypeItem, LookupTypeItemDto>();
-                cfg.CreateMap<RentTransactionPayment, RentTransactionPaymentDto>()
-                    .ForMember(dest => dest.DatePaidString, 
-                                opt => opt.MapFrom(src => src.DatePaid.ToShortDateString()))
-                    .ForMember(dest => dest.PaymentTransactionType,
-                        opt => opt.MapFrom(src => src.GetTransactionPaymentType()));
-
-                cfg.CreateMap<BookingType, BookingTypeDto>()
-                    .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src => src.AccountProduct.Name))
-                    .ForMember(dest => dest.Description,
-                        opt => opt.MapFrom(src => src.AccountProduct.Description))
-                    .ForMember(dest => dest.Price,
-                        opt => opt.MapFrom(src => src.AccountProduct.Price.ToString("#,#00")))
-                    .ForMember(dest => dest.OnlinePrice,
-                        opt => opt.MapFrom(src => src.AccountProduct.OnlinePrice.ToString("#,#00")))
-                    .ForMember(dest => dest.BookingTypeInclusions,
-                                opt => opt.MapFrom(src => src.BookingTypeInclusions.Where(o => o.IsActive).ToList()))
-                    .ForMember(dest => dest.BookingTypeImages,
-                        opt => opt.MapFrom(src => src.BookingTypeImages.Where(o => o.IsShow).ToList()));
-
-                cfg.CreateMap<BookingTypeInclusion, BookingTypeInclusionDto>()
-                    .ForMember(dest => dest.InclusionName,
-                        opt => opt.MapFrom(src => src.LookupTypeItem.Description));
-
-                cfg.CreateMap<BookingTypeImage, BookingTypeImageDto>();
-                
-                //ricxplorer
-                cfg.CreateMap<GuestBookingDetailDto, GuestBookingDetail>()
-                    .ForMember(dest => dest.CreatedDateTimeUtc,
-                        opt => opt.MapFrom(src => DateTime.UtcNow))
-                    .ForMember(dest => dest.GuestBookings,
-                                opt => opt.MapFrom(src => src.GuestBookings));
-
-                cfg.CreateMap<GuestBookingDto, GuestBooking>();
-                
-                cfg.CreateMap<GuestBookingDetail, GuestBookingDetailDto>()
-                    .ForMember(dest => dest.BookingTypeName,
-                        opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name))
-                    .ForMember(dest => dest.ArrivalDateString,
-                        opt => opt.MapFrom(src => src.ArrivalDate.ToString("dddd, MMMM dd yyyy")))
-                    .ForMember(dest => dest.DepartureDateString,
-                        opt => opt.MapFrom(src => src.DepartureDate.ToString("dddd, MMMM dd yyyy")))
-                    .ForMember(dest => dest.CreatedDateTimeUtcString,
-                        opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")));
-
-                //cost monitoring
-                cfg.CreateMap<TransactionCost, TransactionCostDto>()
-                    .ForMember(dest => dest.TransactionDate,
-                        opt => opt.MapFrom(src => src.TransactionDate.ToShortDateString()))
-                    .ForMember(dest => dest.CostItemName,
-                        opt => opt.MapFrom(src => src.CostItem.Name))
-                    .ForMember(dest => dest.CostCategoryName,
-                        opt => opt.MapFrom(src => src.CostCategory.Description));
-
-                //tool inventory
-                //cfg.CreateMap<Tool, ToolDto>()
-                //    .ForMember(dest => dest.Images, opt => opt.Ignore()); //ignore
-
-                cfg.CreateMap<ToolInventory, ToolInventoryDto>()
-                    .ForMember(dest => dest.InventoryDateTime,
-                    opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));
-                //    .ForMember(dest => dest.CostItemName,
-                //        opt => opt.MapFrom(src => src.CostItem.Name))
-                //    .ForMember(dest => dest.CostCategoryName,
-                //        opt => opt.MapFrom(src => src.CostCategory.Description));
-
-
-
-            });
 
             //Enable CORS policy "AllowCors"
             app.UseCors("AllowCors");

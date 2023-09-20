@@ -53,7 +53,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         //        return NotFound();
         //    }
 
-        //    var data = Mapper.Map<IEnumerable<ToolViewDto>>(tools.OrderByDescending(o => o.CreatedDateTimeUtc));
+        //    var data = _mapper.Map<IEnumerable<ToolViewDto>>(tools.OrderByDescending(o => o.CreatedDateTimeUtc));
 
         //    return Ok(new BaseRestApiModel
         //    {

@@ -25,18 +25,21 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         private readonly IToolInventoryRepository _toolInventoryRepository;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
 
 
         public ToolsController(
             IToolRepository toolRepository,
             IToolInventoryRepository toolInventoryRepository,
             ITypeHelperService typeHelperService,
-            IImageService imageService)
+            IImageService imageService,
+            IMapper mapper)
         {
             _toolRepository = toolRepository ?? throw new ArgumentNullException(nameof(toolRepository));
             _toolInventoryRepository = toolInventoryRepository ?? throw new ArgumentNullException(nameof(toolInventoryRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
@@ -66,11 +69,11 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                 return NotFound();
             }
 
-            var data = Mapper.Map<IEnumerable<ToolViewDto>>(tools.OrderByDescending(o => o.CreatedDateTimeUtc));
-
+            var dataTools = _mapper.Map<IEnumerable<ToolViewDto>>(tools);
+            
             return Ok(new BaseRestApiModel
             {
-                Payload = data.ShapeData(fields),
+                Payload = dataTools.ShapeData(fields),
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });

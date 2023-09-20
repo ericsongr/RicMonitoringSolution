@@ -23,16 +23,19 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
         private readonly ICostItemRepository _costItemRepository;
         private readonly ITransactionCostRepository _transactionCostRepository;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IMapper _mapper;
 
 
         public TransactionCostController(
             ICostItemRepository costItemRepository,
             ITransactionCostRepository transactionCostRepository,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IMapper mapper)
         {
             _costItemRepository = costItemRepository ?? throw new ArgumentNullException(nameof(costItemRepository));
             _transactionCostRepository = transactionCostRepository ?? throw new ArgumentNullException(nameof(transactionCostRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet(Name = "TransactionCosts")]
@@ -73,7 +76,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 return NotFound();
             }
 
-            var data = Mapper.Map<IEnumerable<TransactionCostDto>>(transactionCosts.OrderByDescending(o => o.TransactionDate));
+            var data = _mapper.Map<IEnumerable<TransactionCostDto>>(transactionCosts.OrderByDescending(o => o.TransactionDate));
 
             return Ok(new BaseRestApiModel
             {

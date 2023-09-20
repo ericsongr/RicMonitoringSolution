@@ -17,14 +17,17 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     {
         private readonly IBookingTypeRepository _bookingTypeRepository;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IMapper _mapper;
 
 
         public BookingTypesController(
             IBookingTypeRepository bookingTypeRepository,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IMapper mapper)
         {
             _bookingTypeRepository = bookingTypeRepository ?? throw new ArgumentNullException(nameof(bookingTypeRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [AllowAnonymous]
@@ -50,7 +53,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
-            var bookingTypeDtos = Mapper.Map<IEnumerable<BookingTypeDto>>(bookingTypes).ToList();
+            var bookingTypeDtos = _mapper.Map<IEnumerable<BookingTypeDto>>(bookingTypes).ToList();
 
             return Ok(new{payload = bookingTypeDtos });
         }

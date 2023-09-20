@@ -57,6 +57,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IPushNotificationGateway _pushNotificationGateway;
         private readonly IConfiguration _configuration;
         private readonly IOneSignalService _oneSignalService;
+        private readonly IMapper _mapper;
 
         public ExecuteBatchController(
             RicDbContext context,
@@ -73,7 +74,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             ICommunicationService communicationService,
             IPushNotificationGateway pushNotificationGateway,
             IConfiguration configuration,
-            IOneSignalService oneSignalService
+            IOneSignalService oneSignalService,
+            IMapper mapper
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -91,6 +93,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _pushNotificationGateway = pushNotificationGateway ?? throw new ArgumentNullException(nameof(pushNotificationGateway));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _oneSignalService = oneSignalService ?? throw new ArgumentNullException(nameof(oneSignalService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -120,7 +123,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             var dailyBatch = _monthlyRentBatchRepository.FindAll()
                 .OrderByDescending(o => o.ProcessStartDateTime);
 
-            var dto = Mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch);
+            var dto = _mapper.Map<IEnumerable<MonthlyRentBatchDto>>(dailyBatch);
 
             return Ok(new BaseRestApiModel
             {
@@ -464,7 +467,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                                 ? false
                                 : o.RentTransactionPayments.Sum(o => o.Amount) >= o.TotalAmountDue,
 
-                            Arrear = Mapper.Map<RentArrearDto>(o.Renter.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
+                            Arrear = _mapper.Map<RentArrearDto>(o.Renter.RentArrears?.FirstOrDefault(o => !o.IsProcessed))
                         });
 
                     foreach (var transaction in transactions)
