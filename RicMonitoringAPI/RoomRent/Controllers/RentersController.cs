@@ -34,6 +34,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
 
         public RentersController(
             IRenterRepository renterRepository,
@@ -42,7 +43,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IRenterPropertyMappingService renterPropertyMappingService,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService,
-            IImageService imageService)
+            IImageService imageService,
+            IMapper mapper)
         {
             _renterRepository = renterRepository ?? throw new ArgumentNullException(nameof(renterRepository));
             _rentTransactionRepository = rentTransactionRepository ?? throw new ArgumentNullException(nameof(rentTransactionRepository));
@@ -51,6 +53,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("{id}", Name = "GetRenter")]
@@ -68,7 +71,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var renter = Mapper.Map<RenterDto>(renterFromRepo);
+            var renter = _mapper.Map<RenterDto>(renterFromRepo);
 
             renter.Base64 = _imageService.GetImageInBase64(id);
 
@@ -119,7 +122,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
-            var Renters = Mapper.Map<IEnumerable<RenterDto>>(renterFromRepo);
+            var Renters = _mapper.Map<IEnumerable<RenterDto>>(renterFromRepo);
 
             return Ok(new BaseRestApiModel
             {
@@ -149,7 +152,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 renter.PreviousDueDate = renter.StartDate;
                 renter.NextDueDate = renter.StartDate.AddMonths(1);
 
-                var renterEntity = Mapper.Map<Renter>(renter);
+                var renterEntity = _mapper.Map<Renter>(renter);
 
                 _renterRepository.Add(renterEntity);
                 _renterRepository.Commit();
@@ -281,7 +284,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                     StatusCode = (int)HttpStatusCode.OK
                 });
 
-                //var renterToReturn = Mapper.Map<RenterDto>(renterEntity);
+                //var renterToReturn = _mapper.Map<RenterDto>(renterEntity);
 
                 //return CreatedAtRoute("GetRenters", new { id = renterToReturn.Id, name = renterToReturn.Name.ToLower().Replace(" ", "-") });
 

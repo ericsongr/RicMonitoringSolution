@@ -20,11 +20,14 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     public class GuestBookingController : ControllerBase
     {
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
+        private readonly IMapper _mapper;
 
         public GuestBookingController(
-            IGuestBookingDetailRepository guestBookingDetailRepository)
+            IGuestBookingDetailRepository guestBookingDetailRepository,
+            IMapper mapper)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [AllowAnonymous]
@@ -66,7 +69,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             DateTime.TryParse(endDate, out DateTime departureDate);
 
             var dataGuests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType);
-            var guests = Mapper.Map<IEnumerable<GuestBookingDetailDto>>(dataGuests).ToList();
+            var guests = _mapper.Map<IEnumerable<GuestBookingDetailDto>>(dataGuests).ToList();
 
             return Ok(new BaseRestApiModel
             {
@@ -82,7 +85,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         {
             
             var data = _guestBookingDetailRepository.FindBookingById(id);
-            var guests = Mapper.Map<GuestBookingDetailDto>(data);
+            var guests = _mapper.Map<GuestBookingDetailDto>(data);
 
             return Ok(new BaseRestApiModel
             {
@@ -105,7 +108,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 else
                 {
                     //save both parent and children guests details
-                    var guestBookingDetail = Mapper.Map<GuestBookingDetail>(model);
+                    var guestBookingDetail = _mapper.Map<GuestBookingDetail>(model);
                     guestBookingDetail.AccountId = 1; //TODO: create account
                     guestBookingDetail.GuestBookingDates = new List<GuestBookingDate>();
                     for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate = startDate.AddDays(1))

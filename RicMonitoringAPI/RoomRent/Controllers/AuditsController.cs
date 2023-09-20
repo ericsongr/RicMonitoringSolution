@@ -32,6 +32,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         //
         private readonly IAuditRentTransactionRepository _auditRentTransactionRepository;
         private readonly IAuditRentTransactionPropertyMappingService _auditRentTransactionPropertyMappingService;
+        private readonly IMapper _mapper;
 
         public AuditsController(
             ITypeHelperService typeHelperService,
@@ -46,7 +47,8 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             IAuditRentTransactionPaymentPropertyMappingService auditRentTransactionPaymentPropertyMappingService,
             //
             IAuditRentTransactionRepository auditRentTransactionRepository,
-            IAuditRentTransactionPropertyMappingService auditRentTransactionPropertyMappingService)
+            IAuditRentTransactionPropertyMappingService auditRentTransactionPropertyMappingService,
+            IMapper mapper)
         {
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             //
@@ -61,6 +63,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             //
             _auditRentTransactionRepository = auditRentTransactionRepository ?? throw new ArgumentNullException(nameof(auditRentTransactionRepository));
             _auditRentTransactionPropertyMappingService = auditRentTransactionPropertyMappingService ?? throw new ArgumentNullException(nameof(auditRentTransactionPropertyMappingService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("{id}/renters", Name = "GetAuditRenters")]
@@ -84,7 +87,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var auditRenterRepo = Mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters.OrderByDescending(o => o.AuditDateTime));
+            var auditRenterRepo = _mapper.Map<IEnumerable<AuditRenterDto>>(auditRenters.OrderByDescending(o => o.AuditDateTime));
 
             return Ok(new BaseRestApiModel
             {
@@ -115,7 +118,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var auditRentTransactionRepo = Mapper.Map<IEnumerable<AuditRentTransactionDto>>(auditRenters);
+            var auditRentTransactionRepo = _mapper.Map<IEnumerable<AuditRentTransactionDto>>(auditRenters);
 
             return Ok(new BaseRestApiModel
             {
@@ -147,7 +150,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var auditPaymentRepo = Mapper.Map<IEnumerable<AuditRentTransactionPaymentDto>>(auditPayments);
+            var auditPaymentRepo = _mapper.Map<IEnumerable<AuditRentTransactionPaymentDto>>(auditPayments);
 
             return Ok(new BaseRestApiModel
             {
@@ -173,7 +176,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 .FindAll()
                 .OrderByDescending(o => o.AuditDateTime);
 
-            var auditRenterRepo = Mapper.Map<IEnumerable<AuditRoomDto>>(auditRenters);
+            var auditRenterRepo = _mapper.Map<IEnumerable<AuditRoomDto>>(auditRenters);
 
             return Ok(new BaseRestApiModel
             {

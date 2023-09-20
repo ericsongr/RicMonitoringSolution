@@ -23,16 +23,19 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         private readonly ILookupTypeRepository _lookupTypeRepository;
         private readonly ILookupTypeItemRepository _lookupTypeItemRepository;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IMapper _mapper;
 
 
         public LookupTypeItemsController(
             ILookupTypeRepository lookupTypeRepository,
             ILookupTypeItemRepository lookupTypeItemRepository,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IMapper mapper)
         {
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
             _lookupTypeItemRepository = lookupTypeItemRepository ?? throw new ArgumentNullException(nameof(lookupTypeItemRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("{lookupTypeName}", Name = "GetLookupItems")]
@@ -53,7 +56,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
-            var lookupTypeItems = Mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.OrderBy(o => o.Description));
+            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.OrderBy(o => o.Description));
 
             return Ok(new BaseRestApiModel
             {

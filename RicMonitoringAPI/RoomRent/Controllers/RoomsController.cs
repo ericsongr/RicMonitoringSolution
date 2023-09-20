@@ -26,17 +26,20 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly IRoomPropertyMappingService _roomPropertyMappingService;
         private readonly IUrlHelper _urlHelper;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IMapper _mapper;
 
         public RoomsController(RicDbContext context,
             IRoomRepository roomRepository,
             IRoomPropertyMappingService roomPropertyMappingService,
             IUrlHelper urlHelper,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IMapper mapper)
         {
             _roomRepository = roomRepository;
             _roomPropertyMappingService = roomPropertyMappingService;
             _urlHelper = urlHelper;
             _typeHelperService = typeHelperService;
+            _mapper = mapper;
         }
 
         [HttpGet("{id}", Name = "GetRoom")]
@@ -54,7 +57,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var room = Mapper.Map<RoomDto>(roomFromRepo);
+            var room = _mapper.Map<RoomDto>(roomFromRepo);
 
             return Ok(new BaseRestApiModel
             {
@@ -103,7 +106,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             //Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetaData));
 
-            var rooms = Mapper.Map<IEnumerable<RoomDto>>(roomFromRepo);
+            var rooms = _mapper.Map<IEnumerable<RoomDto>>(roomFromRepo);
             var result = rooms.ShapeData(roomResourceParameters.Fields);
 
             return Ok(new BaseRestApiModel
@@ -126,7 +129,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
 
             try
             {
-                var roomEntity = Mapper.Map<Room>(room);
+                var roomEntity = _mapper.Map<Room>(room);
 
                 _roomRepository.Add(roomEntity);
                 _roomRepository.Commit();
@@ -134,7 +137,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 //null to avoid error
                 roomEntity.AuditRooms = null;
 
-                //var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
+                //var roomToReturn = _mapper.Map<RoomDto>(roomEntity);
 
                 //return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
 
@@ -177,7 +180,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 //null to avoid error
                 roomEntity.AuditRooms = null;
 
-                //var roomToReturn = Mapper.Map<RoomDto>(roomEntity);
+                //var roomToReturn = _mapper.Map<RoomDto>(roomEntity);
                 //return CreatedAtRoute("GetRooms", new { id = roomToReturn.Id }, roomToReturn);
 
                 return Ok(new BaseRestApiModel

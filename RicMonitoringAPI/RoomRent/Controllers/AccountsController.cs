@@ -30,19 +30,22 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly ITypeHelperService _typeHelperService;
         private readonly IAccountService _accountService;
         private readonly ISmsGatewayService _smsGatewayService;
+        private readonly IMapper _mapper;
 
         public AccountsController(RicDbContext context,
             IAccountRepository accountRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService,
             IAccountService accountService,
-            ISmsGatewayService smsGatewayService)
+            ISmsGatewayService smsGatewayService,
+            IMapper mapper)
         {
             _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
             _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             _smsGatewayService = smsGatewayService ?? throw new ArgumentNullException(nameof(smsGatewayService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("time-zones")]
@@ -75,7 +78,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 return NotFound();
             }
 
-            var account = Mapper.Map<AccountDto>(roomFromRepo);
+            var account = _mapper.Map<AccountDto>(roomFromRepo);
 
             return Ok(new BaseRestApiModel
             {
@@ -94,7 +97,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
             }
 
             var accountFromRepo = _accountRepository.GetAccounts(accountResourceParameters);
-            var accounts = Mapper.Map<IEnumerable<AccountDto>>(accountFromRepo).ToList();
+            var accounts = _mapper.Map<IEnumerable<AccountDto>>(accountFromRepo).ToList();
             
             //if there's no selected default account, then set the first account as default selected account avoid error in RicMoniApp
             if (!accounts.Any(o => o.IsSelected))
@@ -125,7 +128,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
                 if (account.IsSelected)
                     UpdateToUnSelectedAccount();
 
-                var roomEntity = Mapper.Map<Account>(account);
+                var roomEntity = _mapper.Map<Account>(account);
 
                 _accountRepository.Add(roomEntity);
                 _accountRepository.Commit();

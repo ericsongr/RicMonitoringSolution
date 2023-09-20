@@ -20,14 +20,17 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
     {
         private readonly ICostItemRepository _costItemRepository;
         private readonly ITypeHelperService _typeHelperService;
+        private readonly IMapper _mapper;
 
 
         public CostItemController(
             ICostItemRepository costItemRepository,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IMapper mapper)
         {
             _costItemRepository = costItemRepository ?? throw new ArgumentNullException(nameof(costItemRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet(Name = "GetCostItems")]
@@ -45,7 +48,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 return NotFound();
             }
 
-            var lookupTypeItems = Mapper.Map<IEnumerable<CostItemDto>>(costItems);
+            var lookupTypeItems = _mapper.Map<IEnumerable<CostItemDto>>(costItems);
 
             return Ok(new BaseRestApiModel
             {
