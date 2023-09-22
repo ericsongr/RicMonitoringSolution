@@ -80,6 +80,34 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
 
         }
 
+        [HttpGet(Name = "View")]
+        [Route("detail/{id}")]
+        public async Task<IActionResult> ViewDetail(int id, [FromQuery] string fields)
+        {
+
+            if (!_typeHelperService.TypeHasProperties<ToolViewDetailDto>(fields))
+            {
+                return BadRequest();
+            }
+
+            var tools = _toolRepository.GetSingleIncludesAsync(o => o.Id == id, o => o.ToolsInventory).GetAwaiter().GetResult();
+            
+            if (tools == null)
+            {
+                return NotFound();
+            }
+
+            var dataTools = _mapper.Map<ToolViewDetailDto>(tools);
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = dataTools.ShapeData(fields),
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
+        }
+
         [HttpPost(Name = "PostTool")]
         public IActionResult PostTool(CreateNewToolDto model)
         {
