@@ -111,6 +111,8 @@ namespace RicMonitoringAPI
                     opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")));
 
             //cost monitoring
+            CreateMap<CostItem, CostItemDto>();
+
             CreateMap<TransactionCost, TransactionCostDto>()
                 .ForMember(dest => dest.TransactionDate,
                     opt => opt.MapFrom(src => src.TransactionDate.ToShortDateString()))
