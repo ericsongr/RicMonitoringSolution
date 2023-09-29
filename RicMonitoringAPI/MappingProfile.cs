@@ -131,8 +131,16 @@ namespace RicMonitoringAPI
                         .OrderByDescending(o => o.InventoryDateTimeUtc)));
 
             CreateMap<ToolInventory, ToolInventoryDto>()
-                .ForMember(dest => dest.InventoryDateTime,
-                opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));
+                .ForMember(dest => dest.InventoryDate,
+                    opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));
+            
+            CreateMap<ToolInventory, ToolInventoryViewDto>()
+                .ForMember(dest => dest.InventoryDate,
+                    opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToShortDateString()))
+                .ForMember(dest => dest.Status,
+                    opt => opt.MapFrom(src => src.LookupTypeItemAction.Description))
+                .ForMember(dest => dest.Action,
+                    opt => opt.MapFrom(src => src.LookupTypeItemStatus.Description));
             
 
             CreateMap<Tool, ToolViewDetailDto>()

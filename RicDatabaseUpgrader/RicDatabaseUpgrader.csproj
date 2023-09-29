@@ -58,10 +58,14 @@
     <None Remove="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />
     <None Remove="Scripts\Update\v1.0004\0003-239-add-background-color.sql" />
     <None Remove="Scripts\Update\v1.0004\0004-245-tools-inventory.sql" />
+    <None Remove="Scripts\Update\v1.0004\0005-255-tools-inventory-detail.sql" />
+    <None Remove="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0005-255-tools-inventory-detail.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0004-245-tools-inventory.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0003-239-add-background-color.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0002-220-add-cost-items-table.sql" />

@@ -10,6 +10,6 @@ namespace RicModel.ToolsInventory.Dtos
         public string Description { get; set; }
         public bool PowerTool { get; set; }
 
-        public ICollection<ToolInventoryDetailDto> ToolsInventory { get; set; }
+        public ICollection<ToolInventoryViewDto> ToolsInventory { get; set; }
     }
 }

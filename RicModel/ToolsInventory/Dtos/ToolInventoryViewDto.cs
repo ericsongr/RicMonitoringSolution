@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace RicModel.ToolsInventory.Dtos
 {
-    public class ToolInventoryDto
+    public class ToolInventoryViewDto
     {
         public int Id { get; set; }
-        public int ToolId { get; set; }
 
         public List<string> FilesInBase64 { get; set; }
 
         public string InventoryDate { get; set; }
-        public int Status { get; set; }
-        public int Action { get; set; }
-        
+       
+        public string Status { get; set; }
+        public string Action { get; set; }
+
 
     }
 }

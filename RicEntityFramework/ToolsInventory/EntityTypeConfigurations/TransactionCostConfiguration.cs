@@ -16,6 +16,18 @@ namespace RicEntityFramework.ToolsInventory.EntityTypeConfigurations
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ToolsInventory_ToolsInventory_Tools");
 
+            builder.HasOne(o => o.LookupTypeItemAction)
+                .WithMany(o => o.ToolInventoryActions)
+                .HasForeignKey(o => o.Action)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ToolsInventory_LookupTypeItem_Action");
+
+            builder.HasOne(o => o.LookupTypeItemStatus)
+                .WithMany(o => o.ToolInventoryStatuses)
+                .HasForeignKey(o => o.Status)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ToolsInventory_LookupTypeItem_Status");
+
             builder.HasQueryFilter(o => !o.IsDeleted);
 
             builder.ToTable("ToolsInventory");
