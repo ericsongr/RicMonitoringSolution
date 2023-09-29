@@ -1,4 +1,5 @@
 ﻿using System;
+using RicModel.RoomRent;
 
 namespace RicModel.ToolsInventory
 {
@@ -10,8 +11,10 @@ namespace RicModel.ToolsInventory
         public string Images { get; set; }
 
         public DateTime InventoryDateTimeUtc { get; set; }
-        public string Status { get; set; }
-        public string Action { get; set; }
+        public int Status { get; set; }
+        public LookupTypeItem LookupTypeItemStatus { get; set; }
+        public int Action { get; set; }
+        public LookupTypeItem LookupTypeItemAction { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTimeUtc { get; set; }

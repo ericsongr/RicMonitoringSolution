@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using RicCommon.Constants;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
+using RicEntityFramework.RicXplorer.Interfaces;
 using RicEntityFramework.Services;
 using RicEntityFramework.ToolsInventory.Interfaces;
 using RicModel.CostMonitoring.Dtos;
@@ -21,6 +22,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
     [ApiController]
     public class ToolsController : ControllerBase
     {
+        private readonly ILookupTypeItemRepository _lookupTypeItemRepository;
         private readonly IToolRepository _toolRepository;
         private readonly IToolInventoryRepository _toolInventoryRepository;
         private readonly ITypeHelperService _typeHelperService;
@@ -29,12 +31,14 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
 
 
         public ToolsController(
+            ILookupTypeItemRepository lookupTypeItemRepository,
             IToolRepository toolRepository,
             IToolInventoryRepository toolInventoryRepository,
             ITypeHelperService typeHelperService,
             IImageService imageService,
             IMapper mapper)
         {
+            _lookupTypeItemRepository = lookupTypeItemRepository ?? throw new ArgumentNullException(nameof(toolRepository));
             _toolRepository = toolRepository ?? throw new ArgumentNullException(nameof(toolRepository));
             _toolInventoryRepository = toolInventoryRepository ?? throw new ArgumentNullException(nameof(toolInventoryRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
@@ -52,9 +56,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             {
                 return BadRequest();
             }
-
-            var tools = _toolRepository.FindAll(o => o.ToolsInventory);
-
+            
             var isStartDateValid = DateTime.TryParse(startDate, out DateTime startDateOut);
             var isEndDateValid = DateTime.TryParse(endDate, out DateTime endDateOut);
             if (!isStartDateValid)
@@ -62,7 +64,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             if (!isEndDateValid)
                 return BadRequest("Invalid end date");
 
-            tools = tools.Where(o => o.CreatedDateTimeUtc.Date >= startDateOut && o.CreatedDateTimeUtc.Date <= endDateOut);
+            var tools = _toolRepository.Find(startDateOut, endDateOut);
 
             if (tools == null)
             {
@@ -90,7 +92,7 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
                 return BadRequest();
             }
 
-            var tools = _toolRepository.GetSingleIncludesAsync(o => o.Id == id, o => o.ToolsInventory).GetAwaiter().GetResult();
+            var tools = _toolRepository.FindDetail(id);
             
             if (tools == null)
             {
@@ -131,14 +133,13 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
 
             if (model.Id > 0)
             {
-                var modifiedEntity = _toolRepository.GetSingleAsync(o => o.Id == model.Id).GetAwaiter().GetResult();
+                var modifiedEntity = _toolRepository.Find(model.Id);
 
                 modifiedEntity.Name = model.Name;
                 modifiedEntity.Description = model.Description;
                 modifiedEntity.PowerTool = model.PowerTool;
 
                 _toolRepository.Update(modifiedEntity);
-                _toolRepository.Commit();
 
                 message = "Cost tool has been updated";
             }
@@ -146,15 +147,22 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
             {
                 tool.CreatedDateTimeUtc = DateTime.UtcNow;
 
-                _toolRepository.Add(tool);
-                _toolRepository.Commit();
+                _toolRepository.Save(tool);
+
+                var statusItem = _lookupTypeItemRepository
+                    .GetSingleAsync(o => o.Description == ToolStatusConstant.Working).GetAwaiter().GetResult();
+                int status = statusItem == null ? 0 : statusItem.Id;
+
+                var actionItem = _lookupTypeItemRepository
+                    .GetSingleAsync(o => o.Description == ToolActionConstant.NewlyAdded).GetAwaiter().GetResult();
+                int action = actionItem == null ? 0 : actionItem.Id;
 
                 var toolInventory = new ToolInventory
                 {
                     ToolId = tool.Id,
                     Images = fileNamesInCommaDelimited,
-                    Status = ToolStatusConstant.Working,
-                    Action = ToolActionConstant.NewlyAdded,
+                    Status = status,
+                    Action = action,
                     InventoryDateTimeUtc = DateTime.UtcNow,
                     CreatedDateTimeUtc = DateTime.UtcNow
                 };

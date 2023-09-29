@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using RicCommon.Constants;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.ToolsInventory.Interfaces;
 using RicModel.ToolsInventory;
@@ -14,14 +15,17 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
     [ApiController]
     public class ToolsInventoryController : ControllerBase
     {
+        private readonly IImageService _imageService;
         private readonly IToolInventoryRepository _toolInventoryRepository;
         private readonly ITypeHelperService _typeHelperService;
 
 
         public ToolsInventoryController(
+            IImageService imageService,
             IToolInventoryRepository toolInventoryRepository,
             ITypeHelperService typeHelperService)
         {
+            _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             _toolInventoryRepository = toolInventoryRepository ?? throw new ArgumentNullException(nameof(toolInventoryRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
         }
@@ -69,22 +73,29 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         {
             string message = "Tool inventory has been added";
 
-            DateTime.TryParse(model.InventoryDateTime, out DateTime inventoryDateTimeOutput);
+            var fileNames = new List<string>();
+            model.FilesInBase64.ForEach(base64 =>
+            {
+                var filename = _imageService.Upload(base64, FolderConstant.InventoryToolsImage);
+                fileNames.Add(filename);
+            });
+            var fileNamesInCommaDelimited = string.Join(",", fileNames);
 
+            DateTime.TryParse(model.InventoryDate, out DateTime inventoryDateTimeOutput);
             var tool = new ToolInventory()
             { 
                ToolId = model.ToolId,
-               Images = model.Images,
+               Images = fileNamesInCommaDelimited,
                InventoryDateTimeUtc = inventoryDateTimeOutput,
-               Action = model.Action,// ToolActionConstant.RunTest,
-               Status = model.Status // ToolStatusConstant.StillWorking
+               Action = model.Action,
+               Status = model.Status
             };
 
             if (model.Id > 0)
             {
                 var modifiedEntity = _toolInventoryRepository.GetSingleAsync(o => o.Id == model.Id).GetAwaiter().GetResult();
 
-                modifiedEntity.Images = model.Images;
+                modifiedEntity.Images = fileNamesInCommaDelimited;
                 modifiedEntity.InventoryDateTimeUtc = tool.InventoryDateTimeUtc;
                 modifiedEntity.Action = tool.Action;
                 modifiedEntity.Status = tool.Status;
