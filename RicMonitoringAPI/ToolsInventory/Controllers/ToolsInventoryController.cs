@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RicCommon.Constants;
 using RicEntityFramework.Interfaces;
@@ -67,6 +68,30 @@ namespace RicMonitoringAPI.ToolsInventory.Controllers
         //    });
 
         //}
+        
+        [HttpGet(Name = "Image")]
+        [Route("image/{id}")]
+        public async Task<IActionResult> Image(int id)
+        {
+            var base64S = new List<string>();
+            var tool = _toolInventoryRepository.GetSingleAsync(o => o.Id == id).GetAwaiter().GetResult();
+            if (tool != null)
+            {
+                var filenames = tool.Images.Split(',');
+                foreach (var filename in filenames)
+                {
+                    base64S.Add(_imageService.GetImageInBase64($"{filename}", "InventoryToolsImage"));
+                }
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = base64S,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
+        }
 
         [HttpPost(Name = "PostToolInventory")]
         public IActionResult PostToolInventory(ToolInventoryDto model)
