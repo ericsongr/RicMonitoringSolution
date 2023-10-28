@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
@@ -67,7 +68,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
-        [HttpPost()]
+        [HttpPost("add")]
         public IActionResult AddCategory(LookupTypeItemDto model)
         {
             string message = string.Empty;
@@ -95,6 +96,25 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             return Ok(new BaseRestApiModel
             {
                 Payload = new { id = entity.Id, message },
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [HttpPost("update")]
+        public IActionResult UpdateCategory(LookupTypeItemDto model)
+        {
+            var entity = _lookupTypeItemRepository.FindBy(o => o.Id == model.Id).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.Description = model.Description;
+                _lookupTypeItemRepository.Update(entity);
+                _lookupTypeItemRepository.Commit();
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message = "Category has been updated."},
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });

@@ -63,6 +63,7 @@ namespace RicMonitoringAPI
                     opt => opt.MapFrom(src => src.GetPayments()));
 
             CreateMap<LookupType, LookupTypeDto>();
+            CreateMap<LookupType, LookupTypeCategoryDto>();
             CreateMap<LookupTypeItem, LookupTypeItemDto>();
             CreateMap<RentTransactionPayment, RentTransactionPaymentDto>()
                 .ForMember(dest => dest.DatePaidString,
