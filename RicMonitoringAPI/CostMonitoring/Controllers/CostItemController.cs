@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -59,7 +60,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
 
         }
 
-        [HttpPost(Name = "AddCostItem")]
+        [HttpPost("add", Name = "AddCostItem")]
         public IActionResult AddCostItem(CostItemDto model)
         {
             var entity = new CostItem
@@ -74,6 +75,26 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
             return Ok(new BaseRestApiModel
             {
                 Payload = new {id = entity.Id, message = "New cost item has been added" },
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [HttpPost("update", Name = "UpdateCostItem")]
+        public IActionResult UpdateCostItem(CostItemDto model)
+        {
+            var entity = _costItemRepository.FindBy(o => o.Id == model.Id).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.Name = model.Name;
+                entity.BackgroundColor = model.BackgroundColor;
+                _costItemRepository.Update(entity);
+                _costItemRepository.Commit();
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message = "Cost item has been updated." },
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
