@@ -6,7 +6,9 @@ using RicModel.CostMonitoring.Dtos;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
+using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
+using RicModel.RoomRent.Dtos.Audits;
 using RicModel.RoomRent.Extensions;
 using RicModel.ToolsInventory;
 using RicModel.ToolsInventory.Dtos;
@@ -21,6 +23,12 @@ namespace RicMonitoringAPI
         public MappingProfile()
         {
             //settings
+            CreateMap<Account, AccountDto>();
+            CreateMap<MonthlyRentBatch, MonthlyRentBatchDto>();
+            CreateMap<AuditRentTransaction, AuditRentTransactionDto>();
+            CreateMap<AuditRenter, AuditRenterDto>();
+            CreateMap<AuditRoom, AuditRoomDto>();
+
             CreateMap<Setting, SettingDto>()
                    .ForMember(dest => dest.DataType,
                                opt => opt.MapFrom(src => src.GetDataType()))
