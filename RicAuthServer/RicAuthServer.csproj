@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
 		<UserSecretsId>aspnet-AuthorizationServer-6FF6A6A8-0F1D-480E-A4A7-F8C67C40EBB4</UserSecretsId>
 		<AssemblyName>RicAuthServer</AssemblyName>
