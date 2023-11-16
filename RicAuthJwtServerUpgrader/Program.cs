@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Reflection;
 using DbUp;
+using Microsoft.Data.SqlClient;
 using RicAuthJwtServerUpgrader.Properties;
 
 namespace RicAuthJwtServerUpgrader

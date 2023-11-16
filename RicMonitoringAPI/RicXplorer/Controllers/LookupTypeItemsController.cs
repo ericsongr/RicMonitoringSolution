@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
