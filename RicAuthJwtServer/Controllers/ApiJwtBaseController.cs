@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using RicAuthJwtServer.Models;
-using RicMonitoringAPI.Common.Model;
+using RicAuthJwtServer.ViewModels;
 
 namespace RicAuthJwtServer.Controllers
 {
@@ -13,7 +13,7 @@ namespace RicAuthJwtServer.Controllers
             return new BaseRestApiModel
             {
                 Payload = new List<object>(),
-                Errors = new BaseErrorModel
+                Errors = new BaseError
                 {
                     Message = message,
                     MessageFields = ""
