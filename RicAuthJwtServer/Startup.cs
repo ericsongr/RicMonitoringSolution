@@ -20,7 +20,7 @@ using RicAuthJwtServer.Data;
 using RicAuthJwtServer.Data.Persistence.Interfaces;
 using RicAuthJwtServer.Data.Persistence.Repositories;
 using RicAuthJwtServer.Data.Services;
-using RicMonitoringAPI.Common.Validators;
+using RicAuthJwtServer.Validators;
 
 namespace RicAuthJwtServer
 {

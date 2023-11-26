@@ -16,8 +16,6 @@ using RicAuthJwtServer.Models;
 using RicAuthJwtServer.Models.Constants;
 using RicAuthJwtServer.ViewModels;
 using RicCommon.Infrastructure.Extensions;
-using RicMonitoringAPI.Common.Model;
-using BaseRestApiModel = RicMonitoringAPI.Common.Model.BaseRestApiModel;
 
 namespace RicAuthJwtServer.Controllers
 {

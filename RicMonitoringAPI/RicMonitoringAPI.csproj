@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+		<AWSProjectType>Lambda</AWSProjectType>
 		<UseAppHost>false</UseAppHost>
 		<UserSecretsId>6c8f6828-28ca-4293-8e57-07dbaa81927f</UserSecretsId>
 	</PropertyGroup>
@@ -74,6 +75,7 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
 		<PackageReference Include="Audit.EntityFramework.Core" Version="22.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="8.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

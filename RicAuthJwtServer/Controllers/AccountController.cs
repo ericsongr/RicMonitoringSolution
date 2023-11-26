@@ -17,9 +17,9 @@ using RicAuthJwtServer.Application.Interfaces;
 using RicAuthJwtServer.Data.Extensions;
 using RicAuthJwtServer.Data.Services;
 using RicAuthJwtServer.Infrastructure;
+using RicAuthJwtServer.Models;
 using RicCommon.Diagnostics;
-using RicMonitoringAPI.Common.Model;
-using RicMonitoringAPI.Services.Interfaces;
+using BaseErrorModel = RicAuthJwtServer.ViewModels.BaseErrorModel;
 using BaseRestApiModel = RicAuthJwtServer.ViewModels.BaseRestApiModel;
 
 namespace RicAuthJwtServer.Controllers

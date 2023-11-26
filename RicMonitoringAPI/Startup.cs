@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Audit.Core;
 using FluentValidation.AspNetCore;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
@@ -48,23 +45,13 @@ using RicEntityFramework.RoomRent.Repositories.Audits;
 using RicEntityFramework.Services;
 using RicEntityFramework.ToolsInventory.Interfaces;
 using RicEntityFramework.ToolsInventory.Repositories;
-using RicModel.CostMonitoring;
-using RicModel.CostMonitoring.Dtos;
-using RicModel.RicXplorer;
-using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
-using RicModel.RoomRent.Dtos;
-using RicModel.RoomRent.Extensions;
-using RicModel.ToolsInventory;
-using RicModel.ToolsInventory.Dtos;
 using RicMonitoringAPI.Common.Validators;
-using RicMonitoringAPI.RicXplorer.ViewModels;
-using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 using RicMonitoringAPI.RoomRent.Validators;
 using RicMonitoringAPI.Services;
 using RicMonitoringAPI.Services.Interfaces;
-using AutoMapper;
+using IdentityServer4.AccessTokenValidation;
 
 namespace RicMonitoringAPI
 {
@@ -291,12 +278,15 @@ namespace RicMonitoringAPI
             //Enable CORS policy "AllowCors"
             app.UseCors("AllowCors");
 
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-                RequestPath = new PathString("/Resources")
-            });
+            //comment this line when deployed to aws
+            //start
+            //app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+            //    RequestPath = new PathString("/Resources")
+            //});
+            //end 
 
             //uncomment when deploy to live server
             //app.UseHttpsRedirection();
