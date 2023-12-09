@@ -40,7 +40,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
 
         [HttpGet(Name = "TransactionCosts")]
         [Route("list")]
-        public async Task<IActionResult> TransactionCosts(bool isFilterByCurrentMonth, string startDate, string endDate, int costCategoryId, [FromQuery] string fields)
+        public async Task<IActionResult> TransactionCosts(bool isFilterByCurrentMonth, string startDate, string endDate, int costCategoryId, int itemId, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<TransactionCostDto>(fields))
@@ -70,6 +70,10 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
 
             if (costCategoryId > 0)
                 transactionCosts = transactionCosts.Where(o => o.CostCategoryId == costCategoryId);
+
+            if (itemId > 0)
+                transactionCosts = transactionCosts.Where(o => o.CostItemId == itemId);
+
 
             if (transactionCosts == null)
             {

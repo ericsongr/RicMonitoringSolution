@@ -43,7 +43,7 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
                 return BadRequest();
             }
 
-            var costItems = _costItemRepository.FindAll();
+            var costItems = _costItemRepository.FindAll().OrderBy(o => o.Name);
             if (costItems == null)
             {
                 return NotFound();
