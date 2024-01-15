@@ -60,10 +60,12 @@
     <None Remove="Scripts\Update\v1.0004\0004-245-tools-inventory.sql" />
     <None Remove="Scripts\Update\v1.0004\0005-255-tools-inventory-detail.sql" />
     <None Remove="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />
+    <None Remove="Scripts\Update\v1.0004\0007-256-markasdeleted.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0007-256-markasdeleted.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0005-255-tools-inventory-detail.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0004-245-tools-inventory.sql" />
