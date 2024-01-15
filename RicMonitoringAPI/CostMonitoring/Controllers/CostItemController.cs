@@ -100,12 +100,15 @@ namespace RicMonitoringAPI.CostMonitoring.Controllers
             });
         }
 
-        [HttpPost("delete", Name = "DeleteCostItem")]
+        [HttpDelete]
         public IActionResult DeleteCostItem(int id)
         {
             var entity = _costItemRepository.GetSingleIncludesAsync(o => o.Id == id).GetAwaiter().GetResult();
-            entity.IsDeleted = true;
-            _costItemRepository.Commit();
+            if (entity != null)
+            {
+                entity.IsDeleted = true;
+                _costItemRepository.Commit();
+            }
 
             return Ok(new BaseRestApiModel
             {
