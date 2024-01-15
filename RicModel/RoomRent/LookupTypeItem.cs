@@ -10,6 +10,7 @@ namespace RicModel.RoomRent
         public int Id { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public int LookupTypeId { get; set; }
 
         public virtual LookupType LookupTypes { get; set; }

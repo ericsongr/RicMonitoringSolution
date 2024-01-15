@@ -56,7 +56,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
-            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.OrderBy(o => o.Description));
+            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.Where(o => !o.IsDeleted).OrderBy(o => o.Description));
 
             return Ok(new BaseRestApiModel
             {
@@ -114,6 +114,25 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             return Ok(new BaseRestApiModel
             {
                 Payload = new { id = entity.Id, message = "Category has been updated."},
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteCategory(int id)
+        {
+            var entity = _lookupTypeItemRepository.FindBy(o => o.Id == id).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.IsDeleted = true;
+                _lookupTypeItemRepository.Update(entity);
+                _lookupTypeItemRepository.Commit();
+            }
+            
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message = "Look Up successfully deleted." },
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
