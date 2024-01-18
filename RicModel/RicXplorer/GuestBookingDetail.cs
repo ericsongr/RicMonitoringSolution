@@ -17,6 +17,12 @@ namespace RicModel.RicXplorer
         public string LeaveMessage { get; set; }
         public DateTime CreatedDateTimeUtc { get; set; }
         public int BookingType { get; set; }
+        
+        public DateTime? CheckedInDateTime { get; set; }
+        public string CheckedInBy { get; set; }
+        public DateTime? CheckedOutDateTime { get; set; }
+        public string CheckedOutBy { get; set; }
+
         public virtual BookingType BookingTypeModel { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }

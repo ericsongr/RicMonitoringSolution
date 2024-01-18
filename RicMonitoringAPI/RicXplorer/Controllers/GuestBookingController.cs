@@ -41,7 +41,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             var guests = _guestBookingDetailRepository.Find(arrivalDate, departureDate, bookingType)
                 .GroupBy(g => new
                 {
-                    g.DateBooked, 
+                    g.DateBooked,
                     g.GuestBookingDetail.BookingTypeModel.AccountProduct.MaximumLevelQuantity
                 })
                 .Select(p => new GuestBookedSchedule
@@ -60,7 +60,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
-       
+
         [AllowAnonymous]
         [HttpGet("guests-confirmed-bookings")]
         public IActionResult GuestsConfirmedBookings(string startDate, string endDate, int bookingType)
@@ -79,11 +79,10 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             });
         }
 
-        [AllowAnonymous]
         [HttpGet("detail/{id:int}")]
         public IActionResult GuestsBookingDetail(int id)
         {
-            
+
             var data = _guestBookingDetailRepository.FindBookingById(id);
             var guests = _mapper.Map<GuestBookingDetailDto>(data);
 
@@ -129,6 +128,72 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                         StatusCode = (int)HttpStatusCode.OK
                     });
                 }
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+            }
+        }
+
+        [HttpPost("check-in", Name = "CheckIn")]
+        public IActionResult CheckIn(GuestCheckInCheckOut model)
+        {
+            try
+            {
+                var guestBooking = _guestBookingDetailRepository.FindBookingById(model.Id);
+                if (guestBooking != null)
+                {
+                    guestBooking.CheckedInDateTime = DateTime.Now;
+                    guestBooking.CheckedInBy = model.Username;
+                }
+
+                _guestBookingDetailRepository.Update(guestBooking);
+                _guestBookingDetailRepository.Commit();
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = new
+                    {
+                        checkedInDateTimeString = guestBooking.CheckedInDateTime?.ToString("dd-MMM-yyyy hh:mm tt"),
+                        message = "Guest(s) has been checked-in"
+                    },
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+            }
+        }
+
+        [HttpPost("check-out", Name = "CheckOut")]
+        public IActionResult CheckOut(GuestCheckInCheckOut model)
+        {
+            try
+            {
+                var guestBooking = _guestBookingDetailRepository.FindBookingById(model.Id);
+                if (guestBooking != null)
+                {
+                    guestBooking.CheckedOutDateTime = DateTime.Now;
+                    guestBooking.CheckedOutBy = model.Username;
+                }
+
+                _guestBookingDetailRepository.Update(guestBooking);
+                _guestBookingDetailRepository.Commit();
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = new
+                    {
+                        checkedOutDateTimeString = guestBooking.CheckedInDateTime?.ToString("dd-MMM-yyyy hh:mm tt"),
+                        message = "Guest(s) has been checked-out"
+                    },
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
 
             }
             catch (Exception ex)
