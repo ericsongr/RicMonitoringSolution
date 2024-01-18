@@ -375,6 +375,10 @@ CREATE TABLE [dbo].[GuestBookingDetails](
 	[CreatedDateTimeUtc] [datetime] NULL,
 	[BookingType] [int] NOT NULL,
 	[AccountId] [int] NOT NULL,
+	CheckedInDateTime DATETIME NULL,
+	CheckedInBy nvarchar(256),
+	CheckedOutDateTime DATETIME NULL,
+	CheckedOutBy nvarchar(256),
  CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
