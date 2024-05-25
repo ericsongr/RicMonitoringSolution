@@ -11,6 +11,10 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public DateTime? DepartureDate { get; set; }
         public string DepartureDateString { get; set; }
         public string Country { get; set; }
+        public string CountrySelected
+        {
+            get { return Country; }
+        }
         public string LanguagesSpoken { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }

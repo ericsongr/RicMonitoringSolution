@@ -62,10 +62,12 @@
     <None Remove="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />
     <None Remove="Scripts\Update\v1.0004\0007-256-markasdeleted.sql" />
     <None Remove="Scripts\Update\v1.0004\0008-280-check-in.sql" />
+    <None Remove="Scripts\Update\v1.0004\0009-282-api-buklod.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0009-282-api-buklod.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0008-280-check-in.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0007-256-markasdeleted.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0006-257-api-add-status-and-action.sql" />

@@ -3,6 +3,8 @@ using System.Linq;
 using AutoMapper;
 using RicModel.CostMonitoring;
 using RicModel.CostMonitoring.Dtos;
+using RicModel.Inc;
+using RicModel.Inc.Dtos;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
@@ -160,6 +162,22 @@ namespace RicMonitoringAPI
             CreateMap<ToolInventory, ToolInventoryDetailDto>()
                 .ForMember(dest => dest.InventoryDateTime,
                 opt => opt.MapFrom(src => src.InventoryDateTimeUtc.ToString("f")));
+
+            //Buklod
+            CreateMap<IncBuklodCreateDto, IncBuklod>();
+            CreateMap<IncBuklod, IncBuklodViewDto>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => $"{src.LastName}, {src.FirstName}"))
+                .ForMember(dest => dest.AnniversaryString,
+                    opt => opt.MapFrom(src => src.GetAnniversary()))
+                .ForMember(dest => dest.BirthdayString,
+                    opt => opt.MapFrom(src => src.GetBirthday()));
+
+            CreateMap<IncBuklod, IncBuklodDto>()
+                .ForMember(dest => dest.AnniversaryString,
+                    opt => opt.MapFrom(src => src.GetAnniversary2()))
+                .ForMember(dest => dest.BirthdayString,
+                    opt => opt.MapFrom(src => src.GetBirthday2()));
 
             //    .ForMember(dest => dest.CostItemName,
             //        opt => opt.MapFrom(src => src.CostItem.Name))

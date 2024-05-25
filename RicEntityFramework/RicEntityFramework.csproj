@@ -32,4 +32,9 @@
     <ProjectReference Include="..\RicCommunication\RicCommunication.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Inc\PropertyMappings\" />
+  </ItemGroup>
+
 </Project>
