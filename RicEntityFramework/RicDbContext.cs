@@ -4,6 +4,7 @@ using Audit.Core;
 using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using RicModel.CostMonitoring;
+using RicModel.Inc;
 using RicModel.RicXplorer;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
@@ -72,6 +73,14 @@ namespace RicEntityFramework
         public DbSet<Tool> Tools { get; set; }
         public DbSet<ToolInventory> ToolsInventory { get; set; }
         // tool inventory - end
+
+
+
+        //inc start
+
+        public DbSet<IncBuklod> IncBuklod { get; set; }
+
+        //inc end
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
