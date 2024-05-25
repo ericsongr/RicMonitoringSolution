@@ -52,6 +52,8 @@ using RicMonitoringAPI.RoomRent.Validators;
 using RicMonitoringAPI.Services;
 using RicMonitoringAPI.Services.Interfaces;
 using IdentityServer4.AccessTokenValidation;
+using RicEntityFramework.Inc.Interfaces;
+using RicEntityFramework.Inc.Repositories;
 
 namespace RicMonitoringAPI
 {
@@ -110,6 +112,10 @@ namespace RicMonitoringAPI
             //tool inventory
             services.AddScoped<IToolRepository, ToolRepository>();
             services.AddScoped<IToolInventoryRepository, ToolInventoryRepository>();
+
+
+            //buklod
+            services.AddScoped<IIncBuklodRepository, IncBuklodRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 

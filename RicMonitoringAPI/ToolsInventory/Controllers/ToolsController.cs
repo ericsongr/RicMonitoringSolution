@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,9 +8,7 @@ using RicCommon.Constants;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
-using RicEntityFramework.Services;
 using RicEntityFramework.ToolsInventory.Interfaces;
-using RicModel.CostMonitoring.Dtos;
 using RicModel.ToolsInventory;
 using RicModel.ToolsInventory.Dtos;
 using RicMonitoringAPI.Common.Model;
