@@ -36,8 +36,13 @@ namespace RicMonitoringAPI.Inc.Controllers
 
         [HttpGet(Name = "ViewBuklod")]
         [Route("view")]
-        public async Task<IActionResult> View([FromQuery] string fields)
+        public async Task<IActionResult> View(string startBirthdayString, string endBirthdayString, string startAnniversaryString, string endAnniversaryString, [FromQuery] string fields)
         {
+
+            DateTime.TryParse(startBirthdayString, out DateTime startBirthday);
+            DateTime.TryParse(endBirthdayString, out DateTime endBirthday);
+            DateTime.TryParse(startAnniversaryString, out DateTime startAnniversary);
+            DateTime.TryParse(endAnniversaryString, out DateTime endAnniversary);
 
             if (!_typeHelperService.TypeHasProperties<IncBuklodViewDto>(fields))
             {
@@ -51,11 +56,29 @@ namespace RicMonitoringAPI.Inc.Controllers
                 return NotFound();
             }
 
-            var dataTools = _mapper.Map<IEnumerable<IncBuklodViewDto>>(items.OrderBy(o => o.LastName));
+            
+            var buklodList = _mapper.Map<IEnumerable<IncBuklodViewDto>>(items.OrderBy(o => o.LastName));
+            foreach (var item in buklodList)
+            {
+                if (item.Anniversary.HasValue)
+                {
+                    var replaceYearStartAnniversary = new DateTime(item.Anniversary.Value.Year, startAnniversary.Month, startAnniversary.Day);
+                    var replaceYearEndAnniversary = new DateTime(item.Anniversary.Value.Year, endAnniversary.Month, endAnniversary.Day);
+                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " B" : "";
+                }
+
+                if (item.Birthday.HasValue)
+                {
+                    var replaceYearStartBirthday = new DateTime(item.Birthday.Value.Year, startBirthday.Month, startBirthday.Day);
+                    var replaceYearEndBirthday = new DateTime(item.Birthday.Value.Year, endBirthday.Month, endBirthday.Day);
+                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " A" : "";
+                }
+
+            }
 
             return Ok(new BaseRestApiModel
             {
-                Payload = dataTools.ShapeData(fields),
+                Payload = buklodList.ShapeData(fields),
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
@@ -141,11 +164,8 @@ namespace RicMonitoringAPI.Inc.Controllers
 
         [HttpPost(Name = "PostDownload")]
         [Route("post/download")]
-        public IActionResult PostDownload()
+        public IActionResult PostDownload(IncBuklodDownload model)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("NAME,PUROK,GRUPO,MOBILE,ANNIVERSARY,BIRTHDAY");
-
             var items = _incBuklodRepository.FindAll();
 
             if (items == null)
@@ -153,7 +173,31 @@ namespace RicMonitoringAPI.Inc.Controllers
                 return NotFound();
             }
 
+            DateTime.TryParse(model.StartBirthdayString, out DateTime startBirthday);
+            DateTime.TryParse(model.EndBirthdayString, out DateTime endBirthday);
+            DateTime.TryParse(model.StartAnniversaryString, out DateTime startAnniversary);
+            DateTime.TryParse(model.EndAnniversaryString, out DateTime endAnniversary);
+
             var buklodList = _mapper.Map<IEnumerable<IncBuklodViewDto>>(items.OrderBy(o => o.LastName).ThenBy(o => o.FirstName));
+
+            foreach (var item in buklodList)
+            {
+                if (item.Anniversary.HasValue)
+                {
+                    var replaceYearStartAnniversary = new DateTime(item.Anniversary.Value.Year, startAnniversary.Month, startAnniversary.Day);
+                    var replaceYearEndAnniversary = new DateTime(item.Anniversary.Value.Year, endAnniversary.Month, endAnniversary.Day);
+                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " B" : "";
+                }
+
+                if (item.Birthday.HasValue)
+                {
+                    var replaceYearStartBirthday = new DateTime(item.Birthday.Value.Year, startBirthday.Month, startBirthday.Day);
+                    var replaceYearEndBirthday = new DateTime(item.Birthday.Value.Year, endBirthday.Month, endBirthday.Day);
+                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " A" : "";
+                }
+
+            }
+
             return Ok(new BaseRestApiModel
             {
                 Payload = buklodList,
