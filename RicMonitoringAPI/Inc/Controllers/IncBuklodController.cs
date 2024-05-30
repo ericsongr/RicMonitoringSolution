@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RicCommon.Infrastructure.Extensions;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Inc.Interfaces;
 using RicEntityFramework.Interfaces;
@@ -89,7 +90,8 @@ namespace RicMonitoringAPI.Inc.Controllers
 
         }
 
-        [HttpPost(Name = "Post")]
+        [HttpPost(Name = "PostSave")]
+        [Route("post/save")]
         public IActionResult Post(IncBuklodCreateDto model)
         {
             string message = "New item has been added";
@@ -137,6 +139,29 @@ namespace RicMonitoringAPI.Inc.Controllers
             });
         }
 
+        [HttpPost(Name = "PostDownload")]
+        [Route("post/download")]
+        public IActionResult PostDownload()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("NAME,PUROK,GRUPO,MOBILE,ANNIVERSARY,BIRTHDAY");
+
+            var items = _incBuklodRepository.FindAll();
+
+            if (items == null)
+            {
+                return NotFound();
+            }
+
+            var buklodList = _mapper.Map<IEnumerable<IncBuklodViewDto>>(items.OrderBy(o => o.LastName).ThenBy(o => o.FirstName));
+            return Ok(new BaseRestApiModel
+            {
+                Payload = buklodList,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
+        }
 
         [HttpDelete]
         public IActionResult PostDelete(int id)
