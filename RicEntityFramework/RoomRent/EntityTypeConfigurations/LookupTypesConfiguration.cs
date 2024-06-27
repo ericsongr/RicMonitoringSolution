@@ -14,6 +14,8 @@ namespace RicEntityFramework.RoomRent.EntityTypeConfigurations
                 .Property(t => t.Name)
                 .HasMaxLength(50);
 
+            builder.HasQueryFilter(o => !o.IsDeleted);
+
             builder.ToTable("LookupTypes");
         }
     }

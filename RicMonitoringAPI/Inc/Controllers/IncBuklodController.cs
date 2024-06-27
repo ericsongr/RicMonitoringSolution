@@ -64,14 +64,14 @@ namespace RicMonitoringAPI.Inc.Controllers
                 {
                     var replaceYearStartAnniversary = new DateTime(item.Anniversary.Value.Year, startAnniversary.Month, startAnniversary.Day);
                     var replaceYearEndAnniversary = new DateTime(item.Anniversary.Value.Year, endAnniversary.Month, endAnniversary.Day);
-                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " B" : "";
+                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " A" : "";
                 }
 
                 if (item.Birthday.HasValue)
                 {
                     var replaceYearStartBirthday = new DateTime(item.Birthday.Value.Year, startBirthday.Month, startBirthday.Day);
                     var replaceYearEndBirthday = new DateTime(item.Birthday.Value.Year, endBirthday.Month, endBirthday.Day);
-                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " A" : "";
+                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " B" : "";
                 }
 
             }
@@ -186,14 +186,14 @@ namespace RicMonitoringAPI.Inc.Controllers
                 {
                     var replaceYearStartAnniversary = new DateTime(item.Anniversary.Value.Year, startAnniversary.Month, startAnniversary.Day);
                     var replaceYearEndAnniversary = new DateTime(item.Anniversary.Value.Year, endAnniversary.Month, endAnniversary.Day);
-                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " B" : "";
+                    item.AnniversaryString += item.Anniversary >= replaceYearStartAnniversary && item.Anniversary <= replaceYearEndAnniversary ? " A" : "";
                 }
 
                 if (item.Birthday.HasValue)
                 {
                     var replaceYearStartBirthday = new DateTime(item.Birthday.Value.Year, startBirthday.Month, startBirthday.Day);
                     var replaceYearEndBirthday = new DateTime(item.Birthday.Value.Year, endBirthday.Month, endBirthday.Day);
-                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " A" : "";
+                    item.BirthdayString += item.Birthday >= replaceYearStartBirthday && item.Birthday <= replaceYearEndBirthday ? " B" : "";
                 }
 
             }

@@ -6,7 +6,7 @@ BEGIN
 		[FirstName] [VARCHAR](100) NOT NULL,
 		[Purok] [INT] NOT NULL DEFAULT(0),
 		[Grupo] [INT] NOT NULL DEFAULT(0),
-		[Mobile] [VARCHAR(20)] NULL,
+		[Mobile] [VARCHAR](20) NULL,
 		[Anniversary] [DATETIME] NULL,
 		[Birthday] [DATETIME] NULL,
 		[IsDeleted] [bit] not null default(0),

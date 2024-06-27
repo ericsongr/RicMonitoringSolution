@@ -7,5 +7,7 @@ namespace RicModel.RoomRent.Dtos
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public int LookupTypeId { get; set; }
+        public string Notes { get; set; }
+        public string LookupTypeName { get; set; }
     }
 }

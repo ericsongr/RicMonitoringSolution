@@ -12,6 +12,7 @@ namespace RicModel.RoomRent
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public int LookupTypeId { get; set; }
+        public string Notes { get; set; }
 
         public virtual LookupType LookupTypes { get; set; }
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
@@ -20,5 +21,6 @@ namespace RicModel.RoomRent
         public virtual ICollection<TransactionCost> TransactionCosts { get; set; }
         public virtual ICollection<ToolInventory> ToolInventoryStatuses { get; set; }
         public virtual ICollection<ToolInventory> ToolInventoryActions { get; set; }
+        public virtual ICollection<CheckListForCheckInOutGuest> CheckListForCheckInOutGuests { get; set; }
     }
 }

@@ -11,6 +11,14 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string Gender { get; set; }
         public DateTime? Birthday { get; set; }
 
+        public string BirthdayString
+        {
+            get
+            {
+                return Birthday.Value.ToString("MMM dd, yyyy");
+            }
+        }
+
         public int Age
         {
             get

@@ -119,7 +119,9 @@ namespace RicMonitoringAPI
                 .ForMember(dest => dest.DepartureDateString,
                     opt => opt.MapFrom(src => src.DepartureDate.ToString("dddd, MMMM dd yyyy")))
                 .ForMember(dest => dest.CreatedDateTimeUtcString,
-                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")));
+                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")))
+                .ForMember(dest => dest.CreatedDateTimeUtcString2,
+                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("MMM dd, yyyy @ hh:mm tt")));
 
             //cost monitoring
             CreateMap<CostItem, CostItemDto>();

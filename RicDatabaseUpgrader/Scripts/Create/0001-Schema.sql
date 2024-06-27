@@ -415,7 +415,8 @@ CREATE TABLE [dbo].[LookupTypeItems](
 	[Description] [nvarchar](100) NULL,
 	[IsActive] [bit] NOT NULL,
 	[LookupTypeId] [int] NOT NULL,
-	[IsDeleted] [bit] NOT NULL DEFAULT(0)
+	[IsDeleted] [bit] NOT NULL DEFAULT(0),
+	[Notes] VARCHAR(1000)
  CONSTRAINT [PK_LookupTypeItems] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -430,6 +431,7 @@ GO
 CREATE TABLE [dbo].[LookupTypes](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NULL,
+	IsDeleted BIT NOT NULL DEFAULT(0),
  CONSTRAINT [PK_LookupTypes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1473,4 +1475,33 @@ CREATE TABLE [dbo].[IncBuklod](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[CheckListForCheckInOutGuests]    Script Date: 6/22/2023 7:48:27 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CheckListForCheckInOutGuests](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LookupId] [int] NOT NULL,
+	[LookupTypeItemId] [int] NOT NULL,
+	[IsIncluded] [bit] NOT NULL,
+ CONSTRAINT [PK_CheckListForCheckInOutGuests] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[CheckListForCheckInOutGuests]  WITH CHECK ADD  CONSTRAINT [FK_LookupType_CheckListForCheckInOutGuest_LookupId] FOREIGN KEY([LookupId])
+REFERENCES [dbo].[LookupTypes] ([Id])
+GO
+ALTER TABLE [dbo].[CheckListForCheckInOutGuests] CHECK CONSTRAINT [FK_LookupType_CheckListForCheckInOutGuest_LookupId]
+GO
+
+ALTER TABLE [dbo].[CheckListForCheckInOutGuests]  WITH CHECK ADD  CONSTRAINT [FK_LookupTypeItem_CheckListForCheckInOutGuest_LookupTypeItemId] FOREIGN KEY([LookupTypeItemId])
+REFERENCES [dbo].[LookupTypeItems] ([Id])
+GO
+ALTER TABLE [dbo].[CheckListForCheckInOutGuests] CHECK CONSTRAINT [FK_LookupTypeItem_CheckListForCheckInOutGuest_LookupTypeItemId]
 GO
