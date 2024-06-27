@@ -13,6 +13,7 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Constants;
 using RicMonitoringAPI.Common.Model;
+using static Azure.Core.HttpHeader;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
 {
@@ -67,16 +68,62 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
+        [HttpGet("by-id/{id}", Name = "GetLookupByIdItems")]
+        public async Task<IActionResult> GetLookupByIdItems(int id, [FromQuery] string fields)
+        {
+
+            if (!_typeHelperService.TypeHasProperties<LookupTypeItemDto>(fields))
+            {
+                return BadRequest();
+            }
+
+            var lookupTypeItemRepo =
+                await _lookupTypeRepository.GetSingleIncludesAsync(
+                    o => o.Id == id,
+                    o => o.LookupTypeItems);
+            if (lookupTypeItemRepo == null)
+            {
+                return NotFound();
+            }
+
+            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.Where(o => !o.IsDeleted).OrderBy(o => o.Description));
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = lookupTypeItems.ShapeData(fields),
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+
+        }
+
         [HttpPost("add")]
         public IActionResult AddCategory(LookupTypeItemDto model)
         {
             string message = string.Empty;
+
+           
             var entity = new LookupTypeItem
             {
                 Description = model.Description,
                 IsActive = true,
-                LookupTypeId = model.LookupTypeId
+                Notes = model.Notes,
             };
+
+            if (model.LookupTypeId > 0)
+            {
+                entity.LookupTypeId = model.LookupTypeId;
+            }
+            else
+            {
+                var lookupTypeItemRepo =
+                    _lookupTypeRepository.GetSingleAsync(
+                        o => o.Name.ToLower().Trim() == model.LookupTypeName.ToLower().Trim()).GetAwaiter().GetResult();
+
+                entity.LookupTypeId = lookupTypeItemRepo.Id;
+                model.LookupTypeId = lookupTypeItemRepo.Id;
+            }
+
             _lookupTypeItemRepository.Add(entity);
             _lookupTypeItemRepository.Commit();
 
@@ -107,6 +154,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             if (entity != null)
             {
                 entity.Description = model.Description;
+                entity.Notes = model.Notes;
                 _lookupTypeItemRepository.Update(entity);
                 _lookupTypeItemRepository.Commit();
             }

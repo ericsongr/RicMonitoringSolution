@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
+using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 
@@ -33,7 +34,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         }
 
         [HttpGet(Name = "GetLookups")]
-        public async Task<IActionResult> GetLookupItems([FromQuery] string fields)
+        public async Task<IActionResult> GetLookupItems(string lookUps, [FromQuery] string fields)
         {
 
             if (!_typeHelperService.TypeHasProperties<LookupTypeDto>(fields))
@@ -41,16 +42,17 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return BadRequest();
             }
 
-            var lookUpTypes = new List<string>
+            IEnumerable<LookupType> lookupTypes = null;
+            if (string.IsNullOrEmpty(lookUps))
             {
-                "Ages",
-                "Booking Type Inclusions",
-                "Cost Categories",
-                "Inventory Tool Action",
-                "Inventory Tool Status",
-            };
-
-            var lookupTypes = _lookupTypeRepository.FindBy(o => lookUpTypes.Contains(o.Name));
+                lookupTypes = _lookupTypeRepository.FindAll();
+            }
+            else
+            {
+                var lookUpTypeIds = lookUps.Split(',').Select(int.Parse).ToList();
+                lookupTypes = _lookupTypeRepository.FindBy(o => lookUpTypeIds.Contains(o.Id));
+            }
+            
             if (lookupTypes == null)
             {
                 return NotFound();
@@ -67,37 +69,65 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
-        //[HttpPost()]
-        //public IActionResult AddCategory(LookupTypeItemDto model)
-        //{
-        //    string message = string.Empty;
-        //    var entity = new LookupTypeItem
-        //    {
-        //        Description = model.Description,
-        //        IsActive = true,
-        //        LookupTypeId = model.LookupTypeId
-        //    };
-        //    _lookupTypeItemRepository.Add(entity);
-        //    _lookupTypeItemRepository.Commit();
+        [HttpPost("add")]
+        public IActionResult AddLookup(LookupTypeDto model)
+        {
+            string message = "New lookup has been saved.";
 
-        //    var lookUp = _lookupTypeRepository.FindBy(o => o.Id == model.LookupTypeId).FirstOrDefault(); // should always exist
 
-        //    switch (lookUp.Name)
-        //    {
-        //        case LookupTypeConstant.CostCategories:
-        //            message = "New cost category has been saved.";
-        //            break;
-        //        default:
-        //            message = "New look up item has been saved.";
-        //            break;
-        //    }
+            var entity = new LookupType
+            {
+                Name = model.Name,
+            };
 
-        //    return Ok(new BaseRestApiModel
-        //    {
-        //        Payload = new { id = entity.Id, message },
-        //        Errors = new List<BaseError>(),
-        //        StatusCode = (int)HttpStatusCode.OK
-        //    });
-        //}
+            _lookupTypeRepository.Add(entity);
+            _lookupTypeRepository.Commit();
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message },
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [HttpPost("update")]
+        public IActionResult UpdateLookup(LookupTypeDto model)
+        {
+            var entity = _lookupTypeRepository.FindBy(o => o.Id == model.Id).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.Name = model.Name;
+
+                _lookupTypeRepository.Update(entity);
+                _lookupTypeRepository.Commit();
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message = "Lookup has been updated." },
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteLookup(int id)
+        {
+            var entity = _lookupTypeRepository.FindBy(o => o.Id == id).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.IsDeleted = true;
+                _lookupTypeRepository.Update(entity);
+                _lookupTypeRepository.Commit();
+            }
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = new { id = entity.Id, message = "Lookup Item successfully deleted." },
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
     }
 }

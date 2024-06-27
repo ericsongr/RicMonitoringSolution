@@ -24,6 +24,7 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string BookingTypeName { get; set; }
         public DateTime? CreatedDateTimeUtc { get; set; }
         public string CreatedDateTimeUtcString { get; set; }
+        public string CreatedDateTimeUtcString2 { get; set; }
         public DateTime? CheckedInDateTime { get; set; }
         public string CheckedInBy { get; set; }
         public DateTime? CheckedOutDateTime { get; set; }
