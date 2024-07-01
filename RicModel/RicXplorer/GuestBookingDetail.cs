@@ -18,6 +18,7 @@ namespace RicModel.RicXplorer
         public DateTime CreatedDateTimeUtc { get; set; }
         public int BookingType { get; set; }
         
+        
         public DateTime? CheckedInDateTime { get; set; }
         public string CheckedInBy { get; set; }
         public DateTime? CheckedOutDateTime { get; set; }
@@ -26,6 +27,9 @@ namespace RicModel.RicXplorer
         public virtual BookingType BookingTypeModel { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
+
+        public int? RoomOrBedId { get; set; }
+        public virtual LookupTypeItem RoomOrBed { get; set; }
 
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
         public virtual ICollection<GuestBookingDate> GuestBookingDates { get; set; }

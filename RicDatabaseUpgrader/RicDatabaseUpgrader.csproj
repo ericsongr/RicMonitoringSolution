@@ -66,10 +66,12 @@
     <None Remove="Scripts\Update\v1.0004\0010-290-add-note-field.sql" />
     <None Remove="Scripts\Update\v1.0004\0010-290-is-deleted.sql" />
     <None Remove="Scripts\Update\v1.0004\0011-291-check-list-for-check-in-and-check-out-guests.sql" />
+    <None Remove="Scripts\Update\v1.0004\0012-294-option-to-select-room-and-bed-api.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0012-294-option-to-select-room-and-bed-api.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0011-291-check-list-for-check-in-and-check-out-guests.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0010-290-is-deleted.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0010-290-add-note-field.sql" />

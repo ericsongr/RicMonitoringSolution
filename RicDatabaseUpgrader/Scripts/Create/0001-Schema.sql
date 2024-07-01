@@ -299,6 +299,7 @@ CREATE TABLE [dbo].[BookingTypes](
 	[NoOfPersonsMax] [int] NOT NULL,
 	[BookingUrl] [nvarchar](100) NULL,
 	[AccountProductId] [int] NOT NULL,
+	LinkRooms VARCHAR(20),
  CONSTRAINT [PK_BookingTypes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -379,12 +380,18 @@ CREATE TABLE [dbo].[GuestBookingDetails](
 	CheckedInBy nvarchar(256),
 	CheckedOutDateTime DATETIME NULL,
 	CheckedOutBy nvarchar(256),
+	RoomOrBedId INT NULL,
  CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+ALTER TABLE [dbo].[GuestBookingDetails]  WITH CHECK ADD  CONSTRAINT [FK_GuestBookingDetails_LookupTypeItems_RoomOrBedId] FOREIGN KEY([RoomOrBedId])	REFERENCES [dbo].[LookupTypeItems] ([Id])
+GO
+ALTER TABLE [dbo].[GuestBookingDetails] CHECK CONSTRAINT [FK_GuestBookingDetails_LookupTypeItems_RoomOrBedId]
+GO
+
 /****** Object:  Table [dbo].[GuestBookings]    Script Date: 11/22/2023 7:48:27 PM ******/
 SET ANSI_NULLS ON
 GO

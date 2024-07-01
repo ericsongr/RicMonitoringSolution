@@ -14,6 +14,7 @@ namespace RicModel.RicXplorer.Dtos
         public int NoOfPersons { get; set; }
         public int NoOfPersonsMax { get; set; }
         public string BookingUrl { get; set; }
+        public string LinkRooms { get; set; } // comma delimited
 
         public string NoOfPersonsInclusion
         {

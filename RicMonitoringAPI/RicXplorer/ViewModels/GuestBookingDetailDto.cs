@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using RicModel.RoomRent.Dtos;
 
 namespace RicMonitoringAPI.RicXplorer.ViewModels
 {
@@ -21,6 +23,10 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public string ContactPerson { get; set; }
         public string LeaveMessage { get; set; }
         public int BookingType { get; set; }
+        public List<int> BookingOptionIds { get; set; }
+        public List<LookupTypeOnlyDto> RoomOptions { get; set; }
+        public int? RoomId { get; set; }
+        public int? RoomOrBedId { get; set; }
         public string BookingTypeName { get; set; }
         public DateTime? CreatedDateTimeUtc { get; set; }
         public string CreatedDateTimeUtcString { get; set; }

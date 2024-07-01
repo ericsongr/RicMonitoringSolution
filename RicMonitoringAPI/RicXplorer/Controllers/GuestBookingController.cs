@@ -5,10 +5,12 @@ using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RicCommon.Infrastructure.Extensions;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
+using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Helpers;
 using RicMonitoringAPI.RicXplorer.ViewModels;
@@ -20,13 +22,16 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     public class GuestBookingController : ControllerBase
     {
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
+        private readonly ILookupTypeRepository _lookupTypeRepository;
         private readonly IMapper _mapper;
 
         public GuestBookingController(
             IGuestBookingDetailRepository guestBookingDetailRepository,
+            ILookupTypeRepository lookupTypeRepository,
             IMapper mapper)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
+            _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -84,11 +89,24 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         {
 
             var data = _guestBookingDetailRepository.FindBookingById(id);
-            var guests = _mapper.Map<GuestBookingDetailDto>(data);
+            var guest = _mapper.Map<GuestBookingDetailDto>(data);
+
+            guest.RoomOptions =_lookupTypeRepository
+                .FindBy(o => guest.BookingOptionIds.Contains(o.Id))
+                .Select(o => new LookupTypeOnlyDto
+                {
+                    Value  = o.Id.ToString(),
+                    Text = o.Name
+                }).ToList();
+
+            if (data.BookingType == 3) //if booking type selected is family then family room id should be default id
+            {
+                guest.RoomId = int.Parse(guest.RoomOptions[0].Value);
+            }
 
             return Ok(new BaseRestApiModel
             {
-                Payload = guests,
+                Payload = guest,
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });
@@ -202,5 +220,36 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             }
         }
 
+        [HttpPost("save-room-or-bed", Name = "SaveRoomOrBed")]
+        public IActionResult SaveRoomOrBed(GuestRoomOrBedDto model)
+        {
+            try
+            {
+                var guestBooking = _guestBookingDetailRepository.FindBookingById(model.GuestBookingDetailId);
+                if (guestBooking != null)
+                {
+                    guestBooking.RoomOrBedId = model.RoomOrBedId == 0 ? null : model.RoomOrBedId;
+                }
+                _guestBookingDetailRepository.Update(guestBooking);
+                _guestBookingDetailRepository.Commit();
+
+                string prefix = guestBooking.BookingType == 3 ? "room" : "bed";
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = new
+                    {
+                        message = "Assigned " + prefix + " has been saved."
+                    },
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+            }
+        }
     }
 }

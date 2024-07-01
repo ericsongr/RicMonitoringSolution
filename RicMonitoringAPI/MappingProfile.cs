@@ -113,7 +113,9 @@ namespace RicMonitoringAPI
 
             CreateMap<GuestBookingDetail, GuestBookingDetailDto>()
                 .ForMember(dest => dest.BookingTypeName,
-                    opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name))
+                    opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name)) 
+                .ForMember(dest => dest.BookingOptionIds,
+                    opt => opt.MapFrom(src => src.BookingTypeModel.GetBookingOptionIds()))
                 .ForMember(dest => dest.ArrivalDateString,
                     opt => opt.MapFrom(src => src.ArrivalDate.ToString("dddd, MMMM dd yyyy")))
                 .ForMember(dest => dest.DepartureDateString,
@@ -121,7 +123,9 @@ namespace RicMonitoringAPI
                 .ForMember(dest => dest.CreatedDateTimeUtcString,
                     opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("f")))
                 .ForMember(dest => dest.CreatedDateTimeUtcString2,
-                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("MMM dd, yyyy @ hh:mm tt")));
+                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("MMM dd, yyyy @ hh:mm tt")))
+                .ForMember(dest => dest.RoomId,
+                    opt => opt.MapFrom(src => src.RoomOrBed == null ? 0 : src.RoomOrBed.LookupTypes.Id));
 
             //cost monitoring
             CreateMap<CostItem, CostItemDto>();
