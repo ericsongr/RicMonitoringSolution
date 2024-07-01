@@ -62,6 +62,13 @@ namespace RicEntityFramework.RicXplorer.EntityTypeConfigurations
                 .HasConstraintName("FK_GuestBookingDetail_BookingType_Id")
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder
+                .HasOne(t => t.RoomOrBed)
+                .WithMany(p => p.GuestBookingDetails)
+                .HasForeignKey(f => f.RoomOrBedId)
+                .HasConstraintName("FK_GuestBookingDetails_LookupTypeItems_RoomOrBedId")
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.ToTable("GuestBookingDetails");
         }
     }

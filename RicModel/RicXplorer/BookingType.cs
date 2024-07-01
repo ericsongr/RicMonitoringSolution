@@ -16,6 +16,7 @@ namespace RicModel.RicXplorer
         public string BookingUrl { get; set; }
         public DateTime UtcDateTimeCreated { get; set; }
         public DateTime? UtcDateTimeUpdated { get; set; }
+        public string LinkRooms { get; set; } // comma delimited
 
 
         public virtual AccountProduct AccountProduct { get; set; }

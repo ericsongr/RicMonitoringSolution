@@ -26,6 +26,7 @@ namespace RicEntityFramework.RicXplorer.Repositories
             var guest = Context.GuestBookingDetails
                 .Include(o => o.BookingTypeModel.AccountProduct)
                 .Include(o => o.GuestBookings)
+                .Include(o => o.RoomOrBed.LookupTypes)
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Id == id);
             return guest;
