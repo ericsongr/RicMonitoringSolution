@@ -1,8 +1,12 @@
-﻿namespace RicMonitoringAPI.RicXplorer.ViewModels
+﻿using System.Collections.Generic;
+
+namespace RicMonitoringAPI.RicXplorer.ViewModels
 {
     public class GuestCheckInCheckOut
     {
         public int Id { get; set; }
         public string Username { get; set; }
+        public int RoomOrBedId { get; set; }
+        public List<GuestCheckListDetailDto> GuestCheckList { get; set; }
     }
 }

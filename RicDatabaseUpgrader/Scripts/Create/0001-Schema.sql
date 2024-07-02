@@ -381,6 +381,10 @@ CREATE TABLE [dbo].[GuestBookingDetails](
 	CheckedOutDateTime DATETIME NULL,
 	CheckedOutBy nvarchar(256),
 	RoomOrBedId INT NULL,
+	CheckedListCheckInDateTime DATETIME NULL,
+	CheckedListCheckInBy varchar(100),
+	CheckedListCheckOutDateTime DATETIME NULL,
+	CheckedListCheckOutBy varchar(100),
  CONSTRAINT [PK_GuestBookingDetails] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -1511,4 +1515,31 @@ ALTER TABLE [dbo].[CheckListForCheckInOutGuests]  WITH CHECK ADD  CONSTRAINT [FK
 REFERENCES [dbo].[LookupTypeItems] ([Id])
 GO
 ALTER TABLE [dbo].[CheckListForCheckInOutGuests] CHECK CONSTRAINT [FK_LookupTypeItem_CheckListForCheckInOutGuest_LookupTypeItemId]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[GuestCheckLists](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[GuestBookingDetailId] [int] NOT NULL,
+	[CheckListId] [int] NOT NULL,
+	[IsChecked] [bit] NOT NULL,
+	[Notes] [varchar](1000) NULL,
+ CONSTRAINT [PK_GuestCheckLists] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[GuestCheckLists]  WITH CHECK ADD  CONSTRAINT [FK_GuestCheckLists_LookupTypeItems_GuestBookingDetailId] FOREIGN KEY([GuestBookingDetailId]) REFERENCES [dbo].[GuestBookingDetails] ([Id])
+GO
+ALTER TABLE [dbo].[GuestCheckLists] CHECK CONSTRAINT [FK_GuestCheckLists_LookupTypeItems_GuestBookingDetailId]
+GO
+
+ALTER TABLE [dbo].[GuestCheckLists]  WITH CHECK ADD  CONSTRAINT [FK_GuestCheckLists_LookupTypeItems_CheckListId] FOREIGN KEY([CheckListId])	REFERENCES [dbo].[LookupTypeItems] ([Id])
+GO
+ALTER TABLE [dbo].[GuestCheckLists] CHECK CONSTRAINT [FK_GuestCheckLists_LookupTypeItems_CheckListId]
 GO

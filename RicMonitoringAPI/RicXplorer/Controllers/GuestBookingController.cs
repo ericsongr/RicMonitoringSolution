@@ -10,6 +10,7 @@ using RicCommon.Infrastructure.Extensions;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
+using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Helpers;
@@ -22,15 +23,18 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     public class GuestBookingController : ControllerBase
     {
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
+        private readonly IGuestCheckListRepository _guestCheckListRepository;
         private readonly ILookupTypeRepository _lookupTypeRepository;
         private readonly IMapper _mapper;
 
         public GuestBookingController(
             IGuestBookingDetailRepository guestBookingDetailRepository,
+            IGuestCheckListRepository guestCheckListRepository,
             ILookupTypeRepository lookupTypeRepository,
             IMapper mapper)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
+            _guestCheckListRepository = guestCheckListRepository ?? throw new ArgumentNullException(nameof(guestCheckListRepository));
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -88,7 +92,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         public IActionResult GuestsBookingDetail(int id)
         {
 
-            var data = _guestBookingDetailRepository.FindBookingById(id);
+            var data = _guestBookingDetailRepository.FindBookingByIdv2(id);
             var guest = _mapper.Map<GuestBookingDetailDto>(data);
 
             guest.RoomOptions =_lookupTypeRepository
@@ -162,12 +166,40 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 var guestBooking = _guestBookingDetailRepository.FindBookingById(model.Id);
                 if (guestBooking != null)
                 {
+                    guestBooking.RoomOrBedId = model.RoomOrBedId;
                     guestBooking.CheckedInDateTime = DateTime.Now;
                     guestBooking.CheckedInBy = model.Username;
                 }
 
                 _guestBookingDetailRepository.Update(guestBooking);
                 _guestBookingDetailRepository.Commit();
+
+                //save check list
+                model.GuestCheckList.ForEach(item =>
+                {
+                    var itemModel = _guestCheckListRepository.GetSingleAsync(o =>
+                            o.GuestBookingDetailId == model.Id && o.CheckListId == item.CheckListId)
+                        .GetAwaiter().GetResult();
+                    if (itemModel == null)
+                    {
+                        _guestCheckListRepository.Add(new GuestCheckList
+                        {
+                            GuestBookingDetailId = model.Id,
+                            CheckListId = item.CheckListId,
+                            IsChecked = item.IsChecked,
+                            Notes = item.Notes
+                        });
+                    }
+                    else
+                    {
+                        itemModel.IsChecked = item.IsChecked;
+                        itemModel.Notes = item.Notes;
+                        _guestCheckListRepository.Update(itemModel);
+                    }
+
+                });
+
+                _guestCheckListRepository.Commit();
 
                 return Ok(new BaseRestApiModel
                 {
@@ -201,6 +233,33 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
                 _guestBookingDetailRepository.Update(guestBooking);
                 _guestBookingDetailRepository.Commit();
+
+                //save check list
+                model.GuestCheckList.ForEach(item =>
+                {
+                    var itemModel = _guestCheckListRepository.GetSingleAsync(o =>
+                            o.GuestBookingDetailId == model.Id && o.CheckListId == item.CheckListId)
+                        .GetAwaiter().GetResult();
+                    if (itemModel == null)
+                    {
+                        _guestCheckListRepository.Add(new GuestCheckList
+                        {
+                            GuestBookingDetailId = model.Id,
+                            CheckListId = item.CheckListId,
+                            IsChecked = item.IsChecked,
+                            Notes = item.Notes
+                        });
+                    }
+                    else
+                    {
+                        itemModel.IsChecked = item.IsChecked;
+                        itemModel.Notes = item.Notes;
+                        _guestCheckListRepository.Update(itemModel);
+                    }
+
+                });
+
+                _guestCheckListRepository.Commit();
 
                 return Ok(new BaseRestApiModel
                 {

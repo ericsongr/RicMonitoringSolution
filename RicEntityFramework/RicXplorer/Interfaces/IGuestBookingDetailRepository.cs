@@ -8,6 +8,8 @@ namespace RicEntityFramework.RicXplorer.Interfaces
     public interface IGuestBookingDetailRepository : IEntityBaseRepository<GuestBookingDetail>
     {
         GuestBookingDetail FindBookingById(int id);
+        GuestBookingDetail FindBookingByIdv2(int id);
+        GuestBookingDetail FindCheckListById(int id);
         IQueryable<GuestBookingDate> Find(DateTime startDate, DateTime endDate, int bookingType);
         IQueryable<GuestBookingDetail> FindBookings(DateTime startDate, DateTime endDate, int bookingType);
     }

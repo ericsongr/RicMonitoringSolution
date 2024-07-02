@@ -23,5 +23,6 @@ namespace RicModel.RoomRent
         public virtual ICollection<ToolInventory> ToolInventoryActions { get; set; }
         public virtual ICollection<CheckListForCheckInOutGuest> CheckListForCheckInOutGuests { get; set; }
         public virtual ICollection<GuestBookingDetail> GuestBookingDetails { get; set; }
+        public virtual ICollection<GuestCheckList> GuestCheckLists { get; set; }
     }
 }

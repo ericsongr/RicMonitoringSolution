@@ -26,7 +26,9 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         public List<int> BookingOptionIds { get; set; }
         public List<LookupTypeOnlyDto> RoomOptions { get; set; }
         public int? RoomId { get; set; }
+        public string RoomName { get; set; }
         public int? RoomOrBedId { get; set; }
+        public string RoomOrBedName { get; set; }
         public string BookingTypeName { get; set; }
         public DateTime? CreatedDateTimeUtc { get; set; }
         public string CreatedDateTimeUtcString { get; set; }
@@ -45,11 +47,11 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
         
         public string CheckedInDateTimeString
         {
-            get { return CheckedInDateTime?.ToString("dd-MMM-yyyy hh:mm tt"); }
+            get { return CheckedInDateTime.HasValue ? CheckedInDateTime?.ToString("dd-MMM-yyyy hh:mm tt") : ""; }
         }
         public string CheckedOutDateTimeString
         {
-            get { return CheckedOutDateTime?.ToString("dd-MMM-yyyy hh:mm tt"); }
+            get { return CheckedOutDateTime.HasValue ? CheckedOutDateTime?.ToString("dd-MMM-yyyy hh:mm tt") : ""; }
         }
 
     }
