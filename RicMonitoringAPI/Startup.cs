@@ -54,6 +54,7 @@ using RicMonitoringAPI.Services.Interfaces;
 using IdentityServer4.AccessTokenValidation;
 using RicEntityFramework.Inc.Interfaces;
 using RicEntityFramework.Inc.Repositories;
+using RicMonitoringAPI.MappingProfiles;
 
 namespace RicMonitoringAPI
 {
@@ -74,7 +75,11 @@ namespace RicMonitoringAPI
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
 
             // Add AutoMapper configuration
-            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddAutoMapper(typeof(RentProfile));
+            services.AddAutoMapper(typeof(RicXplorerProfile));
+            services.AddAutoMapper(typeof(CostMonitoringProfile));
+            services.AddAutoMapper(typeof(ToolInventoryProfile));
+            services.AddAutoMapper(typeof(BuklodProfile));
             
             //rent
             services.AddScoped<IAccountRepository, AccountRepository>();

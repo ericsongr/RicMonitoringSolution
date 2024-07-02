@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
+using RicEntityFramework.RicXplorer.Repositories;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Constants;
@@ -23,6 +24,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
     {
         private readonly ILookupTypeRepository _lookupTypeRepository;
         private readonly ILookupTypeItemRepository _lookupTypeItemRepository;
+        private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IMapper _mapper;
 
@@ -30,11 +32,13 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         public LookupTypeItemsController(
             ILookupTypeRepository lookupTypeRepository,
             ILookupTypeItemRepository lookupTypeItemRepository,
+            IGuestBookingDetailRepository guestBookingDetailRepository,
             ITypeHelperService typeHelperService,
             IMapper mapper)
         {
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
             _lookupTypeItemRepository = lookupTypeItemRepository ?? throw new ArgumentNullException(nameof(lookupTypeItemRepository));
+            _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -86,7 +90,15 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
-            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(lookupTypeItemRepo.LookupTypeItems.Where(o => !o.IsDeleted).OrderBy(o => o.Description));
+            var roomOrBedIds = new List<int>();
+            var occupiedRoomOrBed = _guestBookingDetailRepository.FindBy(o => o.RoomOrBedId != null && o.CheckedOutDateTime == null); //get occupied room not to make available on the dropdown
+            if (occupiedRoomOrBed != null)
+            {
+                roomOrBedIds = occupiedRoomOrBed.Select(o => o.RoomOrBedId ?? 0).ToList();
+            }
+
+            var data = lookupTypeItemRepo.LookupTypeItems.Where(o => !o.IsDeleted && !roomOrBedIds.Contains(o.Id)).OrderBy(o => o.Description);
+            var lookupTypeItems = _mapper.Map<IEnumerable<LookupTypeItemDto>>(data);
 
             return Ok(new BaseRestApiModel
             {

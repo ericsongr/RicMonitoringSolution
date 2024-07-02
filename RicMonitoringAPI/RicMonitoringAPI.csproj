@@ -81,6 +81,7 @@
 	<ItemGroup>
 		<Folder Include="Common\Entities\" />
 		<Folder Include="Resources\Images\InventoryToolsImage\" />
+		<Folder Include="Resources\Images\GuestRoom\" />
 		<Folder Include="Resources\Images\Rooms\" />
 		<Folder Include="Services\Templates\" />
 	</ItemGroup>
