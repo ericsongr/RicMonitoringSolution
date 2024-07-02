@@ -78,7 +78,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             DateTime.TryParse(endDate, out DateTime departureDate);
 
             var dataGuests = _guestBookingDetailRepository.FindBookings(arrivalDate, departureDate, bookingType);
-            var guests = _mapper.Map<IEnumerable<GuestBookingDetailDto>>(dataGuests).ToList();
+            var guests = _mapper.Map<IEnumerable<GuestBookingListDto>>(dataGuests).ToList();
 
             return Ok(new BaseRestApiModel
             {

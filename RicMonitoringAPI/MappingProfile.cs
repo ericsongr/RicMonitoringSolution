@@ -111,6 +111,16 @@ namespace RicMonitoringAPI
             CreateMap<GuestBookingDto, GuestBooking>();
             CreateMap<GuestBooking, GuestBookingDto>();
 
+            CreateMap<GuestBookingDetail, GuestBookingListDto>()
+                .ForMember(dest => dest.BookingTypeName,
+                    opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name))
+                .ForMember(dest => dest.ArrivalDateString,
+                    opt => opt.MapFrom(src => src.ArrivalDate.ToString("dddd, MMMM dd yyyy")))
+                .ForMember(dest => dest.DepartureDateString,
+                    opt => opt.MapFrom(src => src.DepartureDate.ToString("dddd, MMMM dd yyyy")))
+                .ForMember(dest => dest.CreatedDateTimeUtcString,
+                    opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("MMM dd, yyyy @ hh:mm tt")));
+
             CreateMap<GuestBookingDetail, GuestBookingDetailDto>()
                 .ForMember(dest => dest.BookingTypeName,
                     opt => opt.MapFrom(src => src.BookingTypeModel.AccountProduct.Name)) 
