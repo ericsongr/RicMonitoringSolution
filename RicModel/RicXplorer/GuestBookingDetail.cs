@@ -24,6 +24,11 @@ namespace RicModel.RicXplorer
         public DateTime? CheckedOutDateTime { get; set; }
         public string CheckedOutBy { get; set; }
 
+        public DateTime? CheckedListCheckInDateTime { get; set; }
+        public string CheckedListCheckInBy { get; set; }
+        public DateTime? CheckedListCheckOutDateTime { get; set; }
+        public string CheckedListCheckOutBy { get; set; }
+
         public virtual BookingType BookingTypeModel { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
@@ -33,5 +38,6 @@ namespace RicModel.RicXplorer
 
         public virtual ICollection<GuestBooking> GuestBookings { get; set; }
         public virtual ICollection<GuestBookingDate> GuestBookingDates { get; set; }
+        public virtual ICollection<GuestCheckList> GuestCheckLists { get; set; }
     }
 }

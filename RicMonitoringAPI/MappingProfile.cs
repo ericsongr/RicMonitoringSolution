@@ -125,7 +125,17 @@ namespace RicMonitoringAPI
                 .ForMember(dest => dest.CreatedDateTimeUtcString2,
                     opt => opt.MapFrom(src => src.CreatedDateTimeUtc.ToString("MMM dd, yyyy @ hh:mm tt")))
                 .ForMember(dest => dest.RoomId,
-                    opt => opt.MapFrom(src => src.RoomOrBed == null ? 0 : src.RoomOrBed.LookupTypes.Id));
+                    opt => opt.MapFrom(src => src.RoomOrBed == null ? 0 : src.RoomOrBed.LookupTypes.Id))
+                .ForMember(dest => dest.RoomName,
+                    opt => opt.MapFrom(src => src.RoomOrBed == null ? "" : src.RoomOrBed.LookupTypes.Name))
+                .ForMember(dest => dest.RoomOrBedName,
+                    opt => opt.MapFrom(src => src.RoomOrBed == null ? "" : $"{src.RoomOrBed.Notes} [{src.RoomOrBed.Description}]"));
+
+            CreateMap<CheckListForCheckInOutGuest, GuestCheckListDetailDto>()
+                .ForMember(dest => dest.CheckListId,
+                    opt => opt.MapFrom(src => src.LookupTypeItemId))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.LookupTypeItem.Description));
 
             //cost monitoring
             CreateMap<CostItem, CostItemDto>();
