@@ -9,6 +9,7 @@ using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicEntityFramework.Services;
+using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 
@@ -66,7 +67,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                     if (occupied != null)
                         myItem.GuestId = occupied.Id;
                     
-                    myItem.DefaultImage = _imageService.GetImageInBase64($"default-room.png", "GuestRoom");
+                    //myItem.DefaultImage = _imageService.GetImageInBase64($"default-room.png", "GuestRoom");
                 });
             });
 
@@ -79,31 +80,24 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         }
 
-        //[HttpGet(Name = "GuestRoomImages")]
-        //[Route("images/{id}")]
-        //public async Task<IActionResult> GuestRoomImages(int id)
-        //{
-        //    //var base64S = new List<string>();
-        //    //var tool = _toolInventoryRepository.GetSingleAsync(o => o.Id == id).GetAwaiter().GetResult();
-        //    //if (tool != null)
-        //    //{
-        //    //    var filenames = tool.Images.Split(',');
-        //    //    foreach (var filename in filenames)
-        //    //    {
-        //    //        base64S.Add(_imageService.GetImageInBase64($"{filename}", "InventoryToolsImage"));
-        //    //    }
-        //    //}
+        [HttpGet("image/{id}", Name = "GuestRoomImage")]
+        public async Task<IActionResult> GuestRoomImage(int id)
+        {
 
-        //    var base64S = _imageService.GetImageInBase64($"default-room", "InventoryToolsImage");
+            string imageBase64 = string.Empty;
+            await Task.Run(() =>
+            {
+                imageBase64 = _imageService.GetImageInBase64($"default-room.png", "GuestRoom");
+            });
 
-        //    return Ok(new BaseRestApiModel
-        //    {
-        //        Payload = base64S,
-        //        Errors = new List<BaseError>(),
-        //        StatusCode = (int)HttpStatusCode.OK
-        //    });
+            return Ok(new BaseRestApiModel
+            {
+                Payload = imageBase64,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
 
-        //}
+        }
 
     }
 }

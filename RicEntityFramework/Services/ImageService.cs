@@ -51,6 +51,27 @@ namespace RicEntityFramework.Services
             }
         }
 
+        public byte[] GetImageInByte(string filename, string path3 = "Profile")
+        {
+            var folderName = Path.Combine("Resources", "Images", path3);
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fullPath = Path.Combine(pathToSave, filename);
+
+            if (!File.Exists(fullPath))
+                fullPath = Path.Combine(pathToSave, "default-user-image.png");
+
+            using (Image image = Image.FromFile(fullPath))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    image.Save(m, image.RawFormat);
+                    byte[] imageBytes = m.ToArray();
+
+                    return imageBytes;
+                }
+            }
+        }
+
         public void Upload(int renterId, string base64)
         {
             try
