@@ -34,13 +34,21 @@ namespace RicMonitoringAPI.MappingProfiles
 
             CreateMap<BookingTypeImage, BookingTypeImageDto>();
 
-            CreateMap<GuestBookingDetailDto, GuestBookingDetail>()
+            //CreateMap<GuestBookingDetailDto, GuestBookingDetail>()
+            //    .ForMember(dest => dest.CreatedDateTimeUtc,
+            //        opt => opt.MapFrom(src => DateTime.UtcNow))
+            //    .ForMember(dest => dest.GuestBookings,
+            //                opt => opt.MapFrom(src => src.GuestBookings));
+
+            CreateMap<CreateGuestBookingDto, GuestBookingDetail>()
                 .ForMember(dest => dest.CreatedDateTimeUtc,
                     opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(dest => dest.GuestBookings,
-                            opt => opt.MapFrom(src => src.GuestBookings));
+                    opt => opt.MapFrom(src => src.GuestBookings));
+
 
             CreateMap<GuestBookingDto, GuestBooking>();
+            CreateMap<GuestBooking, GuestBookingDto>();
             CreateMap<GuestBooking, GuestBookingDto>();
 
             CreateMap<GuestBookingDetail, GuestBookingListDto>()

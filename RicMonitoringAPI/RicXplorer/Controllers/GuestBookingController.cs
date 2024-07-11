@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using AutoMapper;
+using Bogus;
+using Bogus.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using RicCommon.Infrastructure.Extensions;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
+using RicMonitoringAPI.Common.Enumeration;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Helpers;
 using RicMonitoringAPI.RicXplorer.ViewModels;
@@ -118,8 +119,9 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         [AllowAnonymous]
         [HttpPost("book", Name = "book")]
-        public IActionResult Book(GuestBookingDetailDto model)
+        public IActionResult Book(CreateGuestBookingDto model)
         {
+            bool isManyGuests = false;
             try
             {
                 if (!ModelState.IsValid)
@@ -143,9 +145,11 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
 
+                    isManyGuests = guestBookingDetail.GuestBookings.Count > 1;
+
                     return Ok(new BaseRestApiModel
                     {
-                        Payload = "Booking has been successful",
+                        Payload = $"{(isManyGuests ? "Guests" : "Guest")} has been booked.",
                         Errors = new List<BaseError>(),
                         StatusCode = (int)HttpStatusCode.OK
                     });
@@ -157,7 +161,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
             }
         }
-
+        
         [HttpPost("check-in", Name = "CheckIn")]
         public IActionResult CheckIn(GuestCheckInCheckOut model)
         {
@@ -310,5 +314,198 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
             }
         }
+
+        #region API Test Data
+
+        [AllowAnonymous]
+        [HttpPost("book-single-test", Name = "BookSingleTest")]
+        public IActionResult BookSingleTest()
+        {
+            try
+            {
+                var faker = new Faker();
+                var arrivalDate = new DateTime(2024, 7, 11);
+                var departureDate = new DateTime(2024, 7, 13);
+                var guestBookings = new List<GuestBookingDto>
+                {
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Male),
+                        LastName = faker.Name.LastName(Name.Gender.Male),
+                        Gender = "Male",
+                        Ages = 1
+                    }
+                };
+
+                var guestBooking = new CreateGuestBookingDto
+                {
+                    ArrivalDate = arrivalDate,
+                    DepartureDate = departureDate,
+                    BookingType = (int)BookingTypeEnum.Backpacker,
+                    Contact = "+069999999999",
+                    ContactPerson = $"{guestBookings[0].FirstName} {guestBookings[0].LastName}",
+                    Country = "Philippines",
+                    LanguagesSpoken = "English",
+                    Email = "english@yahoo.com",
+                    LeaveMessage = "Test leave message",
+                    SelectedPayment = "GCASH",
+                    GuestBookings = guestBookings
+                };
+
+                Book(guestBooking);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "Booking backpacker test data has been successful",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("book-couple-test", Name = "BookCoupleTest")]
+        public IActionResult BookCoupleTest()
+        {
+            try
+            {
+                var faker = new Faker();
+                var arrivalDate = new DateTime(2024, 7, 11);
+                var departureDate = new DateTime(2024, 7, 13);
+                var guestBookings = new List<GuestBookingDto>
+                {
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Male),
+                        LastName = faker.Name.LastName(Name.Gender.Male),
+                        Gender = "Male",
+                        Ages = 1
+                    },
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Female),
+                        LastName = faker.Name.LastName(Name.Gender.Female),
+                        Gender = "Male",
+                        Ages = 1
+                    }
+                };
+
+                var guestBooking = new CreateGuestBookingDto
+                {
+                    ArrivalDate = arrivalDate,
+                    DepartureDate = departureDate,
+                    BookingType = (int)BookingTypeEnum.CoupleBackpackers,
+                    Contact = "+069999999999",
+                    ContactPerson = $"{guestBookings[0].FirstName} {guestBookings[0].LastName}",
+                    Country = "Philippines",
+                    LanguagesSpoken = "English",
+                    Email = "english@yahoo.com",
+                    LeaveMessage = "Test leave message",
+                    SelectedPayment = "GCASH",
+                    GuestBookings = guestBookings
+                };
+
+                Book(guestBooking);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "Booking couple test data has been successful",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException.Message, HttpStatusCode.InternalServerError));
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("book-family-test", Name = "BookFamilyTest")]
+        public IActionResult BookFamilyTest()
+        {
+            try
+            {
+                var faker = new Faker();
+                var arrivalDate = new DateTime(2024, 7, 11);
+                var departureDate = new DateTime(2024, 7, 13);
+                var guestBookings = new List<GuestBookingDto>
+                {
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Male),
+                        LastName = faker.Name.LastName(Name.Gender.Male),
+                        Gender = "Male",
+                        Ages = 1
+                    },
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Male),
+                        LastName = faker.Name.LastName(Name.Gender.Male),
+                        Gender = "Male",
+                        Ages = 14
+                    },
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Female),
+                        LastName = faker.Name.LastName(Name.Gender.Female),
+                        Gender = "Female",
+                        Ages = 56
+                    },
+                    new GuestBookingDto
+                    {
+                        Birthday = new DateTime(1980, 9, 19),
+                        FirstName = faker.Name.FirstName(Name.Gender.Female),
+                        LastName = faker.Name.LastName(Name.Gender.Female),
+                        Gender = "Female",
+                        Ages = 17
+                    }
+                };
+
+                var guestBooking = new CreateGuestBookingDto
+                {
+                    ArrivalDate = arrivalDate,
+                    DepartureDate = departureDate,
+                    BookingType = (int)BookingTypeEnum.FamilyRoom,
+                    Contact = "+069999999999",
+                    ContactPerson = $"{guestBookings[0].FirstName} {guestBookings[0].LastName}",
+                    Country = "Philippines",
+                    LanguagesSpoken = "English",
+                    Email = "english@yahoo.com",
+                    LeaveMessage = "Test leave message",
+                    SelectedPayment = "GCASH",
+                    GuestBookings = guestBookings
+                };
+
+                Book(guestBooking);
+
+                return Ok(new BaseRestApiModel
+                {
+                    Payload = "Booking family test data has been successful",
+                    Errors = new List<BaseError>(),
+                    StatusCode = (int)HttpStatusCode.OK
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(HandleApi.Exception(ex.InnerException?.Message, HttpStatusCode.InternalServerError));
+            }
+        }
+
+        #endregion
+
     }
 }

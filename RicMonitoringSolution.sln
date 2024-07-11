@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicAmazonS3", "RicAmazonS3\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicCommunication", "RicCommunication\RicCommunication.csproj", "{1368F245-6EA6-446D-AA2E-154A232712EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicUnitTest", "RicUnitTest\RicUnitTest.csproj", "{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,17 @@ Global
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Release|ApiBuild.Build.0 = Release|Any CPU
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Debug|ApiBuild.Build.0 = Debug|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Debug|WebOnlyBuild.ActiveCfg = Debug|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|ApiBuild.ActiveCfg = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|ApiBuild.Build.0 = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
+		{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
