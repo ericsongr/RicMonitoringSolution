@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int InclusionId { get; set; }
         public string InclusionName { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

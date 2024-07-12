@@ -92,6 +92,27 @@ namespace RicMonitoringAPI.MappingProfiles
                     opt => opt.MapFrom(src => src.LookupTypeItems));
 
             CreateMap<LookupTypeItem, GuestRoomsOrBedsAvailabilityDto>();
+
+            CreateMap<BookingType, BookingTypeDropdownDto>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.AccountProduct.Name));
+
+            CreateMap<BookingType, GuestBookingTypeDto>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.AccountProduct.Name))
+                .ForMember(dest => dest.Price,
+                    opt => opt.MapFrom(src => src.AccountProduct.Price.ToString("#,#00")))
+                .ForMember(dest => dest.OnlinePrice,
+                    opt => opt.MapFrom(src => src.AccountProduct.OnlinePrice.ToString("#,#00")))
+
+                .ForMember(dest => dest.AmenitiesIncluded,
+                    opt => opt.MapFrom(src => src.BookingTypeInclusions));
+
+            CreateMap<BookingTypeInclusion, AmenityIncludedDto>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.LookupTypeItem.Description))
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.InclusionId));
         }
     }
 }
