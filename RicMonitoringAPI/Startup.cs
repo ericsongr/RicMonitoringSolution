@@ -112,6 +112,7 @@ namespace RicMonitoringAPI
             services.AddScoped<ICheckListForCheckInOutGuestRepository, CheckListForCheckInOutGuestRepository>();
             services.AddScoped<IGuestCheckListRepository, GuestCheckListRepository>();
             services.AddScoped<IBookingTypeInclusionRepository, BookingTypeInclusionRepository>();
+            services.AddScoped<IAccountProductRepository, AccountProductRepository>();
 
             //cost monitoring
             services.AddScoped<ICostItemRepository, CostItemRepository>();
