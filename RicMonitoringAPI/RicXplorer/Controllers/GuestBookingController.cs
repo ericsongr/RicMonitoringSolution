@@ -7,7 +7,9 @@ using Bogus;
 using Bogus.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RicCommon.Enumeration;
 using RicEntityFramework.RicXplorer.Interfaces;
+using RicEntityFramework.RoomRent.Interfaces;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
 using RicModel.RoomRent;
@@ -26,17 +28,23 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
         private readonly IGuestCheckListRepository _guestCheckListRepository;
         private readonly ILookupTypeRepository _lookupTypeRepository;
+        private readonly IAccountProductRepository _accountProductRepository;
+        private readonly ISettingRepository _settingRepository;
         private readonly IMapper _mapper;
 
         public GuestBookingController(
             IGuestBookingDetailRepository guestBookingDetailRepository,
             IGuestCheckListRepository guestCheckListRepository,
             ILookupTypeRepository lookupTypeRepository,
+            IAccountProductRepository accountProductRepository,
+            ISettingRepository settingRepository,
             IMapper mapper)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
             _guestCheckListRepository = guestCheckListRepository ?? throw new ArgumentNullException(nameof(guestCheckListRepository));
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
+            _accountProductRepository = accountProductRepository ?? throw new ArgumentNullException(nameof(accountProductRepository));
+            _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -112,6 +120,39 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             return Ok(new BaseRestApiModel
             {
                 Payload = guest,
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("cost/{bookingId:int}")]
+        public IActionResult BookingCost(int bookingId)
+        {
+            
+            var productItem = _accountProductRepository.FindBy(o => o.Id == bookingId).FirstOrDefault();
+            var settingVat = _settingRepository.Get(SettingNameEnum.VatPH);
+            if (productItem == null || settingVat == null)
+            {
+                return NotFound();
+            }
+
+            var costLabel = productItem.Id == 3 ? productItem.Name : $"{productItem.Name} bed";
+            var vat = decimal.Parse(settingVat.Value.Replace("%", "")) / 100;
+            var vatCost = productItem.OnlinePrice * vat;
+
+            var bookingCost = productItem.OnlinePrice - vatCost;
+            var model = new 
+            {
+                costLabel,
+                totalCost = productItem.OnlinePrice.ToString("#,###.00"),
+                vatCost = vatCost.ToString("#,###.00"),
+                bookingCost = bookingCost.ToString("#,###.00")
+            };
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = model,
                 Errors = new List<BaseError>(),
                 StatusCode = (int)HttpStatusCode.OK
             });

@@ -68,10 +68,12 @@
     <None Remove="Scripts\Update\v1.0004\0011-291-check-list-for-check-in-and-check-out-guests.sql" />
     <None Remove="Scripts\Update\v1.0004\0012-294-option-to-select-room-and-bed-api.sql" />
     <None Remove="Scripts\Update\v1.0004\0013-296-save-check-list-when-guest-check-in-and-check-out-api.sql" />
+    <None Remove="Scripts\Update\v1.0004\0014-309-payment-to-show-the-vat-and-option-payment-api.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Update\v1.0004\0001-218-cost-category-api.sql" />
+    <EmbeddedResource Include="Scripts\Update\v1.0004\0014-309-payment-to-show-the-vat-and-option-payment-api.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0013-296-save-check-list-when-guest-check-in-and-check-out-api.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0012-294-option-to-select-room-and-bed-api.sql" />
     <EmbeddedResource Include="Scripts\Update\v1.0004\0011-291-check-list-for-check-in-and-check-out-guests.sql" />
