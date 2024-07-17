@@ -6,7 +6,6 @@ namespace RicMonitoringAPI.RicXplorer.ViewModels
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public int RoomOrBedId { get; set; }
         public List<GuestCheckListDetailDto> GuestCheckList { get; set; }
     }
 }

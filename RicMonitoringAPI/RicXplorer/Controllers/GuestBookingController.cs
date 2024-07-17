@@ -28,23 +28,29 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
         private readonly IGuestCheckListRepository _guestCheckListRepository;
         private readonly ILookupTypeRepository _lookupTypeRepository;
+        private readonly ILookupTypeItemRepository _lookupTypeItemRepository;
         private readonly IAccountProductRepository _accountProductRepository;
         private readonly ISettingRepository _settingRepository;
+        private readonly IBookingTypeRepository _bookingTypeRepository;
         private readonly IMapper _mapper;
 
         public GuestBookingController(
             IGuestBookingDetailRepository guestBookingDetailRepository,
             IGuestCheckListRepository guestCheckListRepository,
             ILookupTypeRepository lookupTypeRepository,
+            ILookupTypeItemRepository lookupTypeItemRepository,
             IAccountProductRepository accountProductRepository,
             ISettingRepository settingRepository,
+            IBookingTypeRepository bookingTypeRepository,
             IMapper mapper)
         {
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
             _guestCheckListRepository = guestCheckListRepository ?? throw new ArgumentNullException(nameof(guestCheckListRepository));
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
+            _lookupTypeItemRepository = lookupTypeItemRepository ?? throw new ArgumentNullException(nameof(lookupTypeItemRepository));
             _accountProductRepository = accountProductRepository ?? throw new ArgumentNullException(nameof(accountProductRepository));
             _settingRepository = settingRepository ?? throw new ArgumentNullException(nameof(settingRepository));
+            _bookingTypeRepository = bookingTypeRepository ?? throw new ArgumentNullException(nameof(bookingTypeRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -178,9 +184,42 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 }
                 else
                 {
+                    //automatic assign backpacker/couple bed or room
+                    var bookingType = _bookingTypeRepository.FindBy(o => o.Id == model.BookingType).FirstOrDefault();
+                    if (bookingType == null)
+                        return NotFound("Booking Type not found");
+
+                    var linkRoomIdToList = bookingType.LinkRooms
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse).ToList();
+
+                    //get all beds and rooms
+                    var bedOrRoomIds = _lookupTypeItemRepository
+                        .FindBy(o => linkRoomIdToList.Contains(o.LookupTypeId))
+                        .Select(o => o.Id)
+                        .ToList();
+                    if (bedOrRoomIds == null)
+                        return NotFound("guest beds or room not found from look up type item.");
+
+                    var existingData = _guestBookingDetailRepository
+                        .FindBy(o =>
+                            o.BookingType == model.BookingType && bedOrRoomIds.Contains(o.RoomOrBedId ?? 0) &&
+                            o.CheckedOutDateTime == null)
+                        .Select(o => o.RoomOrBedId ?? 0).ToList();
+
+                    var availableBedOrRooms = bedOrRoomIds.Where(bedOrRoomId => !existingData.Contains(bedOrRoomId)).ToList();
+                    if (!availableBedOrRooms.Any())
+                        return NotFound("No available bed or room.");
+
+                    //get available bed or room and then assign to confirmed guest.
+                    int availableBedOrRoomId = availableBedOrRooms[0]; //get one
+
+
                     //save both parent and children guests details
                     var guestBookingDetail = _mapper.Map<GuestBookingDetail>(model);
                     guestBookingDetail.AccountId = 1; //TODO: create account
+                    guestBookingDetail.RoomOrBedId = availableBedOrRoomId;
+
                     guestBookingDetail.GuestBookingDates = new List<GuestBookingDate>();
                     for (DateTime startDate = guestBookingDetail.ArrivalDate; startDate <= guestBookingDetail.DepartureDate; startDate = startDate.AddDays(1))
                     {
@@ -192,6 +231,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
                     _guestBookingDetailRepository.Add(guestBookingDetail);
                     _guestBookingDetailRepository.Commit();
+                    
 
                     isManyGuests = guestBookingDetail.GuestBookings.Count > 1;
 
@@ -218,7 +258,6 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 var guestBooking = _guestBookingDetailRepository.FindBookingById(model.Id);
                 if (guestBooking != null)
                 {
-                    guestBooking.RoomOrBedId = model.RoomOrBedId;
                     guestBooking.CheckedInDateTime = DateTime.Now;
                     guestBooking.CheckedInBy = model.Username;
                 }
