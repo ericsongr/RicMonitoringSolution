@@ -127,9 +127,13 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
         [AllowAnonymous]
         [HttpGet("cost/{bookingId:int}")]
-        public IActionResult BookingCost(int bookingId)
+        public IActionResult BookingCost(int bookingId, string startDate, string endDate)
         {
-            
+            DateTime.TryParse(startDate, out DateTime checkInDate);
+            DateTime.TryParse(endDate, out DateTime checkOutDate);
+
+            int bookingDays = (checkOutDate - checkInDate).Days;
+
             var productItem = _accountProductRepository.FindBy(o => o.Id == bookingId).FirstOrDefault();
             var settingVat = _settingRepository.Get(SettingNameEnum.VatPH);
             if (productItem == null || settingVat == null)
@@ -139,15 +143,18 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
 
             var costLabel = productItem.Id == 3 ? productItem.Name : $"{productItem.Name} bed";
             var vat = decimal.Parse(settingVat.Value.Replace("%", "")) / 100;
-            var vatCost = productItem.OnlinePrice * vat;
-
-            var bookingCost = productItem.OnlinePrice - vatCost;
+            var vatCost = (productItem.OnlinePrice * bookingDays) * vat;
+            var bookingCost = (productItem.OnlinePrice * bookingDays) - vatCost;
+            
             var model = new 
             {
+                period = $"{checkInDate.ToString("dd-MMM-yyy")} to {checkOutDate.ToString("dd-MMM-yyy")}",
+                bookingDays = $"{bookingDays} {(bookingDays == 1 ? "day" : "days")}",
                 costLabel,
-                totalCost = productItem.OnlinePrice.ToString("#,###.00"),
+                cost = productItem.OnlinePrice.ToString("#,###.00"),
                 vatCost = vatCost.ToString("#,###.00"),
-                bookingCost = bookingCost.ToString("#,###.00")
+                totalCostExcludedVAT = bookingCost.ToString("#,###.00"),
+                totalCostIncludedVAT = (bookingCost + vatCost).ToString("#,###.00"),
             };
 
             return Ok(new BaseRestApiModel
