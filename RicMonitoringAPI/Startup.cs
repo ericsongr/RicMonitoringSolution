@@ -25,26 +25,7 @@ using RicCommunication.Interface;
 using RicCommunication.PushNotification;
 using RicCommunication.SmsGateway;
 using RicEntityFramework;
-using RicEntityFramework.CostMonitoring.Interfaces;
-using RicEntityFramework.CostMonitoring.Repositories;
-using RicEntityFramework.Interfaces;
-using RicEntityFramework.Interfaces.PropertyMappings;
-using RicEntityFramework.PropertyMappings;
-using RicEntityFramework.RicXplorer.Interfaces;
-using RicEntityFramework.RicXplorer.Interfaces.IPropertyMappings;
-using RicEntityFramework.RicXplorer.PropertyMappings;
-using RicEntityFramework.RicXplorer.Repositories;
 using RicEntityFramework.RoomRent.Interfaces;
-using RicEntityFramework.RoomRent.Interfaces.IAudits;
-using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings;
-using RicEntityFramework.RoomRent.Interfaces.IPropertyMappings.IAudits;
-using RicEntityFramework.RoomRent.PropertyMappings;
-using RicEntityFramework.RoomRent.PropertyMappings.Audits;
-using RicEntityFramework.RoomRent.Repositories;
-using RicEntityFramework.RoomRent.Repositories.Audits;
-using RicEntityFramework.Services;
-using RicEntityFramework.ToolsInventory.Interfaces;
-using RicEntityFramework.ToolsInventory.Repositories;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
 using RicMonitoringAPI.Common.Validators;
@@ -52,9 +33,8 @@ using RicMonitoringAPI.RoomRent.Validators;
 using RicMonitoringAPI.Services;
 using RicMonitoringAPI.Services.Interfaces;
 using IdentityServer4.AccessTokenValidation;
-using RicEntityFramework.Inc.Interfaces;
-using RicEntityFramework.Inc.Repositories;
 using RicMonitoringAPI.MappingProfiles;
+using System.Reflection;
 
 namespace RicMonitoringAPI
 {
@@ -80,90 +60,26 @@ namespace RicMonitoringAPI
             services.AddAutoMapper(typeof(CostMonitoringProfile));
             services.AddAutoMapper(typeof(ToolInventoryProfile));
             services.AddAutoMapper(typeof(BuklodProfile));
-            
-            //rent
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<ISettingRepository, SettingRepository>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddScoped<IRenterRepository, RenterRepository>();
-            services.AddScoped<IRentTransactionRepository, RentTransactionRepository>();
-            services.AddScoped<IRentTransactionDetailRepository, RentTransactionDetailRepository>();
-            services.AddScoped<ILookupTypeRepository, LookupTypeRepository>();
-            services.AddScoped<ILookupTypeItemRepository, LookupTypeItemRepository>();
-            services.AddScoped<IRentArrearRepository, RentArrearRepository>();
-            services.AddScoped<IMonthlyRentBatchRepository, MonthlyRentBatchRepository>();
-            services.AddScoped<IRentTransactionHistoryRepository, RentTransactionHistoryRepository>();
-            services.AddScoped<IRentTransactionPaymentRepository, RentTransactionPaymentRepository>();
-            services.AddScoped<IMobileAppLogRepository, MobileAppLogRepository>();
-            services.AddScoped<ISmsGatewayRepository, SmsGatewayRepository>();
-            services.AddScoped<IRenterCommunicationRepository, RenterCommunicationRepository>();
-            services.AddScoped<IAccountBillingItemRepository, AccountBillingItemRepository>();
 
-            services.AddScoped<IAuditAccountRepository, AuditAccountRepository>();
-            services.AddScoped<IAuditRenterRepository, AuditRenterRepository>();
-            services.AddScoped<IAuditRoomRepository, AuditRoomRepository>();
-            services.AddScoped<IAuditRentTransactionRepository, AuditRentTransactionRepository>();
-            services.AddScoped<IAuditRentTransactionPaymentRepository, AuditRentTransactionPaymentRepository>();
+            // Register all services with transient lifetime
+            // Get the assembly containing the services (e.g., MyServicesAssembly.dll)
+            var ricEntityFrameworkServiceAssembly = Assembly.Load("RicEntityFramework");
 
-            //ricxplorer
-            services.AddScoped<IBookingTypeRepository, BookingTypeRepository>();
-            services.AddScoped<IGuestBookingDetailRepository, GuestBookingDetailRepository>();
-            services.AddScoped<IGuestBookingRepository, GuestBookingRepository>();
-            services.AddScoped<ICheckListForCheckInOutGuestRepository, CheckListForCheckInOutGuestRepository>();
-            services.AddScoped<IGuestCheckListRepository, GuestCheckListRepository>();
-            services.AddScoped<IBookingTypeInclusionRepository, BookingTypeInclusionRepository>();
-            services.AddScoped<IAccountProductRepository, AccountProductRepository>();
+            // Register all services from the specified assembly with transient or scope lifetime
+            services.AddAllServicesFromAssemblies(ricEntityFrameworkServiceAssembly);
 
-            //cost monitoring
-            services.AddScoped<ICostItemRepository, CostItemRepository>();
-            services.AddScoped<ITransactionCostRepository, TransactionCostRepository>();
-
-            //tool inventory
-            services.AddScoped<IToolRepository, ToolRepository>();
-            services.AddScoped<IToolInventoryRepository, ToolInventoryRepository>();
-
-
-            //buklod
-            services.AddScoped<IIncBuklodRepository, IncBuklodRepository>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IOneSignalService, OneSignalService>();
+            services.AddTransient<ISMSGateway, SMSGlobal>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
             services.AddScoped<IUrlHelper, UrlHelper>(implementationFactory =>
             {
                 var actionContext = implementationFactory.GetService<IActionContextAccessor>().ActionContext;
 
                 return new UrlHelper(actionContext);
             });
-
-            //rent
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            services.AddTransient<IPropertyMappingService, PropertyMappingService>();
-            services.AddTransient<IRoomPropertyMappingService, RoomPropertyMappingService>();
-            services.AddTransient<IRenterPropertyMappingService, RenterPropertyMappingService>();
-            services.AddTransient<IRentTransactionPropertyMappingService, RentTransactionPropertyMappingService>();
-            services.AddTransient<ILookupTypePropertyMappingService, LookupTypePropertyMappingService>();
-            services.AddTransient<ILookupTypeItemPropertyMappingService, LookupTypeItemPropertyMappingService>();
-            services.AddTransient<IRentTransactionHistoryPropertyMappingService, RentTransactionHistoryPropertyMappingService>();
-
-            services.AddTransient<IAccountPropertyMappingService, AccountPropertyMappingService>();
-
-            services.AddTransient<IAuditRenterPropertyMappingService, AuditRenterPropertyMappingService>();
-            services.AddTransient<IAuditRoomPropertyMappingService, AuditRoomPropertyMappingService>();
-            services.AddTransient<IAuditRentTransactionPropertyMappingService, AuditRentTransactionPropertyMappingService>();
-            services.AddTransient<IAuditRentTransactionPaymentPropertyMappingService, AuditRentTransactionPaymentPropertyMappingService>();
-
-            services.AddTransient<IOneSignalService, OneSignalService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<ITypeHelperService, TypeHelperService>();
-            services.AddTransient<ISmsGatewayService, SmsGatewayService>();
-            services.AddTransient<ICommunicationService, CommunicationService>();
-            services.AddTransient<ISMSGateway, SMSGlobal>();
-
-            //RicXplorer
-            services.AddTransient<IBookingTypePropertyMappingService, BookingTypePropertyMappingService>();
-
+            
             // Get the service provider to access the http context
             var svrProvider = services.BuildServiceProvider();
             var settingRepository = svrProvider.GetService<ISettingRepository>();

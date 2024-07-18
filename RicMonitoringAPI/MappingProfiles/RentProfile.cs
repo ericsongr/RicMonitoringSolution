@@ -1,20 +1,9 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using RicModel.CostMonitoring;
-using RicModel.CostMonitoring.Dtos;
-using RicModel.Inc;
-using RicModel.Inc.Dtos;
-using RicModel.RicXplorer;
-using RicModel.RicXplorer.Dtos;
+﻿using AutoMapper;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Audits;
 using RicModel.RoomRent.Dtos;
 using RicModel.RoomRent.Dtos.Audits;
 using RicModel.RoomRent.Extensions;
-using RicModel.ToolsInventory;
-using RicModel.ToolsInventory.Dtos;
-using RicMonitoringAPI.RicXplorer.ViewModels;
 using RicMonitoringAPI.RoomRent.Helpers.Extensions;
 
 namespace RicMonitoringAPI.MappingProfiles
