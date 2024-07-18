@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
     
       - name: Sync files
-        uses: Ericson/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.SERVER_FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
