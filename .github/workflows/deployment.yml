@@ -10,16 +10,15 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  build_and_deploy:
+    name: Build package and deploy to SmarterASP.NET
     runs-on: windows-latest
-
     steps:
     - name: build file
     - uses: actions/checkout@v4
     
     - name: Sync files
-      uses: Ericson/FTP-Deploy-Action@v4.3.4
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.SERVER_FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
