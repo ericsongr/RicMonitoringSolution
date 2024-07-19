@@ -8,6 +8,7 @@ using Moq;
 using RicEntityFramework;
 using RicEntityFramework.RicXplorer.Interfaces;
 using RicEntityFramework.RicXplorer.Repositories;
+using RicEntityFramework.RoomRent.Interfaces;
 using RicModel.RicXplorer;
 using RicMonitoringAPI.RicXplorer.Controllers;
 using RicMonitoringAPI.RicXplorer.ViewModels;
@@ -19,6 +20,10 @@ namespace RicUnitTest
         private readonly Mock<IGuestBookingDetailRepository> _guestBookingDetailRepository;
         private readonly Mock<IGuestCheckListRepository> _guestCheckListRepository;
         private readonly Mock<ILookupTypeRepository> _lookupTypeRepository;
+        private readonly Mock<ILookupTypeItemRepository> _lookupTypeItemRepository;
+        private readonly Mock<IAccountProductRepository> _accountProductRepository;
+        private readonly Mock<ISettingRepository> _settingRepository;
+        private readonly Mock<IBookingTypeRepository> _bookingTypeRepository;
         private readonly Mock<IMapper> _mapper;
         private readonly GuestBookingController _controller;
         public GuestBookingControllerUnitTest()
@@ -32,12 +37,20 @@ namespace RicUnitTest
             _guestBookingDetailRepository = new Mock<IGuestBookingDetailRepository>();
             _guestCheckListRepository = new Mock<IGuestCheckListRepository>();
             _lookupTypeRepository = new Mock<ILookupTypeRepository>();
+            _lookupTypeItemRepository = new Mock<ILookupTypeItemRepository>();
+            _accountProductRepository = new Mock<IAccountProductRepository>();
+            _settingRepository = new Mock<ISettingRepository>();
+            _bookingTypeRepository = new Mock<IBookingTypeRepository>();
             _mapper = new Mock<IMapper>();
 
             _controller = new GuestBookingController(
                 _guestBookingDetailRepository.Object,
                 _guestCheckListRepository.Object,
                 _lookupTypeRepository.Object,
+                _lookupTypeItemRepository.Object,
+                _accountProductRepository.Object,
+                _settingRepository.Object,
+                _bookingTypeRepository.Object,
                 _mapper.Object);
 
         }
