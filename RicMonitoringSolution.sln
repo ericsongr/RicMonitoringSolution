@@ -26,8 +26,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicAuthJwtServerUpgrader", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicCommon", "RicCommon\RicCommon.csproj", "{BF15FCCE-36EF-4123-8E04-61A33C438326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RicRunBatchFileApi", "RicRunBatchFileApi\RicRunBatchFileApi.csproj", "{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicCommunication", "RicCommunication\RicCommunication.csproj", "{1368F245-6EA6-446D-AA2E-154A232712EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RicUnitTest", "RicUnitTest\RicUnitTest.csproj", "{FD8EDBC7-C1F7-471B-B909-62FB388BC6C9}"
@@ -121,16 +119,6 @@ Global
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Release|ApiBuild.Build.0 = Release|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
 		{BF15FCCE-36EF-4123-8E04-61A33C438326}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Debug|WebOnlyBuild.ActiveCfg = Debug|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|ApiBuild.ActiveCfg = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|ApiBuild.Build.0 = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|WebOnlyBuild.ActiveCfg = Release|Any CPU
-		{D715D488-0F46-4C9E-BF8F-BC2C64A85F2F}.Release|WebOnlyBuild.Build.0 = Release|Any CPU
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1368F245-6EA6-446D-AA2E-154A232712EC}.Debug|ApiBuild.ActiveCfg = Debug|Any CPU
