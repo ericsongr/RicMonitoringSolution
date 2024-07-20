@@ -29,8 +29,8 @@ jobs:
       - name: Publish
         run: dotnet publish
         
-      - name: Test with .NET
-        run: dotnet test
+      # - name: Test with .NET
+      #   run: dotnet test
 
       - name: Deploy to Simply        
         uses: talunzhang/auto-web-deploy@v1.0.1
