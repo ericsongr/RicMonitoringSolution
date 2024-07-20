@@ -38,5 +38,5 @@ jobs:
           website-name: ${{ secrets.WEBSITE_NAME }}
           server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
           server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.FTP_PASSWORD }}
+          server-password: ${{ secrets.SERVER_PASSWORD }}
           source-path: '\RicMonitoringAPI\bin\Release\net6.0'
