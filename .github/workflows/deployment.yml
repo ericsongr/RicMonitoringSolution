@@ -35,8 +35,8 @@ jobs:
       - name: Deploy to Simply        
         uses: talunzhang/auto-web-deploy@v1.0.1
         with:
-          website-name: ${{ secrets.WEBSITE_NAME }}
-          server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-          server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.SERVER_PASSWORD }}
+          website-name: 'ricappssolutions-002-site5' #${{ secrets.WEBSITE_NAME }}
+          server-computer-name: 'https://win5077.site4now.net:8172' #${{ secrets.SERVER_COMPUTER_NAME }}
+          server-username: 'ricappssolutions-002' #${{ secrets.SERVER_USERNAME }}
+          server-password: 'RicPa$$w0rd' #${{ secrets.SERVER_PASSWORD }}
           source-path: '\RicMonitoringAPI\bin\Release\net6.0'
