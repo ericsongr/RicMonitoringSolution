@@ -38,4 +38,4 @@ jobs:
           server: ${{ secrets.SERVER_FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          source-path: '\RicMonitoringAPI\bin\Release\net6.0'
+          source-path: './RicMonitoringAPI/bin/Release/net6.0'
