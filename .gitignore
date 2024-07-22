@@ -202,5 +202,5 @@ RicMonitoringAPI/obj/project.assets.json
 /.vs/ProjectEvaluation/ricmonitoringsolution.strings.v8.bin
 /RicAuthJwtServer/Properties/PublishProfiles/Default Settings1.pubxml
 /RicMonitoringAPI/Properties/PublishProfiles/Default Settings1.pubxml
-/RicMonitoringAPI/Properties/launchSettings.json
+# /RicMonitoringAPI/Properties/launchSettings.json
 /RicMonitoringAPI/logs/shared
