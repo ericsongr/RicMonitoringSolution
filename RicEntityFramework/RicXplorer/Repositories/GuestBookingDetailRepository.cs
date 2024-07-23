@@ -41,6 +41,16 @@ namespace RicEntityFramework.RicXplorer.Repositories
                 .FirstOrDefault(o => o.Id == id);
             return guest;
         }
+
+        public GuestBookingDetail FindDisplayRoomOrBed(int id)
+        {
+            var guest = Context.GuestBookingDetails
+                .Include(o => o.RoomOrBed.LookupTypes)
+                .AsNoTracking()
+                .FirstOrDefault(o => o.Id == id);
+            return guest;
+        }
+
         public GuestBookingDetail FindCheckListById(int id)
         {
             var guest = Context.GuestBookingDetails
