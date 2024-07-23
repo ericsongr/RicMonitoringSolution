@@ -383,13 +383,22 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 _guestBookingDetailRepository.Update(guestBooking);
                 _guestBookingDetailRepository.Commit();
 
+                var roomInfo = _guestBookingDetailRepository.FindBookingByIdv2(model.GuestBookingDetailId);
+                if (roomInfo == null)
+                    throw new ArgumentNullException("Not found");
+
+                var roomName = roomInfo.RoomOrBed.LookupTypes.Name;
+                var roomOrBedName = $"{roomInfo.RoomOrBed.Notes} [{roomInfo.RoomOrBed.Description}]";
+
                 string prefix = guestBooking.BookingType == 3 ? "room" : "bed";
 
                 return Ok(new BaseRestApiModel
                 {
                     Payload = new
                     {
-                        message = "Assigned " + prefix + " has been saved."
+                        message = "Assigned " + prefix + " has been saved.",
+                        roomName,
+                        roomOrBedName,
                     },
                     Errors = new List<BaseError>(),
                     StatusCode = (int)HttpStatusCode.OK
