@@ -172,7 +172,8 @@ namespace RicMonitoringAPI
                     setupAction.Filters.Add(typeof(ValidatorActionFilter));
                 })
                 .AddFluentValidation(fvc =>
-                    fvc.RegisterValidatorsFromAssemblyContaining<RoomForCreateDtoValidator>()) // this line automatically register all validators that inherit from AbstractValidator
+                    fvc.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
+                //fvc.RegisterValidatorsFromAssemblyContaining<RoomForCreateDtoValidator>()) // this line automatically register all validators that inherit from AbstractValidator
                 .AddNewtonsoftJson(setupAction =>
                 {
                     setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

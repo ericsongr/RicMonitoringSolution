@@ -17,6 +17,7 @@ using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Enumeration;
 using RicMonitoringAPI.Common.Model;
 using RicMonitoringAPI.Infrastructure.Helpers;
+using RicMonitoringAPI.RicXplorer.Validators;
 using RicMonitoringAPI.RicXplorer.ViewModels;
 
 namespace RicMonitoringAPI.RicXplorer.Controllers
@@ -178,6 +179,13 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             bool isManyGuests = false;
             try
             {
+                var validator = new CreateGuestBookingDtoValidator();
+                var result = validator.Validate(model);
+                if (!result.IsValid)
+                {
+                    return BadRequest(result.Errors);
+                }
+
                 if (!ModelState.IsValid)
                 {
                     return Ok(HandleApi.Exception("Error when booking.", HttpStatusCode.NotFound));
