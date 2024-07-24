@@ -7,6 +7,7 @@
 		<AWSProjectType>Lambda</AWSProjectType>
 		<UseAppHost>false</UseAppHost>
 		<UserSecretsId>6c8f6828-28ca-4293-8e57-07dbaa81927f</UserSecretsId>
+		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -75,6 +76,7 @@
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
 		<PackageReference Include="Audit.EntityFramework.Core" Version="22.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 		<PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="8.1.0" />
 	</ItemGroup>
@@ -92,5 +94,7 @@
 	  <ProjectReference Include="..\RicCommunication\RicCommunication.csproj" />
 	  <ProjectReference Include="..\RicEntityFramework\RicEntityFramework.csproj" />
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties aws-lambda-tools-defaults_1json__JsonSchema="https://bitbucket.org/atlassianlabs/intellij-bitbucket-references-plugin/raw/master/src/main/resources/schemas/bitbucket-pipelines.schema.json" /></VisualStudio></ProjectExtensions>
 
 </Project>

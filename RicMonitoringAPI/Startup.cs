@@ -35,6 +35,7 @@ using RicMonitoringAPI.Services.Interfaces;
 using IdentityServer4.AccessTokenValidation;
 using RicMonitoringAPI.MappingProfiles;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace RicMonitoringAPI
 {
@@ -50,6 +51,32 @@ namespace RicMonitoringAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RicMonitoringAPI", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }});
+            });
+
             //mapped database connection string
             services.AddDbContext<RicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RicMonitoringApiDbConnString")));
@@ -79,21 +106,21 @@ namespace RicMonitoringAPI
 
                 return new UrlHelper(actionContext);
             });
-            
+
             // Get the service provider to access the http context
             var svrProvider = services.BuildServiceProvider();
             var settingRepository = svrProvider.GetService<ISettingRepository>();
 
             //DI with passing of constructor parameter
-            services.AddTransient<IPushNotificationGateway>(p => 
-                new OneSignalGateway(settingRepository.GetValue(SettingNameEnum.OneSignalAuthKey), 
+            services.AddTransient<IPushNotificationGateway>(p =>
+                new OneSignalGateway(settingRepository.GetValue(SettingNameEnum.OneSignalAuthKey),
                                      settingRepository.GetValue(SettingNameEnum.OneSignalAppId)));
-            
+
             services.AddHealthChecks();
 
             // Add the HttpContextAccessor if needed.
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
             Audit.Core.Configuration.Setup()
                 .UseEntityFramework(ef => ef
                     .AuditTypeExplicitMapper(m => m
@@ -130,32 +157,34 @@ namespace RicMonitoringAPI
                 {
                     builder
                         .AllowAnyHeader()
-                        .WithOrigins(clientUrls) 
+                        .WithOrigins(clientUrls)
                         .WithMethods("GET", "PUT", "POST", "DELETE");
                 });
             });
 
-            services.Configure<FormOptions>(o => {
+            services.Configure<FormOptions>(o =>
+            {
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options => {
-                            options.SaveToken = true;
-                            options.RequireHttpsMetadata = bool.Parse(Configuration["RequireHttpsMetadata"]);
-                            options.TokenValidationParameters = new TokenValidationParameters()
-                            {
-                                ValidateIssuer = true,
-                                ValidateAudience = true,
-                                ValidAudience = Configuration["JWT:ValidAudience"],
-                                ValidIssuer = Configuration["JWT:ValidIssuer"],
-                                IssuerSigningKey = new SymmetricSecurityKey(WebEncoders.Base64UrlDecode(Configuration["JWT:Secret"])),
-                            };
-                        }); 
+                    .AddJwtBearer(options =>
+                    {
+                        options.SaveToken = true;
+                        options.RequireHttpsMetadata = bool.Parse(Configuration["RequireHttpsMetadata"]);
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidAudience = Configuration["JWT:ValidAudience"],
+                            ValidIssuer = Configuration["JWT:ValidIssuer"],
+                            IssuerSigningKey = new SymmetricSecurityKey(WebEncoders.Base64UrlDecode(Configuration["JWT:Secret"])),
+                        };
+                    });
 
-          
+
 
             services.AddAuthorization(config =>
             {
@@ -192,11 +221,20 @@ namespace RicMonitoringAPI
             )
         {
 
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SwaggerDemo v1");
+                    c.RoutePrefix = string.Empty; // This makes Swagger UI the home page
+                });
 
-                //Audit.Core.Configuration.AuditDisabled = true;
             }
             else
             {
@@ -232,7 +270,7 @@ namespace RicMonitoringAPI
 
             // Execute the matched endpoint.
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
-           
+
         }
     }
 }

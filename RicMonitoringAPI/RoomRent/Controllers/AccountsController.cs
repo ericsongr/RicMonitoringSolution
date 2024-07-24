@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using RicEntityFramework;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.Parameters;
@@ -14,7 +13,6 @@ using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
 using RicMonitoringAPI.Common.Model;
 using System.Net;
-using RicEntityFramework.Services;
 using TimeZone = RicModel.RoomRent.TimeZone;
 
 namespace RicMonitoringAPI.RoomRent.Controllers
@@ -32,7 +30,7 @@ namespace RicMonitoringAPI.RoomRent.Controllers
         private readonly ISmsGatewayService _smsGatewayService;
         private readonly IMapper _mapper;
 
-        public AccountsController(RicDbContext context,
+        public AccountsController(
             IAccountRepository accountRepository,
             IUrlHelper urlHelper,
             ITypeHelperService typeHelperService,
