@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
+using RicEntityFramework.RicXplorer.Repositories;
 using RicEntityFramework.Services;
 using RicModel.RoomRent;
 using RicModel.RoomRent.Dtos;
@@ -23,6 +24,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         private readonly IGuestBookingDetailRepository _guestBookingDetailRepository;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IImageService _imageService;
+        private readonly IBookingTypeRepository _bookingTypeRepository;
         private readonly IMapper _mapper;
 
 
@@ -31,12 +33,14 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             IGuestBookingDetailRepository guestBookingDetailRepository,
             ITypeHelperService typeHelperService,
             IImageService imageService,
+            IBookingTypeRepository bookingTypeRepository,
             IMapper mapper)
         {
             _lookupTypeRepository = lookupTypeRepository ?? throw new ArgumentNullException(nameof(lookupTypeRepository));
             _guestBookingDetailRepository = guestBookingDetailRepository ?? throw new ArgumentNullException(nameof(guestBookingDetailRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            _bookingTypeRepository = bookingTypeRepository ?? throw new ArgumentNullException(nameof(imageService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -58,6 +62,8 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 return NotFound();
             }
 
+            var bookingTypes = _bookingTypeRepository.FindAll(o => o.AccountProduct);
+
             var lookupTypeItems = _mapper.Map<IEnumerable<GuestRoomTypesAvailabilityDto>>(lookupTypes).ToList();
             lookupTypeItems.ForEach(item =>
             {
@@ -66,7 +72,11 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                     var occupied = occupiedRoomOrBed.FirstOrDefault(o => o.RoomOrBedId == myItem.Id);
                     if (occupied != null)
                         myItem.GuestId = occupied.Id;
-                    
+
+                    var bookingType = bookingTypes.FirstOrDefault(o => o.LinkRooms.Contains(item.Id.ToString()));
+                    if (bookingType != null)
+                        myItem.BookingType = bookingType.AccountProduct.Name;
+
                     //myItem.DefaultImage = _imageService.GetImageInBase64($"default-room.png", "GuestRoom");
                 });
             });
