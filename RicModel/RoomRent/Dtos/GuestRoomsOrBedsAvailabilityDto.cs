@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
+        public string BookingType { get; set; }
         public string DefaultImage { get; set; }
         public int GuestId { get; set; }
 
