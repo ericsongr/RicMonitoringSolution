@@ -9,6 +9,7 @@ using NuGet.Packaging;
 using RicEntityFramework.Helpers;
 using RicEntityFramework.Interfaces;
 using RicEntityFramework.RicXplorer.Interfaces;
+using RicEntityFramework.RicXplorer.Repositories;
 using RicModel.CostMonitoring.Dtos;
 using RicModel.RicXplorer;
 using RicModel.RicXplorer.Dtos;
@@ -25,6 +26,7 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
         private readonly ILookupTypeItemRepository _lookupTypeItemRepository;
         private readonly IBookingTypeInclusionRepository _bookingTypeInclusionRepository;
         private readonly IBookingTypeRepository _bookingTypeRepository;
+        private readonly IAccountProductRepository _accountProductRepository;
         private readonly ITypeHelperService _typeHelperService;
         private readonly IMapper _mapper;
         private readonly int _bookingTypeInclusionId = 3; //Booking Type Inclusions from look up
@@ -32,12 +34,14 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
             ILookupTypeItemRepository lookupTypeItemRepository,
             IBookingTypeInclusionRepository bookingTypeInclusionRepository,
             IBookingTypeRepository bookingTypeRepository,
+            IAccountProductRepository accountProductRepository,
             ITypeHelperService typeHelperService,
             IMapper mapper)
         {
             _lookupTypeItemRepository = lookupTypeItemRepository ?? throw new ArgumentNullException(nameof(lookupTypeItemRepository));
             _bookingTypeInclusionRepository = bookingTypeInclusionRepository ?? throw new ArgumentNullException(nameof(bookingTypeInclusionRepository));
             _bookingTypeRepository = bookingTypeRepository ?? throw new ArgumentNullException(nameof(bookingTypeRepository));
+            _accountProductRepository = accountProductRepository ?? throw new ArgumentNullException(nameof(accountProductRepository));
             _typeHelperService = typeHelperService ?? throw new ArgumentNullException(nameof(typeHelperService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -181,5 +185,51 @@ namespace RicMonitoringAPI.RicXplorer.Controllers
                 StatusCode = (int)HttpStatusCode.OK
             });
         }
+
+        #region Guest Booking Types
+
+
+        [HttpPost("save-booking-type-detail")]
+        public IActionResult SaveBookingTypeDetail(GuestBookingTypeModel model)
+        {
+            var repo = _bookingTypeRepository
+                .GetSingleAsync(o => o.Id == model.BookingTypeId)
+                .GetAwaiter().GetResult();
+            if (repo != null)
+            {
+                //repo.IsActive = model.IsActive;
+                repo.NoOfPersons = model.NoOfPersons;
+                repo.NoOfPersonsMax = model.NoOfPersonsMax;
+                repo.UtcDateTimeUpdated = DateTime.Today;
+                _bookingTypeRepository.Update(repo);
+                _bookingTypeRepository.Commit();
+
+                var acctProd = _accountProductRepository
+                    .GetSingleAsync(o => o.Id == repo.AccountProductId)
+                    .GetAwaiter().GetResult();
+                if (acctProd != null)
+                {
+                    acctProd.OnlinePrice = model.OnlinePrice;
+                    acctProd.Price=model.Price;
+                    _accountProductRepository.Update(acctProd);
+                    _accountProductRepository.Commit();
+                }
+            }
+            else
+            {
+                //TODO: save new booking type function codes here
+            }
+
+           
+
+            return Ok(new BaseRestApiModel
+            {
+                Payload = "Guest booking type detail has been saved.",
+                Errors = new List<BaseError>(),
+                StatusCode = (int)HttpStatusCode.OK
+            });
+        }
+
+        #endregion
     }
 }
